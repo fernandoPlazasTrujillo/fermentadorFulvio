@@ -1,131 +1,85 @@
+/**
+ * @file task_sensores.c
+ * @brief Adquisición y procesamiento de sensores.
+ * 
+ * Lee sensores, aplica filtrado y calcula variables derivadas.
+ * Envía los datos a las colas del sistema.
+ */
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "freertos/queue.h"
 
 #include "esp_log.h"
 
 #include "utils/data_types.h"
+#include "drivers/rtc_ds3231.h"
+#include "drivers/mq135.h"
+#include "drivers/ph_sensor.h"
+#include "drivers/ds18b20.h"
 #include "queues.h"
-#include "drivers/sd_card.h"
 
-// 🔥 sincronización con energía
-extern TaskHandle_t task_energia_handle;
+static const char *TAG = "SENSORES";
 
-static const char *TAG = "LOGGER";
+RTC_DATA_ATTR static float baseline = 0;
+RTC_DATA_ATTR static int baseline_initialized = 0;
 
-#define MQ135_THRESHOLD 0.02
+#define ALPHA 0.2
 
-void task_logger(void *pvParameters)
+static float filtered = 0;
+
+/**
+ * @brief Tarea de sensores.
+ */
+void task_sensores(void *pvParameters)
 {
     sensor_data_t data;
-    char line[128];
 
-    vTaskDelay(pdMS_TO_TICKS(500));
+    mq135_init();
+    ph_init();
 
-    // =====================
-    // INIT SD CON REINTENTOS
-    // =====================
-    int retries = 3;
-    esp_err_t ret = ESP_FAIL;
+    ds18b20_init(GPIO_NUM_4);
 
-    while (retries--) {
-
-        ret = sd_card_init();
-
-        if (ret == ESP_OK) {
-            ESP_LOGI(TAG, "SD montada correctamente");
-            break;
-        }
-
-        ESP_LOGW(TAG, "Fallo SD, reintentando...");
-        vTaskDelay(pdMS_TO_TICKS(500));
-    }
-
-    // =====================
-    // FALLA CRÍTICA SD
-    // =====================
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "SD FALLÓ DEFINITIVO");
-
-        while (1) {
-            vTaskDelay(pdMS_TO_TICKS(2000));
-        }
-    }
-
-    ESP_LOGI(TAG, "Logger listo");
-
-    // =====================
-    // LOOP PRINCIPAL
-    // =====================
     while (1) {
 
-        if (xQueueReceive(queue_logger, &data, portMAX_DELAY)) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-            // =====================
-            // FORMATO CSV
-            // =====================
-            snprintf(line, sizeof(line),
-                "%04d-%02d-%02d %02d:%02d:%02d,%.2f,%.2f,%.4f,%.4f,%.2f,%.2f",
-                data.datetime.year,
-                data.datetime.month,
-                data.datetime.day,
-                data.datetime.hours,
-                data.datetime.minutes,
-                data.datetime.seconds,
-                data.temperatura,
-                data.ph,
-                data.co2_raw,
-                data.co2,
-                data.voltaje,
-                data.corriente
-            );
+        ESP_LOGI(TAG, "Leyendo sensores...");
 
-            // =====================
-            // ESCRITURA SD
-            // =====================
-            if (sd_card_write_line(line) != ESP_OK) {
-                ESP_LOGE(TAG, "Error escribiendo en SD");
-            }
+        float raw_voltage = mq135_read();
+        int raw_adc = mq135_read_raw();
 
-            // =====================
-            // DEBUG CONTROLADO
-            // =====================
-            ESP_LOGI(TAG, "-------------------------");
+        ESP_LOGI(TAG, "MQ135 ADC RAW: %d", raw_adc);
 
-            ESP_LOGI(TAG, "Fecha: %04d-%02d-%02d",
-                data.datetime.year,
-                data.datetime.month,
-                data.datetime.day);
+        filtered = ALPHA * raw_voltage + (1 - ALPHA) * filtered;
 
-            ESP_LOGI(TAG, "Hora: %02d:%02d:%02d",
-                data.datetime.hours,
-                data.datetime.minutes,
-                data.datetime.seconds);
-
-            ESP_LOGI(TAG, "Temp: %.2f C", data.temperatura);
-
-            if (data.ph < 0) {
-                ESP_LOGI(TAG, "pH: INVALIDO");
-            } else {
-                ESP_LOGI(TAG, "pH: %.2f", data.ph);
-            }
-
-            ESP_LOGI(TAG, "MQ135 raw: %.4f V", data.co2_raw);
-            ESP_LOGI(TAG, "MQ135 delta: %.4f V", data.co2);
-
-            if (data.co2 > MQ135_THRESHOLD) {
-                ESP_LOGI(TAG, "CO2 detectado: SI");
-            } else {
-                ESP_LOGI(TAG, "CO2 detectado: NO");
-            }
-
-            ESP_LOGI(TAG, "Voltaje: %.2f V", data.voltaje);
-            ESP_LOGI(TAG, "Corriente: %.2f A", data.corriente);
-
-            // =====================
-            // 🔥 NOTIFICAR A ENERGÍA
-            // =====================
-            xTaskNotifyGive(task_energia_handle);
+        if (!baseline_initialized) {
+            baseline = filtered;
+            baseline_initialized = 1;
+            ESP_LOGI(TAG, "Baseline inicial: %.4f", baseline);
         }
+
+        data.co2_raw = raw_voltage;
+        data.co2 = filtered - baseline;
+
+        data.ph = ph_read();
+
+        data.voltaje = 5.0;
+
+        float temp = ds18b20_read_temperature();
+
+        if (temp == -127.0) {
+            ESP_LOGW(TAG, "Error leyendo DS18B20");
+            temp = 25.0;
+        }
+
+        data.temperatura = temp;
+        data.corriente = 0.5;
+
+        ds3231_get_datetime(&data.datetime);
+
+        xQueueSend(queue_sensores, &data, portMAX_DELAY);
+        xQueueSend(queue_logger, &data, portMAX_DELAY);
+
+        ESP_LOGI(TAG, "Datos enviados");
     }
 }

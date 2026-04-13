@@ -1,3 +1,7 @@
+# CMakeLists.txt
+# Configuración del componente principal del proyecto ESP-IDF
+# Define los archivos fuente y directorios de inclusión
+
 idf_component_register(
     SRCS 
         "main.c"
@@ -18,7 +22,7 @@ idf_component_register(
         "hal/i2c_manager.c"
         "hal/adc_manager.c"
 
-        "utils/queues.c"   # 🔥 CORREGIDO
+        "utils/queues.c"
 
     INCLUDE_DIRS
         "."

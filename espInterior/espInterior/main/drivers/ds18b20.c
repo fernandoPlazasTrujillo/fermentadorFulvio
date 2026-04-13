@@ -1,3 +1,16 @@
+/**
+ * @file ds18b20.c
+ * @brief Implementación del driver DS18B20 mediante protocolo OneWire.
+ * 
+ * Contiene funciones de bajo nivel para comunicación OneWire y funciones
+ * de alto nivel para lectura de temperatura.
+ * 
+ * @author
+ * Fernando Plazas Trujillo
+ * Isabella Ordoñez
+ * Juan Daniel Constain
+ */
+
 #include "drivers/ds18b20.h"
 #include "driver/gpio.h"
 #include "esp_rom_sys.h"
@@ -8,22 +21,35 @@
 
 static const char *TAG = "DS18B20";
 
+/** @brief Pin GPIO usado para comunicación OneWire */
 static gpio_num_t ds_pin;
 
 // =====================
 // LOW LEVEL
 // =====================
+
+/**
+ * @brief Fuerza la línea OneWire a nivel bajo.
+ */
 static void ow_low()
 {
     gpio_set_direction(ds_pin, GPIO_MODE_OUTPUT);
     gpio_set_level(ds_pin, 0);
 }
 
+/**
+ * @brief Libera la línea OneWire (estado alto mediante pull-up).
+ */
 static void ow_release()
 {
     gpio_set_direction(ds_pin, GPIO_MODE_INPUT);
 }
 
+/**
+ * @brief Lee el estado actual del bus OneWire.
+ * 
+ * @return 0 o 1 según el nivel lógico.
+ */
 static int ow_read()
 {
     return gpio_get_level(ds_pin);
@@ -32,6 +58,14 @@ static int ow_read()
 // =====================
 // RESET
 // =====================
+
+/**
+ * @brief Realiza el reset del bus OneWire.
+ * 
+ * Envía la señal de reset y detecta la presencia del sensor.
+ * 
+ * @return 1 si el dispositivo responde, 0 en caso contrario.
+ */
 static int ow_reset()
 {
     ow_low();
@@ -50,6 +84,12 @@ static int ow_reset()
 // =====================
 // WRITE BIT
 // =====================
+
+/**
+ * @brief Escribe un bit en el bus OneWire.
+ * 
+ * @param bit Valor del bit (0 o 1).
+ */
 static void ow_write_bit(int bit)
 {
     ow_low();
@@ -68,6 +108,12 @@ static void ow_write_bit(int bit)
 // =====================
 // READ BIT
 // =====================
+
+/**
+ * @brief Lee un bit desde el bus OneWire.
+ * 
+ * @return Bit leído (0 o 1).
+ */
 static int ow_read_bit()
 {
     int bit;
@@ -87,6 +133,12 @@ static int ow_read_bit()
 // =====================
 // BYTE
 // =====================
+
+/**
+ * @brief Escribe un byte completo en el bus OneWire.
+ * 
+ * @param byte Byte a transmitir.
+ */
 static void ow_write_byte(uint8_t byte)
 {
     for (int i = 0; i < 8; i++) {
@@ -95,6 +147,11 @@ static void ow_write_byte(uint8_t byte)
     }
 }
 
+/**
+ * @brief Lee un byte completo desde el bus OneWire.
+ * 
+ * @return Byte leído.
+ */
 static uint8_t ow_read_byte()
 {
     uint8_t byte = 0;
@@ -109,6 +166,13 @@ static uint8_t ow_read_byte()
 // =====================
 // INIT
 // =====================
+
+/**
+ * @brief Inicializa el sensor DS18B20.
+ * 
+ * @param pin GPIO de conexión.
+ * @return ESP_OK si se configura correctamente.
+ */
 esp_err_t ds18b20_init(gpio_num_t pin)
 {
     ds_pin = pin;
@@ -123,6 +187,13 @@ esp_err_t ds18b20_init(gpio_num_t pin)
 // =====================
 // READ TEMPERATURE
 // =====================
+
+/**
+ * @brief Obtiene la temperatura del sensor DS18B20.
+ * 
+ * @return Temperatura en °C.
+ * @return -127.0 si el sensor no responde.
+ */
 float ds18b20_read_temperature(void)
 {
     if (!ow_reset()) {
@@ -130,13 +201,9 @@ float ds18b20_read_temperature(void)
         return -127.0;
     }
 
-    // Skip ROM
     ow_write_byte(0xCC);
-
-    // Convert T
     ow_write_byte(0x44);
 
-    // Espera conversión (750ms max)
     vTaskDelay(pdMS_TO_TICKS(750));
 
     if (!ow_reset()) {

@@ -1,3 +1,19 @@
+/**
+ * @file task_actuadores.c
+ * @brief Control de actuadores del sistema.
+ * 
+ * Esta tarea recibe comandos desde la cola de control y ejecuta
+ * acciones sobre bomba, motor y servomotor.
+ * 
+ * Incluye control de duración de mezcla y sincronización con la
+ * tarea de energía.
+ * 
+ * @author
+ * Fernando Plazas Trujillo
+ * Isabella Ordoñez
+ * Juan Daniel Constain
+ */
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
@@ -7,7 +23,7 @@
 #include "queues.h"
 #include "drivers/servo.h"
 
-// 🔥 sincronización con energía
+// sincronización con energía
 extern TaskHandle_t task_energia_handle;
 
 static const char *TAG = "ACTUADORES";
@@ -22,11 +38,15 @@ static const char *TAG = "ACTUADORES";
 // =====================
 // CONFIGURACIÓN
 // =====================
-#define MIX_DURATION_MS 20000   // 20 segundos
+#define MIX_DURATION_MS 20000
 
 // =====================
 // INIT GPIO + SERVO
 // =====================
+
+/**
+ * @brief Inicializa los actuadores.
+ */
 static void actuadores_init(void)
 {
     gpio_config_t io_conf = {
@@ -39,26 +59,25 @@ static void actuadores_init(void)
 
     gpio_config(&io_conf);
 
-    // Estado inicial
     gpio_set_level(PIN_BOMBA, 0);
     gpio_set_level(PIN_MOTOR, 0);
 
-    // 🔥 INIT SERVO
     servo_init(PIN_SERVO);
 }
 
 // =====================
 // TASK ACTUADORES
 // =====================
+
+/**
+ * @brief Tarea principal de actuadores.
+ */
 void task_actuadores(void *pvParameters)
 {
     control_cmd_t cmd;
 
     actuadores_init();
 
-    // =====================
-    // ESTADOS INTERNOS
-    // =====================
     bool motor_activo = false;
     TickType_t motor_start_time = 0;
 
@@ -68,36 +87,20 @@ void task_actuadores(void *pvParameters)
 
     while (1) {
 
-        // =====================
-        // RECIBIR COMANDOS
-        // =====================
         if (xQueueReceive(queue_control, &cmd, pdMS_TO_TICKS(100))) {
 
             ESP_LOGI(TAG, "Ejecutando acciones...");
 
-            // =====================
-            // BOMBA
-            // =====================
             gpio_set_level(PIN_BOMBA, cmd.bomba ? 1 : 0);
-            ESP_LOGI(TAG, "Bomba: %d", cmd.bomba);
 
-            // =====================
-            // SERVO (PWM)
-            // =====================
             if (cmd.servo_angle != last_servo_angle) {
-
                 servo_set_angle(cmd.servo_angle);
                 last_servo_angle = cmd.servo_angle;
-
-                ESP_LOGI(TAG, "Servo: %.2f grados", cmd.servo_angle);
             }
 
-            // =====================
-            // INICIO DE MEZCLA (MOTOR)
-            // =====================
             if (cmd.mezclar && !motor_activo) {
 
-                ESP_LOGI(TAG, "Iniciando mezcla (20s)");
+                ESP_LOGI(TAG, "Iniciando mezcla");
 
                 gpio_set_level(PIN_MOTOR, 1);
 
@@ -106,9 +109,6 @@ void task_actuadores(void *pvParameters)
             }
         }
 
-        // =====================
-        // CONTROL DE DURACIÓN MOTOR
-        // =====================
         if (motor_activo) {
 
             TickType_t now = xTaskGetTickCount();
@@ -120,14 +120,10 @@ void task_actuadores(void *pvParameters)
                 gpio_set_level(PIN_MOTOR, 0);
                 motor_activo = false;
 
-                // 🔥 Notificar a energía
                 xTaskNotifyGive(task_energia_handle);
             }
         }
 
-        // =====================
-        // DELAY PEQUEÑO
-        // =====================
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }

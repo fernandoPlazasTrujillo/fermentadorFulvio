@@ -1,3 +1,11 @@
+/**
+ * @file task_control.c
+ * @brief Lógica de control del sistema.
+ * 
+ * Procesa los datos provenientes de sensores y genera comandos
+ * para los actuadores.
+ */
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
@@ -12,6 +20,9 @@ static const char *TAG = "CONTROL";
 #define CO2_THRESHOLD 0.02
 #define MIX_INTERVAL_CYCLES 3
 
+/**
+ * @brief Tarea de control.
+ */
 void task_control(void *pvParameters)
 {
     sensor_data_t data;
@@ -27,21 +38,10 @@ void task_control(void *pvParameters)
 
             ESP_LOGI(TAG, "Procesando datos...");
 
-            // =====================
-            // CO2
-            // =====================
             int aire_activo = (data.co2 > CO2_THRESHOLD);
 
-            // =====================
-            // MEZCLA CONTROLADA
-            // =====================
             cmd.mezclar = (cycle_count % MIX_INTERVAL_CYCLES == 0);
-
-            // =====================
-            // ENFRIAMIENTO (placeholder)
-            // =====================
             cmd.enfriar = 0;
-
             cmd.bomba = cmd.enfriar;
 
             ESP_LOGI(TAG, "Ciclo: %d", cycle_count);

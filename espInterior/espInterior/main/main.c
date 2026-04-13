@@ -1,3 +1,22 @@
+/**
+ * @file main.c
+ * @brief Punto de entrada del sistema.
+ * 
+ * Inicializa hardware, configura el RTC, crea las tareas
+ * y gestiona el flujo principal del sistema.
+ * 
+ * Coordina:
+ * - Inicialización de HAL
+ * - Configuración de wakeup
+ * - Creación de tareas
+ * - Inicio del ciclo de ejecución
+ * 
+ * @author
+ * Fernando Plazas Trujillo
+ * Isabella Ordoñez
+ * Juan Daniel Constain
+ */
+
 #include <stdio.h>
 
 #include "freertos/FreeRTOS.h"
@@ -26,7 +45,11 @@
 // =====================
 // HANDLES
 // =====================
+
+/** @brief Handle de la tarea de sensores */
 TaskHandle_t task_sensores_handle = NULL;
+
+/** @brief Handle de la tarea de energía */
 TaskHandle_t task_energia_handle  = NULL;
 
 static const char *TAG = "MAIN";
@@ -34,6 +57,10 @@ static const char *TAG = "MAIN";
 // =====================
 // MAIN
 // =====================
+
+/**
+ * @brief Función principal del sistema.
+ */
 void app_main(void)
 {
     ESP_LOGI(TAG, "Iniciando sistema...");
@@ -41,29 +68,34 @@ void app_main(void)
     // =====================
     // INIT HARDWARE
     // =====================
+
     i2c_manager_init();
-    adc_manager_init();   // SOLO AQUÍ (no repetir en tasks)
+    adc_manager_init();
 
     // =====================
     // WAKEUP CAUSE
     // =====================
+
     esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
     ESP_LOGI(TAG, "Wakeup cause: %d", cause);
 
     // =====================
-    // CONFIG WAKEUP (RTC INT)
+    // CONFIG WAKEUP
     // =====================
+
     esp_sleep_enable_ext0_wakeup(GPIO_NUM_33, 0);
 
     // =====================
     // RTC
     // =====================
+
     ds3231_init();
     ds3231_clear_alarm_flag();
 
     // =====================
-    // ALARMA (alternar 00 / 30)
+    // ALARMA
     // =====================
+
     static RTC_DATA_ATTR int toggle = 0;
 
     if (toggle == 0) {
@@ -77,11 +109,13 @@ void app_main(void)
     // =====================
     // QUEUES
     // =====================
+
     queues_init();
 
     // =====================
     // TASKS
     // =====================
+
     BaseType_t res;
 
     res = xTaskCreate(task_sensores, "task_sensores", 4096, NULL, 5, &task_sensores_handle);
@@ -104,5 +138,6 @@ void app_main(void)
     // =====================
     // INICIO DEL CICLO
     // =====================
+
     xTaskNotifyGive(task_energia_handle);
 }

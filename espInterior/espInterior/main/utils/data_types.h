@@ -1,12 +1,33 @@
+/*
+ * @file data_types.h
+ * @brief Definición de estructuras de datos del sistema.
+ * 
+ * Contiene las estructuras utilizadas para:
+ * - Manejo de fecha y hora
+ * - Datos de sensores
+ * - Comandos de control
+ * 
+ * Estas estructuras son compartidas entre tasks mediante colas.
+ * 
+ * @author
+ * Fernando Plazas Trujillo
+ * Isabella Ordoñez
+ * Juan Daniel Constain
+ */
+
 #ifndef DATA_TYPES_H
 #define DATA_TYPES_H
 
 #include <stdint.h>
-#include <stdbool.h>   // 🔥 FALTABA ESTO
+#include <stdbool.h>
 
 // =====================
 // DATETIME
 // =====================
+
+/**
+ * @brief Estructura de fecha y hora.
+ */
 typedef struct {
     uint8_t seconds;
     uint8_t minutes;
@@ -19,6 +40,10 @@ typedef struct {
 // =====================
 // DATOS DE SENSORES
 // =====================
+
+/**
+ * @brief Datos provenientes de los sensores del sistema.
+ */
 typedef struct {
     float temperatura;
     float ph;
@@ -34,18 +59,20 @@ typedef struct {
 // =====================
 // COMANDOS DE CONTROL
 // =====================
+
+/**
+ * @brief Comandos enviados a los actuadores.
+ */
 typedef struct {
 
-    // 🔥 mantener compatibilidad con task_control
     bool enfriar;
 
-    // actuadores reales
     bool bomba;
     bool mezclar;
 
-    // servo
     float servo_angle;
 
 } control_cmd_t;
 
 #endif
+
