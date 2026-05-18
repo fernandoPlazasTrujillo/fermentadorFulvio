@@ -75,16 +75,16 @@ void task_logger(void *pvParameters)
              * @brief Generación de línea en formato CSV
              *
              * Formato:
-             * HH:MM:SS,DD/MM/YYYY,temperatura,humedad
+             * DD-MM-YYYY, HH.MM.SS, temperatura, humedad
              */
             snprintf(linea, sizeof(linea),
-                     "%02d:%02d:%02d,%02d/%02d/%04d,%.2f,%.2f",
-                     datos.hora,
-                     datos.minuto,
-                     datos.segundo,
+                     "%02d-%02d-%04d, %02d.%02d.%02d, %.2f, %.2f",
                      datos.dia,
                      datos.mes,
                      datos.anio,
+                     datos.hora,
+                     datos.minuto,
+                     datos.segundo,
                      datos.temperatura,
                      datos.humedad);
 

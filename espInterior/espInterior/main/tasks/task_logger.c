@@ -1,85 +1,58 @@
 /**
- * @file task_sensores.c
- * @brief Adquisición y procesamiento de sensores.
- * 
- * Lee sensores, aplica filtrado y calcula variables derivadas.
- * Envía los datos a las colas del sistema.
+ * @file task_logger.c
+ * @brief Registro de datos de sensores en tarjeta SD.
  */
+
+#include <stdio.h>
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
 
 #include "esp_log.h"
 
 #include "utils/data_types.h"
-#include "drivers/rtc_ds3231.h"
-#include "drivers/mq135.h"
-#include "drivers/ph_sensor.h"
-#include "drivers/ds18b20.h"
+#include "drivers/sd_card.h"
 #include "queues.h"
 
-static const char *TAG = "SENSORES";
-
-RTC_DATA_ATTR static float baseline = 0;
-RTC_DATA_ATTR static int baseline_initialized = 0;
-
-#define ALPHA 0.2
-
-static float filtered = 0;
+static const char *TAG = "LOGGER";
 
 /**
- * @brief Tarea de sensores.
+ * @brief Tarea de logging del sistema.
  */
-void task_sensores(void *pvParameters)
+void task_logger(void *pvParameters)
 {
     sensor_data_t data;
+    char line[160];
 
-    mq135_init();
-    ph_init();
-
-    ds18b20_init(GPIO_NUM_4);
+    if (sd_card_init() != ESP_OK) {
+        ESP_LOGE(TAG, "SD no inicializada");
+    }
 
     while (1) {
+        if (xQueueReceive(queue_logger, &data, portMAX_DELAY)) {
+            snprintf(line, sizeof(line),
+                     "%02d-%02d-%04d, %02d.%02d.%02d, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f",
+                     data.datetime.day,
+                     data.datetime.month,
+                     data.datetime.year,
+                     data.datetime.hours,
+                     data.datetime.minutes,
+                     data.datetime.seconds,
+                     data.temperatura,
+                     data.ph,
+                     data.co2,
+                     data.co2_raw,
+                     data.voltaje,
+                     data.corriente);
 
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            ESP_LOGI(TAG, "LOG -> %s", line);
 
-        ESP_LOGI(TAG, "Leyendo sensores...");
-
-        float raw_voltage = mq135_read();
-        int raw_adc = mq135_read_raw();
-
-        ESP_LOGI(TAG, "MQ135 ADC RAW: %d", raw_adc);
-
-        filtered = ALPHA * raw_voltage + (1 - ALPHA) * filtered;
-
-        if (!baseline_initialized) {
-            baseline = filtered;
-            baseline_initialized = 1;
-            ESP_LOGI(TAG, "Baseline inicial: %.4f", baseline);
+            if (sd_card_write_line(line) != ESP_OK) {
+                ESP_LOGE(TAG, "Error escribiendo en SD");
+            } else {
+                ESP_LOGI(TAG, "Dato guardado en SD");
+            }
         }
-
-        data.co2_raw = raw_voltage;
-        data.co2 = filtered - baseline;
-
-        data.ph = ph_read();
-
-        data.voltaje = 5.0;
-
-        float temp = ds18b20_read_temperature();
-
-        if (temp == -127.0) {
-            ESP_LOGW(TAG, "Error leyendo DS18B20");
-            temp = 25.0;
-        }
-
-        data.temperatura = temp;
-        data.corriente = 0.5;
-
-        ds3231_get_datetime(&data.datetime);
-
-        xQueueSend(queue_sensores, &data, portMAX_DELAY);
-        xQueueSend(queue_logger, &data, portMAX_DELAY);
-
-        ESP_LOGI(TAG, "Datos enviados");
     }
 }

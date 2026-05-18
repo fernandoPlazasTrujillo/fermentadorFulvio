@@ -69,7 +69,6 @@
 // COLAS DEL SISTEMA
 // ==========================
 
-QueueHandle_t cola_eventos;  /**< Cola de eventos del sistema */
 QueueHandle_t cola_datos;    /**< Cola de datos para logging */
 QueueHandle_t cola_display;  /**< Cola de datos para visualización */
 
@@ -88,7 +87,6 @@ TaskHandle_t main_task_handle = NULL;
 // DECLARACIÓN DE TAREAS
 // ==========================
 
-extern void task_input(void *pvParameters);
 extern void task_sensores(void *pvParameters);
 extern void task_logger(void *pvParameters);
 extern void task_display(void *pvParameters);
@@ -175,7 +173,6 @@ void app_main(void)
     // CREACIÓN DE COLAS
     // ==========================
 
-    cola_eventos  = xQueueCreate(10, sizeof(evento_t));
     cola_datos    = xQueueCreate(10, sizeof(datos_ambiente_t));
     cola_display  = xQueueCreate(10, sizeof(datos_ambiente_t));
 
@@ -183,7 +180,6 @@ void app_main(void)
     // CREACIÓN DE TAREAS
     // ==========================
 
-    xTaskCreate(task_input,    "task_input",    2048, NULL, 5, NULL);
     xTaskCreate(task_sensores, "task_sensores", 4096, NULL, 5, NULL);
     xTaskCreate(task_logger,   "task_logger",   4096, NULL, 5, NULL);
     xTaskCreate(task_display,  "task_display",  4096, NULL, 5, NULL);

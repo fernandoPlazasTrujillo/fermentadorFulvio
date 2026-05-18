@@ -1,7 +1,6 @@
 idf_component_register(
     SRCS 
         "main.c"
-        "tasks/task_input.c"
         "tasks/task_sensores.c"
         "tasks/task_logger.c"
         "tasks/task_display.c"

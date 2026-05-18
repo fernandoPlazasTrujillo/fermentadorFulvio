@@ -1,13 +1,5 @@
 #pragma once
 
-typedef enum {
-    EVENTO_INICIO_PROCESO
-} evento_tipo_t;
-
-typedef struct {
-    evento_tipo_t tipo;
-} evento_t;
-
 typedef struct {
     float temperatura;
     float humedad;

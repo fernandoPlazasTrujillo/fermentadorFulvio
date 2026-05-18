@@ -33,7 +33,7 @@
 #define LCD_E  GPIO_NUM_33 /**< Pin Enable */
 
 #define LCD_D4 GPIO_NUM_14 /**< Data bit 4 */
-#define LCD_D5 GPIO_NUM_27 /**< Data bit 5 */
+#define LCD_D5 GPIO_NUM_32 /**< Data bit 5 */
 #define LCD_D6 GPIO_NUM_26 /**< Data bit 6 */
 #define LCD_D7 GPIO_NUM_25 /**< Data bit 7 */
 
@@ -58,10 +58,11 @@ static void lcd_send_nibble(uint8_t nibble)
     gpio_set_level(LCD_D6, (nibble >> 2) & 1);
     gpio_set_level(LCD_D7, (nibble >> 3) & 1);
 
+    esp_rom_delay_us(2);
     gpio_set_level(LCD_E, 1);
-    esp_rom_delay_us(1);
+    esp_rom_delay_us(5);
     gpio_set_level(LCD_E, 0);
-    esp_rom_delay_us(100);
+    esp_rom_delay_us(120);
 }
 
 /**
@@ -122,8 +123,15 @@ void lcd_init(void)
     gpio_set_direction(LCD_D6, GPIO_MODE_OUTPUT);
     gpio_set_direction(LCD_D7, GPIO_MODE_OUTPUT);
 
+    gpio_set_level(LCD_RS, 0);
+    gpio_set_level(LCD_E, 0);
+    gpio_set_level(LCD_D4, 0);
+    gpio_set_level(LCD_D5, 0);
+    gpio_set_level(LCD_D6, 0);
+    gpio_set_level(LCD_D7, 0);
+
     // Espera inicial para estabilización del display
-    vTaskDelay(pdMS_TO_TICKS(50));
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     // Secuencia de inicialización estándar (HD44780)
     lcd_send_nibble(0x03);
@@ -136,6 +144,7 @@ void lcd_init(void)
     vTaskDelay(pdMS_TO_TICKS(5));
 
     lcd_send_nibble(0x02); // Activar modo 4 bits
+    vTaskDelay(pdMS_TO_TICKS(5));
 
     // Configuración del display
     lcd_cmd(0x28); // 2 líneas, matriz 5x8

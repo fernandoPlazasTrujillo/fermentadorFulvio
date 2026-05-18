@@ -71,11 +71,12 @@ void task_display(void *pvParameters)
      * @brief Inicialización del LCD
      */
     lcd_init();
+    lcd_clear();
 
     /**
      * @brief Retardo inicial para estabilización
      */
-    vTaskDelay(pdMS_TO_TICKS(50));
+    vTaskDelay(pdMS_TO_TICKS(1500));
 
     while (1)
     {
@@ -131,6 +132,7 @@ void task_display(void *pvParameters)
              */
             lcd_set_cursor(0, 1);
             lcd_print(buffer2);
+            vTaskDelay(pdMS_TO_TICKS(3000));
 
             // ==========================
             // SINCRONIZACIÓN

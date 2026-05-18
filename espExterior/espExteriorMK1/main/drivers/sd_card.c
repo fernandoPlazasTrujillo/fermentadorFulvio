@@ -25,6 +25,7 @@
 #include "sd_card.h"
 #include <stdio.h>
 
+#include "esp_err.h"
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 #include "driver/spi_common.h"
@@ -37,6 +38,7 @@
 #define PIN_NUM_MOSI 23 /**< Pin MOSI */
 #define PIN_NUM_CLK  18 /**< Pin CLK */
 #define PIN_NUM_CS   15 /**< Pin Chip Select */
+#define SD_SPI_MAX_FREQ_KHZ 4000
 
 // ==========================
 // INICIALIZACIÓN SD
@@ -50,6 +52,7 @@ int sd_init(void)
      * @brief Configuración del host SPI en modo SD
      */
     sdmmc_host_t host = SDSPI_HOST_DEFAULT();
+    host.max_freq_khz = SD_SPI_MAX_FREQ_KHZ;
 
     /**
      * @brief Configuración del bus SPI
@@ -59,7 +62,8 @@ int sd_init(void)
         .miso_io_num = PIN_NUM_MISO,
         .sclk_io_num = PIN_NUM_CLK,
         .quadwp_io_num = -1,
-        .quadhd_io_num = -1
+        .quadhd_io_num = -1,
+        .max_transfer_sz = 4000
     };
 
     /**
@@ -96,11 +100,12 @@ int sd_init(void)
 
     if (ret != ESP_OK)
     {
-        printf("Error montando sistema de archivos en SD\n");
+        printf("Error montando sistema de archivos en SD: %s\n", esp_err_to_name(ret));
         return -1;
     }
 
     printf("Tarjeta SD inicializada correctamente\n");
+    sdmmc_card_print_info(stdout, card);
 
     return 0;
 }
