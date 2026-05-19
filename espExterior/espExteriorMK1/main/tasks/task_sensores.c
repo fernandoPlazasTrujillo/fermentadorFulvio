@@ -128,6 +128,8 @@ void task_sensores(void *pvParameters)
      */
     xQueueSend(cola_display, &datos, portMAX_DELAY);
 
+    xQueueSend(cola_mqtt, &datos, portMAX_DELAY);
+
     printf("Medicion completada\n");
 
     // ===============================

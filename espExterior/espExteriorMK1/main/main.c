@@ -51,6 +51,8 @@
 #include "ds3231.h"
 #include "sd_card.h"
 
+#include "wifi/wifi_manager.h"
+
 // ==========================
 // CONFIGURACIÓN I2C
 // ==========================
@@ -58,6 +60,7 @@
 #define I2C_MASTER_SCL_IO 22        /**< Pin SCL */
 #define I2C_MASTER_SDA_IO 21        /**< Pin SDA */
 #define I2C_MASTER_FREQ_HZ 100000   /**< Frecuencia I2C */
+#define WIFI_CONNECT_TIMEOUT_MS 10000
 
 // ==========================
 // CONFIGURACIÓN RTC
@@ -71,6 +74,7 @@
 
 QueueHandle_t cola_datos;    /**< Cola de datos para logging */
 QueueHandle_t cola_display;  /**< Cola de datos para visualización */
+QueueHandle_t cola_mqtt;     /**< Cola de datos para MQTT */
 
 // ==========================
 // HANDLE DE TAREA PRINCIPAL
@@ -90,6 +94,7 @@ TaskHandle_t main_task_handle = NULL;
 extern void task_sensores(void *pvParameters);
 extern void task_logger(void *pvParameters);
 extern void task_display(void *pvParameters);
+extern void task_mqtt(void *pvParameters);
 
 // ==========================
 // INICIALIZACIÓN I2C
@@ -124,6 +129,19 @@ void i2c_init()
 void app_main(void)
 {
     printf("Sistema iniciado\n");
+
+    wifi_init();
+    bool wifi_connected = wifi_wait_connected(WIFI_CONNECT_TIMEOUT_MS);
+
+    if (wifi_connected)
+    {
+        printf("WiFi listo\n");
+    }
+    else
+    {
+        printf("WiFi no conectado, se continua sin red\n");
+        wifi_scan_print();
+    }
 
     /**
      * @brief Obtener handle de la tarea principal
@@ -175,6 +193,7 @@ void app_main(void)
 
     cola_datos    = xQueueCreate(10, sizeof(datos_ambiente_t));
     cola_display  = xQueueCreate(10, sizeof(datos_ambiente_t));
+    cola_mqtt     = xQueueCreate(10, sizeof(datos_ambiente_t));
 
     // ==========================
     // CREACIÓN DE TAREAS
@@ -183,6 +202,11 @@ void app_main(void)
     xTaskCreate(task_sensores, "task_sensores", 4096, NULL, 5, NULL);
     xTaskCreate(task_logger,   "task_logger",   4096, NULL, 5, NULL);
     xTaskCreate(task_display,  "task_display",  4096, NULL, 5, NULL);
+
+    if (wifi_connected)
+    {
+        xTaskCreate(task_mqtt, "task_mqtt", 6144, NULL, 5, NULL);
+    }
 
     // ==========================
     // SINCRONIZACIÓN
@@ -194,6 +218,11 @@ void app_main(void)
      * Se utiliza notificación de tarea para sincronizar el flujo.
      */
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+    if (wifi_connected)
+    {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    }
 
     // ==========================
     // CONFIGURACIÓN ALARMA RTC
