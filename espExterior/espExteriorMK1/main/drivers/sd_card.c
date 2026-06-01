@@ -30,6 +30,9 @@
 #include "sdmmc_cmd.h"
 #include "driver/spi_common.h"
 
+#include <errno.h>
+#include <sys/stat.h>
+
 // ==========================
 // CONFIGURACIÓN DE PINES SPI
 // ==========================
@@ -37,8 +40,9 @@
 #define PIN_NUM_MISO 19 /**< Pin MISO */
 #define PIN_NUM_MOSI 23 /**< Pin MOSI */
 #define PIN_NUM_CLK  18 /**< Pin CLK */
-#define PIN_NUM_CS   15 /**< Pin Chip Select */
+#define PIN_NUM_CS   4 /**< Pin Chip Select */
 #define SD_SPI_MAX_FREQ_KHZ 4000
+#define SD_PENDING_MQTT_PATH "/sdcard/test.txt"
 
 // ==========================
 // INICIALIZACIÓN SD
@@ -138,4 +142,77 @@ int sd_write_line(const char *line)
     fclose(f);
 
     return 0;
+}
+
+int sd_append_pending_mqtt(const char *payload)
+{
+    FILE *f = fopen(SD_PENDING_MQTT_PATH, "a");
+
+    if (f == NULL)
+    {
+        printf("ERROR: No se pudo abrir %s. errno=%d\n", SD_PENDING_MQTT_PATH, errno);
+        return -1;
+    }
+
+    fprintf(f, "%s\n", payload);
+
+    fclose(f);
+
+    printf("Payload almacenado en %s\n", SD_PENDING_MQTT_PATH);
+
+    return 0;
+}
+
+bool sd_pending_mqtt_exists(void)
+{
+    struct stat file_stat;
+
+    return stat(SD_PENDING_MQTT_PATH, &file_stat) == 0;
+}
+
+FILE *sd_open_pending_mqtt_read(void)
+{
+    FILE *f = fopen(SD_PENDING_MQTT_PATH, "r");
+
+    if (f == NULL)
+    {
+        printf("ERROR: No se pudo abrir %s en lectura. errno=%d\n", SD_PENDING_MQTT_PATH, errno);
+    }
+
+    return f;
+}
+
+char *sd_read_pending_mqtt_line(FILE *file, char *buffer, size_t size)
+{
+    if (file == NULL || buffer == NULL || size == 0)
+    {
+        return NULL;
+    }
+
+    return fgets(buffer, size, file);
+}
+
+void sd_close_pending_mqtt(FILE *file)
+{
+    if (file != NULL)
+    {
+        fclose(file);
+    }
+}
+
+int sd_delete_pending_mqtt(void)
+{
+    if (remove(SD_PENDING_MQTT_PATH) == 0)
+    {
+        printf("Archivo %s eliminado\n", SD_PENDING_MQTT_PATH);
+        return 0;
+    }
+
+    if (errno == ENOENT)
+    {
+        return 0;
+    }
+
+    printf("ERROR: No se pudo eliminar %s. errno=%d\n", SD_PENDING_MQTT_PATH, errno);
+    return -1;
 }

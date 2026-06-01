@@ -203,10 +203,8 @@ void app_main(void)
     xTaskCreate(task_logger,   "task_logger",   4096, NULL, 5, NULL);
     xTaskCreate(task_display,  "task_display",  4096, NULL, 5, NULL);
 
-    if (wifi_connected)
-    {
-        xTaskCreate(task_mqtt, "task_mqtt", 6144, NULL, 5, NULL);
-    }
+    xTaskCreate(task_mqtt, "task_mqtt", 6144, NULL, 5, NULL);
+    
 
     // ==========================
     // SINCRONIZACIÓN
@@ -218,11 +216,9 @@ void app_main(void)
      * Se utiliza notificación de tarea para sincronizar el flujo.
      */
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-
-    if (wifi_connected)
-    {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-    }
+    
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    
 
     // ==========================
     // CONFIGURACIÓN ALARMA RTC

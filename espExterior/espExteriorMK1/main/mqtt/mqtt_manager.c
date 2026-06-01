@@ -7,7 +7,7 @@
 #include "esp_log.h"
 #include "mqtt_client.h"
 
-#define MQTT_BROKER_URI "mqtt://192.168.80.13:1883"
+#define MQTT_BROKER_URI "mqtt://10.51.221.155:1883"
 
 static const char *TAG = "mqtt_manager";
 

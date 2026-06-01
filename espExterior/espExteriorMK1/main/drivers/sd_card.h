@@ -24,6 +24,10 @@
 
 #pragma once
 
+#include <stddef.h>
+#include <stdbool.h>
+#include <stdio.h>
+
 /**
  * @brief Inicializa la tarjeta SD
  *
@@ -51,3 +55,47 @@ int sd_init(void);
  * @note El archivo se abre en modo append ("a")
  */
 int sd_write_line(const char *line);
+
+int sd_append_pending_mqtt(const char *payload);
+
+/**
+ * @brief Verifica si existe el archivo de mensajes MQTT pendientes.
+ *
+ * @return true si existe "/sdcard/test.txt", false en caso contrario.
+ */
+bool sd_pending_mqtt_exists(void);
+
+/**
+ * @brief Abre el archivo de mensajes MQTT pendientes en modo lectura.
+ *
+ * @return FILE* Puntero al archivo abierto, o NULL si no se pudo abrir.
+ */
+FILE *sd_open_pending_mqtt_read(void);
+
+/**
+ * @brief Lee una linea del archivo de mensajes MQTT pendientes.
+ *
+ * @param file Archivo abierto previamente con sd_open_pending_mqtt_read().
+ * @param buffer Buffer donde se almacenara la linea leida.
+ * @param size Tamano del buffer.
+ *
+ * @return char* El mismo buffer si se leyo una linea, o NULL al llegar al fin
+ * del archivo o si ocurre un error.
+ */
+char *sd_read_pending_mqtt_line(FILE *file, char *buffer, size_t size);
+
+/**
+ * @brief Cierra el archivo de mensajes MQTT pendientes.
+ *
+ * @param file Archivo abierto a cerrar.
+ */
+void sd_close_pending_mqtt(FILE *file);
+
+/**
+ * @brief Elimina el archivo de mensajes MQTT pendientes.
+ *
+ * @return int Codigo de estado:
+ * - 0: eliminacion exitosa o archivo inexistente
+ * - -1: error eliminando el archivo
+ */
+int sd_delete_pending_mqtt(void);
