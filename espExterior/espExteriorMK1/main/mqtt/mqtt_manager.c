@@ -7,7 +7,7 @@
 #include "esp_log.h"
 #include "mqtt_client.h"
 
-#define MQTT_BROKER_URI "mqtt://10.51.221.155:1883"
+#define MQTT_BROKER_URI "mqtt://10.51.221.153:1883"
 
 static const char *TAG = "mqtt_manager";
 
@@ -59,6 +59,15 @@ void mqtt_manager_start(void)
     {
         mqtt_event_group = xEventGroupCreate();
     }
+
+    if (mqtt_event_group == NULL)
+    {
+        ESP_LOGE(TAG, "No se pudo crear grupo de eventos MQTT");
+        return;
+    }
+
+    xEventGroupClearBits(mqtt_event_group,
+                         MQTT_CONNECTED_BIT | MQTT_PUBLISHED_BIT | MQTT_ERROR_BIT);
 
     if (mqtt_client != NULL)
     {
@@ -148,5 +157,11 @@ void mqtt_manager_stop(void)
         esp_mqtt_client_stop(mqtt_client);
         esp_mqtt_client_destroy(mqtt_client);
         mqtt_client = NULL;
+    }
+
+    if (mqtt_event_group != NULL)
+    {
+        xEventGroupClearBits(mqtt_event_group,
+                             MQTT_CONNECTED_BIT | MQTT_PUBLISHED_BIT | MQTT_ERROR_BIT);
     }
 }
