@@ -13,8 +13,8 @@
 
 #include "nvs_flash.h"
 
-#define WIFI_SSID      "S25 Ultra de fernando"
-#define WIFI_PASS      "fer12345"
+#define WIFI_SSID      "TP-LINK-TM"
+#define WIFI_PASS      "24890717"
 #define WIFI_MAX_RETRIES 4
 #define WIFI_SCAN_MAX_AP 20
 
