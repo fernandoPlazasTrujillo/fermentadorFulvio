@@ -34,8 +34,19 @@ extern QueueHandle_t queue_control;
 extern QueueHandle_t queue_logger;
 
 /**
+ * @brief Cola de publicacion MQTT.
+ */
+extern QueueHandle_t queue_mqtt;
+
+/**
+ * @brief Cola de display.
+ */
+extern QueueHandle_t queue_display;
+
+/**
  * @brief Inicializa todas las colas del sistema.
  */
 void queues_init(void);
+
 
 #endif

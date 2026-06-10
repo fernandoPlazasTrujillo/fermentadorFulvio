@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -38,9 +39,18 @@
 #include "tasks/task_actuadores.h"
 #include "tasks/task_logger.h"
 #include "tasks/task_energia.h"
+#include "tasks/task_mqtt.h"
+#include "tasks/task_display.h"
+
+// Network
+#include "wifi/wifi_manager.h"
 
 // Queues
 #include "queues.h"
+
+// Drivers
+#include "drivers/rtc_ds3231.h"
+#include "drivers/oled_display.h"
 
 // =====================
 // HANDLES
@@ -54,6 +64,8 @@ TaskHandle_t task_energia_handle  = NULL;
 
 static const char *TAG = "MAIN";
 
+#define WIFI_CONNECT_TIMEOUT_MS 10000
+
 // =====================
 // MAIN
 // =====================
@@ -66,11 +78,26 @@ void app_main(void)
     ESP_LOGI(TAG, "Iniciando sistema...");
 
     // =====================
+    // WIFI
+    // =====================
+
+    wifi_init();
+    bool wifi_connected = wifi_wait_connected(WIFI_CONNECT_TIMEOUT_MS);
+    
+    if (wifi_connected) {
+        ESP_LOGI(TAG, "WiFi listo");
+    } else {
+        ESP_LOGW(TAG, "WiFi no conectado, se continua sin red");
+        wifi_scan_print();
+    }
+
+    // =====================
     // INIT HARDWARE
     // =====================
 
     i2c_manager_init();
     adc_manager_init();
+
 
     // =====================
     // WAKEUP CAUSE
@@ -129,6 +156,12 @@ void app_main(void)
 
     res = xTaskCreate(task_logger, "task_logger", 4096, NULL, 5, NULL);
     if (res != pdPASS) ESP_LOGE(TAG, "Error creando task_logger");
+
+    res = xTaskCreate(task_mqtt, "task_mqtt", 6144, NULL, 5, NULL);
+    if (res != pdPASS) ESP_LOGE(TAG, "Error creando task_mqtt");
+
+    res = xTaskCreate(task_display, "task_display", 4096, NULL, 4, NULL);
+    if (res != pdPASS) ESP_LOGE(TAG, "Error creando task_display");
 
     res = xTaskCreate(task_energia, "task_energia", 4096, NULL, 5, &task_energia_handle);
     if (res != pdPASS) ESP_LOGE(TAG, "Error creando task_energia");

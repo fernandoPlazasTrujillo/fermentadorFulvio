@@ -10,6 +10,10 @@
 #include "drivers/ds18b20.h"
 #include "queues.h"
 
+#include "wifi/wifi_manager.h"
+#include "mqtt/mqtt_manager.h"
+#include "drivers/sd_card.h"
+
 static const char *TAG = "SENSORES";
 
 // =====================
@@ -74,7 +78,7 @@ void task_sensores(void *pvParameters)
         // =====================
         // VALORES FIJOS (DEBUG)
         // =====================
-        data.voltaje = 5.0;       // 🔥 fijo
+        data.voltaje = 5.0;       // fijo
         
         float temp = ds18b20_read_temperature();
 
@@ -91,11 +95,34 @@ void task_sensores(void *pvParameters)
         // =====================
         ds3231_get_datetime(&data.datetime);
 
+        printf("RTC -> %d:%d:%d\n",
+        data.datetime.hours,
+        data.datetime.minutes,
+        data.datetime.seconds);
+
         // =====================
         // ENVÍO A SISTEMA
         // =====================
         xQueueSend(queue_sensores, &data, portMAX_DELAY);
         xQueueSend(queue_logger, &data, portMAX_DELAY);
+        xQueueSend(queue_mqtt, &data, portMAX_DELAY);
+
+        display_data_t display;
+
+        display.temperatura = data.temperatura;
+        display.ph          = data.ph;
+        display.co2         = data.co2;
+
+        display.wifi_ok = wifi_is_connected();
+        display.mqtt_ok = mqtt_is_connected();
+        display.sd_ok   = sd_card_is_mounted();
+
+        display.datetime = data.datetime;
+
+        xQueueSend(
+            queue_display,
+            &display,
+            0);
 
         ESP_LOGI(TAG, "Datos enviados");
     }

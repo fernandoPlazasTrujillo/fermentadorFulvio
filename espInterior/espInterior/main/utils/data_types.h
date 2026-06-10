@@ -74,5 +74,21 @@ typedef struct {
 
 } control_cmd_t;
 
+/**
+ * @brief Datos para la pantalla.
+ */
+typedef struct
+{
+    float temperatura;
+    float ph;
+    float co2;
+
+    bool wifi_ok;
+    bool mqtt_ok;
+    bool sd_ok;
+
+    datetime_t datetime;
+
+} display_data_t;
 #endif
 

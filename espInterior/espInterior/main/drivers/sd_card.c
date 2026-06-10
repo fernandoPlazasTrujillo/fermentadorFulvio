@@ -14,7 +14,10 @@
  */
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <errno.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include "esp_log.h"
 #include "esp_vfs_fat.h"
@@ -52,12 +55,18 @@ static const char *TAG = "SD";
 /** @brief Punto de montaje del sistema de archivos */
 static const char mount_point[] = "/sdcard";
 
+/** @brief Archivo de respaldo para mensajes MQTT no enviados */
+static const char pending_mqtt_path[] = "/sdcard/mqtt_pending.txt";
+
 // ============================
 // MUTEX SPI
 // ============================
 
 /** @brief Mutex para acceso seguro al bus SPI */
 static SemaphoreHandle_t spi_mutex = NULL;
+
+/** @brief Indica si la SD ya fue montada */
+static bool sd_mounted = false;
 
 // ============================
 // INIT SD
@@ -73,6 +82,10 @@ static SemaphoreHandle_t spi_mutex = NULL;
 esp_err_t sd_card_init(void)
 {
     esp_err_t ret;
+
+    if (sd_mounted) {
+        return ESP_OK;
+    }
 
     if (spi_mutex == NULL) {
         spi_mutex = xSemaphoreCreateMutex();
@@ -119,6 +132,8 @@ esp_err_t sd_card_init(void)
     }
 
     ESP_LOGI(TAG, "SD montada correctamente");
+
+    sd_mounted = true;
 
     return ESP_OK;
 }
@@ -167,4 +182,124 @@ esp_err_t sd_card_write_line(const char *line)
     }
 
     return ESP_OK;
+}
+
+esp_err_t sd_card_append_pending_mqtt(const char *payload)
+{
+    if (payload == NULL) {
+        return ESP_FAIL;
+    }
+
+    if (sd_card_init() != ESP_OK) {
+        return ESP_FAIL;
+    }
+
+    if (spi_mutex != NULL) {
+        xSemaphoreTake(spi_mutex, portMAX_DELAY);
+    }
+
+    FILE *f = fopen(pending_mqtt_path, "a");
+
+    if (f == NULL) {
+        ESP_LOGE(TAG, "Error abriendo pendientes MQTT (%s), errno=%d", pending_mqtt_path, errno);
+
+        if (spi_mutex != NULL) {
+            xSemaphoreGive(spi_mutex);
+        }
+
+        return ESP_FAIL;
+    }
+
+    fprintf(f, "%s\n", payload);
+    fflush(f);
+    fclose(f);
+
+    if (spi_mutex != NULL) {
+        xSemaphoreGive(spi_mutex);
+    }
+
+    return ESP_OK;
+}
+
+bool sd_card_pending_mqtt_exists(void)
+{
+    struct stat file_stat;
+
+    if (sd_card_init() != ESP_OK) {
+        return false;
+    }
+
+    return stat(pending_mqtt_path, &file_stat) == 0;
+}
+
+FILE *sd_card_open_pending_mqtt_read(void)
+{
+    if (sd_card_init() != ESP_OK) {
+        return NULL;
+    }
+
+    if (spi_mutex != NULL) {
+        xSemaphoreTake(spi_mutex, portMAX_DELAY);
+    }
+
+    FILE *f = fopen(pending_mqtt_path, "r");
+
+    if (f == NULL) {
+        ESP_LOGE(TAG, "Error abriendo pendientes MQTT (%s), errno=%d", pending_mqtt_path, errno);
+
+        if (spi_mutex != NULL) {
+            xSemaphoreGive(spi_mutex);
+        }
+    }
+
+    return f;
+}
+
+char *sd_card_read_pending_mqtt_line(FILE *file, char *buffer, size_t size)
+{
+    if (file == NULL || buffer == NULL || size == 0) {
+        return NULL;
+    }
+
+    return fgets(buffer, size, file);
+}
+
+void sd_card_close_pending_mqtt(FILE *file)
+{
+    if (file != NULL) {
+        fclose(file);
+    }
+
+    if (spi_mutex != NULL) {
+        xSemaphoreGive(spi_mutex);
+    }
+}
+
+esp_err_t sd_card_delete_pending_mqtt(void)
+{
+    if (sd_card_init() != ESP_OK) {
+        return ESP_FAIL;
+    }
+
+    if (spi_mutex != NULL) {
+        xSemaphoreTake(spi_mutex, portMAX_DELAY);
+    }
+
+    int result = remove(pending_mqtt_path);
+
+    if (spi_mutex != NULL) {
+        xSemaphoreGive(spi_mutex);
+    }
+
+    if (result == 0 || errno == ENOENT) {
+        return ESP_OK;
+    }
+
+    ESP_LOGE(TAG, "Error eliminando pendientes MQTT (%s), errno=%d", pending_mqtt_path, errno);
+    return ESP_FAIL;
+}
+
+bool sd_card_is_mounted(void)
+{
+    return sd_mounted;
 }

@@ -50,4 +50,7 @@ esp_err_t i2c_manager_write(uint8_t addr, uint8_t reg, uint8_t *data, size_t len
  */
 esp_err_t i2c_manager_read(uint8_t addr, uint8_t reg, uint8_t *data, size_t len);
 
+
+esp_err_t i2c_manager_write_raw(uint8_t addr, const uint8_t *data, size_t len);
+
 #endif
