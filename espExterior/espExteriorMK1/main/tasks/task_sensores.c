@@ -16,17 +16,27 @@
  * 2. Lectura del RTC
  * 3. Validación de datos
  * 4. Envío a colas:
- *    - cola_datos → task_logger
+ *    - cola_datos   → task_logger
  *    - cola_display → task_display
+ *    - cola_mqtt    → task_mqtt
  * 5. Eliminación de la tarea
  *
  * Comunicación:
- * - Salida: cola_datos, cola_display
+ * - Salida:
+ *   - cola_datos
+ *   - cola_display
+ *   - cola_mqtt
+ * 
+ * Aspectos de FreeRTOS utilizados:
+ * - Queue para distribución de datos entre tareas.
+ * - Ejecución one-shot mediante creación y destrucción dinámica.
+ * - Bloqueo seguro mediante portMAX_DELAY durante el envío.
  *
  * @note Esta tarea es de tipo "one-shot" (ejecución única).
  *
- * @warning No implementa control periódico ni sincronización con RTC
- * mediante interrupciones (esto puede mejorarse en futuras versiones).
+ * @note La periodicidad de ejecución es gestionada por la tarea
+ * principal del sistema, manteniendo esta tarea enfocada
+ * exclusivamente en la adquisición de datos.
  *
  * @authors
  * - Fernando Plazas
@@ -50,14 +60,10 @@
  */
 void task_sensores(void *pvParameters)
 {
-    /**
-     * @brief Estructura principal de datos ambientales
-     */
+
     datos_ambiente_t datos;
 
-    /**
-     * @brief Estructuras auxiliares de sensores
-     */
+
     dht11_data_t dht;
     rtc_time_t rtc;
 
@@ -67,9 +73,7 @@ void task_sensores(void *pvParameters)
     // LECTURA DEL SENSOR DHT11
     // ===============================
 
-    /**
-     * @brief Lectura de temperatura y humedad
-     */
+
     if (dht11_read(&dht) == 0)
     {
         datos.temperatura = dht.temperatura;
@@ -77,9 +81,7 @@ void task_sensores(void *pvParameters)
     }
     else
     {
-        /**
-         * @brief Valores de error en caso de fallo
-         */
+
         datos.temperatura = -1;
         datos.humedad = -1;
     }
@@ -88,9 +90,7 @@ void task_sensores(void *pvParameters)
     // LECTURA DEL RTC DS3231
     // ===============================
 
-    /**
-     * @brief Lectura de fecha y hora
-     */
+
     if (ds3231_read_time(&rtc) == 0)
     {
         datos.hora    = rtc.horas;
@@ -103,9 +103,7 @@ void task_sensores(void *pvParameters)
     }
     else
     {
-        /**
-         * @brief Valores por defecto en caso de error
-         */
+
         datos.hora = 0;
         datos.minuto = 0;
         datos.segundo = 0;
@@ -118,14 +116,10 @@ void task_sensores(void *pvParameters)
     // ENVÍO DE DATOS A OTRAS TAREAS
     // ===============================
 
-    /**
-     * @brief Envío a tarea de logging (SD)
-     */
+
     xQueueSend(cola_datos, &datos, portMAX_DELAY);
 
-    /**
-     * @brief Envío a tarea de visualización (LCD)
-     */
+
     xQueueSend(cola_display, &datos, portMAX_DELAY);
 
     xQueueSend(cola_mqtt, &datos, portMAX_DELAY);
@@ -136,14 +130,10 @@ void task_sensores(void *pvParameters)
     // FINALIZACIÓN DE LA TAREA
     // ===============================
 
-    /**
-     * @brief Eliminación de la tarea tras ejecución única
-     */
+
     vTaskDelete(NULL);
 
-    /**
-     * @brief Bucle de seguridad (no debería ejecutarse)
-     */
+
     while (1)
     {
         vTaskDelay(portMAX_DELAY);

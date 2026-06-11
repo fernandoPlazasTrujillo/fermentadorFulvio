@@ -1,17 +1,36 @@
 /**
  * @file lcd_parallel.c
- * @brief Implementación del driver para LCD 16x2 en modo paralelo (4 bits).
+ * @brief Implementación del driver para pantalla LCD 16x2 basada en HD44780.
  *
- * Este módulo implementa el control de una pantalla LCD basada en
- * el controlador HD44780 utilizando GPIO del ESP32.
+ * Este módulo implementa la comunicación paralela en modo de 4 bits
+ * utilizando GPIO del ESP32 para controlar una pantalla LCD 16x2.
  *
- * Características:
- * - Comunicación en modo 4 bits
- * - Control manual de temporización
- * - Soporte para comandos y datos
+ * Funcionalidades implementadas:
+ * - Inicialización del controlador HD44780.
+ * - Envío de comandos.
+ * - Envío de caracteres.
+ * - Posicionamiento del cursor.
+ * - Limpieza de pantalla.
+ *
+ * @section lcd_system_role Rol dentro del sistema
+ *
+ * Este módulo forma parte del ESP32 externo y proporciona la interfaz
+ * visual local para el monitoreo del proceso de fermentación.
+ *
+ * La información mostrada puede incluir:
+ * - Temperatura ambiente.
+ * - Humedad relativa.
+ * - Estado de conexión WiFi.
+ * - Estado MQTT.
+ * - Estado del almacenamiento SD.
+ * - Mensajes de diagnóstico.
  *
  * @note No es seguro para acceso concurrente.
- * @warning Requiere temporización precisa (uso de delays en microsegundos)
+ * @note Se recomienda que únicamente la tarea task_display acceda
+ * directamente a este módulo.
+ *
+ * @warning La comunicación requiere retardos precisos para cumplir
+ * las especificaciones del controlador HD44780.
  *
  * @authors
  * - Fernando Plazas
@@ -66,15 +85,16 @@ static void lcd_send_nibble(uint8_t nibble)
 }
 
 /**
- * @brief Envía un byte completo al LCD
+ * @brief Envía un byte completo al controlador LCD.
  *
- * Divide el byte en dos nibbles (alto y bajo) y los envía
- * secuencialmente usando lcd_send_nibble.
+ * Debido al uso del modo de comunicación de 4 bits, el byte es
+ * dividido en dos nibbles que son transmitidos secuencialmente.
  *
- * @param data Byte a enviar
+ * @param data Byte a transmitir.
+ *
  * @param rs Selección de registro:
- * - 0: comando
- * - 1: dato
+ * - 0: Comando.
+ * - 1: Dato.
  */
 static void lcd_send_byte(uint8_t data, int rs)
 {
@@ -89,9 +109,14 @@ static void lcd_send_byte(uint8_t data, int rs)
 // ==========================
 
 /**
- * @brief Envía un comando al LCD
+ * @brief Envía un comando al controlador HD44780.
  *
- * @param cmd Código de comando según HD44780
+ * Permite ejecutar operaciones internas como:
+ * - Limpiar pantalla.
+ * - Posicionar cursor.
+ * - Configurar modos de operación.
+ *
+ * @param cmd Código de comando HD44780.
  */
 static void lcd_cmd(uint8_t cmd)
 {
@@ -99,19 +124,31 @@ static void lcd_cmd(uint8_t cmd)
 }
 
 /**
- * @brief Envía un dato (carácter) al LCD
+ * @brief Envía un carácter al display.
  *
- * @param data Caracter ASCII a mostrar
+ * El dato es almacenado en la memoria DDRAM interna del
+ * controlador y mostrado en la posición actual del cursor.
+ *
+ * @param data Código ASCII del carácter a visualizar.
  */
 static void lcd_data(uint8_t data)
 {
     lcd_send_byte(data, 1);
 }
 
-// ==========================
-// API PÚBLICA
-// ==========================
-
+/**
+ * @brief Inicializa la pantalla LCD.
+ *
+ * Configura los GPIO asociados a las líneas de control y datos,
+ * ejecuta la secuencia de arranque recomendada por el fabricante
+ * y habilita el funcionamiento en modo de 4 bits.
+ *
+ * La secuencia implementada sigue las recomendaciones del
+ * controlador HD44780.
+ *
+ * @note Debe ejecutarse una única vez durante el arranque
+ * del sistema.
+ */
 void lcd_init(void)
 {
     // Configuración de pines como salida
@@ -155,18 +192,44 @@ void lcd_init(void)
     vTaskDelay(pdMS_TO_TICKS(5));
 }
 
+/**
+ * @brief Limpia completamente el contenido de la pantalla.
+ *
+ * Borra todos los caracteres visibles y reposiciona el cursor
+ * en la primera columna de la primera fila.
+ */
 void lcd_clear(void)
 {
     lcd_cmd(0x01);
     vTaskDelay(pdMS_TO_TICKS(5));
 }
 
+/**
+ * @brief Posiciona el cursor en una ubicación específica.
+ *
+ * Convierte la fila y columna solicitadas a la dirección DDRAM
+ * correspondiente del controlador HD44780.
+ *
+ * @param col Columna destino (0-15).
+ * @param row Fila destino (0-1).
+ */
 void lcd_set_cursor(uint8_t col, uint8_t row)
 {
     uint8_t addr = (row == 0) ? 0x80 : 0xC0;
     lcd_cmd(addr + col);
 }
 
+/**
+ * @brief Imprime una cadena de texto en la pantalla.
+ *
+ * Los caracteres son enviados secuencialmente comenzando desde
+ * la posición actual del cursor.
+ *
+ * @param str Cadena terminada en carácter nulo ('\0').
+ *
+ * @warning No se realiza control automático de longitud ni
+ * salto de línea.
+ */
 void lcd_print(const char *str)
 {
     while (*str)

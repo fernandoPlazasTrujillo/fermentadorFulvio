@@ -14,17 +14,47 @@
  * - Juan Daniel Constain
  */
 
+ /**
+ * @section rtc_architecture Arquitectura del sistema
+ *
+ * El módulo DS3231 constituye la referencia temporal principal
+ * del sistema distribuido de fermentación de café.
+ *
+ * Sus funciones principales son:
+ * - Generación de timestamps para almacenamiento en SD.
+ * - Sincronización de mediciones ambientales.
+ * - Activación periódica del sistema mediante alarmas.
+ * - Soporte para estrategias de ahorro energético basadas en sleep.
+ */
+
 #include "ds3231.h"
 #include "driver/i2c.h"
 #include "esp_log.h"
 
+/**
+ * @brief Etiqueta utilizada para mensajes de depuración.
+ */
 #define TAG "DS3231"
 
+/**
+ * @brief Dirección I2C del RTC DS3231.
+ */
 #define DS3231_ADDR 0x68
+
+/**
+ * @brief Puerto I2C utilizado para la comunicación.
+ */
 #define I2C_PORT I2C_NUM_0
 
 /**
- * @brief Convierte BCD a decimal
+ * @brief Convierte un valor codificado en BCD a decimal.
+ *
+ * El DS3231 almacena los valores de fecha y hora en formato
+ * Binary Coded Decimal (BCD), por lo que es necesario convertirlos
+ * antes de utilizarlos en la aplicación.
+ *
+ * @param val Valor en formato BCD.
+ * @return Valor convertido a decimal.
  */
 static uint8_t bcd_to_dec(uint8_t val)
 {
@@ -32,16 +62,41 @@ static uint8_t bcd_to_dec(uint8_t val)
 }
 
 /**
- * @brief Convierte decimal a BCD
+ * @brief Convierte un valor decimal a formato BCD.
+ *
+ * Esta función se utiliza antes de escribir valores de fecha
+ * y hora en los registros internos del DS3231.
+ *
+ * @param val Valor decimal.
+ * @return Valor convertido a BCD.
  */
 static uint8_t dec_to_bcd(uint8_t val)
 {
     return ((val / 10) << 4) | (val % 10);
 }
 
-// ==========================
-// READ TIME
-// ==========================
+/**
+ * @brief Obtiene la fecha y hora actuales del DS3231.
+ *
+ * Lee los registros de tiempo del RTC mediante comunicación I2C
+ * y convierte los valores almacenados en formato BCD a decimal.
+ *
+ * Los campos recuperados son:
+ * - Segundos
+ * - Minutos
+ * - Horas
+ * - Día del mes
+ * - Mes
+ * - Año
+ *
+ * @param[out] time Estructura donde se almacenará la fecha y hora.
+ *
+ * @retval 0 Lectura exitosa.
+ * @retval -1 Error de comunicación I2C.
+ *
+ * @note Esta función debe ejecutarse bajo protección de mutex
+ * si el bus I2C es compartido con otros dispositivos.
+ */
 int ds3231_read_time(rtc_time_t *time)
 {
     uint8_t data[7];
@@ -76,9 +131,20 @@ int ds3231_read_time(rtc_time_t *time)
     return 0;
 }
 
-// ==========================
-// SET TIME
-// ==========================
+/**
+ * @brief Configura la fecha y hora del RTC DS3231.
+ *
+ * Convierte los valores de la estructura rtc_time_t a formato BCD
+ * y los almacena en los registros internos del RTC.
+ *
+ * @param[in] time Estructura que contiene la fecha y hora a configurar.
+ *
+ * @retval 0 Configuración exitosa.
+ * @retval -1 Error de comunicación I2C.
+ *
+ * @warning Esta operación modifica la referencia temporal utilizada
+ * por todo el sistema para generación de timestamps y alarmas.
+ */
 int ds3231_set_time(rtc_time_t *time)
 {
     uint8_t data[7];
@@ -108,9 +174,28 @@ int ds3231_set_time(rtc_time_t *time)
     return (ret == ESP_OK) ? 0 : -1;
 }
 
-// ==========================
-// 🔥 ALARMA CADA MINUTO REAL
-// ==========================
+/**
+ * @brief Configura una alarma periódica cada minuto.
+ *
+ * Programa la alarma 1 del DS3231 para generar una interrupción
+ * cuando los segundos alcancen el valor 0.
+ *
+ * La configuración utilizada permite generar una interrupción
+ * exactamente al inicio de cada minuto.
+ *
+ * Registros utilizados:
+ * - Alarm1 (0x07 - 0x0A)
+ * - Control (0x0E)
+ *
+ * Esta funcionalidad se utiliza para despertar periódicamente
+ * al ESP32 desde modos de bajo consumo.
+ *
+ * @retval 0 Configuración exitosa.
+ * @retval -1 Error de comunicación I2C.
+ *
+ * @note El pin INT/SQW del DS3231 debe estar conectado a un GPIO
+ * configurado como interrupción externa.
+ */
 int ds3231_set_alarm_every_minute()
 {
     esp_err_t ret;
@@ -155,9 +240,23 @@ int ds3231_set_alarm_every_minute()
     return (ret == ESP_OK) ? 0 : -1;
 }
 
-// ==========================
-// 🔥 LIMPIAR FLAG (CRÍTICO)
-// ==========================
+/**
+ * @brief Limpia el indicador de alarma A1F.
+ *
+ * Después de que una alarma genera una interrupción, el bit A1F
+ * permanece activado dentro del registro de estado del DS3231.
+ *
+ * Esta función limpia dicho bit para permitir que la siguiente
+ * alarma vuelva a producir una interrupción válida.
+ *
+ * Registro utilizado:
+ * - Status Register (0x0F)
+ *
+ * @retval 0 Operación completada.
+ *
+ * @warning Si esta función no se ejecuta después de atender la
+ * interrupción, las alarmas posteriores no funcionarán correctamente.
+ */
 int ds3231_clear_alarm_flag()
 {
     uint8_t status;

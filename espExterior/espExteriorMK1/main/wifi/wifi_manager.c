@@ -1,3 +1,31 @@
+/**
+ * @file wifi_manager.c
+ * @brief Implementación del gestor de conectividad WiFi.
+ *
+ * Este módulo implementa la inicialización y administración
+ * de la interfaz WiFi del ESP32 utilizando ESP-IDF.
+ *
+ * Funcionalidades:
+ * - Inicialización de NVS.
+ * - Configuración del stack TCP/IP.
+ * - Gestión de conexión WiFi en modo estación.
+ * - Reintentos automáticos de conexión.
+ * - Obtención de dirección IP.
+ * - Escaneo de redes disponibles.
+ *
+ * Aspectos de FreeRTOS utilizados:
+ * - Event Groups para sincronización de estados.
+ * - Tareas bloqueantes mediante xEventGroupWaitBits().
+ *
+ * La comunicación entre los eventos del stack WiFi y las
+ * tareas de aplicación se realiza mediante bits de estado
+ * almacenados en un Event Group.
+ *
+ * @authors
+ * - Fernando Plazas
+ * - Isabella Ordoñez
+ * - Juan Daniel Constain
+ */
 #include "wifi_manager.h"
 
 #include <string.h>
@@ -13,16 +41,28 @@
 
 #include "nvs_flash.h"
 
-#define WIFI_SSID      "TP-LINK-TM"
-#define WIFI_PASS      "24890717"
+#define WIFI_SSID      "Sala331"
+#define WIFI_PASS      "Sala331tm"
 #define WIFI_MAX_RETRIES 4
 #define WIFI_SCAN_MAX_AP 20
 
+/**
+ * @brief Etiqueta utilizada por el sistema de logs.
+ */
 static const char *TAG = "wifi_manager";
+
+/**
+ * @brief Contador de reintentos de conexión WiFi.
+ */
 static int retry_count = 0;
 
 /**
- * @brief Event group para manejar estados del WiFi.
+ * @brief Grupo de eventos utilizado para sincronizar
+ * el estado de la conexión WiFi.
+ *
+ * Permite notificar a otras tareas cuando:
+ * - Se establece la conexión.
+ * - Ocurre un fallo de conexión.
  */
 static EventGroupHandle_t wifi_event_group;
 
@@ -30,10 +70,27 @@ static EventGroupHandle_t wifi_event_group;
  * @brief Bit que indica conexión WiFi exitosa.
  */
 #define WIFI_CONNECTED_BIT BIT0
+
+/**
+ * @brief Bit que indica fallo de conexión.
+ */
 #define WIFI_FAIL_BIT      BIT1
 
 /**
- * @brief Handler de eventos WiFi e IP.
+ * @brief Manejador de eventos WiFi e IP.
+ *
+ * Procesa los eventos generados por el stack de red de ESP-IDF
+ * y actualiza el Event Group utilizado por las tareas del sistema.
+ *
+ * Eventos gestionados:
+ * - WIFI_EVENT_STA_START
+ * - WIFI_EVENT_STA_DISCONNECTED
+ * - IP_EVENT_STA_GOT_IP
+ *
+ * @param arg Argumento de usuario.
+ * @param event_base Base del evento.
+ * @param event_id Identificador del evento.
+ * @param event_data Datos asociados al evento.
  */
 static void wifi_event_handler(
     void *arg,
@@ -41,9 +98,7 @@ static void wifi_event_handler(
     int32_t event_id,
     void *event_data)
 {
-    /**
-     * WiFi iniciado.
-     */
+
     if (event_base == WIFI_EVENT &&
         event_id == WIFI_EVENT_STA_START)
     {
@@ -55,9 +110,7 @@ static void wifi_event_handler(
         esp_wifi_connect();
     }
 
-    /**
-     * WiFi desconectado.
-     */
+
     else if (event_base == WIFI_EVENT &&
              event_id == WIFI_EVENT_STA_DISCONNECTED)
     {
@@ -89,9 +142,7 @@ static void wifi_event_handler(
         }
     }
 
-    /**
-     * IP obtenida correctamente.
-     */
+
     else if (event_base == IP_EVENT &&
              event_id == IP_EVENT_STA_GOT_IP)
     {
@@ -116,7 +167,18 @@ static void wifi_event_handler(
 }
 
 /**
- * @brief Inicializa y conecta el ESP32 al WiFi.
+ * @brief Inicializa la infraestructura de red WiFi.
+ *
+ * Realiza las siguientes operaciones:
+ * - Inicialización de NVS.
+ * - Inicialización del stack TCP/IP.
+ * - Creación del Event Loop.
+ * - Configuración del modo estación.
+ * - Registro de eventos WiFi.
+ * - Inicio de la interfaz inalámbrica.
+ *
+ * La conexión al punto de acceso comienza automáticamente
+ * después de la inicialización.
  */
 void wifi_init(void)
 {
@@ -216,6 +278,19 @@ void wifi_init(void)
              "Inicialización WiFi completada");
 }
 
+/**
+ * @brief Espera el resultado del proceso de conexión WiFi.
+ *
+ * La función permanece bloqueada hasta que:
+ * - Se obtiene una dirección IP válida.
+ * - Se alcanza el número máximo de reintentos.
+ * - Expira el timeout especificado.
+ *
+ * @param timeout_ms Tiempo máximo de espera en milisegundos.
+ *
+ * @return true si se estableció la conexión.
+ * @return false si ocurrió timeout o fallo.
+ */
 bool wifi_wait_connected(uint32_t timeout_ms)
 {
     if (wifi_event_group == NULL)
@@ -233,6 +308,13 @@ bool wifi_wait_connected(uint32_t timeout_ms)
     return (bits & WIFI_CONNECTED_BIT) != 0;
 }
 
+/**
+ * @brief Convierte un tipo de autenticación WiFi a texto.
+ *
+ * @param authmode Modo de autenticación.
+ *
+ * @return Cadena descriptiva del modo de autenticación.
+ */
 static const char *auth_mode_name(wifi_auth_mode_t authmode)
 {
     switch (authmode)
@@ -258,6 +340,20 @@ static const char *auth_mode_name(wifi_auth_mode_t authmode)
     }
 }
 
+/**
+ * @brief Escanea e imprime las redes WiFi visibles.
+ *
+ * Realiza un escaneo activo de puntos de acceso cercanos
+ * e imprime información relevante:
+ *
+ * - SSID
+ * - Intensidad de señal (RSSI)
+ * - Canal
+ * - Tipo de autenticación
+ *
+ * Esta función está destinada principalmente a tareas
+ * de diagnóstico y depuración.
+ */
 void wifi_scan_print(void)
 {
     wifi_ap_record_t ap_records[WIFI_SCAN_MAX_AP];

@@ -15,15 +15,24 @@
  *
  * Arquitectura:
  * - task_sensores → adquisición de datos
- * - task_logger → almacenamiento en SD
- * - task_display → visualización en LCD
+ * - task_logger   → almacenamiento en SD
+ * - task_display  → visualización en LCD
+ * - task_mqtt     → transmisión MQTT
  *
  * Flujo general:
  * 1. Inicialización del sistema
- * 2. Ejecución de tareas
- * 3. Espera sincronización (display)
- * 4. Configuración de alarma RTC
- * 5. Entrada en Deep Sleep
+ * 2. Conexión WiFi
+ * 3. Creación de tareas
+ * 4. Espera finalización de tareas críticas
+ *    (display y MQTT)
+ * 5. Configuración de alarma RTC
+ * 6. Entrada en Deep Sleep
+ * 
+ * Aspectos de FreeRTOS utilizados:
+ * - Creación dinámica de tareas.
+ * - Colas para intercambio de datos.
+ * - Notificaciones de tareas para sincronización.
+ * - Bloqueo eficiente mediante portMAX_DELAY.
  *
  * @note El sistema funciona en ciclos:
  * medir → procesar → mostrar → guardar → dormir
@@ -72,9 +81,20 @@
 // COLAS DEL SISTEMA
 // ==========================
 
-QueueHandle_t cola_datos;    /**< Cola de datos para logging */
-QueueHandle_t cola_display;  /**< Cola de datos para visualización */
-QueueHandle_t cola_mqtt;     /**< Cola de datos para MQTT */
+/**
+ * @brief Cola utilizada para transferir datos hacia task_logger.
+ */
+QueueHandle_t cola_datos;
+
+/**
+ * @brief Cola utilizada para transferir datos hacia task_display.
+ */
+QueueHandle_t cola_display;
+
+/**
+ * @brief Cola utilizada para transferir datos hacia task_mqtt.
+ */
+QueueHandle_t cola_mqtt;
 
 // ==========================
 // HANDLE DE TAREA PRINCIPAL
@@ -122,10 +142,36 @@ void i2c_init()
     i2c_driver_install(I2C_NUM_0, conf.mode, 0, 0, 0);
 }
 
-// ==========================
-// FUNCIÓN PRINCIPAL
-// ==========================
-
+/**
+ * @brief Punto de entrada principal de la aplicación.
+ *
+ * Coordina la ejecución completa del ciclo de monitoreo:
+ *
+ * - Inicializa periféricos.
+ * - Establece conectividad WiFi.
+ * - Inicializa almacenamiento SD.
+ * - Crea las tareas del sistema.
+ * - Espera la finalización de los procesos críticos.
+ * - Configura la siguiente alarma RTC.
+ * - Entra en modo Deep Sleep.
+ *
+ * La función actúa como orquestador del sistema.
+ */
+/**
+ * @brief Punto de entrada principal de la aplicación.
+ *
+ * Coordina la ejecución completa del ciclo de monitoreo:
+ *
+ * - Inicializa periféricos.
+ * - Establece conectividad WiFi.
+ * - Inicializa almacenamiento SD.
+ * - Crea las tareas del sistema.
+ * - Espera la finalización de los procesos críticos.
+ * - Configura la siguiente alarma RTC.
+ * - Entra en modo Deep Sleep.
+ *
+ * La función actúa como orquestador del sistema.
+ */
 void app_main(void)
 {
     printf("Sistema iniciado\n");
@@ -211,9 +257,13 @@ void app_main(void)
     // ==========================
 
     /**
-     * @brief Espera a que la tarea de display finalice
+     * @brief Espera la finalización de tareas críticas.
      *
-     * Se utiliza notificación de tarea para sincronizar el flujo.
+     * El sistema espera la notificación de:
+     * - task_display
+     * - task_mqtt
+     *
+     * antes de continuar hacia el modo de bajo consumo.
      */
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     

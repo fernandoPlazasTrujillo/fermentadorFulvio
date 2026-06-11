@@ -2,18 +2,30 @@
  * @file lcd_parallel.h
  * @brief Driver para pantalla LCD 16x2 en modo paralelo (4 bits).
  *
- * Este módulo proporciona una interfaz sencilla para controlar
- * una pantalla LCD basada en el controlador HD44780 utilizando
- * el bus paralelo en modo de 4 bits.
+ * Este módulo proporciona una interfaz para controlar una pantalla
+ * LCD basada en el controlador HD44780 utilizando comunicación
+ * paralela de 4 bits.
  *
- * Funcionalidades:
- * - Inicialización del display
- * - Posicionamiento del cursor
- * - Impresión de texto
- * - Limpieza de pantalla
+ * Funcionalidades principales:
+ * - Inicialización del display.
+ * - Posicionamiento del cursor.
+ * - Impresión de texto.
+ * - Limpieza de pantalla.
  *
- * @note Este módulo no es thread-safe. Si es accedido desde múltiples
- * tareas, debe protegerse mediante un mutex.
+ * @section lcd_architecture Integración en el sistema
+ *
+ * Dentro del sistema distribuido de fermentación de café, esta pantalla
+ * forma parte del ESP32 externo y permite visualizar información de:
+ *
+ * - Temperatura ambiente.
+ * - Humedad relativa.
+ * - Estado de conexión WiFi.
+ * - Estado de comunicación MQTT.
+ * - Estado de almacenamiento en SD.
+ * - Información de diagnóstico.
+ *
+ * @note Este módulo no es thread-safe. Si es utilizado desde múltiples
+ * tareas FreeRTOS debe protegerse mediante un mutex.
  *
  * @authors
  * - Fernando Plazas
@@ -26,38 +38,58 @@
 #include <stdint.h>
 
 /**
- * @brief Inicializa la pantalla LCD
+ * @brief Inicializa la pantalla LCD.
  *
- * Configura los pines GPIO y ejecuta la secuencia de inicialización
- * requerida por el controlador HD44780 en modo 4 bits.
+ * Configura los GPIO asociados a las líneas de datos y control,
+ * ejecutando posteriormente la secuencia de inicialización definida
+ * por el controlador HD44780 para operación en modo de 4 bits.
  *
- * @note Debe ejecutarse una sola vez al inicio del sistema.
+ * Esta función debe ejecutarse antes de utilizar cualquier otra
+ * función del módulo.
+ *
+ * @note Debe llamarse una única vez durante la fase de arranque
+ * del sistema.
  */
 void lcd_init(void);
 
 /**
- * @brief Limpia la pantalla LCD
+ * @brief Limpia completamente el contenido de la pantalla.
  *
- * Borra todo el contenido del display y posiciona el cursor
- * en la posición inicial (0,0).
+ * Borra todos los caracteres visibles y reposiciona el cursor
+ * en la posición inicial de la primera fila.
+ *
+ * @note Esta operación requiere varios milisegundos debido a las
+ * limitaciones temporales del controlador HD44780.
  */
 void lcd_clear(void);
 
 /**
- * @brief Posiciona el cursor en la LCD
+ * @brief Posiciona el cursor en una ubicación específica.
  *
- * @param col Columna (0–15)
- * @param row Fila (0–1)
+ * Convierte automáticamente la fila y columna indicadas a la
+ * dirección DDRAM correspondiente del controlador LCD.
  *
- * @note Internamente convierte a dirección DDRAM.
+ * @param col Columna destino.
+ *            Rango válido: 0–15.
+ *
+ * @param row Fila destino.
+ *            Rango válido: 0–1.
+ *
+ * @note Valores fuera de rango pueden producir comportamientos
+ * inesperados dependiendo de la implementación.
  */
 void lcd_set_cursor(uint8_t col, uint8_t row);
 
 /**
- * @brief Imprime una cadena de caracteres en la LCD
+ * @brief Imprime una cadena de caracteres en la pantalla.
  *
- * @param str Cadena terminada en null
+ * Los caracteres son enviados secuencialmente al controlador LCD
+ * comenzando desde la posición actual del cursor.
  *
- * @note No realiza control de longitud. Evitar overflow visual.
+ * @param str Cadena de caracteres terminada en '\0'.
+ *
+ * @note No se realiza control automático de longitud ni salto
+ * de línea. Es responsabilidad de la aplicación garantizar que
+ * el texto se ajuste al tamaño disponible del display.
  */
 void lcd_print(const char *str);

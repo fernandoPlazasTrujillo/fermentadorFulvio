@@ -47,36 +47,22 @@
  */
 void task_logger(void *pvParameters)
 {
-    /**
-     * @brief Estructura para recibir datos desde la cola
-     */
+
     datos_ambiente_t datos;
 
-    /**
-     * @brief Buffer para línea CSV
-     */
+
     char linea[100];
 
     while (1)
     {
-        /**
-         * @brief Espera datos desde la cola
-         *
-         * La tarea permanece bloqueada hasta recibir información,
-         * evitando uso innecesario del procesador.
-         */
+
         if (xQueueReceive(cola_datos, &datos, portMAX_DELAY))
         {
             // ===============================
             // FORMATO DE DATOS (CSV)
             // ===============================
 
-            /**
-             * @brief Generación de línea en formato CSV
-             *
-             * Formato:
-             * DD-MM-YYYY, HH.MM.SS, temperatura, humedad
-             */
+
             snprintf(linea, sizeof(linea),
                      "%02d-%02d-%04d, %02d.%02d.%02d, %.2f, %.2f",
                      datos.dia,
@@ -92,18 +78,14 @@ void task_logger(void *pvParameters)
             // SALIDA POR CONSOLA (DEBUG)
             // ===============================
 
-            /**
-             * @brief Impresión en consola para monitoreo
-             */
+
             printf("LOG -> %s\n", linea);
 
             // ===============================
             // ESCRITURA EN TARJETA SD
             // ===============================
 
-            /**
-             * @brief Guardado de datos en la SD
-             */
+
             if (sd_write_line(linea) != 0)
             {
                 printf("Error escribiendo en SD\n");
