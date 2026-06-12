@@ -1,3 +1,35 @@
+/**
+ * @file wifi_manager.c
+ * @brief Implementación del gestor de conectividad WiFi.
+ *
+ * Este módulo implementa la inicialización, conexión y monitoreo
+ * de la interfaz WiFi del ESP32 utilizando el framework ESP-IDF.
+ *
+ * Funcionalidades principales:
+ * - Inicialización del subsistema WiFi.
+ * - Gestión automática de conexión y reconexión.
+ * - Obtención de dirección IP mediante DHCP.
+ * - Escaneo de redes inalámbricas disponibles.
+ * - Consulta del estado de conexión.
+ * - Sincronización mediante Event Groups de FreeRTOS.
+ *
+ * El módulo abstrae la complejidad de la pila de red y proporciona
+ * una interfaz sencilla para las tareas de aplicación.
+ *
+ * Mecanismos FreeRTOS utilizados:
+ * - Event Groups para sincronización de estados de conexión.
+ *
+ * Eventos gestionados:
+ * - Inicio del modo estación.
+ * - Conexión y desconexión WiFi.
+ * - Obtención de dirección IP.
+ * - Reintentos automáticos de conexión.
+ *
+ * @author
+ * Fernando Plazas Trujillo
+ * Isabella Ordoñez
+ * Juan Daniel Constain
+ */
 #include "wifi_manager.h"
 
 #include <string.h>
@@ -19,10 +51,25 @@
 //#define WIFI_PASS      "24890717"
 //#define WIFI_SSID      "S25 Ultra de fernando"
 //#define WIFI_PASS      "fer12345"
+
+/**
+ * @brief Número máximo de reintentos de conexión WiFi.
+ */
 #define WIFI_MAX_RETRIES 4
+
+/**
+ * @brief Número máximo de puntos de acceso almacenados durante un escaneo.
+ */
 #define WIFI_SCAN_MAX_AP 20
 
+/**
+ * @brief Etiqueta utilizada para mensajes de depuración.
+ */
 static const char *TAG = "wifi_manager";
+
+/**
+ * @brief Contador de reintentos de conexión WiFi.
+ */
 static int retry_count = 0;
 
 /**
@@ -37,7 +84,24 @@ static EventGroupHandle_t wifi_event_group;
 #define WIFI_FAIL_BIT      BIT1
 
 /**
- * @brief Handler de eventos WiFi e IP.
+ * @brief Manejador de eventos WiFi e IP.
+ *
+ * Esta función es registrada en el sistema de eventos del ESP-IDF
+ * y es ejecutada automáticamente cuando ocurre un evento relacionado
+ * con la conectividad de red.
+ *
+ * Eventos gestionados:
+ * - Inicio de la interfaz WiFi.
+ * - Desconexión de la red.
+ * - Obtención de dirección IP.
+ *
+ * Además actualiza los Event Groups utilizados por las tareas
+ * para sincronizar el estado de conexión.
+ *
+ * @param arg Argumento de usuario.
+ * @param event_base Base del evento recibido.
+ * @param event_id Identificador del evento.
+ * @param event_data Datos asociados al evento.
  */
 static void wifi_event_handler(
     void *arg,
@@ -120,7 +184,17 @@ static void wifi_event_handler(
 }
 
 /**
- * @brief Inicializa y conecta el ESP32 al WiFi.
+ * @brief Inicializa y conecta el ESP32 a una red WiFi.
+ *
+ * Realiza la inicialización de:
+ * - NVS Flash.
+ * - Pila TCP/IP.
+ * - Event Loop del sistema.
+ * - Interfaz WiFi en modo estación.
+ *
+ * Posteriormente configura las credenciales de acceso,
+ * registra los manejadores de eventos y comienza el proceso
+ * de conexión a la red inalámbrica.
  */
 void wifi_init(void)
 {
@@ -219,7 +293,17 @@ void wifi_init(void)
     ESP_LOGI(TAG,
              "Inicialización WiFi completada");
 }
-
+/**
+ * @brief Espera hasta que el ESP32 se conecte a la red WiFi.
+ *
+ * La función bloquea la ejecución hasta recibir un evento de
+ * conexión exitosa o hasta que se detecte un fallo de conexión.
+ *
+ * @param timeout_ms Tiempo máximo de espera en milisegundos.
+ *
+ * @return true si la conexión fue exitosa.
+ * @return false si ocurrió timeout o fallo de conexión.
+ */
 bool wifi_wait_connected(uint32_t timeout_ms)
 {
     if (wifi_event_group == NULL)
@@ -237,6 +321,16 @@ bool wifi_wait_connected(uint32_t timeout_ms)
     return (bits & WIFI_CONNECTED_BIT) != 0;
 }
 
+/**
+ * @brief Convierte un modo de autenticación WiFi a texto.
+ *
+ * Se utiliza para mostrar información legible durante
+ * el escaneo de redes disponibles.
+ *
+ * @param authmode Modo de autenticación reportado por ESP-IDF.
+ *
+ * @return Cadena descriptiva del tipo de autenticación.
+ */
 static const char *auth_mode_name(wifi_auth_mode_t authmode)
 {
     switch (authmode)
@@ -262,6 +356,21 @@ static const char *auth_mode_name(wifi_auth_mode_t authmode)
     }
 }
 
+/**
+ * @brief Realiza un escaneo de redes WiFi disponibles.
+ *
+ * Ejecuta un escaneo activo del entorno inalámbrico,
+ * obtiene la lista de puntos de acceso detectados y
+ * muestra por consola información relevante:
+ *
+ * - SSID
+ * - Intensidad de señal (RSSI)
+ * - Canal
+ * - Tipo de autenticación
+ *
+ * Los resultados son utilizados principalmente para
+ * diagnóstico y configuración del sistema.
+ */
 void wifi_scan_print(void)
 {
     wifi_ap_record_t ap_records[WIFI_SCAN_MAX_AP];
@@ -307,6 +416,15 @@ void wifi_scan_print(void)
     }
 }
 
+/**
+ * @brief Verifica si existe una conexión WiFi activa.
+ *
+ * Consulta el estado actual almacenado en el Event Group
+ * del módulo WiFi.
+ *
+ * @return true si el ESP32 está conectado a una red.
+ * @return false si no existe conexión activa.
+ */
 bool wifi_is_connected(void)
 {
     if (wifi_event_group == NULL)
