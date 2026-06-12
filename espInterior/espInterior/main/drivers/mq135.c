@@ -1,10 +1,18 @@
 /**
  * @file mq135.c
- * @brief Implementación del driver para el sensor MQ135.
- * 
- * Este módulo permite leer valores de calidad del aire mediante
- * el uso del ADC del ESP32.
- * 
+ * @brief Implementación del driver para adquisición de señales del sensor MQ135.
+ *
+ * Este módulo permite obtener mediciones analógicas provenientes
+ * del sensor MQ135 utilizando el subsistema ADC del ESP32.
+ *
+ * Funcionalidades:
+ * - Lectura de voltaje.
+ * - Obtención de valores ADC estimados.
+ * - Promediado de muestras para reducción de ruido.
+ *
+ * La conversión a concentraciones específicas de gases no forma
+ * parte de este módulo.
+ *
  * @author
  * Fernando Plazas Trujillo
  * Isabella Ordoñez
@@ -15,12 +23,23 @@
 #include "hal/adc_manager.h"
 #include "esp_log.h"
 
+/**
+ * @brief Etiqueta utilizada por el sistema de logging.
+ */
 #define TAG "MQ135"
 
-/** @brief Canal ADC utilizado (GPIO36) */
+/**
+ * @brief Canal ADC asociado al sensor MQ135.
+ *
+ * Corresponde al GPIO36 del ESP32.
+ */
 #define MQ135_ADC_CHANNEL ADC_CHANNEL_0  
 
-/** @brief Número de muestras para promediado */
+/**
+ * @brief Cantidad de muestras utilizadas para el cálculo del promedio.
+ *
+ * El promediado reduce el efecto del ruido presente en la señal analógica.
+ */
 #define NUM_SAMPLES 10
 
 // =====================

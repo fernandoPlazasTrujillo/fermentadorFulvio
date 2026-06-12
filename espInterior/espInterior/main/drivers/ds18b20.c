@@ -1,10 +1,19 @@
 /**
  * @file ds18b20.c
- * @brief Implementación del driver DS18B20 mediante protocolo OneWire.
- * 
- * Contiene funciones de bajo nivel para comunicación OneWire y funciones
- * de alto nivel para lectura de temperatura.
- * 
+ * @brief Implementación del driver para el sensor DS18B20 mediante protocolo OneWire.
+ *
+ * Este módulo implementa las funciones necesarias para la comunicación
+ * con un sensor DS18B20 utilizando el protocolo OneWire por software.
+ *
+ * Incluye:
+ * - Inicialización del bus OneWire.
+ * - Transmisión y recepción de bits y bytes.
+ * - Detección de presencia del dispositivo.
+ * - Conversión y lectura de temperatura.
+ *
+ * El sensor se utiliza para monitorear la temperatura interna del
+ * sistema de fermentación de café.
+ *
  * @author
  * Fernando Plazas Trujillo
  * Isabella Ordoñez
@@ -19,9 +28,17 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+/**
+ * @brief Etiqueta utilizada por el sistema de logging ESP-IDF.
+ */
 static const char *TAG = "DS18B20";
 
-/** @brief Pin GPIO usado para comunicación OneWire */
+/**
+ * @brief GPIO utilizado para la comunicación OneWire.
+ *
+ * Se configura durante la inicialización del driver y es utilizado
+ * por todas las funciones de acceso al sensor.
+ */
 static gpio_num_t ds_pin;
 
 // =====================
@@ -30,6 +47,8 @@ static gpio_num_t ds_pin;
 
 /**
  * @brief Fuerza la línea OneWire a nivel bajo.
+ *
+ * Configura temporalmente el GPIO como salida y escribe un nivel lógico bajo.
  */
 static void ow_low()
 {
@@ -38,7 +57,10 @@ static void ow_low()
 }
 
 /**
- * @brief Libera la línea OneWire (estado alto mediante pull-up).
+ * @brief Libera la línea OneWire.
+ *
+ * Configura el GPIO como entrada permitiendo que la resistencia pull-up
+ * mantenga el bus en nivel alto.
  */
 static void ow_release()
 {
@@ -204,6 +226,10 @@ float ds18b20_read_temperature(void)
     ow_write_byte(0xCC);
     ow_write_byte(0x44);
 
+    /*
+    * Tiempo máximo de conversión para resolución de 12 bits
+    * según la hoja de datos del DS18B20.
+    */
     vTaskDelay(pdMS_TO_TICKS(750));
 
     if (!ow_reset()) {

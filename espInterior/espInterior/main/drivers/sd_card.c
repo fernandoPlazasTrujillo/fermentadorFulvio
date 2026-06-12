@@ -1,12 +1,20 @@
 /**
  * @file sd_card.c
- * @brief Implementación del manejo de tarjeta SD mediante SPI.
- * 
- * Este módulo permite montar la tarjeta SD y realizar escrituras
- * seguras en un archivo utilizando protección por mutex.
- * 
- * Incluye control de concurrencia para evitar conflictos en el bus SPI.
- * 
+ * @brief Implementación del módulo de almacenamiento en tarjeta SD mediante SPI.
+ *
+ * Este módulo proporciona funciones para:
+ * - Inicialización y montaje de la tarjeta SD.
+ * - Escritura de registros históricos en formato CSV.
+ * - Almacenamiento temporal de mensajes MQTT pendientes.
+ * - Recuperación de mensajes pendientes.
+ * - Gestión segura de acceso concurrente mediante mutex.
+ *
+ * El módulo permite mantener la persistencia de datos del sistema
+ * de fermentación incluso ante fallos de conectividad MQTT.
+ *
+ * El acceso al bus SPI se encuentra protegido mediante exclusión
+ * mutua para evitar condiciones de carrera entre tareas FreeRTOS.
+ *
  * @author
  * Fernando Plazas Trujillo
  * Isabella Ordoñez
@@ -30,42 +38,64 @@
 
 #include "sd_card.h"
 
+/**
+ * @brief Etiqueta utilizada por el sistema de logging.
+ */
 static const char *TAG = "SD";
 
 // ============================
 // PINES SPI
 // ============================
 
-/** @brief Pin MISO */
+/**
+ * @brief GPIO utilizado como línea MISO.
+ */
 #define PIN_MISO 19
 
-/** @brief Pin MOSI */
+/**
+ * @brief GPIO utilizado como línea MOSI.
+ */
 #define PIN_MOSI 23
 
-/** @brief Pin CLK */
-#define PIN_CLK  18
+/**
+ * @brief GPIO utilizado como reloj SPI.
+ */
+#define PIN_CLK 18
 
-/** @brief Pin CS */
-#define PIN_CS   5
+/**
+ * @brief GPIO utilizado como Chip Select.
+ */
+#define PIN_CS 5
 
 // ============================
 // MONTAJE
 // ============================
 
-/** @brief Punto de montaje del sistema de archivos */
+/**
+ * @brief Punto de montaje del sistema de archivos FAT.
+ */
 static const char mount_point[] = "/sdcard";
 
-/** @brief Archivo de respaldo para mensajes MQTT no enviados */
+/**
+ * @brief Archivo utilizado para almacenar mensajes MQTT pendientes.
+ */
 static const char pending_mqtt_path[] = "/sdcard/mqtt_pending.txt";
 
 // ============================
 // MUTEX SPI
 // ============================
 
-/** @brief Mutex para acceso seguro al bus SPI */
+/**
+ * @brief Mutex para acceso exclusivo al bus SPI.
+ *
+ * Evita accesos concurrentes desde múltiples tareas
+ * durante operaciones de lectura o escritura.
+ */
 static SemaphoreHandle_t spi_mutex = NULL;
 
-/** @brief Indica si la SD ya fue montada */
+/**
+ * @brief Indica si la tarjeta SD fue montada correctamente.
+ */
 static bool sd_mounted = false;
 
 // ============================
@@ -106,6 +136,10 @@ esp_err_t sd_card_init(void)
         .max_transfer_sz = 4000,
     };
 
+    /*
+    * Configuración del bus SPI utilizado para la comunicación
+    * con la tarjeta SD.
+    */
     ret = spi_bus_initialize(host.slot, &bus_cfg, SDSPI_DEFAULT_DMA);
     if (ret != ESP_OK && ret != ESP_ERR_INVALID_STATE) {
         ESP_LOGE(TAG, "Error inicializando SPI");
@@ -116,6 +150,9 @@ esp_err_t sd_card_init(void)
     slot_config.gpio_cs = PIN_CS;
     slot_config.host_id = host.slot;
 
+    /*
+    * Montaje del sistema de archivos FAT sobre la tarjeta SD.
+    */
     esp_vfs_fat_sdmmc_mount_config_t mount_config = {
         .format_if_mount_failed = false,
         .max_files = 5,
@@ -160,6 +197,10 @@ esp_err_t sd_card_write_line(const char *line)
         xSemaphoreTake(spi_mutex, portMAX_DELAY);
     }
 
+    /*
+    * Apertura del archivo en modo append para preservar
+    * los registros históricos previamente almacenados.
+    */
     FILE *f = fopen("/sdcard/log.csv", "a");
 
     if (f == NULL) {
@@ -172,6 +213,10 @@ esp_err_t sd_card_write_line(const char *line)
         return ESP_FAIL;
     }
 
+    /*
+    * Cada registro corresponde a una muestra del sistema
+    * de fermentación almacenada en formato CSV.
+    */
     fprintf(f, "%s\n", line);
 
     fflush(f);

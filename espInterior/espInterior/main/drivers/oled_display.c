@@ -1,3 +1,26 @@
+/**
+ * @file oled_display.c
+ * @brief Implementación del controlador OLED SSD1306 mediante interfaz I2C.
+ *
+ * Este módulo implementa las funciones necesarias para controlar una
+ * pantalla OLED basada en el controlador SSD1306.
+ *
+ * Funcionalidades:
+ * - Inicialización del controlador.
+ * - Gestión de framebuffer local.
+ * - Dibujo de píxeles.
+ * - Renderizado de caracteres.
+ * - Renderizado de cadenas de texto.
+ * - Actualización de pantalla mediante I2C.
+ *
+ * El acceso al bus I2C es protegido mediante un mutex compartido
+ * para garantizar la exclusión mutua entre tareas FreeRTOS.
+ *
+ * @author
+ * Fernando Plazas Trujillo
+ * Isabella Ordoñez
+ * Juan Daniel Constain
+ */
 #include "drivers/oled_display.h"
 
 #include <string.h>
@@ -7,16 +30,57 @@
 
 #include "font5x7.h"
 
+/**
+ * @brief Dirección I2C del controlador SSD1306.
+ */
 #define OLED_ADDR      0x3C
 
-#define OLED_WIDTH     128
-#define OLED_HEIGHT    64
-#define OLED_PAGES     8
+/**
+ * @brief Ancho de la pantalla OLED en píxeles.
+ */
+#define OLED_WIDTH 128
 
+/**
+ * @brief Alto de la pantalla OLED en píxeles.
+ */
+#define OLED_HEIGHT 64
+
+/**
+ * @brief Número de páginas de memoria del SSD1306.
+ *
+ * Cada página contiene 8 filas de píxeles.
+ */
+#define OLED_PAGES 8
+
+/**
+ * @brief Mutex compartido para acceso exclusivo al bus I2C.
+ *
+ * Utilizado por todos los periféricos que comparten el mismo bus,
+ * evitando condiciones de carrera entre tareas concurrentes.
+ */
 extern SemaphoreHandle_t mutex_i2c;
 
+/**
+ * @brief Framebuffer local de la pantalla OLED.
+ *
+ * Almacena una copia completa de la memoria gráfica del SSD1306.
+ * Los cambios gráficos se realizan sobre este buffer y posteriormente
+ * se transfieren al dispositivo mediante oled_update().
+ */
 static uint8_t framebuffer[1024];
 
+/**
+ * @brief Envía un comando al controlador SSD1306.
+ *
+ * La transmisión se realiza mediante I2C utilizando exclusión
+ * mutua sobre el bus compartido.
+ *
+ * @param cmd Comando a transmitir.
+ *
+ * @return
+ * - ESP_OK si la transmisión fue exitosa.
+ * - ESP_FAIL si no fue posible acceder al bus.
+ */
 static esp_err_t oled_send_command(uint8_t cmd)
 {
     uint8_t buffer[2];
@@ -40,6 +104,19 @@ static esp_err_t oled_send_command(uint8_t cmd)
     return ESP_FAIL;
 }
 
+/**
+ * @brief Envía datos gráficos al SSD1306.
+ *
+ * Copia los datos al buffer de transmisión I2C y posteriormente
+ * los envía al controlador OLED.
+ *
+ * @param data Puntero al bloque de datos.
+ * @param len Cantidad de bytes a transmitir.
+ *
+ * @return
+ * - ESP_OK si la transmisión fue exitosa.
+ * - ESP_FAIL en caso de error.
+ */
 static esp_err_t oled_send_data(const uint8_t *data, size_t len) 
 {
     uint8_t buffer[129];
@@ -64,6 +141,10 @@ static esp_err_t oled_send_data(const uint8_t *data, size_t len)
     return ESP_FAIL;
 }
 
+/*
+ * Secuencia de inicialización recomendada por el datasheet
+ * del controlador SSD1306.
+ */
 esp_err_t oled_init(void)
 {
     oled_send_command(0xAE);
@@ -115,6 +196,7 @@ esp_err_t oled_init(void)
     return ESP_OK;
 }
 
+
 esp_err_t oled_clear(void)
 {
     memset(
@@ -125,6 +207,10 @@ esp_err_t oled_clear(void)
     return oled_update();
 }
 
+/*
+ * Conversión de coordenadas XY a posición dentro
+ * de la memoria organizada por páginas del SSD1306.
+ */
 esp_err_t oled_draw_pixel(uint8_t x, uint8_t y)
 {
     if (x >= OLED_WIDTH)
@@ -139,6 +225,7 @@ esp_err_t oled_draw_pixel(uint8_t x, uint8_t y)
 
     return ESP_OK;
 }
+
 
 esp_err_t oled_draw_char(uint8_t x, uint8_t y, char c)
 {

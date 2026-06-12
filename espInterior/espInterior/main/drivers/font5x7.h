@@ -1,8 +1,47 @@
+/**
+ * @file font5x7.h
+ * @brief Definición de una fuente bitmap de 5x7 píxeles para pantallas OLED.
+ *
+ * Este archivo contiene una tabla de caracteres ASCII representados
+ * mediante matrices de 5 columnas y 7 filas.
+ *
+ * La fuente es utilizada por el módulo oled_display para renderizar
+ * texto sobre la pantalla SSD1306.
+ *
+ * Características:
+ * - Fuente monoespaciada.
+ * - Caracteres numéricos (0-9).
+ * - Letras mayúsculas (A-Z).
+ * - Símbolos básicos.
+ *
+ * Cada entrada contiene 5 bytes donde cada bit representa un píxel
+ * de la columna correspondiente.
+ *
+ * @author
+ * Fernando Plazas Trujillo
+ * Isabella Ordoñez
+ * Juan Daniel Constain
+ */
 #ifndef FONT5X7_H
 #define FONT5X7_H
 
 #include <stdint.h>
 
+/**
+ * @brief Tabla de caracteres bitmap de 5x7 píxeles.
+ *
+ * Cada índice corresponde a un código ASCII.
+ *
+ * El contenido de cada carácter está almacenado en 5 bytes,
+ * donde cada byte representa una columna vertical de píxeles.
+ *
+ * Ejemplo:
+ * - font5x7['A'] devuelve la representación gráfica de la letra A.
+ * - font5x7['0'] devuelve la representación gráfica del número 0.
+ *
+ * Esta tabla es utilizada por el controlador OLED para generar
+ * texto sobre la pantalla SSD1306.
+ */
 static const uint8_t font5x7[][5] = {
 
     [48] = {0x3E,0x51,0x49,0x45,0x3E}, // 0

@@ -1,10 +1,17 @@
 /**
  * @file ph_sensor.c
- * @brief Implementación del sensor de pH.
- * 
- * Este módulo convierte lecturas analógicas en valores de pH
- * utilizando una ecuación de calibración lineal.
- * 
+ * @brief Implementación del driver para sensor de pH basado en adquisición analógica.
+ *
+ * Este módulo obtiene mediciones analógicas desde un sensor de pH,
+ * calcula un voltaje promedio mediante múltiples muestras y convierte
+ * dicho voltaje a unidades de pH utilizando una ecuación de calibración lineal.
+ *
+ * Funcionalidades:
+ * - Lectura de voltaje.
+ * - Filtrado mediante promediado.
+ * - Conversión voltaje-pH.
+ * - Validación básica de rango de operación.
+ *
  * @author
  * Fernando Plazas Trujillo
  * Isabella Ordoñez
@@ -17,18 +24,48 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 
-/** @brief Canal ADC utilizado (GPIO39) */
-#define PH_ADC_CHANNEL ADC_CHANNEL_3  
+/**
+ * @brief Canal ADC asociado al sensor de pH.
+ *
+ * Corresponde al GPIO39 del ESP32.
+ */
+#define PH_ADC_CHANNEL ADC_CHANNEL_3
 
-/** @brief Número de muestras para promediado */
+/**
+ * @brief Cantidad de muestras utilizadas para el cálculo del promedio.
+ *
+ * El promediado reduce el ruido presente en la señal analógica.
+ */
 #define NUM_SAMPLES 20
 
-/** @brief Pendiente de calibración del sensor */
-#define PH_SLOPE   -5.7
+/**
+ * @brief Pendiente de la ecuación de calibración.
+ *
+ * Relaciona el voltaje medido con el valor de pH.
+ */
+#define PH_SLOPE (-5.7f)
 
-/** @brief Offset de calibración del sensor */
-#define PH_OFFSET   21.34
+/**
+ * @brief Offset de la ecuación de calibración.
+ *
+ * Corresponde al término independiente obtenido durante
+ * el proceso de calibración experimental.
+ */
+#define PH_OFFSET (21.34f)
 
+/**
+ * @brief Voltaje mínimo válido para el sensor.
+ */
+#define PH_MIN_VOLTAGE (0.1f)
+
+/**
+ * @brief Voltaje máximo válido para el sensor.
+ */
+#define PH_MAX_VOLTAGE (3.2f)
+
+/**
+ * @brief Etiqueta utilizada por el sistema de logging.
+ */
 static const char *TAG = "PH";
 
 // =====================
@@ -36,7 +73,10 @@ static const char *TAG = "PH";
 // =====================
 
 /**
- * @brief Inicializa el sensor de pH.
+ * @brief Inicializa el módulo de pH.
+ *
+ * Actualmente no requiere configuración específica,
+ * ya que la adquisición ADC es gestionada por adc_manager.
  */
 void ph_init(void)
 {
@@ -48,8 +88,11 @@ void ph_init(void)
 
 /**
  * @brief Obtiene el voltaje promedio del sensor de pH.
- * 
- * @return Voltaje en voltios.
+ *
+ * Realiza múltiples lecturas ADC y calcula un promedio
+ * para reducir el efecto del ruido presente en la señal.
+ *
+ * @return Voltaje promedio en voltios.
  */
 float ph_read_voltage(void)
 {
@@ -57,6 +100,12 @@ float ph_read_voltage(void)
 
     for (int i = 0; i < NUM_SAMPLES; i++) {
         sum += adc_manager_read_voltage(PH_ADC_CHANNEL);
+
+        /*
+         * Se introduce un pequeño retardo entre muestras
+         * para evitar lecturas consecutivas excesivamente
+         * correlacionadas y mejorar el promedio obtenido.
+         */
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 
@@ -69,21 +118,33 @@ float ph_read_voltage(void)
 
 /**
  * @brief Calcula el valor de pH a partir del voltaje medido.
- * 
- * Usa una relación lineal calibrada:
- * pH = slope * V + offset
- * 
- * @return Valor de pH.
- * @return -1.0 si el sensor está fuera de rango.
+ *
+ * Utiliza una ecuación de calibración lineal:
+ *
+ * pH = (PH_SLOPE * V) + PH_OFFSET
+ *
+ * donde:
+ * - V corresponde al voltaje medido.
+ * - PH_SLOPE es la pendiente de calibración.
+ * - PH_OFFSET es el offset de calibración.
+ *
+ * @return Valor estimado de pH.
+ * @retval -1.0 Lectura inválida o fuera de rango.
  */
 float ph_read(void)
 {
     float voltage = ph_read_voltage();
 
-    if (voltage > 3.2 || voltage < 0.1) {
+    if (voltage > PH_MAX_VOLTAGE ||
+        voltage < PH_MIN_VOLTAGE)
+    {
         ESP_LOGW(TAG, "Sensor pH fuera de rango");
         return -1.0;
     }
 
+    /*
+     * Conversión lineal obtenida durante el proceso
+     * de calibración del sensor.
+     */
     return PH_SLOPE * voltage + PH_OFFSET;
 }
