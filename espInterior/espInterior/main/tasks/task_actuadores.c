@@ -1,19 +1,31 @@
 /**
  * @file task_actuadores.c
- * @brief Control de actuadores del sistema.
- * 
- * Esta tarea recibe comandos desde la cola de control y ejecuta
- * acciones sobre bomba, motor y servomotor.
- * 
- * Incluye control de duración de mezcla y sincronización con la
- * tarea de energía.
- * 
+ * @brief Implementación de la tarea de ejecución de actuadores.
+ *
+ * Esta tarea recibe comandos generados por la lógica de control
+ * mediante una cola FreeRTOS y ejecuta las acciones físicas
+ * correspondientes sobre los actuadores del sistema.
+ *
+ * Actuadores gestionados:
+ * - Bomba de circulación.
+ * - Motor de mezcla.
+ * - Servomotor.
+ *
+ * Características:
+ * - Consumo de comandos mediante colas FreeRTOS.
+ * - Control temporizado del motor de mezcla.
+ * - Notificación a la tarea de energía al finalizar una mezcla.
+ * - Separación entre lógica de control y acceso a hardware.
+ *
+ * Mecanismos FreeRTOS utilizados:
+ * - Colas.
+ * - Notificaciones entre tareas.
+ *
  * @author
  * Fernando Plazas Trujillo
  * Isabella Ordoñez
  * Juan Daniel Constain
  */
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
@@ -23,21 +35,42 @@
 #include "queues.h"
 #include "drivers/servo.h"
 
-// sincronización con energía
+/**
+ * @brief Handle de la tarea de energía.
+ *
+ * Utilizado para enviar notificaciones cuando finaliza
+ * un ciclo de mezcla.
+ */
 extern TaskHandle_t task_energia_handle;
 
+/**
+ * @brief Etiqueta utilizada para mensajes de depuración.
+ */
 static const char *TAG = "ACTUADORES";
 
 // =====================
 // PINES
 // =====================
-#define PIN_BOMBA  GPIO_NUM_25
-#define PIN_MOTOR  GPIO_NUM_26
-#define PIN_SERVO  GPIO_NUM_27
+/**
+ * @brief GPIO de control de la bomba.
+ */
+#define PIN_BOMBA GPIO_NUM_25
 
-// =====================
-// CONFIGURACIÓN
-// =====================
+/**
+ * @brief GPIO de control del motor de mezcla.
+ */
+#define PIN_MOTOR GPIO_NUM_26
+
+/**
+ * @brief GPIO utilizado por el servomotor.
+ */
+#define PIN_SERVO GPIO_NUM_27
+
+/**
+ * @brief Duración del ciclo de mezcla.
+ *
+ * Tiempo durante el cual el motor permanece activo.
+ */
 #define MIX_DURATION_MS 20000
 
 // =====================
@@ -45,7 +78,13 @@ static const char *TAG = "ACTUADORES";
 // =====================
 
 /**
- * @brief Inicializa los actuadores.
+ * @brief Inicializa los actuadores del sistema.
+ *
+ * Configura los GPIO utilizados por la bomba y el motor
+ * en modo salida e inicializa el controlador del servomotor.
+ *
+ * Además establece todos los actuadores en estado seguro
+ * al arrancar el sistema.
  */
 static void actuadores_init(void)
 {
@@ -65,12 +104,23 @@ static void actuadores_init(void)
     servo_init(PIN_SERVO);
 }
 
-// =====================
-// TASK ACTUADORES
-// =====================
 
 /**
- * @brief Tarea principal de actuadores.
+ * @brief Tarea encargada de ejecutar acciones físicas.
+ *
+ * Esta tarea permanece bloqueada esperando comandos
+ * provenientes de queue_control.
+ *
+ * Funciones principales:
+ * - Activación y desactivación de la bomba.
+ * - Posicionamiento del servomotor.
+ * - Gestión del motor de mezcla.
+ * - Notificación a task_energia al finalizar una mezcla.
+ *
+ * La tarea no implementa lógica de decisión; únicamente
+ * ejecuta los comandos generados por task_control.
+ *
+ * @param pvParameters Parámetros de la tarea (no utilizados).
  */
 void task_actuadores(void *pvParameters)
 {

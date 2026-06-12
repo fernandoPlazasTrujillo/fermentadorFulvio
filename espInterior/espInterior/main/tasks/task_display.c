@@ -1,3 +1,43 @@
+/**
+ * @file task_display.c
+ * @brief Implementación de la tarea de visualización del sistema.
+ *
+ * Esta tarea recibe información mediante una cola FreeRTOS y
+ * actualiza la pantalla OLED con el estado actual del proceso
+ * de fermentación.
+ *
+ * Información mostrada:
+ * - Temperatura.
+ * - pH.
+ * - Concentración de CO2.
+ * - Estado de WiFi.
+ * - Estado de MQTT.
+ * - Estado de la tarjeta SD.
+ * - Hora del sistema.
+ *
+ * La tarea se encarga exclusivamente de la presentación de datos,
+ * manteniendo desacoplada la interfaz de usuario de las tareas de
+ * adquisición, control y comunicación.
+ *
+ * Arquitectura:
+ *
+ * queue_display
+ *        |
+ *        v
+ *   task_display
+ *        |
+ *        v
+ *      OLED
+ *
+ * Mecanismos FreeRTOS utilizados:
+ * - Colas para recepción de datos.
+ *
+ * @author
+ * Fernando Plazas Trujillo
+ * Isabella Ordoñez
+ * Juan Daniel Constain
+ */
+
 #include "tasks/task_display.h"
 
 #include <stdio.h>
@@ -11,12 +51,35 @@
 #include "queues.h"
 #include "utils/data_types.h"
 
+/**
+ * @brief Tarea encargada de actualizar la pantalla OLED.
+ *
+ * Espera datos provenientes de queue_display y muestra
+ * información relevante del proceso de fermentación.
+ *
+ * La tarea permanece bloqueada hasta recibir nuevos datos,
+ * minimizando el consumo de CPU.
+ *
+ * Información visualizada:
+ * - Temperatura.
+ * - pH.
+ * - CO2.
+ * - Estado de WiFi.
+ * - Estado de MQTT.
+ * - Estado de la tarjeta SD.
+ * - Hora actual.
+ *
+ * @param pvParameters Parámetros de la tarea (no utilizados).
+ */
 void task_display(void *pvParameters)
 {
     display_data_t data;
 
     char line[32];
 
+    /**
+     * Inicialización de la pantalla OLED.
+     */
     oled_init();
     oled_clear();
 
@@ -27,11 +90,14 @@ void task_display(void *pvParameters)
                 &data,
                 portMAX_DELAY))
         {
+            /**
+             * Limpiar pantalla antes de redibujar.
+             */
             oled_clear();
 
-            // -------------------
-            // Temperatura
-            // -------------------
+            // =====================================================
+            // TEMPERATURA
+            // =====================================================
 
             snprintf(
                 line,
@@ -44,9 +110,9 @@ void task_display(void *pvParameters)
                 0,
                 line);
 
-            // -------------------
-            // pH
-            // -------------------
+            // =====================================================
+            // PH
+            // =====================================================
 
             snprintf(
                 line,
@@ -59,9 +125,9 @@ void task_display(void *pvParameters)
                 12,
                 line);
 
-            // -------------------
+            // =====================================================
             // CO2
-            // -------------------
+            // =====================================================
 
             snprintf(
                 line,
@@ -74,9 +140,9 @@ void task_display(void *pvParameters)
                 24,
                 line);
 
-            // -------------------
-            // MQTT
-            // -------------------
+            // =====================================================
+            // ESTADOS DEL SISTEMA
+            // =====================================================
 
             snprintf(
                 line,
@@ -91,11 +157,15 @@ void task_display(void *pvParameters)
                 36,
                 line);
 
-            // -------------------
-            // Hora
-            // -------------------
+            // =====================================================
+            // HORA
+            // =====================================================
 
-            printf("DISPLAY -> %d:%d:%d\n", data.datetime.hours, data.datetime.minutes, data.datetime.seconds);
+            printf(
+                "DISPLAY -> %02d:%02d:%02d\n",
+                data.datetime.hours,
+                data.datetime.minutes,
+                data.datetime.seconds);
 
             snprintf(
                 line,
@@ -110,6 +180,9 @@ void task_display(void *pvParameters)
                 48,
                 line);
 
+            /**
+             * Actualizar contenido físico de la pantalla.
+             */
             oled_update();
         }
     }
