@@ -1,0 +1,337 @@
+\doxysection{Referencia del archivo main/\+drivers/\+ds3231.c}
+\hypertarget{ds3231_8c}{}\label{ds3231_8c}\index{main/drivers/ds3231.c@{main/drivers/ds3231.c}}
+
+
+Implementación del driver RTC DS3231.  
+
+
+{\ttfamily \+\#include "{}ds3231.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+i2c.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{ds3231_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}~"{}DS3231"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada para mensajes de depuración. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\+\_\+\+ADDR}}~0x68
+\begin{DoxyCompactList}\small\item\em Dirección I2C del RTC DS3231. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{ds3231_8c_ad9ecf80e1eac083d16ec47f9d3aeb39f}{I2\+C\+\_\+\+PORT}}~I2\+C\+\_\+\+NUM\+\_\+0
+\begin{DoxyCompactList}\small\item\em Puerto I2C utilizado para la comunicación. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+static uint8\+\_\+t \doxymbox{\hyperlink{ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\+\_\+to\+\_\+dec}} (uint8\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Convierte un valor codificado en BCD a decimal. \end{DoxyCompactList}\item 
+static uint8\+\_\+t \doxymbox{\hyperlink{ds3231_8c_a24b3d8dbee18df34f1133e358b959f74}{dec\+\_\+to\+\_\+bcd}} (uint8\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Convierte un valor decimal a formato BCD. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{ds3231_8c_a6e87e6440c17af3e57145cc329930007}{ds3231\+\_\+read\+\_\+time}} (\doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}time)
+\begin{DoxyCompactList}\small\item\em Obtiene la fecha y hora actuales del DS3231. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{ds3231_8c_aaee737743525a3d5cbc679d969338204}{ds3231\+\_\+set\+\_\+time}} (\doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}time)
+\begin{DoxyCompactList}\small\item\em Configura la fecha y hora del RTC DS3231. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{ds3231_8c_a2a5b627c6f5a3c948decc6bd860f2fec}{ds3231\+\_\+set\+\_\+alarm\+\_\+every\+\_\+minute}} ()
+\begin{DoxyCompactList}\small\item\em Configura una alarma periódica cada minuto. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{ds3231_8c_a689721d4bed5ce9273f21a85e6b39c00}{ds3231\+\_\+clear\+\_\+alarm\+\_\+flag}} ()
+\begin{DoxyCompactList}\small\item\em Limpia el indicador de alarma A1F. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del driver RTC DS3231. 
+
+Maneja comunicación I2C para:\+
+\begin{DoxyItemize}
+\item Lectura de tiempo
+\item Configuración de alarmas
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Nota}
+Debe protegerse con mutex si se usa en múltiples tareas.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{ds3231_8c_doc-define-members}
+\Hypertarget{ds3231_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{ds3231_8c_a807ca712a5ee10a56cf420c420c42524}\index{ds3231.c@{ds3231.c}!DS3231\_ADDR@{DS3231\_ADDR}}
+\index{DS3231\_ADDR@{DS3231\_ADDR}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{DS3231\_ADDR}{DS3231\_ADDR}}
+{\footnotesize\ttfamily \label{ds3231_8c_a807ca712a5ee10a56cf420c420c42524} 
+\+\#define DS3231\+\_\+\+ADDR~0x68}
+
+
+
+Dirección I2C del RTC DS3231. 
+
+\Hypertarget{ds3231_8c_ad9ecf80e1eac083d16ec47f9d3aeb39f}\index{ds3231.c@{ds3231.c}!I2C\_PORT@{I2C\_PORT}}
+\index{I2C\_PORT@{I2C\_PORT}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{I2C\_PORT}{I2C\_PORT}}
+{\footnotesize\ttfamily \label{ds3231_8c_ad9ecf80e1eac083d16ec47f9d3aeb39f} 
+\+\#define I2\+C\+\_\+\+PORT~I2\+C\+\_\+\+NUM\+\_\+0}
+
+
+
+Puerto I2C utilizado para la comunicación. 
+
+\Hypertarget{ds3231_8c_afc3d101f633a076cc1ca84b85b6224b2}\index{ds3231.c@{ds3231.c}!TAG@{TAG}}
+\index{TAG@{TAG}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{ds3231_8c_afc3d101f633a076cc1ca84b85b6224b2} 
+\+\#define TAG~"{}DS3231"{}}
+
+
+
+Etiqueta utilizada para mensajes de depuración. 
+
+\hypertarget{ds3231_8h_rtc_architecture}{}\doxysubsection{\texorpdfstring{Arquitectura del sistema}{Arquitectura del sistema}}\label{ds3231_8h_rtc_architecture}
+El módulo DS3231 constituye la referencia temporal principal del sistema distribuido de fermentación de café.
+
+Sus funciones principales son:\+
+\begin{DoxyItemize}
+\item Generación de timestamps para almacenamiento en SD.
+\item Sincronización de mediciones ambientales.
+\item Activación periódica del sistema mediante alarmas.
+\item Soporte para estrategias de ahorro energético basadas en sleep. 
+\end{DoxyItemize}
+
+\label{ds3231_8c_doc-func-members}
+\Hypertarget{ds3231_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}\index{ds3231.c@{ds3231.c}!bcd\_to\_dec@{bcd\_to\_dec}}
+\index{bcd\_to\_dec@{bcd\_to\_dec}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{bcd\_to\_dec()}{bcd\_to\_dec()}}
+{\footnotesize\ttfamily \label{ds3231_8c_a24f474e744189c94192a1450f4bf6bbd} 
+uint8\+\_\+t bcd\+\_\+to\+\_\+dec (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Convierte un valor codificado en BCD a decimal. 
+
+El DS3231 almacena los valores de fecha y hora en formato Binary Coded Decimal (BCD), por lo que es necesario convertirlos antes de utilizarlos en la aplicación.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em val} & Valor en formato BCD. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Valor convertido a decimal. 
+\end{DoxyReturn}
+\Hypertarget{ds3231_8c_a24b3d8dbee18df34f1133e358b959f74}\index{ds3231.c@{ds3231.c}!dec\_to\_bcd@{dec\_to\_bcd}}
+\index{dec\_to\_bcd@{dec\_to\_bcd}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{dec\_to\_bcd()}{dec\_to\_bcd()}}
+{\footnotesize\ttfamily \label{ds3231_8c_a24b3d8dbee18df34f1133e358b959f74} 
+uint8\+\_\+t dec\+\_\+to\+\_\+bcd (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Convierte un valor decimal a formato BCD. 
+
+Esta función se utiliza antes de escribir valores de fecha y hora en los registros internos del DS3231.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em val} & Valor decimal. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Valor convertido a BCD. 
+\end{DoxyReturn}
+\Hypertarget{ds3231_8c_a689721d4bed5ce9273f21a85e6b39c00}\index{ds3231.c@{ds3231.c}!ds3231\_clear\_alarm\_flag@{ds3231\_clear\_alarm\_flag}}
+\index{ds3231\_clear\_alarm\_flag@{ds3231\_clear\_alarm\_flag}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{ds3231\_clear\_alarm\_flag()}{ds3231\_clear\_alarm\_flag()}}
+{\footnotesize\ttfamily \label{ds3231_8c_a689721d4bed5ce9273f21a85e6b39c00} 
+int ds3231\+\_\+clear\+\_\+alarm\+\_\+flag (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Limpia el indicador de alarma A1F. 
+
+Limpia el indicador interno de alarma.
+
+Después de que una alarma genera una interrupción, el bit A1F permanece activado dentro del registro de estado del DS3231.
+
+Esta función limpia dicho bit para permitir que la siguiente alarma vuelva a producir una interrupción válida.
+
+Registro utilizado:\+
+\begin{DoxyItemize}
+\item Status Register (0x0F)
+\end{DoxyItemize}
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Operación completada.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Si esta función no se ejecuta después de atender la interrupción, las alarmas posteriores no funcionarán correctamente.
+\end{DoxyWarning}
+Limpia el indicador de alarma A1F.
+
+Después de generarse una interrupción, el DS3231 mantiene activo el bit A1F dentro del registro de estado.
+
+Esta función limpia dicho bit para permitir que futuras alarmas vuelvan a generar interrupciones.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Operación completada.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Si no se ejecuta esta función después de atender una alarma, las siguientes interrupciones pueden no producirse. 
+\end{DoxyWarning}
+\Hypertarget{ds3231_8c_a6e87e6440c17af3e57145cc329930007}\index{ds3231.c@{ds3231.c}!ds3231\_read\_time@{ds3231\_read\_time}}
+\index{ds3231\_read\_time@{ds3231\_read\_time}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{ds3231\_read\_time()}{ds3231\_read\_time()}}
+{\footnotesize\ttfamily \label{ds3231_8c_a6e87e6440c17af3e57145cc329930007} 
+int ds3231\+\_\+read\+\_\+time (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{time}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene la fecha y hora actuales del DS3231. 
+
+Lee la fecha y hora actuales almacenadas en el RTC.
+
+Lee los registros de tiempo del RTC mediante comunicación I2C y convierte los valores almacenados en formato BCD a decimal.
+
+Los campos recuperados son:\+
+\begin{DoxyItemize}
+\item Segundos
+\item Minutos
+\item Horas
+\item Día del mes
+\item Mes
+\item Año
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{out}}  & {\em time} & Estructura donde se almacenará la fecha y hora.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Lectura exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+Esta función debe ejecutarse bajo protección de mutex si el bus I2C es compartido con otros dispositivos.
+\end{DoxyNote}
+Obtiene la fecha y hora actuales del DS3231.
+
+Recupera los registros de tiempo del DS3231 mediante I2C, convirtiendo automáticamente los datos desde formato BCD a formato decimal.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{out}}  & {\em time} & Estructura donde se almacenará la fecha y hora.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Lectura exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{ds3231_8c_a2a5b627c6f5a3c948decc6bd860f2fec}\index{ds3231.c@{ds3231.c}!ds3231\_set\_alarm\_every\_minute@{ds3231\_set\_alarm\_every\_minute}}
+\index{ds3231\_set\_alarm\_every\_minute@{ds3231\_set\_alarm\_every\_minute}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{ds3231\_set\_alarm\_every\_minute()}{ds3231\_set\_alarm\_every\_minute()}}
+{\footnotesize\ttfamily \label{ds3231_8c_a2a5b627c6f5a3c948decc6bd860f2fec} 
+int ds3231\+\_\+set\+\_\+alarm\+\_\+every\+\_\+minute (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Configura una alarma periódica cada minuto. 
+
+Programa la alarma 1 del DS3231 para generar una interrupción cuando los segundos alcancen el valor 0.
+
+La configuración utilizada permite generar una interrupción exactamente al inicio de cada minuto.
+
+Registros utilizados:\+
+\begin{DoxyItemize}
+\item Alarm1 (0x07 -\/ 0x0A)
+\item Control (0x0E)
+\end{DoxyItemize}
+
+Esta funcionalidad se utiliza para despertar periódicamente al ESP32 desde modos de bajo consumo.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Configuración exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+El pin INT/\+\+SQW del DS3231 debe estar conectado a un GPIO configurado como interrupción externa.
+\end{DoxyNote}
+Utiliza la alarma 1 del DS3231 para generar una interrupción exactamente cuando los segundos alcanzan el valor cero.
+
+Esta funcionalidad es utilizada para despertar el sistema desde modos de bajo consumo y ejecutar los ciclos de medición.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Configuración exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+Requiere que el pin INT/\+\+SQW del DS3231 esté conectado a un GPIO configurado como interrupción externa. 
+\end{DoxyNote}
+\Hypertarget{ds3231_8c_aaee737743525a3d5cbc679d969338204}\index{ds3231.c@{ds3231.c}!ds3231\_set\_time@{ds3231\_set\_time}}
+\index{ds3231\_set\_time@{ds3231\_set\_time}!ds3231.c@{ds3231.c}}
+\doxysubsubsection{\texorpdfstring{ds3231\_set\_time()}{ds3231\_set\_time()}}
+{\footnotesize\ttfamily \label{ds3231_8c_aaee737743525a3d5cbc679d969338204} 
+int ds3231\+\_\+set\+\_\+time (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{time}{}\end{DoxyParamCaption})}
+
+
+
+Configura la fecha y hora del RTC DS3231. 
+
+Configura la fecha y hora del RTC.
+
+Convierte los valores de la estructura \doxylink{structrtc__time__t}{rtc\+\_\+time\+\_\+t} a formato BCD y los almacena en los registros internos del RTC.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em time} & Estructura que contiene la fecha y hora a configurar.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Configuración exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Esta operación modifica la referencia temporal utilizada por todo el sistema para generación de timestamps y alarmas.
+\end{DoxyWarning}
+Configura la fecha y hora del RTC DS3231.
+
+Convierte los valores contenidos en la estructura \doxylink{structrtc__time__t}{rtc\+\_\+time\+\_\+t} al formato requerido por el DS3231 y los almacena en sus registros internos.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em time} & Fecha y hora a configurar.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Configuración exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Modificar la hora afecta la generación de timestamps, alarmas e historial de datos almacenados por el sistema. 
+\end{DoxyWarning}

@@ -1,0 +1,158 @@
+\doxysection{Referencia del archivo main/\+drivers/\+dht11.c}
+\hypertarget{dht11_8c}{}\label{dht11_8c}\index{main/drivers/dht11.c@{main/drivers/dht11.c}}
+
+
+Implementación del driver para sensor DHT11.  
+
+
+{\ttfamily \+\#include "{}dht11.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+rom\+\_\+sys.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{dht11_8c_a88f236ffcdba286592667c799ddd69fd}{DHT11\+\_\+\+GPIO}}~GPIO\+\_\+\+NUM\+\_\+5
+\begin{DoxyCompactList}\small\item\em GPIO utilizado para la comunicación con el sensor DHT11. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+static void \doxymbox{\hyperlink{dht11_8c_a0dfc215612016f722dc316d280c113dc}{set\+\_\+output}} ()
+\begin{DoxyCompactList}\small\item\em Configura el pin de datos como salida. \end{DoxyCompactList}\item 
+static void \doxymbox{\hyperlink{dht11_8c_a6a0edc037d98885958cc7858700e4e5a}{set\+\_\+input}} ()
+\begin{DoxyCompactList}\small\item\em Configura el pin de datos como entrada. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{dht11_8c_a5ff9ff980ffd35131504c076f04b141e}{dht11\+\_\+read}} (\doxymbox{\hyperlink{structdht11__data__t}{dht11\+\_\+data\+\_\+t}} \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Realiza una lectura completa del sensor DHT11. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del driver para sensor DHT11. 
+
+Este módulo implementa la comunicación de bajo nivel con el sensor DHT11 utilizando el protocolo propietario basado en temporización de pulsos.
+
+El controlador realiza:\+
+\begin{DoxyItemize}
+\item Generación de la señal de inicio.
+\item Recepción de los 40 bits transmitidos por el sensor.
+\item Verificación de integridad mediante checksum.
+\item Conversión de los datos recibidos a temperatura y humedad.
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Nota}
+El protocolo del DHT11 depende de retardos en microsegundos. 
+
+Se recomienda evitar interrupciones prolongadas durante la lectura. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Atención}
+El acceso concurrente al sensor debe protegerse mediante mutex cuando sea utilizado desde múltiples tareas Free\+RTOS.
+\end{DoxyWarning}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{dht11_8c_doc-define-members}
+\Hypertarget{dht11_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{dht11_8c_a88f236ffcdba286592667c799ddd69fd}\index{dht11.c@{dht11.c}!DHT11\_GPIO@{DHT11\_GPIO}}
+\index{DHT11\_GPIO@{DHT11\_GPIO}!dht11.c@{dht11.c}}
+\doxysubsubsection{\texorpdfstring{DHT11\_GPIO}{DHT11\_GPIO}}
+{\footnotesize\ttfamily \label{dht11_8c_a88f236ffcdba286592667c799ddd69fd} 
+\+\#define DHT11\+\_\+\+GPIO~GPIO\+\_\+\+NUM\+\_\+5}
+
+
+
+GPIO utilizado para la comunicación con el sensor DHT11. 
+
+
+
+\label{dht11_8c_doc-func-members}
+\Hypertarget{dht11_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{dht11_8c_a5ff9ff980ffd35131504c076f04b141e}\index{dht11.c@{dht11.c}!dht11\_read@{dht11\_read}}
+\index{dht11\_read@{dht11\_read}!dht11.c@{dht11.c}}
+\doxysubsubsection{\texorpdfstring{dht11\_read()}{dht11\_read()}}
+{\footnotesize\ttfamily \label{dht11_8c_a5ff9ff980ffd35131504c076f04b141e} 
+int dht11\+\_\+read (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structdht11__data__t}{dht11\+\_\+data\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{data}{}\end{DoxyParamCaption})}
+
+
+
+Realiza una lectura completa del sensor DHT11. 
+
+Ejecuta la secuencia completa de comunicación:\+
+\begin{DoxyEnumerate}
+\item Envía la señal de inicio al sensor.
+\item Espera la respuesta de presencia.
+\item Lee los 40 bits de información transmitidos.
+\item Verifica la integridad mediante checksum.
+\item Extrae los valores de temperatura y humedad.
+\end{DoxyEnumerate}
+
+Los datos obtenidos se almacenan en la estructura proporcionada por el usuario.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{out}}  & {\em data} & Estructura donde se almacenarán los valores leídos.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Lectura realizada correctamente. \\
+\hline
+{\em -\/1} & No se recibió respuesta del sensor. \\
+\hline
+{\em -\/2} & Error de checksum en los datos recibidos.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+Esta función es bloqueante debido al uso de retardos de microsegundos requeridos por el protocolo DHT11.
+\end{DoxyNote}
+Esta función ejecuta el protocolo de comunicación requerido por el sensor, recibe los datos transmitidos y verifica su integridad mediante checksum.
+
+Si la lectura es exitosa, los valores obtenidos son almacenados en la estructura indicada por el parámetro {\ttfamily data}.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{out}}  & {\em data} & Puntero a la estructura donde se almacenarán los datos leídos de temperatura y humedad.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Lectura realizada correctamente. \\
+\hline
+{\em -\/1} & Error de comunicación o ausencia de respuesta del sensor. \\
+\hline
+{\em -\/2} & Error de verificación de checksum.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Esta función es bloqueante debido a los requerimientos de temporización del protocolo DHT11.
+\end{DoxyWarning}
+\begin{DoxyNote}{Nota}
+Se recomienda proteger el acceso mediante mutex si el sensor puede ser utilizado desde múltiples tareas Free\+RTOS. 
+\end{DoxyNote}
+\Hypertarget{dht11_8c_a6a0edc037d98885958cc7858700e4e5a}\index{dht11.c@{dht11.c}!set\_input@{set\_input}}
+\index{set\_input@{set\_input}!dht11.c@{dht11.c}}
+\doxysubsubsection{\texorpdfstring{set\_input()}{set\_input()}}
+{\footnotesize\ttfamily \label{dht11_8c_a6a0edc037d98885958cc7858700e4e5a} 
+void set\+\_\+input (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Configura el pin de datos como entrada. 
+
+Esta función se utiliza después de la señal de inicio para permitir que el sensor transmita los datos hacia el ESP32. \Hypertarget{dht11_8c_a0dfc215612016f722dc316d280c113dc}\index{dht11.c@{dht11.c}!set\_output@{set\_output}}
+\index{set\_output@{set\_output}!dht11.c@{dht11.c}}
+\doxysubsubsection{\texorpdfstring{set\_output()}{set\_output()}}
+{\footnotesize\ttfamily \label{dht11_8c_a0dfc215612016f722dc316d280c113dc} 
+void set\+\_\+output (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Configura el pin de datos como salida. 
+
+Esta función se utiliza durante la fase de inicio de comunicación, cuando el ESP32 debe enviar la señal de arranque al sensor. 

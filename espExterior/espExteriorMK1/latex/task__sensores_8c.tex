@@ -1,0 +1,101 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+sensores.c}
+\hypertarget{task__sensores_8c}{}\label{task__sensores_8c}\index{main/tasks/task\_sensores.c@{main/tasks/task\_sensores.c}}
+
+
+Tarea de adquisición de datos ambientales.  
+
+
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include "{}queues.\+h"{}}\newline
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}dht11.\+h"{}}\newline
+{\ttfamily \+\#include "{}ds3231.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__sensores_8c_a5b2930d6b5c8d2540af7d0b8e60ec19c}{task\+\_\+sensores}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea de lectura de sensores. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Tarea de adquisición de datos ambientales. 
+
+Esta tarea realiza una medición única de los sensores del sistema:\+
+\begin{DoxyItemize}
+\item Sensor DHT11 (temperatura y humedad)
+\item RTC DS3231 (fecha y hora)
+\end{DoxyItemize}
+
+Luego:\+
+\begin{DoxyItemize}
+\item Empaqueta los datos en una estructura
+\item Envía la información a otras tareas mediante colas
+\item Finaliza su ejecución
+\end{DoxyItemize}
+
+Flujo de ejecución:\+
+\begin{DoxyEnumerate}
+\item Lectura del sensor DHT11
+\item Lectura del RTC
+\item Validación de datos
+\item Envío a colas:\+
+\begin{DoxyItemize}
+\item cola\+\_\+datos → task\+\_\+logger
+\item cola\+\_\+display → task\+\_\+display
+\item cola\+\_\+mqtt → task\+\_\+mqtt
+\end{DoxyItemize}
+\item Eliminación de la tarea
+\end{DoxyEnumerate}
+
+Comunicación:\+
+\begin{DoxyItemize}
+\item Salida:\+
+\begin{DoxyItemize}
+\item cola\+\_\+datos
+\item cola\+\_\+display
+\item cola\+\_\+mqtt
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+Aspectos de Free\+RTOS utilizados:\+
+\begin{DoxyItemize}
+\item Queue para distribución de datos entre tareas.
+\item Ejecución one-\/shot mediante creación y destrucción dinámica.
+\item Bloqueo seguro mediante port\+MAX\+\_\+\+DELAY durante el envío.
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Nota}
+Esta tarea es de tipo "{}one-\/shot"{} (ejecución única).
+
+La periodicidad de ejecución es gestionada por la tarea principal del sistema, manteniendo esta tarea enfocada exclusivamente en la adquisición de datos.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{task__sensores_8c_doc-func-members}
+\Hypertarget{task__sensores_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__sensores_8c_a5b2930d6b5c8d2540af7d0b8e60ec19c}\index{task\_sensores.c@{task\_sensores.c}!task\_sensores@{task\_sensores}}
+\index{task\_sensores@{task\_sensores}!task\_sensores.c@{task\_sensores.c}}
+\doxysubsubsection{\texorpdfstring{task\_sensores()}{task\_sensores()}}
+{\footnotesize\ttfamily \label{task__sensores_8c_a5b2930d6b5c8d2540af7d0b8e60ec19c} 
+void task\+\_\+sensores (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea de lectura de sensores. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados) \\
+\hline
+\end{DoxyParams}

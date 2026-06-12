@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Exterior - Sistema de Fermentacion de Cafe: Referencia del archivo main/drivers/lcd_parallel.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Exterior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Monitoreo ambiental con ESP32, FreeRTOS, RTC, SD y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('lcd__parallel_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo lcd_parallel.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Driver para pantalla LCD 16x2 en modo paralelo (4 bits).  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
+</div>
+<p><a href="lcd__parallel_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a6842775ba83d166f02b8fef8bb63b1e6" id="r_a6842775ba83d166f02b8fef8bb63b1e6"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6842775ba83d166f02b8fef8bb63b1e6">lcd_init</a> (void)</td></tr>
+<tr class="memdesc:a6842775ba83d166f02b8fef8bb63b1e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa la pantalla LCD.  <br /></td></tr>
+<tr class="memitem:ad235a86241458b1e7b8771688bfdaf9a" id="r_ad235a86241458b1e7b8771688bfdaf9a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad235a86241458b1e7b8771688bfdaf9a">lcd_clear</a> (void)</td></tr>
+<tr class="memdesc:ad235a86241458b1e7b8771688bfdaf9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Limpia completamente el contenido de la pantalla.  <br /></td></tr>
+<tr class="memitem:a6907f3d2fa05d19627ff31fc3d37925f" id="r_a6907f3d2fa05d19627ff31fc3d37925f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6907f3d2fa05d19627ff31fc3d37925f">lcd_set_cursor</a> (uint8_t col, uint8_t row)</td></tr>
+<tr class="memdesc:a6907f3d2fa05d19627ff31fc3d37925f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Posiciona el cursor en una ubicación específica.  <br /></td></tr>
+<tr class="memitem:a6cbbb7fc3149a2c16a21d50e53563d85" id="r_a6cbbb7fc3149a2c16a21d50e53563d85"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6cbbb7fc3149a2c16a21d50e53563d85">lcd_print</a> (const char *str)</td></tr>
+<tr class="memdesc:a6cbbb7fc3149a2c16a21d50e53563d85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imprime una cadena de caracteres en la pantalla.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Driver para pantalla LCD 16x2 en modo paralelo (4 bits). </p>
+<p>Este módulo proporciona una interfaz para controlar una pantalla LCD basada en el controlador HD44780 utilizando comunicación paralela de 4 bits.</p>
+<p>Funcionalidades principales:</p><ul>
+<li>Inicialización del display.</li>
+<li>Posicionamiento del cursor.</li>
+<li>Impresión de texto.</li>
+<li>Limpieza de pantalla.</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="lcd_architecture"></a>
+Integración en el sistema</h1>
+<p>Dentro del sistema distribuido de fermentación de café, esta pantalla forma parte del ESP32 externo y permite visualizar información de:</p>
+<ul>
+<li>Temperatura ambiente.</li>
+<li>Humedad relativa.</li>
+<li>Estado de conexión WiFi.</li>
+<li>Estado de comunicación MQTT.</li>
+<li>Estado de almacenamiento en SD.</li>
+<li>Información de diagnóstico.</li>
+</ul>
+<dl class="section note"><dt>Nota</dt><dd>Este módulo no es thread-safe. Si es utilizado desde múltiples tareas FreeRTOS debe protegerse mediante un mutex.</dd></dl>
+<dl class="section author"><dt>Autores</dt><dd><ul>
+<li>Fernando Plazas</li>
+<li>Isabella Ordoñez</li>
+<li>Juan Daniel Constain </li>
+</ul>
+</dd></dl>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="ad235a86241458b1e7b8771688bfdaf9a" name="ad235a86241458b1e7b8771688bfdaf9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad235a86241458b1e7b8771688bfdaf9a">&#9670;&#160;</a></span>lcd_clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_clear </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Limpia completamente el contenido de la pantalla. </p>
+<p>Borra todos los caracteres visibles y reposiciona el cursor en la posición inicial de la primera fila.</p>
+<dl class="section note"><dt>Nota</dt><dd>Esta operación requiere varios milisegundos debido a las limitaciones temporales del controlador HD44780.</dd></dl>
+<p>Borra todos los caracteres visibles y reposiciona el cursor en la primera columna de la primera fila. </p>
+
+</div>
+</div>
+<a id="a6842775ba83d166f02b8fef8bb63b1e6" name="a6842775ba83d166f02b8fef8bb63b1e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6842775ba83d166f02b8fef8bb63b1e6">&#9670;&#160;</a></span>lcd_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa la pantalla LCD. </p>
+<p>Configura los GPIO asociados a las líneas de datos y control, ejecutando posteriormente la secuencia de inicialización definida por el controlador HD44780 para operación en modo de 4 bits.</p>
+<p>Esta función debe ejecutarse antes de utilizar cualquier otra función del módulo.</p>
+<dl class="section note"><dt>Nota</dt><dd>Debe llamarse una única vez durante la fase de arranque del sistema.</dd></dl>
+<p>Configura los GPIO asociados a las líneas de control y datos, ejecuta la secuencia de arranque recomendada por el fabricante y habilita el funcionamiento en modo de 4 bits.</p>
+<p>La secuencia implementada sigue las recomendaciones del controlador HD44780.</p>
+<dl class="section note"><dt>Nota</dt><dd>Debe ejecutarse una única vez durante el arranque del sistema. </dd></dl>
+
+</div>
+</div>
+<a id="a6cbbb7fc3149a2c16a21d50e53563d85" name="a6cbbb7fc3149a2c16a21d50e53563d85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cbbb7fc3149a2c16a21d50e53563d85">&#9670;&#160;</a></span>lcd_print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_print </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Imprime una cadena de caracteres en la pantalla. </p>
+<p>Imprime una cadena de texto en la pantalla.</p>
+<p>Los caracteres son enviados secuencialmente al controlador LCD comenzando desde la posición actual del cursor.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>Cadena de caracteres terminada en '\0'.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Nota</dt><dd>No se realiza control automático de longitud ni salto de línea. Es responsabilidad de la aplicación garantizar que el texto se ajuste al tamaño disponible del display.</dd></dl>
+<p>Imprime una cadena de caracteres en la pantalla.</p>
+<p>Los caracteres son enviados secuencialmente comenzando desde la posición actual del cursor.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>Cadena terminada en carácter nulo ('\0').</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Atención</dt><dd>No se realiza control automático de longitud ni salto de línea. </dd></dl>
+
+</div>
+</div>
+<a id="a6907f3d2fa05d19627ff31fc3d37925f" name="a6907f3d2fa05d19627ff31fc3d37925f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6907f3d2fa05d19627ff31fc3d37925f">&#9670;&#160;</a></span>lcd_set_cursor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcd_set_cursor </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>col</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>row</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Posiciona el cursor en una ubicación específica. </p>
+<p>Convierte automáticamente la fila y columna indicadas a la dirección DDRAM correspondiente del controlador LCD.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">col</td><td>Columna destino. Rango válido: 0–15.</td></tr>
+    <tr><td class="paramname">row</td><td>Fila destino. Rango válido: 0–1.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Nota</dt><dd>Valores fuera de rango pueden producir comportamientos inesperados dependiendo de la implementación.</dd></dl>
+<p>Convierte la fila y columna solicitadas a la dirección DDRAM correspondiente del controlador HD44780.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">col</td><td>Columna destino (0-15). </td></tr>
+    <tr><td class="paramname">row</td><td>Fila destino (0-1). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_ce9acbebd20a964a9fb527ea0a00b86e.html">drivers</a></li><li class="navelem"><a href="lcd__parallel_8h.html">lcd_parallel.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

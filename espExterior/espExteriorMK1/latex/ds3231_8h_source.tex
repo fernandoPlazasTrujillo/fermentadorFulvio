@@ -1,0 +1,38 @@
+\doxysection{ds3231.\+h}
+\hypertarget{ds3231_8h_source}{}\label{ds3231_8h_source}\index{main/drivers/ds3231.h@{main/drivers/ds3231.h}}
+\doxymbox{\hyperlink{ds3231_8h}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#ifndef\ DS3231\_H}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ DS3231\_H}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00045\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ uint8\_t\ \doxymbox{\hyperlink{structrtc__time__t_aa5f15b75a248a224f546e0eed2f869d2}{segundos}};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00058\ \ \ \ \ uint8\_t\ \doxymbox{\hyperlink{structrtc__time__t_aa145fb97f4757e0e0113a77f6846a120}{minutos}};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00066\ \ \ \ \ uint8\_t\ \doxymbox{\hyperlink{structrtc__time__t_a273738406d8d38645e3dd476743adeca}{horas}};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00073\ \ \ \ \ uint8\_t\ \doxymbox{\hyperlink{structrtc__time__t_a606e9f8104a25fb216997360d07cadae}{dia}};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00080\ \ \ \ \ uint8\_t\ \doxymbox{\hyperlink{structrtc__time__t_ad15e33da8e2aad29ceb1f46321dc87ee}{mes}};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00087\ \ \ \ \ uint16\_t\ \doxymbox{\hyperlink{structrtc__time__t_a3de12e2111566d8ceaf7347149ec48c8}{anio}};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \}\ \doxymbox{\hyperlink{structrtc__time__t}{rtc\_time\_t}};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00103\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{ds3231_8h_a6e87e6440c17af3e57145cc329930007}{ds3231\_read\_time}}(\doxymbox{\hyperlink{structrtc__time__t}{rtc\_time\_t}}\ *time);}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00120\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{ds3231_8h_aaee737743525a3d5cbc679d969338204}{ds3231\_set\_time}}(\doxymbox{\hyperlink{structrtc__time__t}{rtc\_time\_t}}\ *time);}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00137\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{ds3231_8h_a1dde28e1910523705f4fa712d3e695c1}{ds3231\_set\_alarm\_every\_minute}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00153\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{ds3231_8h_a4621ab7a785638749c64cc2373dda3fe}{ds3231\_clear\_alarm\_flag}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

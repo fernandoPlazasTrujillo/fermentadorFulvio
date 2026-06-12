@@ -1,0 +1,26 @@
+\doxysection{mqtt\+\_\+manager.\+h}
+\hypertarget{mqtt__manager_8h_source}{}\label{mqtt__manager_8h_source}\index{main/mqtt/mqtt\_manager.h@{main/mqtt/mqtt\_manager.h}}
+\doxymbox{\hyperlink{mqtt__manager_8h}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#ifndef\ MQTT\_MANAGER\_H}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ MQTT\_MANAGER\_H}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{mqtt__manager_8h_aade8d25902d34a7a7ae601ba023bff4f}{mqtt\_manager\_start}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00039\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{mqtt__manager_8h_abc2b7e54cf9f610d6ce01fcc17a56aa9}{mqtt\_wait\_connected}}(uint32\_t\ timeout\_ms);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{mqtt__manager_8h_a0aa78fdc87dda9713ff09eefc5d1bfb8}{mqtt\_publish}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *topic,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *payload,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ qos,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ timeout\_ms);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{mqtt__manager_8h_a9d085201987e683cf0725e1cdc249d5f}{mqtt\_manager\_stop}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

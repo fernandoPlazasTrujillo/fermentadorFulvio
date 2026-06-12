@@ -1,0 +1,133 @@
+\doxysection{Referencia de la estructura datos\+\_\+ambiente\+\_\+t}
+\hypertarget{structdatos__ambiente__t}{}\label{structdatos__ambiente__t}\index{datos\_ambiente\_t@{datos\_ambiente\_t}}
+
+
+Estructura que almacena una medición ambiental completa.  
+
+
+
+
+{\ttfamily \+\#include $<$common.\+h$>$}
+
+\doxysubsubsection*{Atributos públicos}
+\begin{DoxyCompactItemize}
+\item 
+float \doxymbox{\hyperlink{structdatos__ambiente__t_a9dfebd28e2820660e099f3505951f0e6}{temperatura}}
+\begin{DoxyCompactList}\small\item\em Temperatura ambiente. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{structdatos__ambiente__t_a4308879ed077a75333ee01d7c7b54690}{humedad}}
+\begin{DoxyCompactList}\small\item\em Humedad relativa. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structdatos__ambiente__t_a725266cc569928c58d01bfe4620407c1}{hora}}
+\begin{DoxyCompactList}\small\item\em Hora de la medición. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structdatos__ambiente__t_a415cd7c905b863202b24d733a809b0ff}{minuto}}
+\begin{DoxyCompactList}\small\item\em Minuto de la medición. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structdatos__ambiente__t_aa0e1cd5cbea8d458b1874c5c980dfed8}{segundo}}
+\begin{DoxyCompactList}\small\item\em Segundo de la medición. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structdatos__ambiente__t_a56f6bcd398a1d17e59bc6483516dc3ce}{dia}}
+\begin{DoxyCompactList}\small\item\em Día del mes. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structdatos__ambiente__t_a531bf8482d03488984e2845cd9f7820d}{mes}}
+\begin{DoxyCompactList}\small\item\em Mes de la medición. \end{DoxyCompactList}\item 
+uint16\+\_\+t \doxymbox{\hyperlink{structdatos__ambiente__t_a89c0685a207edc62a25358d20bbcc160}{anio}}
+\begin{DoxyCompactList}\small\item\em Año de la medición. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Estructura que almacena una medición ambiental completa. 
+
+Contiene los datos adquiridos por los sensores junto con la marca temporal asociada obtenida desde el RTC DS3231.
+
+Esta estructura es utilizada para:\+
+\begin{DoxyItemize}
+\item Transferencia de datos entre tareas Free\+RTOS.
+\item Almacenamiento en tarjeta SD.
+\item Publicación mediante MQTT.
+\item Visualización en la interfaz de usuario. 
+\end{DoxyItemize}
+
+\label{structdatos__ambiente__t_doc-variable-members}
+\Hypertarget{structdatos__ambiente__t_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{structdatos__ambiente__t_a89c0685a207edc62a25358d20bbcc160}\index{datos\_ambiente\_t@{datos\_ambiente\_t}!anio@{anio}}
+\index{anio@{anio}!datos\_ambiente\_t@{datos\_ambiente\_t}}
+\doxysubsubsection{\texorpdfstring{anio}{anio}}
+{\footnotesize\ttfamily \label{structdatos__ambiente__t_a89c0685a207edc62a25358d20bbcc160} 
+uint16\+\_\+t datos\+\_\+ambiente\+\_\+t::\+anio}
+
+
+
+Año de la medición. 
+
+\Hypertarget{structdatos__ambiente__t_a56f6bcd398a1d17e59bc6483516dc3ce}\index{datos\_ambiente\_t@{datos\_ambiente\_t}!dia@{dia}}
+\index{dia@{dia}!datos\_ambiente\_t@{datos\_ambiente\_t}}
+\doxysubsubsection{\texorpdfstring{dia}{dia}}
+{\footnotesize\ttfamily \label{structdatos__ambiente__t_a56f6bcd398a1d17e59bc6483516dc3ce} 
+uint8\+\_\+t datos\+\_\+ambiente\+\_\+t::\+dia}
+
+
+
+Día del mes. 
+
+\Hypertarget{structdatos__ambiente__t_a725266cc569928c58d01bfe4620407c1}\index{datos\_ambiente\_t@{datos\_ambiente\_t}!hora@{hora}}
+\index{hora@{hora}!datos\_ambiente\_t@{datos\_ambiente\_t}}
+\doxysubsubsection{\texorpdfstring{hora}{hora}}
+{\footnotesize\ttfamily \label{structdatos__ambiente__t_a725266cc569928c58d01bfe4620407c1} 
+uint8\+\_\+t datos\+\_\+ambiente\+\_\+t::\+hora}
+
+
+
+Hora de la medición. 
+
+Formato de 24 horas. \Hypertarget{structdatos__ambiente__t_a4308879ed077a75333ee01d7c7b54690}\index{datos\_ambiente\_t@{datos\_ambiente\_t}!humedad@{humedad}}
+\index{humedad@{humedad}!datos\_ambiente\_t@{datos\_ambiente\_t}}
+\doxysubsubsection{\texorpdfstring{humedad}{humedad}}
+{\footnotesize\ttfamily \label{structdatos__ambiente__t_a4308879ed077a75333ee01d7c7b54690} 
+float datos\+\_\+ambiente\+\_\+t::\+humedad}
+
+
+
+Humedad relativa. 
+
+Unidad:\+ porcentaje (RH). \Hypertarget{structdatos__ambiente__t_a531bf8482d03488984e2845cd9f7820d}\index{datos\_ambiente\_t@{datos\_ambiente\_t}!mes@{mes}}
+\index{mes@{mes}!datos\_ambiente\_t@{datos\_ambiente\_t}}
+\doxysubsubsection{\texorpdfstring{mes}{mes}}
+{\footnotesize\ttfamily \label{structdatos__ambiente__t_a531bf8482d03488984e2845cd9f7820d} 
+uint8\+\_\+t datos\+\_\+ambiente\+\_\+t::\+mes}
+
+
+
+Mes de la medición. 
+
+\Hypertarget{structdatos__ambiente__t_a415cd7c905b863202b24d733a809b0ff}\index{datos\_ambiente\_t@{datos\_ambiente\_t}!minuto@{minuto}}
+\index{minuto@{minuto}!datos\_ambiente\_t@{datos\_ambiente\_t}}
+\doxysubsubsection{\texorpdfstring{minuto}{minuto}}
+{\footnotesize\ttfamily \label{structdatos__ambiente__t_a415cd7c905b863202b24d733a809b0ff} 
+uint8\+\_\+t datos\+\_\+ambiente\+\_\+t::\+minuto}
+
+
+
+Minuto de la medición. 
+
+\Hypertarget{structdatos__ambiente__t_aa0e1cd5cbea8d458b1874c5c980dfed8}\index{datos\_ambiente\_t@{datos\_ambiente\_t}!segundo@{segundo}}
+\index{segundo@{segundo}!datos\_ambiente\_t@{datos\_ambiente\_t}}
+\doxysubsubsection{\texorpdfstring{segundo}{segundo}}
+{\footnotesize\ttfamily \label{structdatos__ambiente__t_aa0e1cd5cbea8d458b1874c5c980dfed8} 
+uint8\+\_\+t datos\+\_\+ambiente\+\_\+t::\+segundo}
+
+
+
+Segundo de la medición. 
+
+\Hypertarget{structdatos__ambiente__t_a9dfebd28e2820660e099f3505951f0e6}\index{datos\_ambiente\_t@{datos\_ambiente\_t}!temperatura@{temperatura}}
+\index{temperatura@{temperatura}!datos\_ambiente\_t@{datos\_ambiente\_t}}
+\doxysubsubsection{\texorpdfstring{temperatura}{temperatura}}
+{\footnotesize\ttfamily \label{structdatos__ambiente__t_a9dfebd28e2820660e099f3505951f0e6} 
+float datos\+\_\+ambiente\+\_\+t::\+temperatura}
+
+
+
+Temperatura ambiente. 
+
+Unidad:\+ grados Celsius (°C). 
+
+La documentación de esta estructura está generada del siguiente archivo:\+\begin{DoxyCompactItemize}
+\item 
+main/\+include/\+\doxymbox{\hyperlink{common_8h}{common.\+h}}\end{DoxyCompactItemize}

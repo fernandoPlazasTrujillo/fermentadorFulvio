@@ -1,0 +1,377 @@
+\doxysection{Referencia del archivo main/\+main.c}
+\hypertarget{main_8c}{}\label{main_8c}\index{main/main.c@{main/main.c}}
+
+
+Punto de entrada del sistema ESP32 para monitoreo ambiental.  
+
+
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+i2c.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+sleep.\+h"{}}\newline
+{\ttfamily \+\#include "{}queues.\+h"{}}\newline
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}ds3231.\+h"{}}\newline
+{\ttfamily \+\#include "{}sd\+\_\+card.\+h"{}}\newline
+{\ttfamily \+\#include "{}wifi/\+wifi\+\_\+manager.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{main_8c_a033b5e8a30541fe4ff939a62fdb7a43d}{I2\+C\+\_\+\+MASTER\+\_\+\+SCL\+\_\+\+IO}}~22
+\item 
+\+\#define \doxymbox{\hyperlink{main_8c_af47631d568bba17edf9d1ea042602bb6}{I2\+C\+\_\+\+MASTER\+\_\+\+SDA\+\_\+\+IO}}~21
+\item 
+\+\#define \doxymbox{\hyperlink{main_8c_a5c22ca4de37a83a59014e48b0a0b043d}{I2\+C\+\_\+\+MASTER\+\_\+\+FREQ\+\_\+\+HZ}}~100000
+\item 
+\+\#define \doxymbox{\hyperlink{main_8c_a269a6cfad0972318bcd4766eb6a1d7f2}{WIFI\+\_\+\+CONNECT\+\_\+\+TIMEOUT\+\_\+\+MS}}~10000
+\item 
+\+\#define \doxymbox{\hyperlink{main_8c_a5403bba6834002327f95f773b054068e}{RTC\+\_\+\+INT\+\_\+\+GPIO}}~GPIO\+\_\+\+NUM\+\_\+27
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{main_8c_a5b2930d6b5c8d2540af7d0b8e60ec19c}{task\+\_\+sensores}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea de lectura de sensores. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{main_8c_af38783d3b22fb6c2783f14a88308c330}{task\+\_\+logger}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea de registro de datos en SD. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{main_8c_a0c23017a47c450de05f8c7af642c7461}{task\+\_\+display}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea de visualización en LCD. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{main_8c_a376c1e55c392503ef2bd96eedae58a21}{task\+\_\+mqtt}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea responsable de la comunicación MQTT. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{main_8c_a64303230bf4843297e7ac37ac236ca04}{i2c\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Inicializa el bus I2C en modo maestro. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{main_8c_a630544a7f0a2cc40d8a7fefab7e2fe70}{app\+\_\+main}} (void)
+\begin{DoxyCompactList}\small\item\em Punto de entrada principal de la aplicación. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{main_8c_a228cd02aecd49d8ee1ca64db3acaa324}{cola\+\_\+datos}}
+\begin{DoxyCompactList}\small\item\em Cola utilizada para transferir datos hacia task\+\_\+logger. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{main_8c_a0040603dc9ecd7e7eb6f56f4351adf0d}{cola\+\_\+display}}
+\begin{DoxyCompactList}\small\item\em Cola utilizada para transferir datos hacia task\+\_\+display. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{main_8c_a190d88536d9aa672abaea82479d2329d}{cola\+\_\+mqtt}}
+\begin{DoxyCompactList}\small\item\em Cola utilizada para transferir datos hacia task\+\_\+mqtt. \end{DoxyCompactList}\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d}{main\+\_\+task\+\_\+handle}} = NULL
+\begin{DoxyCompactList}\small\item\em Handle de la tarea principal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Punto de entrada del sistema ESP32 para monitoreo ambiental. 
+
+Este módulo inicializa el sistema, configura periféricos y coordina la ejecución de tareas bajo Free\+RTOS.
+
+Funcionalidades principales:\+
+\begin{DoxyItemize}
+\item Inicialización del bus I2C
+\item Inicialización de la tarjeta SD
+\item Creación de colas de comunicación
+\item Creación de tareas del sistema
+\item Configuración del RTC DS3231 para wakeup periódico
+\item Gestión de bajo consumo mediante Deep Sleep
+\end{DoxyItemize}
+
+Arquitectura:\+
+\begin{DoxyItemize}
+\item task\+\_\+sensores → adquisición de datos
+\item task\+\_\+logger → almacenamiento en SD
+\item task\+\_\+display → visualización en LCD
+\item task\+\_\+mqtt → transmisión MQTT
+\end{DoxyItemize}
+
+Flujo general:\+
+\begin{DoxyEnumerate}
+\item Inicialización del sistema
+\item Conexión Wi\+Fi
+\item Creación de tareas
+\item Espera finalización de tareas críticas (display y MQTT)
+\item Configuración de alarma RTC
+\item Entrada en Deep Sleep
+\end{DoxyEnumerate}
+
+Aspectos de Free\+RTOS utilizados:\+
+\begin{DoxyItemize}
+\item Creación dinámica de tareas.
+\item Colas para intercambio de datos.
+\item Notificaciones de tareas para sincronización.
+\item Bloqueo eficiente mediante port\+MAX\+\_\+\+DELAY.
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Nota}
+El sistema funciona en ciclos:\+ medir → procesar → mostrar → guardar → dormir
+\end{DoxyNote}
+\begin{DoxyWarning}{Atención}
+El pin SQW del DS3231 debe estar correctamente conectado para permitir el wakeup desde Deep Sleep.
+\end{DoxyWarning}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{main_8c_doc-define-members}
+\Hypertarget{main_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{main_8c_a5c22ca4de37a83a59014e48b0a0b043d}\index{main.c@{main.c}!I2C\_MASTER\_FREQ\_HZ@{I2C\_MASTER\_FREQ\_HZ}}
+\index{I2C\_MASTER\_FREQ\_HZ@{I2C\_MASTER\_FREQ\_HZ}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{I2C\_MASTER\_FREQ\_HZ}{I2C\_MASTER\_FREQ\_HZ}}
+{\footnotesize\ttfamily \label{main_8c_a5c22ca4de37a83a59014e48b0a0b043d} 
+\+\#define I2\+C\+\_\+\+MASTER\+\_\+\+FREQ\+\_\+\+HZ~100000}
+
+Frecuencia I2C \Hypertarget{main_8c_a033b5e8a30541fe4ff939a62fdb7a43d}\index{main.c@{main.c}!I2C\_MASTER\_SCL\_IO@{I2C\_MASTER\_SCL\_IO}}
+\index{I2C\_MASTER\_SCL\_IO@{I2C\_MASTER\_SCL\_IO}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{I2C\_MASTER\_SCL\_IO}{I2C\_MASTER\_SCL\_IO}}
+{\footnotesize\ttfamily \label{main_8c_a033b5e8a30541fe4ff939a62fdb7a43d} 
+\+\#define I2\+C\+\_\+\+MASTER\+\_\+\+SCL\+\_\+\+IO~22}
+
+Pin SCL \Hypertarget{main_8c_af47631d568bba17edf9d1ea042602bb6}\index{main.c@{main.c}!I2C\_MASTER\_SDA\_IO@{I2C\_MASTER\_SDA\_IO}}
+\index{I2C\_MASTER\_SDA\_IO@{I2C\_MASTER\_SDA\_IO}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{I2C\_MASTER\_SDA\_IO}{I2C\_MASTER\_SDA\_IO}}
+{\footnotesize\ttfamily \label{main_8c_af47631d568bba17edf9d1ea042602bb6} 
+\+\#define I2\+C\+\_\+\+MASTER\+\_\+\+SDA\+\_\+\+IO~21}
+
+Pin SDA \Hypertarget{main_8c_a5403bba6834002327f95f773b054068e}\index{main.c@{main.c}!RTC\_INT\_GPIO@{RTC\_INT\_GPIO}}
+\index{RTC\_INT\_GPIO@{RTC\_INT\_GPIO}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{RTC\_INT\_GPIO}{RTC\_INT\_GPIO}}
+{\footnotesize\ttfamily \label{main_8c_a5403bba6834002327f95f773b054068e} 
+\+\#define RTC\+\_\+\+INT\+\_\+\+GPIO~GPIO\+\_\+\+NUM\+\_\+27}
+
+Pin SQW del DS3231 \Hypertarget{main_8c_a269a6cfad0972318bcd4766eb6a1d7f2}\index{main.c@{main.c}!WIFI\_CONNECT\_TIMEOUT\_MS@{WIFI\_CONNECT\_TIMEOUT\_MS}}
+\index{WIFI\_CONNECT\_TIMEOUT\_MS@{WIFI\_CONNECT\_TIMEOUT\_MS}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{WIFI\_CONNECT\_TIMEOUT\_MS}{WIFI\_CONNECT\_TIMEOUT\_MS}}
+{\footnotesize\ttfamily \label{main_8c_a269a6cfad0972318bcd4766eb6a1d7f2} 
+\+\#define WIFI\+\_\+\+CONNECT\+\_\+\+TIMEOUT\+\_\+\+MS~10000}
+
+
+
+\label{main_8c_doc-func-members}
+\Hypertarget{main_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{main_8c_a630544a7f0a2cc40d8a7fefab7e2fe70}\index{main.c@{main.c}!app\_main@{app\_main}}
+\index{app\_main@{app\_main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{app\_main()}{app\_main()}}
+{\footnotesize\ttfamily \label{main_8c_a630544a7f0a2cc40d8a7fefab7e2fe70} 
+void app\+\_\+main (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Punto de entrada principal de la aplicación. 
+
+Coordina la ejecución completa del ciclo de monitoreo:\+
+
+
+\begin{DoxyItemize}
+\item Inicializa periféricos.
+\item Establece conectividad Wi\+Fi.
+\item Inicializa almacenamiento SD.
+\item Crea las tareas del sistema.
+\item Espera la finalización de los procesos críticos.
+\item Configura la siguiente alarma RTC.
+\item Entra en modo Deep Sleep.
+\end{DoxyItemize}
+
+La función actúa como orquestador del sistema.
+
+Punto de entrada principal de la aplicación.
+
+Coordina la ejecución completa del ciclo de monitoreo:\+
+
+
+\begin{DoxyItemize}
+\item Inicializa periféricos.
+\item Establece conectividad Wi\+Fi.
+\item Inicializa almacenamiento SD.
+\item Crea las tareas del sistema.
+\item Espera la finalización de los procesos críticos.
+\item Configura la siguiente alarma RTC.
+\item Entra en modo Deep Sleep.
+\end{DoxyItemize}
+
+La función actúa como orquestador del sistema. Obtener handle de la tarea principal
+
+Inicializar I2C
+
+Determina la causa de activación desde Deep Sleep
+
+Limpia el flag de alarma del RTC
+
+Evita falsas interrupciones al iniciar el sistema.
+
+Espera la finalización de tareas críticas.
+
+El sistema espera la notificación de:\+
+\begin{DoxyItemize}
+\item task\+\_\+display
+\item task\+\_\+mqtt
+\end{DoxyItemize}
+
+antes de continuar hacia el modo de bajo consumo.
+
+Limpia el flag antes de dormir
+
+Retardo para estabilización del pin SQW
+
+Lectura del nivel del pin SQW (debug)
+
+Configura wakeup por señal externa (RTC)
+
+Entrada en Deep Sleep\Hypertarget{main_8c_a64303230bf4843297e7ac37ac236ca04}\index{main.c@{main.c}!i2c\_init@{i2c\_init}}
+\index{i2c\_init@{i2c\_init}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{i2c\_init()}{i2c\_init()}}
+{\footnotesize\ttfamily \label{main_8c_a64303230bf4843297e7ac37ac236ca04} 
+void i2c\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el bus I2C en modo maestro. 
+
+Configura los pines SDA y SCL y establece la frecuencia del bus.
+
+\begin{DoxyNote}{Nota}
+Necesario para comunicación con el RTC DS3231. 
+\end{DoxyNote}
+\Hypertarget{main_8c_a0c23017a47c450de05f8c7af642c7461}\index{main.c@{main.c}!task\_display@{task\_display}}
+\index{task\_display@{task\_display}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{task\_display()}{task\_display()}}
+{\footnotesize\ttfamily \label{main_8c_a0c23017a47c450de05f8c7af642c7461} 
+void task\+\_\+display (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Tarea de visualización en LCD. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{main_8c_af38783d3b22fb6c2783f14a88308c330}\index{main.c@{main.c}!task\_logger@{task\_logger}}
+\index{task\_logger@{task\_logger}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{task\_logger()}{task\_logger()}}
+{\footnotesize\ttfamily \label{main_8c_af38783d3b22fb6c2783f14a88308c330} 
+void task\+\_\+logger (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Tarea de registro de datos en SD. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{main_8c_a376c1e55c392503ef2bd96eedae58a21}\index{main.c@{main.c}!task\_mqtt@{task\_mqtt}}
+\index{task\_mqtt@{task\_mqtt}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{task\_mqtt()}{task\_mqtt()}}
+{\footnotesize\ttfamily \label{main_8c_a376c1e55c392503ef2bd96eedae58a21} 
+void task\+\_\+mqtt (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Tarea responsable de la comunicación MQTT. 
+
+Flujo de ejecución:\+
+
+
+\begin{DoxyEnumerate}
+\item Espera datos desde la cola MQTT.
+\item Construye el mensaje JSON.
+\item Inicia el cliente MQTT.
+\item Espera conexión con el broker.
+\item Reenvía mensajes pendientes.
+\item Publica el mensaje actual.
+\item Notifica a la tarea principal.
+\item Finaliza su ejecución.
+\end{DoxyEnumerate}
+
+En caso de pérdida de conectividad:\+
+\begin{DoxyItemize}
+\item El mensaje actual se almacena en SD.
+\item La tarea termina sin perder información.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{main_8c_a5b2930d6b5c8d2540af7d0b8e60ec19c}\index{main.c@{main.c}!task\_sensores@{task\_sensores}}
+\index{task\_sensores@{task\_sensores}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{task\_sensores()}{task\_sensores()}}
+{\footnotesize\ttfamily \label{main_8c_a5b2930d6b5c8d2540af7d0b8e60ec19c} 
+void task\+\_\+sensores (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Tarea de lectura de sensores. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados) \\
+\hline
+\end{DoxyParams}
+
+
+\label{main_8c_doc-var-members}
+\Hypertarget{main_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{main_8c_a228cd02aecd49d8ee1ca64db3acaa324}\index{main.c@{main.c}!cola\_datos@{cola\_datos}}
+\index{cola\_datos@{cola\_datos}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{cola\_datos}{cola\_datos}}
+{\footnotesize\ttfamily \label{main_8c_a228cd02aecd49d8ee1ca64db3acaa324} 
+Queue\+Handle\+\_\+t cola\+\_\+datos}
+
+
+
+Cola utilizada para transferir datos hacia task\+\_\+logger. 
+
+Cola de datos para procesamiento interno.
+
+Cola utilizada para transferir datos hacia task\+\_\+logger.
+
+Transporta estructuras de tipo \doxylink{structdatos__ambiente__t}{datos\+\_\+ambiente\+\_\+t} entre las tareas encargadas de adquisición y procesamiento. \Hypertarget{main_8c_a0040603dc9ecd7e7eb6f56f4351adf0d}\index{main.c@{main.c}!cola\_display@{cola\_display}}
+\index{cola\_display@{cola\_display}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{cola\_display}{cola\_display}}
+{\footnotesize\ttfamily \label{main_8c_a0040603dc9ecd7e7eb6f56f4351adf0d} 
+Queue\+Handle\+\_\+t cola\+\_\+display}
+
+
+
+Cola utilizada para transferir datos hacia task\+\_\+display. 
+
+Cola utilizada para actualización de la interfaz gráfica.
+
+Cola utilizada para transferir datos hacia task\+\_\+display.
+
+Permite enviar nuevas mediciones hacia la tarea encargada de controlar la pantalla LCD. \Hypertarget{main_8c_a190d88536d9aa672abaea82479d2329d}\index{main.c@{main.c}!cola\_mqtt@{cola\_mqtt}}
+\index{cola\_mqtt@{cola\_mqtt}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{cola\_mqtt}{cola\_mqtt}}
+{\footnotesize\ttfamily \label{main_8c_a190d88536d9aa672abaea82479d2329d} 
+Queue\+Handle\+\_\+t cola\+\_\+mqtt}
+
+
+
+Cola utilizada para transferir datos hacia task\+\_\+mqtt. 
+
+Cola utilizada para transmisión MQTT.
+
+Cola utilizada para transferir datos hacia task\+\_\+mqtt.
+
+Contiene los datos que posteriormente serán serializados y publicados hacia el broker MQTT. \Hypertarget{main_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d}\index{main.c@{main.c}!main\_task\_handle@{main\_task\_handle}}
+\index{main\_task\_handle@{main\_task\_handle}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main\_task\_handle}{main\_task\_handle}}
+{\footnotesize\ttfamily \label{main_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d} 
+Task\+Handle\+\_\+t main\+\_\+task\+\_\+handle = NULL}
+
+
+
+Handle de la tarea principal. 
+
+Permite sincronización mediante notificaciones desde otras tareas.
+
+Permite notificar al sistema que el ciclo de visualización ha finalizado. 

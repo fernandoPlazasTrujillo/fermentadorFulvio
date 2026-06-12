@@ -1,0 +1,460 @@
+\begin{theindex}
+
+  \item {anio}
+    \subitem {datos\_ambiente\_t}, \hyperpage{10}
+    \subitem {rtc\_time\_t}, \hyperpage{12}
+  \item {app\_main}
+    \subitem {main.c}, \hyperpage{62}
+  \item {auth\_mode\_name}
+    \subitem {wifi\_manager.c}, \hyperpage{85}
+
+  \indexspace
+
+  \item {bcd\_to\_dec}
+    \subitem {ds3231.c}, \hyperpage{22}
+
+  \indexspace
+
+  \item {cola\_datos}
+    \subitem {main.c}, \hyperpage{65}
+    \subitem {queues.h}, \hyperpage{58}
+  \item {cola\_display}
+    \subitem {main.c}, \hyperpage{65}
+    \subitem {queues.h}, \hyperpage{58}
+  \item {cola\_mqtt}
+    \subitem {main.c}, \hyperpage{65}
+    \subitem {queues.h}, \hyperpage{59}
+
+  \indexspace
+
+  \item {datos\_ambiente\_t}, \hyperpage{9}
+    \subitem {anio}, \hyperpage{10}
+    \subitem {dia}, \hyperpage{10}
+    \subitem {hora}, \hyperpage{10}
+    \subitem {humedad}, \hyperpage{10}
+    \subitem {mes}, \hyperpage{10}
+    \subitem {minuto}, \hyperpage{10}
+    \subitem {segundo}, \hyperpage{10}
+    \subitem {temperatura}, \hyperpage{10}
+  \item {dec\_to\_bcd}
+    \subitem {ds3231.c}, \hyperpage{22}
+  \item {dht11.c}
+    \subitem {DHT11\_GPIO}, \hyperpage{16}
+    \subitem {dht11\_read}, \hyperpage{16}
+    \subitem {set\_input}, \hyperpage{17}
+    \subitem {set\_output}, \hyperpage{17}
+  \item {dht11.h}
+    \subitem {dht11\_read}, \hyperpage{19}
+  \item {dht11\_data\_t}, \hyperpage{11}
+    \subitem {humedad}, \hyperpage{11}
+    \subitem {temperatura}, \hyperpage{11}
+  \item {DHT11\_GPIO}
+    \subitem {dht11.c}, \hyperpage{16}
+  \item {dht11\_read}
+    \subitem {dht11.c}, \hyperpage{16}
+    \subitem {dht11.h}, \hyperpage{19}
+  \item {dia}
+    \subitem {datos\_ambiente\_t}, \hyperpage{10}
+    \subitem {rtc\_time\_t}, \hyperpage{12}
+  \item {ds3231.c}
+    \subitem {bcd\_to\_dec}, \hyperpage{22}
+    \subitem {dec\_to\_bcd}, \hyperpage{22}
+    \subitem {DS3231\_ADDR}, \hyperpage{21}
+    \subitem {ds3231\_clear\_alarm\_flag}, \hyperpage{23}
+    \subitem {ds3231\_read\_time}, \hyperpage{24}
+    \subitem {ds3231\_set\_alarm\_every\_minute}, \hyperpage{25}
+    \subitem {ds3231\_set\_time}, \hyperpage{26}
+    \subitem {I2C\_PORT}, \hyperpage{21}
+    \subitem {TAG}, \hyperpage{21}
+  \item {ds3231.h}
+    \subitem {ds3231\_clear\_alarm\_flag}, \hyperpage{28}
+    \subitem {ds3231\_read\_time}, \hyperpage{29}
+    \subitem {ds3231\_set\_alarm\_every\_minute}, \hyperpage{30}
+    \subitem {ds3231\_set\_time}, \hyperpage{31}
+  \item {DS3231\_ADDR}
+    \subitem {ds3231.c}, \hyperpage{21}
+  \item {ds3231\_clear\_alarm\_flag}
+    \subitem {ds3231.c}, \hyperpage{23}
+    \subitem {ds3231.h}, \hyperpage{28}
+  \item {ds3231\_read\_time}
+    \subitem {ds3231.c}, \hyperpage{24}
+    \subitem {ds3231.h}, \hyperpage{29}
+  \item {ds3231\_set\_alarm\_every\_minute}
+    \subitem {ds3231.c}, \hyperpage{25}
+    \subitem {ds3231.h}, \hyperpage{30}
+  \item {ds3231\_set\_time}
+    \subitem {ds3231.c}, \hyperpage{26}
+    \subitem {ds3231.h}, \hyperpage{31}
+
+  \indexspace
+
+  \item {hora}
+    \subitem {datos\_ambiente\_t}, \hyperpage{10}
+  \item {horas}
+    \subitem {rtc\_time\_t}, \hyperpage{12}
+  \item {humedad}
+    \subitem {datos\_ambiente\_t}, \hyperpage{10}
+    \subitem {dht11\_data\_t}, \hyperpage{11}
+
+  \indexspace
+
+  \item {i2c\_init}
+    \subitem {main.c}, \hyperpage{63}
+  \item {I2C\_MASTER\_FREQ\_HZ}
+    \subitem {main.c}, \hyperpage{62}
+  \item {I2C\_MASTER\_SCL\_IO}
+    \subitem {main.c}, \hyperpage{62}
+  \item {I2C\_MASTER\_SDA\_IO}
+    \subitem {main.c}, \hyperpage{62}
+  \item {I2C\_PORT}
+    \subitem {ds3231.c}, \hyperpage{21}
+
+  \indexspace
+
+  \item {lcd\_clear}
+    \subitem {lcd\_parallel.c}, \hyperpage{35}
+    \subitem {lcd\_parallel.h}, \hyperpage{40}
+  \item {lcd\_cmd}
+    \subitem {lcd\_parallel.c}, \hyperpage{35}
+  \item {LCD\_D4}
+    \subitem {lcd\_parallel.c}, \hyperpage{34}
+  \item {LCD\_D5}
+    \subitem {lcd\_parallel.c}, \hyperpage{34}
+  \item {LCD\_D6}
+    \subitem {lcd\_parallel.c}, \hyperpage{34}
+  \item {LCD\_D7}
+    \subitem {lcd\_parallel.c}, \hyperpage{35}
+  \item {lcd\_data}
+    \subitem {lcd\_parallel.c}, \hyperpage{36}
+  \item {LCD\_E}
+    \subitem {lcd\_parallel.c}, \hyperpage{35}
+  \item {lcd\_init}
+    \subitem {lcd\_parallel.c}, \hyperpage{36}
+    \subitem {lcd\_parallel.h}, \hyperpage{40}
+  \item {lcd\_parallel.c}
+    \subitem {lcd\_clear}, \hyperpage{35}
+    \subitem {lcd\_cmd}, \hyperpage{35}
+    \subitem {LCD\_D4}, \hyperpage{34}
+    \subitem {LCD\_D5}, \hyperpage{34}
+    \subitem {LCD\_D6}, \hyperpage{34}
+    \subitem {LCD\_D7}, \hyperpage{35}
+    \subitem {lcd\_data}, \hyperpage{36}
+    \subitem {LCD\_E}, \hyperpage{35}
+    \subitem {lcd\_init}, \hyperpage{36}
+    \subitem {lcd\_print}, \hyperpage{36}
+    \subitem {LCD\_RS}, \hyperpage{35}
+    \subitem {lcd\_send\_byte}, \hyperpage{37}
+    \subitem {lcd\_send\_nibble}, \hyperpage{38}
+    \subitem {lcd\_set\_cursor}, \hyperpage{38}
+  \item {lcd\_parallel.h}
+    \subitem {lcd\_clear}, \hyperpage{40}
+    \subitem {lcd\_init}, \hyperpage{40}
+    \subitem {lcd\_print}, \hyperpage{40}
+    \subitem {lcd\_set\_cursor}, \hyperpage{41}
+  \item {lcd\_print}
+    \subitem {lcd\_parallel.c}, \hyperpage{36}
+    \subitem {lcd\_parallel.h}, \hyperpage{40}
+  \item {LCD\_RS}
+    \subitem {lcd\_parallel.c}, \hyperpage{35}
+  \item {lcd\_send\_byte}
+    \subitem {lcd\_parallel.c}, \hyperpage{37}
+  \item {lcd\_send\_nibble}
+    \subitem {lcd\_parallel.c}, \hyperpage{38}
+  \item {lcd\_set\_cursor}
+    \subitem {lcd\_parallel.c}, \hyperpage{38}
+    \subitem {lcd\_parallel.h}, \hyperpage{41}
+
+  \indexspace
+
+  \item {main.c}
+    \subitem {app\_main}, \hyperpage{62}
+    \subitem {cola\_datos}, \hyperpage{65}
+    \subitem {cola\_display}, \hyperpage{65}
+    \subitem {cola\_mqtt}, \hyperpage{65}
+    \subitem {i2c\_init}, \hyperpage{63}
+    \subitem {I2C\_MASTER\_FREQ\_HZ}, \hyperpage{62}
+    \subitem {I2C\_MASTER\_SCL\_IO}, \hyperpage{62}
+    \subitem {I2C\_MASTER\_SDA\_IO}, \hyperpage{62}
+    \subitem {main\_task\_handle}, \hyperpage{66}
+    \subitem {RTC\_INT\_GPIO}, \hyperpage{62}
+    \subitem {task\_display}, \hyperpage{64}
+    \subitem {task\_logger}, \hyperpage{64}
+    \subitem {task\_mqtt}, \hyperpage{64}
+    \subitem {task\_sensores}, \hyperpage{65}
+    \subitem {WIFI\_CONNECT\_TIMEOUT\_MS}, \hyperpage{62}
+  \item {main/drivers/dht11.c}, \hyperpage{15}
+  \item {main/drivers/dht11.h}, \hyperpage{18}, \hyperpage{20}
+  \item {main/drivers/ds3231.c}, \hyperpage{20}
+  \item {main/drivers/ds3231.h}, \hyperpage{27}, \hyperpage{32}
+  \item {main/drivers/lcd\_parallel.c}, \hyperpage{33}
+  \item {main/drivers/lcd\_parallel.h}, \hyperpage{39}, \hyperpage{42}
+  \item {main/drivers/sd\_card.c}, \hyperpage{42}
+  \item {main/drivers/sd\_card.h}, \hyperpage{50}, \hyperpage{56}
+  \item {main/include/common.h}, \hyperpage{56, 57}
+  \item {main/include/queues.h}, \hyperpage{57}, \hyperpage{59}
+  \item {main/main.c}, \hyperpage{59}
+  \item {main/mqtt/mqtt\_manager.c}, \hyperpage{66}
+  \item {main/mqtt/mqtt\_manager.h}, \hyperpage{71}, \hyperpage{74}
+  \item {main/tasks/task\_display.c}, \hyperpage{74}
+  \item {main/tasks/task\_logger.c}, \hyperpage{76}
+  \item {main/tasks/task\_mqtt.c}, \hyperpage{77}
+  \item {main/tasks/task\_sensores.c}, \hyperpage{81}
+  \item {main/wifi/wifi\_manager.c}, \hyperpage{83}
+  \item {main/wifi/wifi\_manager.h}, \hyperpage{89}, \hyperpage{92}
+  \item {main\_task\_handle}
+    \subitem {main.c}, \hyperpage{66}
+    \subitem {task\_display.c}, \hyperpage{76}
+    \subitem {task\_mqtt.c}, \hyperpage{81}
+  \item {mes}
+    \subitem {datos\_ambiente\_t}, \hyperpage{10}
+    \subitem {rtc\_time\_t}, \hyperpage{13}
+  \item {minuto}
+    \subitem {datos\_ambiente\_t}, \hyperpage{10}
+  \item {minutos}
+    \subitem {rtc\_time\_t}, \hyperpage{13}
+  \item {MQTT\_BROKER\_URI}
+    \subitem {mqtt\_manager.c}, \hyperpage{67}
+  \item {mqtt\_client}
+    \subitem {mqtt\_manager.c}, \hyperpage{71}
+  \item {MQTT\_CONNECT\_TIMEOUT\_MS}
+    \subitem {task\_mqtt.c}, \hyperpage{79}
+  \item {MQTT\_CONNECTED\_BIT}
+    \subitem {mqtt\_manager.c}, \hyperpage{67}
+  \item {MQTT\_ERROR\_BIT}
+    \subitem {mqtt\_manager.c}, \hyperpage{68}
+  \item {mqtt\_event\_group}
+    \subitem {mqtt\_manager.c}, \hyperpage{71}
+  \item {mqtt\_event\_handler}
+    \subitem {mqtt\_manager.c}, \hyperpage{68}
+  \item {mqtt\_manager.c}
+    \subitem {MQTT\_BROKER\_URI}, \hyperpage{67}
+    \subitem {mqtt\_client}, \hyperpage{71}
+    \subitem {MQTT\_CONNECTED\_BIT}, \hyperpage{67}
+    \subitem {MQTT\_ERROR\_BIT}, \hyperpage{68}
+    \subitem {mqtt\_event\_group}, \hyperpage{71}
+    \subitem {mqtt\_event\_handler}, \hyperpage{68}
+    \subitem {mqtt\_manager\_start}, \hyperpage{69}
+    \subitem {mqtt\_manager\_stop}, \hyperpage{69}
+    \subitem {mqtt\_publish}, \hyperpage{69}
+    \subitem {MQTT\_PUBLISHED\_BIT}, \hyperpage{68}
+    \subitem {mqtt\_wait\_connected}, \hyperpage{70}
+    \subitem {TAG}, \hyperpage{71}
+  \item {mqtt\_manager.h}
+    \subitem {mqtt\_manager\_start}, \hyperpage{72}
+    \subitem {mqtt\_manager\_stop}, \hyperpage{72}
+    \subitem {mqtt\_publish}, \hyperpage{72}
+    \subitem {mqtt\_wait\_connected}, \hyperpage{73}
+  \item {mqtt\_manager\_start}
+    \subitem {mqtt\_manager.c}, \hyperpage{69}
+    \subitem {mqtt\_manager.h}, \hyperpage{72}
+  \item {mqtt\_manager\_stop}
+    \subitem {mqtt\_manager.c}, \hyperpage{69}
+    \subitem {mqtt\_manager.h}, \hyperpage{72}
+  \item {MQTT\_PENDING\_PAYLOAD\_SIZE}
+    \subitem {task\_mqtt.c}, \hyperpage{79}
+  \item {mqtt\_publish}
+    \subitem {mqtt\_manager.c}, \hyperpage{69}
+    \subitem {mqtt\_manager.h}, \hyperpage{72}
+  \item {MQTT\_PUBLISH\_TIMEOUT\_MS}
+    \subitem {task\_mqtt.c}, \hyperpage{79}
+  \item {MQTT\_PUBLISHED\_BIT}
+    \subitem {mqtt\_manager.c}, \hyperpage{68}
+  \item {MQTT\_TOPIC}
+    \subitem {task\_mqtt.c}, \hyperpage{79}
+  \item {mqtt\_wait\_connected}
+    \subitem {mqtt\_manager.c}, \hyperpage{70}
+    \subitem {mqtt\_manager.h}, \hyperpage{73}
+
+  \indexspace
+
+  \item {PIN\_NUM\_CLK}
+    \subitem {sd\_card.c}, \hyperpage{44}
+  \item {PIN\_NUM\_CS}
+    \subitem {sd\_card.c}, \hyperpage{44}
+  \item {PIN\_NUM\_MISO}
+    \subitem {sd\_card.c}, \hyperpage{44}
+  \item {PIN\_NUM\_MOSI}
+    \subitem {sd\_card.c}, \hyperpage{44}
+
+  \indexspace
+
+  \item {queues.h}
+    \subitem {cola\_datos}, \hyperpage{58}
+    \subitem {cola\_display}, \hyperpage{58}
+    \subitem {cola\_mqtt}, \hyperpage{59}
+
+  \indexspace
+
+  \item {Referencia del directorio main}, \hyperpage{8}
+  \item {Referencia del directorio main/drivers}, \hyperpage{7}
+  \item {Referencia del directorio main/include}, \hyperpage{7}
+  \item {Referencia del directorio main/mqtt}, \hyperpage{8}
+  \item {Referencia del directorio main/tasks}, \hyperpage{8}
+  \item {Referencia del directorio main/wifi}, \hyperpage{8}
+  \item {resend\_pending\_mqtt\_messages}
+    \subitem {task\_mqtt.c}, \hyperpage{79}
+  \item {retry\_count}
+    \subitem {wifi\_manager.c}, \hyperpage{88}
+  \item {RTC\_INT\_GPIO}
+    \subitem {main.c}, \hyperpage{62}
+  \item {rtc\_time\_t}, \hyperpage{12}
+    \subitem {anio}, \hyperpage{12}
+    \subitem {dia}, \hyperpage{12}
+    \subitem {horas}, \hyperpage{12}
+    \subitem {mes}, \hyperpage{13}
+    \subitem {minutos}, \hyperpage{13}
+    \subitem {segundos}, \hyperpage{13}
+
+  \indexspace
+
+  \item {save\_pending\_payload}
+    \subitem {task\_mqtt.c}, \hyperpage{79}
+  \item {sd\_append\_pending\_mqtt}
+    \subitem {sd\_card.c}, \hyperpage{45}
+    \subitem {sd\_card.h}, \hyperpage{51}
+  \item {sd\_card.c}
+    \subitem {PIN\_NUM\_CLK}, \hyperpage{44}
+    \subitem {PIN\_NUM\_CS}, \hyperpage{44}
+    \subitem {PIN\_NUM\_MISO}, \hyperpage{44}
+    \subitem {PIN\_NUM\_MOSI}, \hyperpage{44}
+    \subitem {sd\_append\_pending\_mqtt}, \hyperpage{45}
+    \subitem {sd\_close\_pending\_mqtt}, \hyperpage{46}
+    \subitem {sd\_delete\_pending\_mqtt}, \hyperpage{46}
+    \subitem {sd\_init}, \hyperpage{46}
+    \subitem {sd\_open\_pending\_mqtt\_read}, \hyperpage{47}
+    \subitem {sd\_pending\_mqtt\_exists}, \hyperpage{47}
+    \subitem {SD\_PENDING\_MQTT\_PATH}, \hyperpage{45}
+    \subitem {sd\_read\_pending\_mqtt\_line}, \hyperpage{48}
+    \subitem {SD\_SPI\_MAX\_FREQ\_KHZ}, \hyperpage{45}
+    \subitem {sd\_write\_line}, \hyperpage{49}
+  \item {sd\_card.h}
+    \subitem {sd\_append\_pending\_mqtt}, \hyperpage{51}
+    \subitem {sd\_close\_pending\_mqtt}, \hyperpage{52}
+    \subitem {sd\_delete\_pending\_mqtt}, \hyperpage{52}
+    \subitem {sd\_init}, \hyperpage{53}
+    \subitem {sd\_open\_pending\_mqtt\_read}, \hyperpage{53}
+    \subitem {sd\_pending\_mqtt\_exists}, \hyperpage{54}
+    \subitem {sd\_read\_pending\_mqtt\_line}, \hyperpage{54}
+    \subitem {sd\_write\_line}, \hyperpage{55}
+  \item {sd\_close\_pending\_mqtt}
+    \subitem {sd\_card.c}, \hyperpage{46}
+    \subitem {sd\_card.h}, \hyperpage{52}
+  \item {sd\_delete\_pending\_mqtt}
+    \subitem {sd\_card.c}, \hyperpage{46}
+    \subitem {sd\_card.h}, \hyperpage{52}
+  \item {sd\_init}
+    \subitem {sd\_card.c}, \hyperpage{46}
+    \subitem {sd\_card.h}, \hyperpage{53}
+  \item {sd\_open\_pending\_mqtt\_read}
+    \subitem {sd\_card.c}, \hyperpage{47}
+    \subitem {sd\_card.h}, \hyperpage{53}
+  \item {sd\_pending\_mqtt\_exists}
+    \subitem {sd\_card.c}, \hyperpage{47}
+    \subitem {sd\_card.h}, \hyperpage{54}
+  \item {SD\_PENDING\_MQTT\_PATH}
+    \subitem {sd\_card.c}, \hyperpage{45}
+  \item {sd\_read\_pending\_mqtt\_line}
+    \subitem {sd\_card.c}, \hyperpage{48}
+    \subitem {sd\_card.h}, \hyperpage{54}
+  \item {SD\_SPI\_MAX\_FREQ\_KHZ}
+    \subitem {sd\_card.c}, \hyperpage{45}
+  \item {sd\_write\_line}
+    \subitem {sd\_card.c}, \hyperpage{49}
+    \subitem {sd\_card.h}, \hyperpage{55}
+  \item {segundo}
+    \subitem {datos\_ambiente\_t}, \hyperpage{10}
+  \item {segundos}
+    \subitem {rtc\_time\_t}, \hyperpage{13}
+  \item {set\_input}
+    \subitem {dht11.c}, \hyperpage{17}
+  \item {set\_output}
+    \subitem {dht11.c}, \hyperpage{17}
+
+  \indexspace
+
+  \item {TAG}
+    \subitem {ds3231.c}, \hyperpage{21}
+    \subitem {mqtt\_manager.c}, \hyperpage{71}
+    \subitem {wifi\_manager.c}, \hyperpage{88}
+  \item {task\_display}
+    \subitem {main.c}, \hyperpage{64}
+    \subitem {task\_display.c}, \hyperpage{75}
+  \item {task\_display.c}
+    \subitem {main\_task\_handle}, \hyperpage{76}
+    \subitem {task\_display}, \hyperpage{75}
+  \item {task\_logger}
+    \subitem {main.c}, \hyperpage{64}
+    \subitem {task\_logger.c}, \hyperpage{77}
+  \item {task\_logger.c}
+    \subitem {task\_logger}, \hyperpage{77}
+  \item {task\_mqtt}
+    \subitem {main.c}, \hyperpage{64}
+    \subitem {task\_mqtt.c}, \hyperpage{80}
+  \item {task\_mqtt.c}
+    \subitem {main\_task\_handle}, \hyperpage{81}
+    \subitem {MQTT\_CONNECT\_TIMEOUT\_MS}, \hyperpage{79}
+    \subitem {MQTT\_PENDING\_PAYLOAD\_SIZE}, \hyperpage{79}
+    \subitem {MQTT\_PUBLISH\_TIMEOUT\_MS}, \hyperpage{79}
+    \subitem {MQTT\_TOPIC}, \hyperpage{79}
+    \subitem {resend\_pending\_mqtt\_messages}, \hyperpage{79}
+    \subitem {save\_pending\_payload}, \hyperpage{79}
+    \subitem {task\_mqtt}, \hyperpage{80}
+  \item {task\_sensores}
+    \subitem {main.c}, \hyperpage{65}
+    \subitem {task\_sensores.c}, \hyperpage{83}
+  \item {task\_sensores.c}
+    \subitem {task\_sensores}, \hyperpage{83}
+  \item {temperatura}
+    \subitem {datos\_ambiente\_t}, \hyperpage{10}
+    \subitem {dht11\_data\_t}, \hyperpage{11}
+
+  \indexspace
+
+  \item {WIFI\_CONNECT\_TIMEOUT\_MS}
+    \subitem {main.c}, \hyperpage{62}
+  \item {WIFI\_CONNECTED\_BIT}
+    \subitem {wifi\_manager.c}, \hyperpage{84}
+  \item {wifi\_event\_group}
+    \subitem {wifi\_manager.c}, \hyperpage{89}
+  \item {wifi\_event\_handler}
+    \subitem {wifi\_manager.c}, \hyperpage{85}
+  \item {WIFI\_FAIL\_BIT}
+    \subitem {wifi\_manager.c}, \hyperpage{84}
+  \item {wifi\_init}
+    \subitem {wifi\_manager.c}, \hyperpage{86}
+    \subitem {wifi\_manager.h}, \hyperpage{90}
+  \item {wifi\_manager.c}
+    \subitem {auth\_mode\_name}, \hyperpage{85}
+    \subitem {retry\_count}, \hyperpage{88}
+    \subitem {TAG}, \hyperpage{88}
+    \subitem {WIFI\_CONNECTED\_BIT}, \hyperpage{84}
+    \subitem {wifi\_event\_group}, \hyperpage{89}
+    \subitem {wifi\_event\_handler}, \hyperpage{85}
+    \subitem {WIFI\_FAIL\_BIT}, \hyperpage{84}
+    \subitem {wifi\_init}, \hyperpage{86}
+    \subitem {WIFI\_MAX\_RETRIES}, \hyperpage{85}
+    \subitem {WIFI\_PASS}, \hyperpage{85}
+    \subitem {WIFI\_SCAN\_MAX\_AP}, \hyperpage{85}
+    \subitem {wifi\_scan\_print}, \hyperpage{87}
+    \subitem {WIFI\_SSID}, \hyperpage{85}
+    \subitem {wifi\_wait\_connected}, \hyperpage{87}
+  \item {wifi\_manager.h}
+    \subitem {wifi\_init}, \hyperpage{90}
+    \subitem {wifi\_scan\_print}, \hyperpage{90}
+    \subitem {wifi\_wait\_connected}, \hyperpage{91}
+  \item {WIFI\_MAX\_RETRIES}
+    \subitem {wifi\_manager.c}, \hyperpage{85}
+  \item {WIFI\_PASS}
+    \subitem {wifi\_manager.c}, \hyperpage{85}
+  \item {WIFI\_SCAN\_MAX\_AP}
+    \subitem {wifi\_manager.c}, \hyperpage{85}
+  \item {wifi\_scan\_print}
+    \subitem {wifi\_manager.c}, \hyperpage{87}
+    \subitem {wifi\_manager.h}, \hyperpage{90}
+  \item {WIFI\_SSID}
+    \subitem {wifi\_manager.c}, \hyperpage{85}
+  \item {wifi\_wait\_connected}
+    \subitem {wifi\_manager.c}, \hyperpage{87}
+    \subitem {wifi\_manager.h}, \hyperpage{91}
+
+\end{theindex}

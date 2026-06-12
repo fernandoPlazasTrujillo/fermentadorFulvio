@@ -1,0 +1,258 @@
+\doxysection{Referencia del archivo main/\+drivers/\+ds3231.h}
+\hypertarget{ds3231_8h}{}\label{ds3231_8h}\index{main/drivers/ds3231.h@{main/drivers/ds3231.h}}
+
+
+Interfaz pública del controlador para el RTC DS3231.  
+
+
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+\doxysubsubsection*{Clases}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Representa una fecha y hora completas. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+int \doxymbox{\hyperlink{ds3231_8h_a6e87e6440c17af3e57145cc329930007}{ds3231\+\_\+read\+\_\+time}} (\doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}time)
+\begin{DoxyCompactList}\small\item\em Lee la fecha y hora actuales almacenadas en el RTC. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{ds3231_8h_aaee737743525a3d5cbc679d969338204}{ds3231\+\_\+set\+\_\+time}} (\doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}time)
+\begin{DoxyCompactList}\small\item\em Configura la fecha y hora del RTC. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{ds3231_8h_a1dde28e1910523705f4fa712d3e695c1}{ds3231\+\_\+set\+\_\+alarm\+\_\+every\+\_\+minute}} (void)
+\begin{DoxyCompactList}\small\item\em Configura una alarma periódica cada minuto. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{ds3231_8h_a4621ab7a785638749c64cc2373dda3fe}{ds3231\+\_\+clear\+\_\+alarm\+\_\+flag}} (void)
+\begin{DoxyCompactList}\small\item\em Limpia el indicador interno de alarma. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Interfaz pública del controlador para el RTC DS3231. 
+
+Este módulo proporciona las funciones necesarias para interactuar con el reloj de tiempo real (RTC) DS3231 mediante comunicación I2C.
+
+Funcionalidades principales:\+
+\begin{DoxyItemize}
+\item Lectura de fecha y hora.
+\item Configuración de fecha y hora.
+\item Configuración de alarmas periódicas.
+\item Gestión de interrupciones generadas por alarmas.
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Nota}
+El acceso al bus I2C debe protegerse mediante mutex cuando sea compartido entre múltiples tareas Free\+RTOS.
+\end{DoxyNote}
+\hypertarget{ds3231_8h_rtc_architecture}{}\doxysubsection{\texorpdfstring{Arquitectura del sistema}{Arquitectura del sistema}}\label{ds3231_8h_rtc_architecture}
+En el sistema de fermentación de café, el DS3231 actúa como referencia temporal principal para:\+
+
+
+\begin{DoxyItemize}
+\item Generación de timestamps para almacenamiento en SD.
+\item Sincronización de mediciones de sensores.
+\item Activación periódica mediante interrupciones.
+\item Implementación de estrategias de ahorro energético.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{ds3231_8h_doc-func-members}
+\Hypertarget{ds3231_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{ds3231_8h_a4621ab7a785638749c64cc2373dda3fe}\index{ds3231.h@{ds3231.h}!ds3231\_clear\_alarm\_flag@{ds3231\_clear\_alarm\_flag}}
+\index{ds3231\_clear\_alarm\_flag@{ds3231\_clear\_alarm\_flag}!ds3231.h@{ds3231.h}}
+\doxysubsubsection{\texorpdfstring{ds3231\_clear\_alarm\_flag()}{ds3231\_clear\_alarm\_flag()}}
+{\footnotesize\ttfamily \label{ds3231_8h_a4621ab7a785638749c64cc2373dda3fe} 
+int ds3231\+\_\+clear\+\_\+alarm\+\_\+flag (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Limpia el indicador interno de alarma. 
+
+Limpia el indicador de alarma A1F.
+
+Después de generarse una interrupción, el DS3231 mantiene activo el bit A1F dentro del registro de estado.
+
+Esta función limpia dicho bit para permitir que futuras alarmas vuelvan a generar interrupciones.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Operación completada.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Si no se ejecuta esta función después de atender una alarma, las siguientes interrupciones pueden no producirse.
+\end{DoxyWarning}
+Limpia el indicador interno de alarma.
+
+Después de que una alarma genera una interrupción, el bit A1F permanece activado dentro del registro de estado del DS3231.
+
+Esta función limpia dicho bit para permitir que la siguiente alarma vuelva a producir una interrupción válida.
+
+Registro utilizado:\+
+\begin{DoxyItemize}
+\item Status Register (0x0F)
+\end{DoxyItemize}
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Operación completada.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Si esta función no se ejecuta después de atender la interrupción, las alarmas posteriores no funcionarán correctamente. 
+\end{DoxyWarning}
+\Hypertarget{ds3231_8h_a6e87e6440c17af3e57145cc329930007}\index{ds3231.h@{ds3231.h}!ds3231\_read\_time@{ds3231\_read\_time}}
+\index{ds3231\_read\_time@{ds3231\_read\_time}!ds3231.h@{ds3231.h}}
+\doxysubsubsection{\texorpdfstring{ds3231\_read\_time()}{ds3231\_read\_time()}}
+{\footnotesize\ttfamily \label{ds3231_8h_a6e87e6440c17af3e57145cc329930007} 
+int ds3231\+\_\+read\+\_\+time (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{time}{}\end{DoxyParamCaption})}
+
+
+
+Lee la fecha y hora actuales almacenadas en el RTC. 
+
+Obtiene la fecha y hora actuales del DS3231.
+
+Recupera los registros de tiempo del DS3231 mediante I2C, convirtiendo automáticamente los datos desde formato BCD a formato decimal.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{out}}  & {\em time} & Estructura donde se almacenará la fecha y hora.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Lectura exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+Lee la fecha y hora actuales almacenadas en el RTC.
+
+Lee los registros de tiempo del RTC mediante comunicación I2C y convierte los valores almacenados en formato BCD a decimal.
+
+Los campos recuperados son:\+
+\begin{DoxyItemize}
+\item Segundos
+\item Minutos
+\item Horas
+\item Día del mes
+\item Mes
+\item Año
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{out}}  & {\em time} & Estructura donde se almacenará la fecha y hora.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Lectura exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+Esta función debe ejecutarse bajo protección de mutex si el bus I2C es compartido con otros dispositivos. 
+\end{DoxyNote}
+\Hypertarget{ds3231_8h_a1dde28e1910523705f4fa712d3e695c1}\index{ds3231.h@{ds3231.h}!ds3231\_set\_alarm\_every\_minute@{ds3231\_set\_alarm\_every\_minute}}
+\index{ds3231\_set\_alarm\_every\_minute@{ds3231\_set\_alarm\_every\_minute}!ds3231.h@{ds3231.h}}
+\doxysubsubsection{\texorpdfstring{ds3231\_set\_alarm\_every\_minute()}{ds3231\_set\_alarm\_every\_minute()}}
+{\footnotesize\ttfamily \label{ds3231_8h_a1dde28e1910523705f4fa712d3e695c1} 
+int ds3231\+\_\+set\+\_\+alarm\+\_\+every\+\_\+minute (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Configura una alarma periódica cada minuto. 
+
+Utiliza la alarma 1 del DS3231 para generar una interrupción exactamente cuando los segundos alcanzan el valor cero.
+
+Esta funcionalidad es utilizada para despertar el sistema desde modos de bajo consumo y ejecutar los ciclos de medición.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Configuración exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+Requiere que el pin INT/\+\+SQW del DS3231 esté conectado a un GPIO configurado como interrupción externa.
+\end{DoxyNote}
+Programa la alarma 1 del DS3231 para generar una interrupción cuando los segundos alcancen el valor 0.
+
+La configuración utilizada permite generar una interrupción exactamente al inicio de cada minuto.
+
+Registros utilizados:\+
+\begin{DoxyItemize}
+\item Alarm1 (0x07 -\/ 0x0A)
+\item Control (0x0E)
+\end{DoxyItemize}
+
+Esta funcionalidad se utiliza para despertar periódicamente al ESP32 desde modos de bajo consumo.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Configuración exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+El pin INT/\+\+SQW del DS3231 debe estar conectado a un GPIO configurado como interrupción externa. 
+\end{DoxyNote}
+\Hypertarget{ds3231_8h_aaee737743525a3d5cbc679d969338204}\index{ds3231.h@{ds3231.h}!ds3231\_set\_time@{ds3231\_set\_time}}
+\index{ds3231\_set\_time@{ds3231\_set\_time}!ds3231.h@{ds3231.h}}
+\doxysubsubsection{\texorpdfstring{ds3231\_set\_time()}{ds3231\_set\_time()}}
+{\footnotesize\ttfamily \label{ds3231_8h_aaee737743525a3d5cbc679d969338204} 
+int ds3231\+\_\+set\+\_\+time (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{time}{}\end{DoxyParamCaption})}
+
+
+
+Configura la fecha y hora del RTC. 
+
+Configura la fecha y hora del RTC DS3231.
+
+Convierte los valores contenidos en la estructura \doxylink{structrtc__time__t}{rtc\+\_\+time\+\_\+t} al formato requerido por el DS3231 y los almacena en sus registros internos.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em time} & Fecha y hora a configurar.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Configuración exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Modificar la hora afecta la generación de timestamps, alarmas e historial de datos almacenados por el sistema.
+\end{DoxyWarning}
+Configura la fecha y hora del RTC.
+
+Convierte los valores de la estructura \doxylink{structrtc__time__t}{rtc\+\_\+time\+\_\+t} a formato BCD y los almacena en los registros internos del RTC.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em time} & Estructura que contiene la fecha y hora a configurar.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Configuración exitosa. \\
+\hline
+{\em -\/1} & Error de comunicación I2C.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Atención}
+Esta operación modifica la referencia temporal utilizada por todo el sistema para generación de timestamps y alarmas. 
+\end{DoxyWarning}

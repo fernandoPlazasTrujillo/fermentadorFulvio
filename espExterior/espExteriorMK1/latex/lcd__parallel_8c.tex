@@ -1,0 +1,323 @@
+\doxysection{Referencia del archivo main/\+drivers/\+lcd\+\_\+parallel.c}
+\hypertarget{lcd__parallel_8c}{}\label{lcd__parallel_8c}\index{main/drivers/lcd\_parallel.c@{main/drivers/lcd\_parallel.c}}
+
+
+Implementación del driver para pantalla LCD 16x2 basada en HD44780.  
+
+
+{\ttfamily \+\#include "{}lcd\+\_\+parallel.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+rom\+\_\+sys.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{lcd__parallel_8c_a4781e073871c6f27f89b9463ad3a4ed1}{LCD\+\_\+\+RS}}~GPIO\+\_\+\+NUM\+\_\+13
+\item 
+\+\#define \doxymbox{\hyperlink{lcd__parallel_8c_a6ec15b1e813d1f56d2eb644a127e5d49}{LCD\+\_\+E}}~GPIO\+\_\+\+NUM\+\_\+33
+\item 
+\+\#define \doxymbox{\hyperlink{lcd__parallel_8c_ade7e247311032a474711416da480ed8b}{LCD\+\_\+\+D4}}~GPIO\+\_\+\+NUM\+\_\+14
+\item 
+\+\#define \doxymbox{\hyperlink{lcd__parallel_8c_a5b91fe480c768d4f246f3890207bfbfc}{LCD\+\_\+\+D5}}~GPIO\+\_\+\+NUM\+\_\+32
+\item 
+\+\#define \doxymbox{\hyperlink{lcd__parallel_8c_a72e105fcda5fd1c07b5f391379a439d4}{LCD\+\_\+\+D6}}~GPIO\+\_\+\+NUM\+\_\+26
+\item 
+\+\#define \doxymbox{\hyperlink{lcd__parallel_8c_abd65075e01c7413419581aedee5bcc24}{LCD\+\_\+\+D7}}~GPIO\+\_\+\+NUM\+\_\+25
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+static void \doxymbox{\hyperlink{lcd__parallel_8c_a563e70c0e462755cb6ebd28d41b7d7fb}{lcd\+\_\+send\+\_\+nibble}} (uint8\+\_\+t nibble)
+\begin{DoxyCompactList}\small\item\em Envía un nibble (4 bits) al LCD. \end{DoxyCompactList}\item 
+static void \doxymbox{\hyperlink{lcd__parallel_8c_a3868707f8980eb1c4f4c0b3c16313d57}{lcd\+\_\+send\+\_\+byte}} (uint8\+\_\+t data, int rs)
+\begin{DoxyCompactList}\small\item\em Envía un byte completo al controlador LCD. \end{DoxyCompactList}\item 
+static void \doxymbox{\hyperlink{lcd__parallel_8c_ae72239381eaf4e9753d11d063ab852f6}{lcd\+\_\+cmd}} (uint8\+\_\+t cmd)
+\begin{DoxyCompactList}\small\item\em Envía un comando al controlador HD44780. \end{DoxyCompactList}\item 
+static void \doxymbox{\hyperlink{lcd__parallel_8c_a8a4e90ef3dde8cc3e92007c228867fb6}{lcd\+\_\+data}} (uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Envía un carácter al display. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{lcd__parallel_8c_a6842775ba83d166f02b8fef8bb63b1e6}{lcd\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa la pantalla LCD. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{lcd__parallel_8c_ad235a86241458b1e7b8771688bfdaf9a}{lcd\+\_\+clear}} (void)
+\begin{DoxyCompactList}\small\item\em Limpia completamente el contenido de la pantalla. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{lcd__parallel_8c_a6907f3d2fa05d19627ff31fc3d37925f}{lcd\+\_\+set\+\_\+cursor}} (uint8\+\_\+t col, uint8\+\_\+t row)
+\begin{DoxyCompactList}\small\item\em Posiciona el cursor en una ubicación específica. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{lcd__parallel_8c_a6cbbb7fc3149a2c16a21d50e53563d85}{lcd\+\_\+print}} (const char \texorpdfstring{$\ast$}{*}str)
+\begin{DoxyCompactList}\small\item\em Imprime una cadena de texto en la pantalla. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del driver para pantalla LCD 16x2 basada en HD44780. 
+
+Este módulo implementa la comunicación paralela en modo de 4 bits utilizando GPIO del ESP32 para controlar una pantalla LCD 16x2.
+
+Funcionalidades implementadas:\+
+\begin{DoxyItemize}
+\item Inicialización del controlador HD44780.
+\item Envío de comandos.
+\item Envío de caracteres.
+\item Posicionamiento del cursor.
+\item Limpieza de pantalla.
+\end{DoxyItemize}\hypertarget{lcd__parallel_8c_lcd_system_role}{}\doxysubsection{\texorpdfstring{Rol dentro del sistema}{Rol dentro del sistema}}\label{lcd__parallel_8c_lcd_system_role}
+Este módulo forma parte del ESP32 externo y proporciona la interfaz visual local para el monitoreo del proceso de fermentación.
+
+La información mostrada puede incluir:\+
+\begin{DoxyItemize}
+\item Temperatura ambiente.
+\item Humedad relativa.
+\item Estado de conexión Wi\+Fi.
+\item Estado MQTT.
+\item Estado del almacenamiento SD.
+\item Mensajes de diagnóstico.
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Nota}
+No es seguro para acceso concurrente. 
+
+Se recomienda que únicamente la tarea task\+\_\+display acceda directamente a este módulo.
+\end{DoxyNote}
+\begin{DoxyWarning}{Atención}
+La comunicación requiere retardos precisos para cumplir las especificaciones del controlador HD44780.
+\end{DoxyWarning}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{lcd__parallel_8c_doc-define-members}
+\Hypertarget{lcd__parallel_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{lcd__parallel_8c_ade7e247311032a474711416da480ed8b}\index{lcd\_parallel.c@{lcd\_parallel.c}!LCD\_D4@{LCD\_D4}}
+\index{LCD\_D4@{LCD\_D4}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{LCD\_D4}{LCD\_D4}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_ade7e247311032a474711416da480ed8b} 
+\+\#define LCD\+\_\+\+D4~GPIO\+\_\+\+NUM\+\_\+14}
+
+Data bit 4 \Hypertarget{lcd__parallel_8c_a5b91fe480c768d4f246f3890207bfbfc}\index{lcd\_parallel.c@{lcd\_parallel.c}!LCD\_D5@{LCD\_D5}}
+\index{LCD\_D5@{LCD\_D5}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{LCD\_D5}{LCD\_D5}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a5b91fe480c768d4f246f3890207bfbfc} 
+\+\#define LCD\+\_\+\+D5~GPIO\+\_\+\+NUM\+\_\+32}
+
+Data bit 5 \Hypertarget{lcd__parallel_8c_a72e105fcda5fd1c07b5f391379a439d4}\index{lcd\_parallel.c@{lcd\_parallel.c}!LCD\_D6@{LCD\_D6}}
+\index{LCD\_D6@{LCD\_D6}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{LCD\_D6}{LCD\_D6}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a72e105fcda5fd1c07b5f391379a439d4} 
+\+\#define LCD\+\_\+\+D6~GPIO\+\_\+\+NUM\+\_\+26}
+
+Data bit 6 \Hypertarget{lcd__parallel_8c_abd65075e01c7413419581aedee5bcc24}\index{lcd\_parallel.c@{lcd\_parallel.c}!LCD\_D7@{LCD\_D7}}
+\index{LCD\_D7@{LCD\_D7}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{LCD\_D7}{LCD\_D7}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_abd65075e01c7413419581aedee5bcc24} 
+\+\#define LCD\+\_\+\+D7~GPIO\+\_\+\+NUM\+\_\+25}
+
+Data bit 7 \Hypertarget{lcd__parallel_8c_a6ec15b1e813d1f56d2eb644a127e5d49}\index{lcd\_parallel.c@{lcd\_parallel.c}!LCD\_E@{LCD\_E}}
+\index{LCD\_E@{LCD\_E}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{LCD\_E}{LCD\_E}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a6ec15b1e813d1f56d2eb644a127e5d49} 
+\+\#define LCD\+\_\+E~GPIO\+\_\+\+NUM\+\_\+33}
+
+Pin Enable \Hypertarget{lcd__parallel_8c_a4781e073871c6f27f89b9463ad3a4ed1}\index{lcd\_parallel.c@{lcd\_parallel.c}!LCD\_RS@{LCD\_RS}}
+\index{LCD\_RS@{LCD\_RS}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{LCD\_RS}{LCD\_RS}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a4781e073871c6f27f89b9463ad3a4ed1} 
+\+\#define LCD\+\_\+\+RS~GPIO\+\_\+\+NUM\+\_\+13}
+
+Pin Register Select 
+
+\label{lcd__parallel_8c_doc-func-members}
+\Hypertarget{lcd__parallel_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{lcd__parallel_8c_ad235a86241458b1e7b8771688bfdaf9a}\index{lcd\_parallel.c@{lcd\_parallel.c}!lcd\_clear@{lcd\_clear}}
+\index{lcd\_clear@{lcd\_clear}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_clear()}{lcd\_clear()}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_ad235a86241458b1e7b8771688bfdaf9a} 
+void lcd\+\_\+clear (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Limpia completamente el contenido de la pantalla. 
+
+Borra todos los caracteres visibles y reposiciona el cursor en la primera columna de la primera fila.
+
+Borra todos los caracteres visibles y reposiciona el cursor en la posición inicial de la primera fila.
+
+\begin{DoxyNote}{Nota}
+Esta operación requiere varios milisegundos debido a las limitaciones temporales del controlador HD44780. 
+\end{DoxyNote}
+\Hypertarget{lcd__parallel_8c_ae72239381eaf4e9753d11d063ab852f6}\index{lcd\_parallel.c@{lcd\_parallel.c}!lcd\_cmd@{lcd\_cmd}}
+\index{lcd\_cmd@{lcd\_cmd}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_cmd()}{lcd\_cmd()}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_ae72239381eaf4e9753d11d063ab852f6} 
+void lcd\+\_\+cmd (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{cmd}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Envía un comando al controlador HD44780. 
+
+Permite ejecutar operaciones internas como:\+
+\begin{DoxyItemize}
+\item Limpiar pantalla.
+\item Posicionar cursor.
+\item Configurar modos de operación.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em cmd} & Código de comando HD44780. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{lcd__parallel_8c_a8a4e90ef3dde8cc3e92007c228867fb6}\index{lcd\_parallel.c@{lcd\_parallel.c}!lcd\_data@{lcd\_data}}
+\index{lcd\_data@{lcd\_data}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_data()}{lcd\_data()}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a8a4e90ef3dde8cc3e92007c228867fb6} 
+void lcd\+\_\+data (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Envía un carácter al display. 
+
+El dato es almacenado en la memoria DDRAM interna del controlador y mostrado en la posición actual del cursor.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em data} & Código ASCII del carácter a visualizar. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{lcd__parallel_8c_a6842775ba83d166f02b8fef8bb63b1e6}\index{lcd\_parallel.c@{lcd\_parallel.c}!lcd\_init@{lcd\_init}}
+\index{lcd\_init@{lcd\_init}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_init()}{lcd\_init()}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a6842775ba83d166f02b8fef8bb63b1e6} 
+void lcd\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa la pantalla LCD. 
+
+Configura los GPIO asociados a las líneas de control y datos, ejecuta la secuencia de arranque recomendada por el fabricante y habilita el funcionamiento en modo de 4 bits.
+
+La secuencia implementada sigue las recomendaciones del controlador HD44780.
+
+\begin{DoxyNote}{Nota}
+Debe ejecutarse una única vez durante el arranque del sistema.
+\end{DoxyNote}
+Configura los GPIO asociados a las líneas de datos y control, ejecutando posteriormente la secuencia de inicialización definida por el controlador HD44780 para operación en modo de 4 bits.
+
+Esta función debe ejecutarse antes de utilizar cualquier otra función del módulo.
+
+\begin{DoxyNote}{Nota}
+Debe llamarse una única vez durante la fase de arranque del sistema. 
+\end{DoxyNote}
+\Hypertarget{lcd__parallel_8c_a6cbbb7fc3149a2c16a21d50e53563d85}\index{lcd\_parallel.c@{lcd\_parallel.c}!lcd\_print@{lcd\_print}}
+\index{lcd\_print@{lcd\_print}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_print()}{lcd\_print()}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a6cbbb7fc3149a2c16a21d50e53563d85} 
+void lcd\+\_\+print (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{str}{}\end{DoxyParamCaption})}
+
+
+
+Imprime una cadena de texto en la pantalla. 
+
+Imprime una cadena de caracteres en la pantalla.
+
+Los caracteres son enviados secuencialmente comenzando desde la posición actual del cursor.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em str} & Cadena terminada en carácter nulo (\textquotesingle{}\textbackslash{}0\textquotesingle{}).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Atención}
+No se realiza control automático de longitud ni salto de línea.
+\end{DoxyWarning}
+Imprime una cadena de texto en la pantalla.
+
+Los caracteres son enviados secuencialmente al controlador LCD comenzando desde la posición actual del cursor.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em str} & Cadena de caracteres terminada en \textquotesingle{}\textbackslash{}0\textquotesingle{}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Nota}
+No se realiza control automático de longitud ni salto de línea. Es responsabilidad de la aplicación garantizar que el texto se ajuste al tamaño disponible del display. 
+\end{DoxyNote}
+\Hypertarget{lcd__parallel_8c_a3868707f8980eb1c4f4c0b3c16313d57}\index{lcd\_parallel.c@{lcd\_parallel.c}!lcd\_send\_byte@{lcd\_send\_byte}}
+\index{lcd\_send\_byte@{lcd\_send\_byte}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_send\_byte()}{lcd\_send\_byte()}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a3868707f8980eb1c4f4c0b3c16313d57} 
+void lcd\+\_\+send\+\_\+byte (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{data}{, }\item[{int}]{rs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Envía un byte completo al controlador LCD. 
+
+Debido al uso del modo de comunicación de 4 bits, el byte es dividido en dos nibbles que son transmitidos secuencialmente.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em data} & Byte a transmitir.\\
+\hline
+{\em rs} & Selección de registro:\+
+\begin{DoxyItemize}
+\item 0:\+ Comando.
+\item 1:\+ Dato. 
+\end{DoxyItemize}\\
+\hline
+\end{DoxyParams}
+\Hypertarget{lcd__parallel_8c_a563e70c0e462755cb6ebd28d41b7d7fb}\index{lcd\_parallel.c@{lcd\_parallel.c}!lcd\_send\_nibble@{lcd\_send\_nibble}}
+\index{lcd\_send\_nibble@{lcd\_send\_nibble}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_send\_nibble()}{lcd\_send\_nibble()}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a563e70c0e462755cb6ebd28d41b7d7fb} 
+void lcd\+\_\+send\+\_\+nibble (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{nibble}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Envía un nibble (4 bits) al LCD. 
+
+Esta función coloca los bits en las líneas D4-\/\+D7 y genera un pulso en el pin Enable para registrar el dato.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em nibble} & Valor de 4 bits a enviar (LSB alineado)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Nota}
+Función de bajo nivel crítica para la comunicación 
+\end{DoxyNote}
+\Hypertarget{lcd__parallel_8c_a6907f3d2fa05d19627ff31fc3d37925f}\index{lcd\_parallel.c@{lcd\_parallel.c}!lcd\_set\_cursor@{lcd\_set\_cursor}}
+\index{lcd\_set\_cursor@{lcd\_set\_cursor}!lcd\_parallel.c@{lcd\_parallel.c}}
+\doxysubsubsection{\texorpdfstring{lcd\_set\_cursor()}{lcd\_set\_cursor()}}
+{\footnotesize\ttfamily \label{lcd__parallel_8c_a6907f3d2fa05d19627ff31fc3d37925f} 
+void lcd\+\_\+set\+\_\+cursor (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{col}{, }\item[{uint8\+\_\+t}]{row}{}\end{DoxyParamCaption})}
+
+
+
+Posiciona el cursor en una ubicación específica. 
+
+Convierte la fila y columna solicitadas a la dirección DDRAM correspondiente del controlador HD44780.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em col} & Columna destino (0-\/15). \\
+\hline
+{\em row} & Fila destino (0-\/1).\\
+\hline
+\end{DoxyParams}
+Convierte automáticamente la fila y columna indicadas a la dirección DDRAM correspondiente del controlador LCD.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em col} & Columna destino. Rango válido:\+ 0–15.\\
+\hline
+{\em row} & Fila destino. Rango válido:\+ 0–1.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Nota}
+Valores fuera de rango pueden producir comportamientos inesperados dependiendo de la implementación. 
+\end{DoxyNote}

@@ -1,0 +1,164 @@
+\doxysection{Referencia del archivo main/\+wifi/\+wifi\+\_\+manager.h}
+\hypertarget{wifi__manager_8h}{}\label{wifi__manager_8h}\index{main/wifi/wifi\_manager.h@{main/wifi/wifi\_manager.h}}
+
+
+Gestión de conectividad Wi\+Fi para el ESP32.  
+
+
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{wifi__manager_8h_a7267cf9f0ba503d904709977c18a07ea}{wifi\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa y conecta el ESP32 a una red Wi\+Fi. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{wifi__manager_8h_a74ffcbcc6723fdd1f6a44c7dfa813079}{wifi\+\_\+wait\+\_\+connected}} (uint32\+\_\+t timeout\+\_\+ms)
+\begin{DoxyCompactList}\small\item\em Espera hasta que se establezca la conexión Wi\+Fi. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{wifi__manager_8h_a5b3e7a6e474fda19d447711c86399104}{wifi\+\_\+scan\+\_\+print}} (void)
+\begin{DoxyCompactList}\small\item\em Escanea las redes Wi\+Fi disponibles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Gestión de conectividad Wi\+Fi para el ESP32. 
+
+Este módulo proporciona una interfaz para la inicialización, conexión y monitoreo de la red Wi\+Fi utilizada por el sistema.
+
+Responsabilidades:\+
+\begin{DoxyItemize}
+\item Inicializar la pila TCP/\+\+IP.
+\item Configurar la interfaz Wi\+Fi.
+\item Gestionar la conexión a la red inalámbrica.
+\item Verificar el estado de conexión.
+\item Realizar escaneo de redes disponibles.
+\end{DoxyItemize}
+
+Este módulo abstrae los detalles de la implementación Wi\+Fi, permitiendo que otras tareas del sistema utilicen servicios de red sin depender directamente de ESP-\/\+IDF.
+
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{wifi__manager_8h_doc-func-members}
+\Hypertarget{wifi__manager_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{wifi__manager_8h_a7267cf9f0ba503d904709977c18a07ea}\index{wifi\_manager.h@{wifi\_manager.h}!wifi\_init@{wifi\_init}}
+\index{wifi\_init@{wifi\_init}!wifi\_manager.h@{wifi\_manager.h}}
+\doxysubsubsection{\texorpdfstring{wifi\_init()}{wifi\_init()}}
+{\footnotesize\ttfamily \label{wifi__manager_8h_a7267cf9f0ba503d904709977c18a07ea} 
+void wifi\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa y conecta el ESP32 a una red Wi\+Fi. 
+
+Inicializa la infraestructura de red Wi\+Fi.
+
+Configura los recursos necesarios de red e inicia el proceso de asociación con el punto de acceso.
+
+Inicializa y conecta el ESP32 a una red Wi\+Fi.
+
+Realiza las siguientes operaciones:\+
+\begin{DoxyItemize}
+\item Inicialización de NVS.
+\item Inicialización del stack TCP/\+\+IP.
+\item Creación del Event Loop.
+\item Configuración del modo estación.
+\item Registro de eventos Wi\+Fi.
+\item Inicio de la interfaz inalámbrica.
+\end{DoxyItemize}
+
+La conexión al punto de acceso comienza automáticamente después de la inicialización. Crear event group.
+
+Inicializar NVS.
+
+Inicializar TCP/\+\+IP stack.
+
+Crear event loop.
+
+Crear interfaz Wi\+Fi station.
+
+Configuración Wi\+Fi por defecto.
+
+Registrar handlers de eventos.
+
+Configuración de credenciales Wi\+Fi.
+
+Configurar modo station.
+
+Aplicar configuración Wi\+Fi.
+
+Iniciar Wi\+Fi.\Hypertarget{wifi__manager_8h_a5b3e7a6e474fda19d447711c86399104}\index{wifi\_manager.h@{wifi\_manager.h}!wifi\_scan\_print@{wifi\_scan\_print}}
+\index{wifi\_scan\_print@{wifi\_scan\_print}!wifi\_manager.h@{wifi\_manager.h}}
+\doxysubsubsection{\texorpdfstring{wifi\_scan\_print()}{wifi\_scan\_print()}}
+{\footnotesize\ttfamily \label{wifi__manager_8h_a5b3e7a6e474fda19d447711c86399104} 
+void wifi\+\_\+scan\+\_\+print (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Escanea las redes Wi\+Fi disponibles. 
+
+Escanea e imprime las redes Wi\+Fi visibles.
+
+Realiza un barrido de redes inalámbricas visibles e imprime la información obtenida mediante la consola de depuración.
+
+Escanea las redes Wi\+Fi disponibles.
+
+Realiza un escaneo activo de puntos de acceso cercanos e imprime información relevante:\+
+
+
+\begin{DoxyItemize}
+\item SSID
+\item Intensidad de señal (RSSI)
+\item Canal
+\item Tipo de autenticación
+\end{DoxyItemize}
+
+Esta función está destinada principalmente a tareas de diagnóstico y depuración. \Hypertarget{wifi__manager_8h_a74ffcbcc6723fdd1f6a44c7dfa813079}\index{wifi\_manager.h@{wifi\_manager.h}!wifi\_wait\_connected@{wifi\_wait\_connected}}
+\index{wifi\_wait\_connected@{wifi\_wait\_connected}!wifi\_manager.h@{wifi\_manager.h}}
+\doxysubsubsection{\texorpdfstring{wifi\_wait\_connected()}{wifi\_wait\_connected()}}
+{\footnotesize\ttfamily \label{wifi__manager_8h_a74ffcbcc6723fdd1f6a44c7dfa813079} 
+bool wifi\+\_\+wait\+\_\+connected (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{timeout\+\_\+ms}{}\end{DoxyParamCaption})}
+
+
+
+Espera hasta que se establezca la conexión Wi\+Fi. 
+
+Espera el resultado del proceso de conexión Wi\+Fi.
+
+La función bloquea hasta que el dispositivo obtenga una dirección IP válida o se alcance el tiempo máximo de espera.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em timeout\+\_\+ms} & Tiempo máximo de espera en milisegundos.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si la conexión fue exitosa. 
+
+false si ocurrió timeout o error.
+\end{DoxyReturn}
+Espera hasta que se establezca la conexión Wi\+Fi.
+
+La función permanece bloqueada hasta que:\+
+\begin{DoxyItemize}
+\item Se obtiene una dirección IP válida.
+\item Se alcanza el número máximo de reintentos.
+\item Expira el timeout especificado.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em timeout\+\_\+ms} & Tiempo máximo de espera en milisegundos.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si se estableció la conexión. 
+
+false si ocurrió timeout o fallo. 
+\end{DoxyReturn}

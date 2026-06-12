@@ -1,0 +1,91 @@
+\doxysection{Referencia del archivo main/\+include/\+queues.h}
+\hypertarget{queues_8h}{}\label{queues_8h}\index{main/include/queues.h@{main/include/queues.h}}
+
+
+Declaración de las colas Free\+RTOS utilizadas por el sistema.  
+
+
+{\ttfamily \+\#include "{}freertos/\+queue.\+h"{}}\newline
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{queues_8h_a228cd02aecd49d8ee1ca64db3acaa324}{cola\+\_\+datos}}
+\begin{DoxyCompactList}\small\item\em Cola de datos para procesamiento interno. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{queues_8h_a0040603dc9ecd7e7eb6f56f4351adf0d}{cola\+\_\+display}}
+\begin{DoxyCompactList}\small\item\em Cola utilizada para actualización de la interfaz gráfica. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{queues_8h_a190d88536d9aa672abaea82479d2329d}{cola\+\_\+mqtt}}
+\begin{DoxyCompactList}\small\item\em Cola utilizada para transmisión MQTT. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Declaración de las colas Free\+RTOS utilizadas por el sistema. 
+
+Este archivo centraliza las colas empleadas para la comunicación entre tareas del ESP32 externo.
+
+Las colas permiten desacoplar la adquisición de datos, la visualización y la transmisión de información, siguiendo una arquitectura basada en paso de mensajes.\hypertarget{queues_8h_queue_architecture}{}\doxysubsection{\texorpdfstring{Arquitectura de comunicación}{Arquitectura de comunicación}}\label{queues_8h_queue_architecture}
+Flujo principal:\+
+
+task\+\_\+sensores \texorpdfstring{$\vert$}{|} +-\/-\/\texorpdfstring{$>$}{>} cola\+\_\+datos \texorpdfstring{$\vert$}{|} +-\/-\/\texorpdfstring{$>$}{>} cola\+\_\+display \texorpdfstring{$\vert$}{|} +-\/-\/\texorpdfstring{$>$}{>} cola\+\_\+mqtt
+
+De esta manera las tareas no comparten variables globales directamente, reduciendo problemas de sincronización.
+
+\begin{DoxyNote}{Nota}
+Las colas son creadas durante la inicialización del sistema y posteriormente utilizadas por las distintas tareas Free\+RTOS.
+\end{DoxyNote}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{queues_8h_doc-var-members}
+\Hypertarget{queues_8h_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{queues_8h_a228cd02aecd49d8ee1ca64db3acaa324}\index{queues.h@{queues.h}!cola\_datos@{cola\_datos}}
+\index{cola\_datos@{cola\_datos}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{cola\_datos}{cola\_datos}}
+{\footnotesize\ttfamily \label{queues_8h_a228cd02aecd49d8ee1ca64db3acaa324} 
+Queue\+Handle\+\_\+t cola\+\_\+datos\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Cola de datos para procesamiento interno. 
+
+Cola utilizada para transferir datos hacia task\+\_\+logger.
+
+Transporta estructuras de tipo \doxylink{structdatos__ambiente__t}{datos\+\_\+ambiente\+\_\+t} entre las tareas encargadas de adquisición y procesamiento.
+
+Cola de datos para procesamiento interno. \Hypertarget{queues_8h_a0040603dc9ecd7e7eb6f56f4351adf0d}\index{queues.h@{queues.h}!cola\_display@{cola\_display}}
+\index{cola\_display@{cola\_display}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{cola\_display}{cola\_display}}
+{\footnotesize\ttfamily \label{queues_8h_a0040603dc9ecd7e7eb6f56f4351adf0d} 
+Queue\+Handle\+\_\+t cola\+\_\+display\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Cola utilizada para actualización de la interfaz gráfica. 
+
+Cola utilizada para transferir datos hacia task\+\_\+display.
+
+Permite enviar nuevas mediciones hacia la tarea encargada de controlar la pantalla LCD.
+
+Cola utilizada para actualización de la interfaz gráfica. \Hypertarget{queues_8h_a190d88536d9aa672abaea82479d2329d}\index{queues.h@{queues.h}!cola\_mqtt@{cola\_mqtt}}
+\index{cola\_mqtt@{cola\_mqtt}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{cola\_mqtt}{cola\_mqtt}}
+{\footnotesize\ttfamily \label{queues_8h_a190d88536d9aa672abaea82479d2329d} 
+Queue\+Handle\+\_\+t cola\+\_\+mqtt\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Cola utilizada para transmisión MQTT. 
+
+Cola utilizada para transferir datos hacia task\+\_\+mqtt.
+
+Contiene los datos que posteriormente serán serializados y publicados hacia el broker MQTT.
+
+Cola utilizada para transmisión MQTT. 

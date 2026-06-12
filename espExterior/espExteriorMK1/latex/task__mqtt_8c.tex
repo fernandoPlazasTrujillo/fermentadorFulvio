@@ -1,0 +1,224 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+mqtt.c}
+\hypertarget{task__mqtt_8c}{}\label{task__mqtt_8c}\index{main/tasks/task\_mqtt.c@{main/tasks/task\_mqtt.c}}
+
+
+Tarea encargada de la transmisión MQTT de datos ambientales.  
+
+
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \+\#include $<$string.\+h$>$}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}mqtt/\+mqtt\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include "{}queues.\+h"{}}\newline
+{\ttfamily \+\#include "{}sd\+\_\+card.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{task__mqtt_8c_a400d28e1af2bcd57bf651dc23290a6d3}{MQTT\+\_\+\+TOPIC}}~"{}fermentador/\+esp\+Exterior/\+datos"{}
+\begin{DoxyCompactList}\small\item\em Tópico MQTT utilizado para la publicación. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{task__mqtt_8c_a26528eb0ea53fcc2f08b0a31e0d918e5}{MQTT\+\_\+\+CONNECT\+\_\+\+TIMEOUT\+\_\+\+MS}}~8000
+\begin{DoxyCompactList}\small\item\em Tiempo máximo de espera para conexión MQTT. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{task__mqtt_8c_a171ce00cd4c77b8836211f14d77df95e}{MQTT\+\_\+\+PUBLISH\+\_\+\+TIMEOUT\+\_\+\+MS}}~5000
+\begin{DoxyCompactList}\small\item\em Tiempo máximo de espera para confirmación de publicación. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{task__mqtt_8c_a2fdbe826e17a13bf27012646c9b74635}{MQTT\+\_\+\+PENDING\+\_\+\+PAYLOAD\+\_\+\+SIZE}}~256
+\begin{DoxyCompactList}\small\item\em Tamaño máximo del buffer utilizado para mensajes pendientes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+static void \doxymbox{\hyperlink{task__mqtt_8c_ad319f078b1f8cc29d7ef190e6634d758}{save\+\_\+pending\+\_\+payload}} (const char \texorpdfstring{$\ast$}{*}payload)
+\begin{DoxyCompactList}\small\item\em Guarda un payload MQTT pendiente en la tarjeta SD. \end{DoxyCompactList}\item 
+static bool \doxymbox{\hyperlink{task__mqtt_8c_a0aa1439b5051346af3120c189cf56f16}{resend\+\_\+pending\+\_\+mqtt\+\_\+messages}} (void)
+\begin{DoxyCompactList}\small\item\em Reenvía mensajes MQTT pendientes almacenados en SD. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{task__mqtt_8c_a376c1e55c392503ef2bd96eedae58a21}{task\+\_\+mqtt}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea responsable de la comunicación MQTT. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{task__mqtt_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d}{main\+\_\+task\+\_\+handle}}
+\begin{DoxyCompactList}\small\item\em Handle de la tarea principal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Tarea encargada de la transmisión MQTT de datos ambientales. 
+
+Esta tarea recibe datos desde una cola Free\+RTOS, genera un mensaje JSON y lo publica en un broker MQTT.
+
+Para aumentar la confiabilidad del sistema, los mensajes que no pueden ser enviados debido a fallos de conectividad son almacenados temporalmente en la tarjeta SD y reenviados automáticamente cuando la conexión se restablece.
+
+Responsabilidades:\+
+\begin{DoxyItemize}
+\item Recibir datos desde la cola MQTT.
+\item Construir el payload JSON.
+\item Gestionar la conexión MQTT.
+\item Publicar datos en el broker.
+\item Almacenar mensajes pendientes en SD.
+\item Reenviar mensajes pendientes.
+\item Notificar la finalización del ciclo.
+\end{DoxyItemize}
+
+Aspectos de Free\+RTOS utilizados:\+
+\begin{DoxyItemize}
+\item Queue para recepción de datos.
+\item Task Notification para sincronización.
+\item Eliminación dinámica de tarea mediante v\+Task\+Delete().
+\end{DoxyItemize}
+
+Estrategia de tolerancia a fallos:\+
+\begin{DoxyItemize}
+\item Si MQTT falla, los datos se almacenan en SD.
+\item Al recuperar la conexión se reenvían los mensajes pendientes.
+\item Se evita la pérdida de información durante cortes de red.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{task__mqtt_8c_doc-define-members}
+\Hypertarget{task__mqtt_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{task__mqtt_8c_a26528eb0ea53fcc2f08b0a31e0d918e5}\index{task\_mqtt.c@{task\_mqtt.c}!MQTT\_CONNECT\_TIMEOUT\_MS@{MQTT\_CONNECT\_TIMEOUT\_MS}}
+\index{MQTT\_CONNECT\_TIMEOUT\_MS@{MQTT\_CONNECT\_TIMEOUT\_MS}!task\_mqtt.c@{task\_mqtt.c}}
+\doxysubsubsection{\texorpdfstring{MQTT\_CONNECT\_TIMEOUT\_MS}{MQTT\_CONNECT\_TIMEOUT\_MS}}
+{\footnotesize\ttfamily \label{task__mqtt_8c_a26528eb0ea53fcc2f08b0a31e0d918e5} 
+\+\#define MQTT\+\_\+\+CONNECT\+\_\+\+TIMEOUT\+\_\+\+MS~8000}
+
+
+
+Tiempo máximo de espera para conexión MQTT. 
+
+\Hypertarget{task__mqtt_8c_a2fdbe826e17a13bf27012646c9b74635}\index{task\_mqtt.c@{task\_mqtt.c}!MQTT\_PENDING\_PAYLOAD\_SIZE@{MQTT\_PENDING\_PAYLOAD\_SIZE}}
+\index{MQTT\_PENDING\_PAYLOAD\_SIZE@{MQTT\_PENDING\_PAYLOAD\_SIZE}!task\_mqtt.c@{task\_mqtt.c}}
+\doxysubsubsection{\texorpdfstring{MQTT\_PENDING\_PAYLOAD\_SIZE}{MQTT\_PENDING\_PAYLOAD\_SIZE}}
+{\footnotesize\ttfamily \label{task__mqtt_8c_a2fdbe826e17a13bf27012646c9b74635} 
+\+\#define MQTT\+\_\+\+PENDING\+\_\+\+PAYLOAD\+\_\+\+SIZE~256}
+
+
+
+Tamaño máximo del buffer utilizado para mensajes pendientes. 
+
+\Hypertarget{task__mqtt_8c_a171ce00cd4c77b8836211f14d77df95e}\index{task\_mqtt.c@{task\_mqtt.c}!MQTT\_PUBLISH\_TIMEOUT\_MS@{MQTT\_PUBLISH\_TIMEOUT\_MS}}
+\index{MQTT\_PUBLISH\_TIMEOUT\_MS@{MQTT\_PUBLISH\_TIMEOUT\_MS}!task\_mqtt.c@{task\_mqtt.c}}
+\doxysubsubsection{\texorpdfstring{MQTT\_PUBLISH\_TIMEOUT\_MS}{MQTT\_PUBLISH\_TIMEOUT\_MS}}
+{\footnotesize\ttfamily \label{task__mqtt_8c_a171ce00cd4c77b8836211f14d77df95e} 
+\+\#define MQTT\+\_\+\+PUBLISH\+\_\+\+TIMEOUT\+\_\+\+MS~5000}
+
+
+
+Tiempo máximo de espera para confirmación de publicación. 
+
+\Hypertarget{task__mqtt_8c_a400d28e1af2bcd57bf651dc23290a6d3}\index{task\_mqtt.c@{task\_mqtt.c}!MQTT\_TOPIC@{MQTT\_TOPIC}}
+\index{MQTT\_TOPIC@{MQTT\_TOPIC}!task\_mqtt.c@{task\_mqtt.c}}
+\doxysubsubsection{\texorpdfstring{MQTT\_TOPIC}{MQTT\_TOPIC}}
+{\footnotesize\ttfamily \label{task__mqtt_8c_a400d28e1af2bcd57bf651dc23290a6d3} 
+\+\#define MQTT\+\_\+\+TOPIC~"{}fermentador/\+esp\+Exterior/\+datos"{}}
+
+
+
+Tópico MQTT utilizado para la publicación. 
+
+
+
+\label{task__mqtt_8c_doc-func-members}
+\Hypertarget{task__mqtt_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__mqtt_8c_a0aa1439b5051346af3120c189cf56f16}\index{task\_mqtt.c@{task\_mqtt.c}!resend\_pending\_mqtt\_messages@{resend\_pending\_mqtt\_messages}}
+\index{resend\_pending\_mqtt\_messages@{resend\_pending\_mqtt\_messages}!task\_mqtt.c@{task\_mqtt.c}}
+\doxysubsubsection{\texorpdfstring{resend\_pending\_mqtt\_messages()}{resend\_pending\_mqtt\_messages()}}
+{\footnotesize\ttfamily \label{task__mqtt_8c_a0aa1439b5051346af3120c189cf56f16} 
+bool resend\+\_\+pending\+\_\+mqtt\+\_\+messages (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Reenvía mensajes MQTT pendientes almacenados en SD. 
+
+Recorre el archivo de mensajes pendientes y publica cada registro en el broker MQTT.
+
+Si todos los mensajes son enviados correctamente, el archivo de pendientes es eliminado.
+
+\begin{DoxyReturn}{Devuelve}
+true si todos los mensajes fueron reenviados. 
+
+false si ocurrió algún error durante el proceso. 
+\end{DoxyReturn}
+\Hypertarget{task__mqtt_8c_ad319f078b1f8cc29d7ef190e6634d758}\index{task\_mqtt.c@{task\_mqtt.c}!save\_pending\_payload@{save\_pending\_payload}}
+\index{save\_pending\_payload@{save\_pending\_payload}!task\_mqtt.c@{task\_mqtt.c}}
+\doxysubsubsection{\texorpdfstring{save\_pending\_payload()}{save\_pending\_payload()}}
+{\footnotesize\ttfamily \label{task__mqtt_8c_ad319f078b1f8cc29d7ef190e6634d758} 
+void save\+\_\+pending\+\_\+payload (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{payload}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Guarda un payload MQTT pendiente en la tarjeta SD. 
+
+Esta función es utilizada cuando no es posible completar una transmisión MQTT debido a problemas de conectividad.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em payload} & Mensaje MQTT a almacenar. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{task__mqtt_8c_a376c1e55c392503ef2bd96eedae58a21}\index{task\_mqtt.c@{task\_mqtt.c}!task\_mqtt@{task\_mqtt}}
+\index{task\_mqtt@{task\_mqtt}!task\_mqtt.c@{task\_mqtt.c}}
+\doxysubsubsection{\texorpdfstring{task\_mqtt()}{task\_mqtt()}}
+{\footnotesize\ttfamily \label{task__mqtt_8c_a376c1e55c392503ef2bd96eedae58a21} 
+void task\+\_\+mqtt (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea responsable de la comunicación MQTT. 
+
+Flujo de ejecución:\+
+
+
+\begin{DoxyEnumerate}
+\item Espera datos desde la cola MQTT.
+\item Construye el mensaje JSON.
+\item Inicia el cliente MQTT.
+\item Espera conexión con el broker.
+\item Reenvía mensajes pendientes.
+\item Publica el mensaje actual.
+\item Notifica a la tarea principal.
+\item Finaliza su ejecución.
+\end{DoxyEnumerate}
+
+En caso de pérdida de conectividad:\+
+\begin{DoxyItemize}
+\item El mensaje actual se almacena en SD.
+\item La tarea termina sin perder información.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+
+
+\label{task__mqtt_8c_doc-var-members}
+\Hypertarget{task__mqtt_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{task__mqtt_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d}\index{task\_mqtt.c@{task\_mqtt.c}!main\_task\_handle@{main\_task\_handle}}
+\index{main\_task\_handle@{main\_task\_handle}!task\_mqtt.c@{task\_mqtt.c}}
+\doxysubsubsection{\texorpdfstring{main\_task\_handle}{main\_task\_handle}}
+{\footnotesize\ttfamily \label{task__mqtt_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d} 
+Task\+Handle\+\_\+t main\+\_\+task\+\_\+handle\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Handle de la tarea principal. 
+
+Utilizado para notificar la finalización del proceso MQTT.
+
+Permite sincronización mediante notificaciones desde otras tareas.
+
+Permite notificar al sistema que el ciclo de visualización ha finalizado. 

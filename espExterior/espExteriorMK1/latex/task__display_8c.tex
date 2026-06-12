@@ -1,0 +1,103 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+display.c}
+\hypertarget{task__display_8c}{}\label{task__display_8c}\index{main/tasks/task\_display.c@{main/tasks/task\_display.c}}
+
+
+Tarea encargada de la visualización de datos en LCD.  
+
+
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include "{}queues.\+h"{}}\newline
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}lcd\+\_\+parallel.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__display_8c_a0c23017a47c450de05f8c7af642c7461}{task\+\_\+display}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea de visualización en LCD. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{task__display_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d}{main\+\_\+task\+\_\+handle}}
+\begin{DoxyCompactList}\small\item\em Handle de la tarea principal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Tarea encargada de la visualización de datos en LCD. 
+
+Esta tarea recibe datos del sistema a través de una cola y los muestra en una pantalla LCD 16x2.
+
+Responsabilidades:\+
+\begin{DoxyItemize}
+\item Formatear datos para visualización
+\item Actualizar la pantalla LCD
+\item Sincronizar con la tarea principal mediante notificaciones
+\end{DoxyItemize}
+
+Flujo de ejecución:\+
+\begin{DoxyEnumerate}
+\item Espera datos desde la cola (bloqueante)
+\item Formatea la información (hora, fecha, temperatura, humedad)
+\item Actualiza el display
+\item Notifica a la tarea principal
+\end{DoxyEnumerate}
+
+Comunicación:\+
+\begin{DoxyItemize}
+\item Entrada:\+ cola\+\_\+display (Queue)
+\item Salida:\+ notificación a main\+\_\+task\+\_\+handle
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Nota}
+Esta tarea es bloqueante sobre la cola (port\+MAX\+\_\+\+DELAY), lo cual optimiza el consumo energético.
+\end{DoxyNote}
+\begin{DoxyWarning}{Atención}
+El acceso al LCD no es thread-\/safe. Esta tarea debe ser la única que interactúe con el display o debe usarse un mutex.
+\end{DoxyWarning}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{task__display_8c_doc-func-members}
+\Hypertarget{task__display_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__display_8c_a0c23017a47c450de05f8c7af642c7461}\index{task\_display.c@{task\_display.c}!task\_display@{task\_display}}
+\index{task\_display@{task\_display}!task\_display.c@{task\_display.c}}
+\doxysubsubsection{\texorpdfstring{task\_display()}{task\_display()}}
+{\footnotesize\ttfamily \label{task__display_8c_a0c23017a47c450de05f8c7af642c7461} 
+void task\+\_\+display (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea de visualización en LCD. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados) \\
+\hline
+\end{DoxyParams}
+
+
+\label{task__display_8c_doc-var-members}
+\Hypertarget{task__display_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{task__display_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d}\index{task\_display.c@{task\_display.c}!main\_task\_handle@{main\_task\_handle}}
+\index{main\_task\_handle@{main\_task\_handle}!task\_display.c@{task\_display.c}}
+\doxysubsubsection{\texorpdfstring{main\_task\_handle}{main\_task\_handle}}
+{\footnotesize\ttfamily \label{task__display_8c_a2c75b4f34726e9b7a8dd42ca7fa1d31d} 
+Task\+Handle\+\_\+t main\+\_\+task\+\_\+handle\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Handle de la tarea principal. 
+
+Permite notificar al sistema que el ciclo de visualización ha finalizado.
+
+Permite sincronización mediante notificaciones desde otras tareas. 

@@ -1,0 +1,441 @@
+\doxysection{Referencia del archivo main/\+drivers/\+sd\+\_\+card.c}
+\hypertarget{sd__card_8c}{}\label{sd__card_8c}\index{main/drivers/sd\_card.c@{main/drivers/sd\_card.c}}
+
+
+Implementación del módulo de almacenamiento en tarjeta SD.  
+
+
+{\ttfamily \+\#include "{}sd\+\_\+card.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include "{}esp\+\_\+err.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+vfs\+\_\+fat.\+h"{}}\newline
+{\ttfamily \+\#include "{}sdmmc\+\_\+cmd.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+spi\+\_\+common.\+h"{}}\newline
+{\ttfamily \+\#include $<$errno.\+h$>$}\newline
+{\ttfamily \+\#include $<$sys/\+stat.\+h$>$}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_a4ffa0949bfda52d9c7b37fcb148cbb53}{PIN\+\_\+\+NUM\+\_\+\+MISO}}~19
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como línea MISO del bus SPI. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_a060569807a8819489e6a7b4ee17ad67b}{PIN\+\_\+\+NUM\+\_\+\+MOSI}}~23
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como línea MOSI del bus SPI. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_a756bcaa6e44d1879623a058849c66fbb}{PIN\+\_\+\+NUM\+\_\+\+CLK}}~18
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como reloj SPI. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_a6c332c3f862c9e17cb09b32c73516a4a}{PIN\+\_\+\+NUM\+\_\+\+CS}}~4
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como Chip Select de la SD. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_ad594d7d601ca191bc43d3677379cfd3c}{SD\+\_\+\+SPI\+\_\+\+MAX\+\_\+\+FREQ\+\_\+\+KHZ}}~4000
+\begin{DoxyCompactList}\small\item\em Frecuencia máxima del bus SPI en k\+Hz. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_ab9c2c4054cc0f0df5ba9d98f41f9d04d}{SD\+\_\+\+PENDING\+\_\+\+MQTT\+\_\+\+PATH}}~"{}/\+sdcard/\+test.\+txt"{}
+\begin{DoxyCompactList}\small\item\em Ruta del archivo utilizado para almacenar mensajes MQTT pendientes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+int \doxymbox{\hyperlink{sd__card_8c_a51531c835e2323129f557b6086f4d7bd}{sd\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa la tarjeta SD y monta el sistema de archivos FAT. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{sd__card_8c_a7f2e43cca841713799b304fae14fa244}{sd\+\_\+write\+\_\+line}} (const char \texorpdfstring{$\ast$}{*}line)
+\begin{DoxyCompactList}\small\item\em Escribe una línea en el archivo principal de registro. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{sd__card_8c_ab9b9e7d860b3adae26854c93cc017f76}{sd\+\_\+append\+\_\+pending\+\_\+mqtt}} (const char \texorpdfstring{$\ast$}{*}payload)
+\begin{DoxyCompactList}\small\item\em Almacena un mensaje MQTT pendiente de transmisión. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{sd__card_8c_a0f5240853cc216a16b4467ac1c306f04}{sd\+\_\+pending\+\_\+mqtt\+\_\+exists}} (void)
+\begin{DoxyCompactList}\small\item\em Verifica la existencia del archivo de mensajes pendientes. \end{DoxyCompactList}\item 
+FILE \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sd__card_8c_af30330e2078aa3f5868ad73c8de35878}{sd\+\_\+open\+\_\+pending\+\_\+mqtt\+\_\+read}} (void)
+\begin{DoxyCompactList}\small\item\em Abre el archivo de mensajes MQTT pendientes. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sd__card_8c_ad43f1f56660a67a965b8d0c3e022b082}{sd\+\_\+read\+\_\+pending\+\_\+mqtt\+\_\+line}} (FILE \texorpdfstring{$\ast$}{*}file, char \texorpdfstring{$\ast$}{*}buffer, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Lee una línea del archivo de mensajes pendientes. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{sd__card_8c_aedddff57b26b5a33b8674b343e40ded6}{sd\+\_\+close\+\_\+pending\+\_\+mqtt}} (FILE \texorpdfstring{$\ast$}{*}file)
+\begin{DoxyCompactList}\small\item\em Cierra el archivo de mensajes MQTT pendientes. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{sd__card_8c_a40bae311396af261e87c23456b8d95b1}{sd\+\_\+delete\+\_\+pending\+\_\+mqtt}} (void)
+\begin{DoxyCompactList}\small\item\em Elimina el archivo de mensajes MQTT pendientes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del módulo de almacenamiento en tarjeta SD. 
+
+Este módulo implementa la gestión de una tarjeta SD conectada mediante interfaz SPI utilizando el sistema de archivos FAT proporcionado por ESP-\/\+IDF.
+
+Funcionalidades implementadas:\+
+\begin{DoxyItemize}
+\item Inicialización del bus SPI.
+\item Montaje del sistema de archivos FAT.
+\item Registro persistente de datos.
+\item Almacenamiento de mensajes MQTT pendientes.
+\item Recuperación de mensajes pendientes tras reconexión.
+\end{DoxyItemize}\hypertarget{sd__card_8c_sd_role}{}\doxysubsection{\texorpdfstring{Rol dentro del sistema}{Rol dentro del sistema}}\label{sd__card_8c_sd_role}
+Este módulo forma parte del subsistema de persistencia del sistema de fermentación de café.
+
+Se utiliza para:\+
+\begin{DoxyItemize}
+\item Almacenar mediciones ambientales.
+\item Registrar eventos del sistema.
+\item Mantener mensajes MQTT durante pérdidas de conectividad.
+\end{DoxyItemize}\hypertarget{sd__card_8c_mqtt_store_forward}{}\doxysubsection{\texorpdfstring{Estrategia Store-\/and-\/\+Forward}{Estrategia Store-\/and-\/\+Forward}}\label{sd__card_8c_mqtt_store_forward}
+Cuando el broker MQTT no está disponible:\+
+
+Sensor -\/\texorpdfstring{$>$}{>} SD
+
+Al recuperarse la conexión:\+
+
+SD -\/\texorpdfstring{$>$}{>} MQTT Broker
+
+Esto garantiza que no se pierdan mediciones durante fallos temporales de red.
+
+\begin{DoxyNote}{Nota}
+El acceso concurrente debe protegerse mediante mutex.
+\end{DoxyNote}
+\begin{DoxyWarning}{Atención}
+Escrituras simultáneas sin sincronización pueden provocar corrupción del sistema de archivos FAT.
+\end{DoxyWarning}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{sd__card_8c_doc-define-members}
+\Hypertarget{sd__card_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{sd__card_8c_a756bcaa6e44d1879623a058849c66fbb}\index{sd\_card.c@{sd\_card.c}!PIN\_NUM\_CLK@{PIN\_NUM\_CLK}}
+\index{PIN\_NUM\_CLK@{PIN\_NUM\_CLK}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{PIN\_NUM\_CLK}{PIN\_NUM\_CLK}}
+{\footnotesize\ttfamily \label{sd__card_8c_a756bcaa6e44d1879623a058849c66fbb} 
+\+\#define PIN\+\_\+\+NUM\+\_\+\+CLK~18}
+
+
+
+GPIO utilizado como reloj SPI. 
+
+Pin CLK \Hypertarget{sd__card_8c_a6c332c3f862c9e17cb09b32c73516a4a}\index{sd\_card.c@{sd\_card.c}!PIN\_NUM\_CS@{PIN\_NUM\_CS}}
+\index{PIN\_NUM\_CS@{PIN\_NUM\_CS}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{PIN\_NUM\_CS}{PIN\_NUM\_CS}}
+{\footnotesize\ttfamily \label{sd__card_8c_a6c332c3f862c9e17cb09b32c73516a4a} 
+\+\#define PIN\+\_\+\+NUM\+\_\+\+CS~4}
+
+
+
+GPIO utilizado como Chip Select de la SD. 
+
+Pin Chip Select \Hypertarget{sd__card_8c_a4ffa0949bfda52d9c7b37fcb148cbb53}\index{sd\_card.c@{sd\_card.c}!PIN\_NUM\_MISO@{PIN\_NUM\_MISO}}
+\index{PIN\_NUM\_MISO@{PIN\_NUM\_MISO}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{PIN\_NUM\_MISO}{PIN\_NUM\_MISO}}
+{\footnotesize\ttfamily \label{sd__card_8c_a4ffa0949bfda52d9c7b37fcb148cbb53} 
+\+\#define PIN\+\_\+\+NUM\+\_\+\+MISO~19}
+
+
+
+GPIO utilizado como línea MISO del bus SPI. 
+
+Pin MISO \Hypertarget{sd__card_8c_a060569807a8819489e6a7b4ee17ad67b}\index{sd\_card.c@{sd\_card.c}!PIN\_NUM\_MOSI@{PIN\_NUM\_MOSI}}
+\index{PIN\_NUM\_MOSI@{PIN\_NUM\_MOSI}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{PIN\_NUM\_MOSI}{PIN\_NUM\_MOSI}}
+{\footnotesize\ttfamily \label{sd__card_8c_a060569807a8819489e6a7b4ee17ad67b} 
+\+\#define PIN\+\_\+\+NUM\+\_\+\+MOSI~23}
+
+
+
+GPIO utilizado como línea MOSI del bus SPI. 
+
+Pin MOSI \Hypertarget{sd__card_8c_ab9c2c4054cc0f0df5ba9d98f41f9d04d}\index{sd\_card.c@{sd\_card.c}!SD\_PENDING\_MQTT\_PATH@{SD\_PENDING\_MQTT\_PATH}}
+\index{SD\_PENDING\_MQTT\_PATH@{SD\_PENDING\_MQTT\_PATH}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{SD\_PENDING\_MQTT\_PATH}{SD\_PENDING\_MQTT\_PATH}}
+{\footnotesize\ttfamily \label{sd__card_8c_ab9c2c4054cc0f0df5ba9d98f41f9d04d} 
+\+\#define SD\+\_\+\+PENDING\+\_\+\+MQTT\+\_\+\+PATH~"{}/\+sdcard/\+test.\+txt"{}}
+
+
+
+Ruta del archivo utilizado para almacenar mensajes MQTT pendientes. 
+
+\Hypertarget{sd__card_8c_ad594d7d601ca191bc43d3677379cfd3c}\index{sd\_card.c@{sd\_card.c}!SD\_SPI\_MAX\_FREQ\_KHZ@{SD\_SPI\_MAX\_FREQ\_KHZ}}
+\index{SD\_SPI\_MAX\_FREQ\_KHZ@{SD\_SPI\_MAX\_FREQ\_KHZ}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{SD\_SPI\_MAX\_FREQ\_KHZ}{SD\_SPI\_MAX\_FREQ\_KHZ}}
+{\footnotesize\ttfamily \label{sd__card_8c_ad594d7d601ca191bc43d3677379cfd3c} 
+\+\#define SD\+\_\+\+SPI\+\_\+\+MAX\+\_\+\+FREQ\+\_\+\+KHZ~4000}
+
+
+
+Frecuencia máxima del bus SPI en k\+Hz. 
+
+
+
+\label{sd__card_8c_doc-func-members}
+\Hypertarget{sd__card_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{sd__card_8c_ab9b9e7d860b3adae26854c93cc017f76}\index{sd\_card.c@{sd\_card.c}!sd\_append\_pending\_mqtt@{sd\_append\_pending\_mqtt}}
+\index{sd\_append\_pending\_mqtt@{sd\_append\_pending\_mqtt}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_append\_pending\_mqtt()}{sd\_append\_pending\_mqtt()}}
+{\footnotesize\ttfamily \label{sd__card_8c_ab9b9e7d860b3adae26854c93cc017f76} 
+int sd\+\_\+append\+\_\+pending\+\_\+mqtt (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{payload}{}\end{DoxyParamCaption})}
+
+
+
+Almacena un mensaje MQTT pendiente de transmisión. 
+
+Cuando el broker MQTT no está disponible, el payload se guarda en un archivo temporal dentro de la tarjeta SD.
+
+Posteriormente podrá ser reenviado cuando la conectividad sea restaurada.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em payload} & Mensaje MQTT serializado.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Escritura exitosa. \\
+\hline
+{\em -\/1} & Error de almacenamiento.\\
+\hline
+\end{DoxyRetVals}
+Cuando el sistema detecta que el broker MQTT no está disponible, los mensajes se almacenan temporalmente en un archivo de respaldo dentro de la tarjeta SD.
+
+Una vez restablecida la conexión, dichos mensajes pueden ser reenviados al broker.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em payload} & Mensaje MQTT serializado.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Escritura exitosa. \\
+\hline
+{\em -\/1} & Error al almacenar el mensaje. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{sd__card_8c_aedddff57b26b5a33b8674b343e40ded6}\index{sd\_card.c@{sd\_card.c}!sd\_close\_pending\_mqtt@{sd\_close\_pending\_mqtt}}
+\index{sd\_close\_pending\_mqtt@{sd\_close\_pending\_mqtt}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_close\_pending\_mqtt()}{sd\_close\_pending\_mqtt()}}
+{\footnotesize\ttfamily \label{sd__card_8c_aedddff57b26b5a33b8674b343e40ded6} 
+void sd\+\_\+close\+\_\+pending\+\_\+mqtt (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{}\end{DoxyParamCaption})}
+
+
+
+Cierra el archivo de mensajes MQTT pendientes. 
+
+Libera los recursos asociados al descriptor de archivo.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em file} & Archivo previamente abierto. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sd__card_8c_a40bae311396af261e87c23456b8d95b1}\index{sd\_card.c@{sd\_card.c}!sd\_delete\_pending\_mqtt@{sd\_delete\_pending\_mqtt}}
+\index{sd\_delete\_pending\_mqtt@{sd\_delete\_pending\_mqtt}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_delete\_pending\_mqtt()}{sd\_delete\_pending\_mqtt()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a40bae311396af261e87c23456b8d95b1} 
+int sd\+\_\+delete\+\_\+pending\+\_\+mqtt (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Elimina el archivo de mensajes MQTT pendientes. 
+
+Debe ejecutarse después de retransmitir exitosamente todos los mensajes almacenados.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Eliminación exitosa. \\
+\hline
+{\em -\/1} & Error eliminando el archivo.\\
+\hline
+\end{DoxyRetVals}
+Esta función debe ejecutarse una vez que todos los mensajes almacenados hayan sido retransmitidos exitosamente al broker.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Eliminación exitosa o archivo inexistente. \\
+\hline
+{\em -\/1} & Error durante la eliminación. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{sd__card_8c_a51531c835e2323129f557b6086f4d7bd}\index{sd\_card.c@{sd\_card.c}!sd\_init@{sd\_init}}
+\index{sd\_init@{sd\_init}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_init()}{sd\_init()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a51531c835e2323129f557b6086f4d7bd} 
+int sd\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa la tarjeta SD y monta el sistema de archivos FAT. 
+
+Inicializa y monta la tarjeta SD.
+
+Configura el bus SPI, registra el dispositivo SD y monta el sistema de archivos en la ruta "{}/\+sdcard"{}.
+
+Esta función debe ejecutarse antes de cualquier operación de lectura o escritura.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Inicialización exitosa. \\
+\hline
+{\em -\/1} & Error de inicialización o montaje.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+Debe ejecutarse una única vez durante el arranque.
+\end{DoxyNote}
+Inicializa la tarjeta SD y monta el sistema de archivos FAT.
+
+Configura el bus SPI, registra el dispositivo SD y monta el sistema de archivos FAT en la ruta "{}/\+sdcard"{}.
+
+Esta función debe ejecutarse antes de cualquier operación de lectura o escritura.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Inicialización exitosa. \\
+\hline
+{\em -\/1} & Error de inicialización o montaje.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Nota}
+Debe ejecutarse una única vez durante el arranque del sistema. 
+\end{DoxyNote}
+\Hypertarget{sd__card_8c_af30330e2078aa3f5868ad73c8de35878}\index{sd\_card.c@{sd\_card.c}!sd\_open\_pending\_mqtt\_read@{sd\_open\_pending\_mqtt\_read}}
+\index{sd\_open\_pending\_mqtt\_read@{sd\_open\_pending\_mqtt\_read}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_open\_pending\_mqtt\_read()}{sd\_open\_pending\_mqtt\_read()}}
+{\footnotesize\ttfamily \label{sd__card_8c_af30330e2078aa3f5868ad73c8de35878} 
+FILE \texorpdfstring{$\ast$}{*} sd\+\_\+open\+\_\+pending\+\_\+mqtt\+\_\+read (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Abre el archivo de mensajes MQTT pendientes. 
+
+Permite iniciar el proceso de recuperación y retransmisión de mensajes almacenados.
+
+\begin{DoxyReturn}{Devuelve}
+FILE\texorpdfstring{$\ast$}{*} Descriptor del archivo. 
+
+NULL Error al abrir el archivo.
+\end{DoxyReturn}
+Permite iniciar el proceso de lectura secuencial de los mensajes almacenados durante una pérdida de conectividad.
+
+\begin{DoxyReturn}{Devuelve}
+FILE\texorpdfstring{$\ast$}{*} Descriptor del archivo abierto. 
+
+NULL Error al abrir el archivo. 
+\end{DoxyReturn}
+\Hypertarget{sd__card_8c_a0f5240853cc216a16b4467ac1c306f04}\index{sd\_card.c@{sd\_card.c}!sd\_pending\_mqtt\_exists@{sd\_pending\_mqtt\_exists}}
+\index{sd\_pending\_mqtt\_exists@{sd\_pending\_mqtt\_exists}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_pending\_mqtt\_exists()}{sd\_pending\_mqtt\_exists()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a0f5240853cc216a16b4467ac1c306f04} 
+bool sd\+\_\+pending\+\_\+mqtt\+\_\+exists (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Verifica la existencia del archivo de mensajes pendientes. 
+
+Verifica la existencia del archivo de respaldo MQTT.
+
+Determina si existen datos almacenados para retransmisión MQTT.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em true} & El archivo existe. \\
+\hline
+{\em false} & El archivo no existe.\\
+\hline
+\end{DoxyRetVals}
+Verifica la existencia del archivo de mensajes pendientes.
+
+Determina si existen mensajes pendientes almacenados para ser retransmitidos al broker.
+
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em true} & El archivo existe. \\
+\hline
+{\em false} & El archivo no existe. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{sd__card_8c_ad43f1f56660a67a965b8d0c3e022b082}\index{sd\_card.c@{sd\_card.c}!sd\_read\_pending\_mqtt\_line@{sd\_read\_pending\_mqtt\_line}}
+\index{sd\_read\_pending\_mqtt\_line@{sd\_read\_pending\_mqtt\_line}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_read\_pending\_mqtt\_line()}{sd\_read\_pending\_mqtt\_line()}}
+{\footnotesize\ttfamily \label{sd__card_8c_ad43f1f56660a67a965b8d0c3e022b082} 
+char \texorpdfstring{$\ast$}{*} sd\+\_\+read\+\_\+pending\+\_\+mqtt\+\_\+line (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{size\+\_\+t}]{size}{}\end{DoxyParamCaption})}
+
+
+
+Lee una línea del archivo de mensajes pendientes. 
+
+Lee un mensaje MQTT almacenado en la SD.
+
+Recupera un payload MQTT previamente almacenado en la SD.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em file} & Archivo abierto para lectura. \\
+\hline
+\doxymbox{\texttt{out}}  & {\em buffer} & Buffer de destino. \\
+\hline
+\doxymbox{\texttt{in}}  & {\em size} & Tamaño del buffer.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+char\texorpdfstring{$\ast$}{*} Puntero al buffer si la lectura fue exitosa. 
+
+NULL Fin de archivo o error.
+\end{DoxyReturn}
+Lee una línea del archivo de mensajes pendientes.
+
+Recupera una línea del archivo de respaldo y la almacena en el buffer proporcionado.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em file} & Archivo abierto para lectura. \\
+\hline
+\doxymbox{\texttt{out}}  & {\em buffer} & Buffer de destino. \\
+\hline
+\doxymbox{\texttt{in}}  & {\em size} & Tamaño del buffer.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+char\texorpdfstring{$\ast$}{*} Puntero al buffer si la lectura fue exitosa. 
+
+NULL Fin de archivo o error. 
+\end{DoxyReturn}
+\Hypertarget{sd__card_8c_a7f2e43cca841713799b304fae14fa244}\index{sd\_card.c@{sd\_card.c}!sd\_write\_line@{sd\_write\_line}}
+\index{sd\_write\_line@{sd\_write\_line}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_write\_line()}{sd\_write\_line()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a7f2e43cca841713799b304fae14fa244} 
+int sd\+\_\+write\+\_\+line (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{line}{}\end{DoxyParamCaption})}
+
+
+
+Escribe una línea en el archivo principal de registro. 
+
+Añade una línea al archivo principal de registro.
+
+Abre el archivo de log en modo append, añade una nueva línea y cierra el archivo para garantizar la integridad de los datos.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em line} & Cadena de texto a almacenar.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Escritura exitosa. \\
+\hline
+{\em -\/1} & Error al abrir el archivo.\\
+\hline
+\end{DoxyRetVals}
+Escribe una línea en el archivo principal de registro.
+
+Abre (o crea) el archivo de log y agrega una nueva línea de texto al final del archivo.
+
+Esta función es utilizada para almacenar mediciones, eventos y registros del sistema.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\doxymbox{\texttt{in}}  & {\em line} & Cadena de texto a escribir.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em 0} & Escritura exitosa. \\
+\hline
+{\em -\/1} & Error de acceso al archivo. \\
+\hline
+\end{DoxyRetVals}

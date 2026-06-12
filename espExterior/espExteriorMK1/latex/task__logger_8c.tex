@@ -1,0 +1,80 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+logger.c}
+\hypertarget{task__logger_8c}{}\label{task__logger_8c}\index{main/tasks/task\_logger.c@{main/tasks/task\_logger.c}}
+
+
+Tarea encargada del almacenamiento de datos en tarjeta SD.  
+
+
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include "{}queues.\+h"{}}\newline
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}sd\+\_\+card.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__logger_8c_af38783d3b22fb6c2783f14a88308c330}{task\+\_\+logger}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea de registro de datos en SD. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Tarea encargada del almacenamiento de datos en tarjeta SD. 
+
+Esta tarea recibe datos ambientales desde una cola y los almacena en una tarjeta SD en formato CSV.
+
+Responsabilidades:\+
+\begin{DoxyItemize}
+\item Recibir datos desde otras tareas (sensores/\+control)
+\item Formatear la información en una línea estructurada
+\item Guardar los datos en la SD
+\item Mostrar información de depuración en consola
+\end{DoxyItemize}
+
+Flujo de ejecución:\+
+\begin{DoxyEnumerate}
+\item Espera datos en la cola (bloqueante)
+\item Formatea los datos en formato CSV
+\item Imprime en consola (debug)
+\item Guarda en tarjeta SD
+\end{DoxyEnumerate}
+
+Comunicación:\+
+\begin{DoxyItemize}
+\item Entrada:\+ cola\+\_\+datos (Queue)
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Nota}
+Esta tarea es bloqueante sobre la cola, lo que optimiza el uso de CPU y energía.
+\end{DoxyNote}
+\begin{DoxyWarning}{Atención}
+El acceso a la SD no es thread-\/safe. Se recomienda usar un mutex SPI si múltiples tareas acceden al bus.
+\end{DoxyWarning}
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{task__logger_8c_doc-func-members}
+\Hypertarget{task__logger_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__logger_8c_af38783d3b22fb6c2783f14a88308c330}\index{task\_logger.c@{task\_logger.c}!task\_logger@{task\_logger}}
+\index{task\_logger@{task\_logger}!task\_logger.c@{task\_logger.c}}
+\doxysubsubsection{\texorpdfstring{task\_logger()}{task\_logger()}}
+{\footnotesize\ttfamily \label{task__logger_8c_af38783d3b22fb6c2783f14a88308c330} 
+void task\+\_\+logger (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea de registro de datos en SD. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados) \\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,344 @@
+\doxysection{Referencia del archivo main/\+wifi/\+wifi\+\_\+manager.c}
+\hypertarget{wifi__manager_8c}{}\label{wifi__manager_8c}\index{main/wifi/wifi\_manager.c@{main/wifi/wifi\_manager.c}}
+
+
+Implementación del gestor de conectividad Wi\+Fi.  
+
+
+{\ttfamily \+\#include "{}wifi\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include $<$string.\+h$>$}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+event\+\_\+groups.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+event.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+netif.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+wifi.\+h"{}}\newline
+{\ttfamily \+\#include "{}nvs\+\_\+flash.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{wifi__manager_8c_a586542b79d00e4db7e1d5a667ae83a2b}{WIFI\+\_\+\+SSID}}~"{}Sala331"{}
+\item 
+\+\#define \doxymbox{\hyperlink{wifi__manager_8c_a3c95561b03d0fcf9048b231ae2ba90fb}{WIFI\+\_\+\+PASS}}~"{}Sala331tm"{}
+\item 
+\+\#define \doxymbox{\hyperlink{wifi__manager_8c_ae89d816659989e5fe1e0bb202d625985}{WIFI\+\_\+\+MAX\+\_\+\+RETRIES}}~4
+\item 
+\+\#define \doxymbox{\hyperlink{wifi__manager_8c_a23f56fbbc8b0a0b5ece3529c7bcbb4ba}{WIFI\+\_\+\+SCAN\+\_\+\+MAX\+\_\+\+AP}}~20
+\item 
+\+\#define \doxymbox{\hyperlink{wifi__manager_8c_ad552e7688532cbbecd3967538ced06ac}{WIFI\+\_\+\+CONNECTED\+\_\+\+BIT}}~BIT0
+\begin{DoxyCompactList}\small\item\em Bit que indica conexión Wi\+Fi exitosa. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{wifi__manager_8c_a7d013b55e50dfbda0904f5f933b63ec4}{WIFI\+\_\+\+FAIL\+\_\+\+BIT}}~BIT1
+\begin{DoxyCompactList}\small\item\em Bit que indica fallo de conexión. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+static void \doxymbox{\hyperlink{wifi__manager_8c_ac31e38637f7a5e5c8ce4d033b0955fec}{wifi\+\_\+event\+\_\+handler}} (void \texorpdfstring{$\ast$}{*}arg, esp\+\_\+event\+\_\+base\+\_\+t event\+\_\+base, int32\+\_\+t event\+\_\+id, void \texorpdfstring{$\ast$}{*}event\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Manejador de eventos Wi\+Fi e IP. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{wifi__manager_8c_a7267cf9f0ba503d904709977c18a07ea}{wifi\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa la infraestructura de red Wi\+Fi. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{wifi__manager_8c_a74ffcbcc6723fdd1f6a44c7dfa813079}{wifi\+\_\+wait\+\_\+connected}} (uint32\+\_\+t timeout\+\_\+ms)
+\begin{DoxyCompactList}\small\item\em Espera el resultado del proceso de conexión Wi\+Fi. \end{DoxyCompactList}\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{wifi__manager_8c_a9dcf78476c0528f382454066e5af1130}{auth\+\_\+mode\+\_\+name}} (wifi\+\_\+auth\+\_\+mode\+\_\+t authmode)
+\begin{DoxyCompactList}\small\item\em Convierte un tipo de autenticación Wi\+Fi a texto. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{wifi__manager_8c_a5b3e7a6e474fda19d447711c86399104}{wifi\+\_\+scan\+\_\+print}} (void)
+\begin{DoxyCompactList}\small\item\em Escanea e imprime las redes Wi\+Fi visibles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{wifi__manager_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}wifi\+\_\+manager"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada por el sistema de logs. \end{DoxyCompactList}\item 
+static int \doxymbox{\hyperlink{wifi__manager_8c_a79d9a1941d35eea97ea57ea98d6ac2ae}{retry\+\_\+count}} = 0
+\begin{DoxyCompactList}\small\item\em Contador de reintentos de conexión Wi\+Fi. \end{DoxyCompactList}\item 
+static Event\+Group\+Handle\+\_\+t \doxymbox{\hyperlink{wifi__manager_8c_a20c6ba80259caf6916ca631b853d82af}{wifi\+\_\+event\+\_\+group}}
+\begin{DoxyCompactList}\small\item\em Grupo de eventos utilizado para sincronizar el estado de la conexión Wi\+Fi. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del gestor de conectividad Wi\+Fi. 
+
+Este módulo implementa la inicialización y administración de la interfaz Wi\+Fi del ESP32 utilizando ESP-\/\+IDF.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Inicialización de NVS.
+\item Configuración del stack TCP/\+\+IP.
+\item Gestión de conexión Wi\+Fi en modo estación.
+\item Reintentos automáticos de conexión.
+\item Obtención de dirección IP.
+\item Escaneo de redes disponibles.
+\end{DoxyItemize}
+
+Aspectos de Free\+RTOS utilizados:\+
+\begin{DoxyItemize}
+\item Event Groups para sincronización de estados.
+\item Tareas bloqueantes mediante x\+Event\+Group\+Wait\+Bits().
+\end{DoxyItemize}
+
+La comunicación entre los eventos del stack Wi\+Fi y las tareas de aplicación se realiza mediante bits de estado almacenados en un Event Group.
+
+\begin{DoxyAuthor}{Autores}
+
+\begin{DoxyItemize}
+\item Fernando Plazas
+\item Isabella Ordoñez
+\item Juan Daniel Constain 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\label{wifi__manager_8c_doc-define-members}
+\Hypertarget{wifi__manager_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{wifi__manager_8c_ad552e7688532cbbecd3967538ced06ac}\index{wifi\_manager.c@{wifi\_manager.c}!WIFI\_CONNECTED\_BIT@{WIFI\_CONNECTED\_BIT}}
+\index{WIFI\_CONNECTED\_BIT@{WIFI\_CONNECTED\_BIT}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{WIFI\_CONNECTED\_BIT}{WIFI\_CONNECTED\_BIT}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_ad552e7688532cbbecd3967538ced06ac} 
+\+\#define WIFI\+\_\+\+CONNECTED\+\_\+\+BIT~BIT0}
+
+
+
+Bit que indica conexión Wi\+Fi exitosa. 
+
+\Hypertarget{wifi__manager_8c_a7d013b55e50dfbda0904f5f933b63ec4}\index{wifi\_manager.c@{wifi\_manager.c}!WIFI\_FAIL\_BIT@{WIFI\_FAIL\_BIT}}
+\index{WIFI\_FAIL\_BIT@{WIFI\_FAIL\_BIT}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{WIFI\_FAIL\_BIT}{WIFI\_FAIL\_BIT}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a7d013b55e50dfbda0904f5f933b63ec4} 
+\+\#define WIFI\+\_\+\+FAIL\+\_\+\+BIT~BIT1}
+
+
+
+Bit que indica fallo de conexión. 
+
+\Hypertarget{wifi__manager_8c_ae89d816659989e5fe1e0bb202d625985}\index{wifi\_manager.c@{wifi\_manager.c}!WIFI\_MAX\_RETRIES@{WIFI\_MAX\_RETRIES}}
+\index{WIFI\_MAX\_RETRIES@{WIFI\_MAX\_RETRIES}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{WIFI\_MAX\_RETRIES}{WIFI\_MAX\_RETRIES}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_ae89d816659989e5fe1e0bb202d625985} 
+\+\#define WIFI\+\_\+\+MAX\+\_\+\+RETRIES~4}
+
+\Hypertarget{wifi__manager_8c_a3c95561b03d0fcf9048b231ae2ba90fb}\index{wifi\_manager.c@{wifi\_manager.c}!WIFI\_PASS@{WIFI\_PASS}}
+\index{WIFI\_PASS@{WIFI\_PASS}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{WIFI\_PASS}{WIFI\_PASS}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a3c95561b03d0fcf9048b231ae2ba90fb} 
+\+\#define WIFI\+\_\+\+PASS~"{}Sala331tm"{}}
+
+\Hypertarget{wifi__manager_8c_a23f56fbbc8b0a0b5ece3529c7bcbb4ba}\index{wifi\_manager.c@{wifi\_manager.c}!WIFI\_SCAN\_MAX\_AP@{WIFI\_SCAN\_MAX\_AP}}
+\index{WIFI\_SCAN\_MAX\_AP@{WIFI\_SCAN\_MAX\_AP}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{WIFI\_SCAN\_MAX\_AP}{WIFI\_SCAN\_MAX\_AP}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a23f56fbbc8b0a0b5ece3529c7bcbb4ba} 
+\+\#define WIFI\+\_\+\+SCAN\+\_\+\+MAX\+\_\+\+AP~20}
+
+\Hypertarget{wifi__manager_8c_a586542b79d00e4db7e1d5a667ae83a2b}\index{wifi\_manager.c@{wifi\_manager.c}!WIFI\_SSID@{WIFI\_SSID}}
+\index{WIFI\_SSID@{WIFI\_SSID}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{WIFI\_SSID}{WIFI\_SSID}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a586542b79d00e4db7e1d5a667ae83a2b} 
+\+\#define WIFI\+\_\+\+SSID~"{}Sala331"{}}
+
+
+
+\label{wifi__manager_8c_doc-func-members}
+\Hypertarget{wifi__manager_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{wifi__manager_8c_a9dcf78476c0528f382454066e5af1130}\index{wifi\_manager.c@{wifi\_manager.c}!auth\_mode\_name@{auth\_mode\_name}}
+\index{auth\_mode\_name@{auth\_mode\_name}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{auth\_mode\_name()}{auth\_mode\_name()}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a9dcf78476c0528f382454066e5af1130} 
+const char \texorpdfstring{$\ast$}{*} auth\+\_\+mode\+\_\+name (\begin{DoxyParamCaption}\item[{wifi\+\_\+auth\+\_\+mode\+\_\+t}]{authmode}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Convierte un tipo de autenticación Wi\+Fi a texto. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em authmode} & Modo de autenticación.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Cadena descriptiva del modo de autenticación. 
+\end{DoxyReturn}
+\Hypertarget{wifi__manager_8c_ac31e38637f7a5e5c8ce4d033b0955fec}\index{wifi\_manager.c@{wifi\_manager.c}!wifi\_event\_handler@{wifi\_event\_handler}}
+\index{wifi\_event\_handler@{wifi\_event\_handler}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{wifi\_event\_handler()}{wifi\_event\_handler()}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_ac31e38637f7a5e5c8ce4d033b0955fec} 
+void wifi\+\_\+event\+\_\+handler (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{, }\item[{esp\+\_\+event\+\_\+base\+\_\+t}]{event\+\_\+base}{, }\item[{int32\+\_\+t}]{event\+\_\+id}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{event\+\_\+data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Manejador de eventos Wi\+Fi e IP. 
+
+Procesa los eventos generados por el stack de red de ESP-\/\+IDF y actualiza el Event Group utilizado por las tareas del sistema.
+
+Eventos gestionados:\+
+\begin{DoxyItemize}
+\item WIFI\+\_\+\+EVENT\+\_\+\+STA\+\_\+\+START
+\item WIFI\+\_\+\+EVENT\+\_\+\+STA\+\_\+\+DISCONNECTED
+\item IP\+\_\+\+EVENT\+\_\+\+STA\+\_\+\+GOT\+\_\+\+IP
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em arg} & Argumento de usuario. \\
+\hline
+{\em event\+\_\+base} & Base del evento. \\
+\hline
+{\em event\+\_\+id} & Identificador del evento. \\
+\hline
+{\em event\+\_\+data} & Datos asociados al evento. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{wifi__manager_8c_a7267cf9f0ba503d904709977c18a07ea}\index{wifi\_manager.c@{wifi\_manager.c}!wifi\_init@{wifi\_init}}
+\index{wifi\_init@{wifi\_init}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{wifi\_init()}{wifi\_init()}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a7267cf9f0ba503d904709977c18a07ea} 
+void wifi\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa la infraestructura de red Wi\+Fi. 
+
+Inicializa y conecta el ESP32 a una red Wi\+Fi.
+
+Realiza las siguientes operaciones:\+
+\begin{DoxyItemize}
+\item Inicialización de NVS.
+\item Inicialización del stack TCP/\+\+IP.
+\item Creación del Event Loop.
+\item Configuración del modo estación.
+\item Registro de eventos Wi\+Fi.
+\item Inicio de la interfaz inalámbrica.
+\end{DoxyItemize}
+
+La conexión al punto de acceso comienza automáticamente después de la inicialización.
+
+Inicializa la infraestructura de red Wi\+Fi.
+
+Configura los recursos necesarios de red e inicia el proceso de asociación con el punto de acceso. Crear event group.
+
+Inicializar NVS.
+
+Inicializar TCP/\+\+IP stack.
+
+Crear event loop.
+
+Crear interfaz Wi\+Fi station.
+
+Configuración Wi\+Fi por defecto.
+
+Registrar handlers de eventos.
+
+Configuración de credenciales Wi\+Fi.
+
+Configurar modo station.
+
+Aplicar configuración Wi\+Fi.
+
+Iniciar Wi\+Fi.\Hypertarget{wifi__manager_8c_a5b3e7a6e474fda19d447711c86399104}\index{wifi\_manager.c@{wifi\_manager.c}!wifi\_scan\_print@{wifi\_scan\_print}}
+\index{wifi\_scan\_print@{wifi\_scan\_print}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{wifi\_scan\_print()}{wifi\_scan\_print()}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a5b3e7a6e474fda19d447711c86399104} 
+void wifi\+\_\+scan\+\_\+print (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Escanea e imprime las redes Wi\+Fi visibles. 
+
+Escanea las redes Wi\+Fi disponibles.
+
+Realiza un escaneo activo de puntos de acceso cercanos e imprime información relevante:\+
+
+
+\begin{DoxyItemize}
+\item SSID
+\item Intensidad de señal (RSSI)
+\item Canal
+\item Tipo de autenticación
+\end{DoxyItemize}
+
+Esta función está destinada principalmente a tareas de diagnóstico y depuración.
+
+Escanea e imprime las redes Wi\+Fi visibles.
+
+Realiza un barrido de redes inalámbricas visibles e imprime la información obtenida mediante la consola de depuración. \Hypertarget{wifi__manager_8c_a74ffcbcc6723fdd1f6a44c7dfa813079}\index{wifi\_manager.c@{wifi\_manager.c}!wifi\_wait\_connected@{wifi\_wait\_connected}}
+\index{wifi\_wait\_connected@{wifi\_wait\_connected}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{wifi\_wait\_connected()}{wifi\_wait\_connected()}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a74ffcbcc6723fdd1f6a44c7dfa813079} 
+bool wifi\+\_\+wait\+\_\+connected (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{timeout\+\_\+ms}{}\end{DoxyParamCaption})}
+
+
+
+Espera el resultado del proceso de conexión Wi\+Fi. 
+
+Espera hasta que se establezca la conexión Wi\+Fi.
+
+La función permanece bloqueada hasta que:\+
+\begin{DoxyItemize}
+\item Se obtiene una dirección IP válida.
+\item Se alcanza el número máximo de reintentos.
+\item Expira el timeout especificado.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em timeout\+\_\+ms} & Tiempo máximo de espera en milisegundos.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si se estableció la conexión. 
+
+false si ocurrió timeout o fallo.
+\end{DoxyReturn}
+Espera el resultado del proceso de conexión Wi\+Fi.
+
+La función bloquea hasta que el dispositivo obtenga una dirección IP válida o se alcance el tiempo máximo de espera.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em timeout\+\_\+ms} & Tiempo máximo de espera en milisegundos.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si la conexión fue exitosa. 
+
+false si ocurrió timeout o error. 
+\end{DoxyReturn}
+
+
+\label{wifi__manager_8c_doc-var-members}
+\Hypertarget{wifi__manager_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{wifi__manager_8c_a79d9a1941d35eea97ea57ea98d6ac2ae}\index{wifi\_manager.c@{wifi\_manager.c}!retry\_count@{retry\_count}}
+\index{retry\_count@{retry\_count}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{retry\_count}{retry\_count}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a79d9a1941d35eea97ea57ea98d6ac2ae} 
+int retry\+\_\+count = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Contador de reintentos de conexión Wi\+Fi. 
+
+\Hypertarget{wifi__manager_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{wifi\_manager.c@{wifi\_manager.c}!TAG@{TAG}}
+\index{TAG@{TAG}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}wifi\+\_\+manager"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada por el sistema de logs. 
+
+\Hypertarget{wifi__manager_8c_a20c6ba80259caf6916ca631b853d82af}\index{wifi\_manager.c@{wifi\_manager.c}!wifi\_event\_group@{wifi\_event\_group}}
+\index{wifi\_event\_group@{wifi\_event\_group}!wifi\_manager.c@{wifi\_manager.c}}
+\doxysubsubsection{\texorpdfstring{wifi\_event\_group}{wifi\_event\_group}}
+{\footnotesize\ttfamily \label{wifi__manager_8c_a20c6ba80259caf6916ca631b853d82af} 
+Event\+Group\+Handle\+\_\+t wifi\+\_\+event\+\_\+group\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Grupo de eventos utilizado para sincronizar el estado de la conexión Wi\+Fi. 
+
+Permite notificar a otras tareas cuando:\+
+\begin{DoxyItemize}
+\item Se establece la conexión.
+\item Ocurre un fallo de conexión. 
+\end{DoxyItemize}

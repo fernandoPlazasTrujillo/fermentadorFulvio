@@ -1,0 +1,101 @@
+\doxysection{Referencia de la estructura rtc\+\_\+time\+\_\+t}
+\hypertarget{structrtc__time__t}{}\label{structrtc__time__t}\index{rtc\_time\_t@{rtc\_time\_t}}
+
+
+Representa una fecha y hora completas.  
+
+
+
+
+{\ttfamily \+\#include $<$ds3231.\+h$>$}
+
+\doxysubsubsection*{Atributos públicos}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structrtc__time__t_aa5f15b75a248a224f546e0eed2f869d2}{segundos}}
+\begin{DoxyCompactList}\small\item\em Segundos. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structrtc__time__t_aa145fb97f4757e0e0113a77f6846a120}{minutos}}
+\begin{DoxyCompactList}\small\item\em Minutos. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structrtc__time__t_a273738406d8d38645e3dd476743adeca}{horas}}
+\begin{DoxyCompactList}\small\item\em Horas. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structrtc__time__t_a606e9f8104a25fb216997360d07cadae}{dia}}
+\begin{DoxyCompactList}\small\item\em Día del mes. \end{DoxyCompactList}\item 
+uint8\+\_\+t \doxymbox{\hyperlink{structrtc__time__t_ad15e33da8e2aad29ceb1f46321dc87ee}{mes}}
+\begin{DoxyCompactList}\small\item\em Mes del año. \end{DoxyCompactList}\item 
+uint16\+\_\+t \doxymbox{\hyperlink{structrtc__time__t_a3de12e2111566d8ceaf7347149ec48c8}{anio}}
+\begin{DoxyCompactList}\small\item\em Año completo. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Representa una fecha y hora completas. 
+
+Esta estructura almacena los valores obtenidos desde los registros internos del RTC DS3231 o los valores que serán escritos en él. 
+
+\label{structrtc__time__t_doc-variable-members}
+\Hypertarget{structrtc__time__t_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{structrtc__time__t_a3de12e2111566d8ceaf7347149ec48c8}\index{rtc\_time\_t@{rtc\_time\_t}!anio@{anio}}
+\index{anio@{anio}!rtc\_time\_t@{rtc\_time\_t}}
+\doxysubsubsection{\texorpdfstring{anio}{anio}}
+{\footnotesize\ttfamily \label{structrtc__time__t_a3de12e2111566d8ceaf7347149ec48c8} 
+uint16\+\_\+t rtc\+\_\+time\+\_\+t::\+anio}
+
+
+
+Año completo. 
+
+Ejemplo:\+ 2026. \Hypertarget{structrtc__time__t_a606e9f8104a25fb216997360d07cadae}\index{rtc\_time\_t@{rtc\_time\_t}!dia@{dia}}
+\index{dia@{dia}!rtc\_time\_t@{rtc\_time\_t}}
+\doxysubsubsection{\texorpdfstring{dia}{dia}}
+{\footnotesize\ttfamily \label{structrtc__time__t_a606e9f8104a25fb216997360d07cadae} 
+uint8\+\_\+t rtc\+\_\+time\+\_\+t::\+dia}
+
+
+
+Día del mes. 
+
+Rango válido:\+ 1 -\/ 31. \Hypertarget{structrtc__time__t_a273738406d8d38645e3dd476743adeca}\index{rtc\_time\_t@{rtc\_time\_t}!horas@{horas}}
+\index{horas@{horas}!rtc\_time\_t@{rtc\_time\_t}}
+\doxysubsubsection{\texorpdfstring{horas}{horas}}
+{\footnotesize\ttfamily \label{structrtc__time__t_a273738406d8d38645e3dd476743adeca} 
+uint8\+\_\+t rtc\+\_\+time\+\_\+t::\+horas}
+
+
+
+Horas. 
+
+Formato de 24 horas. Rango válido:\+ 0 -\/ 23. \Hypertarget{structrtc__time__t_ad15e33da8e2aad29ceb1f46321dc87ee}\index{rtc\_time\_t@{rtc\_time\_t}!mes@{mes}}
+\index{mes@{mes}!rtc\_time\_t@{rtc\_time\_t}}
+\doxysubsubsection{\texorpdfstring{mes}{mes}}
+{\footnotesize\ttfamily \label{structrtc__time__t_ad15e33da8e2aad29ceb1f46321dc87ee} 
+uint8\+\_\+t rtc\+\_\+time\+\_\+t::\+mes}
+
+
+
+Mes del año. 
+
+Rango válido:\+ 1 -\/ 12. \Hypertarget{structrtc__time__t_aa145fb97f4757e0e0113a77f6846a120}\index{rtc\_time\_t@{rtc\_time\_t}!minutos@{minutos}}
+\index{minutos@{minutos}!rtc\_time\_t@{rtc\_time\_t}}
+\doxysubsubsection{\texorpdfstring{minutos}{minutos}}
+{\footnotesize\ttfamily \label{structrtc__time__t_aa145fb97f4757e0e0113a77f6846a120} 
+uint8\+\_\+t rtc\+\_\+time\+\_\+t::\+minutos}
+
+
+
+Minutos. 
+
+Rango válido:\+ 0 -\/ 59. \Hypertarget{structrtc__time__t_aa5f15b75a248a224f546e0eed2f869d2}\index{rtc\_time\_t@{rtc\_time\_t}!segundos@{segundos}}
+\index{segundos@{segundos}!rtc\_time\_t@{rtc\_time\_t}}
+\doxysubsubsection{\texorpdfstring{segundos}{segundos}}
+{\footnotesize\ttfamily \label{structrtc__time__t_aa5f15b75a248a224f546e0eed2f869d2} 
+uint8\+\_\+t rtc\+\_\+time\+\_\+t::\+segundos}
+
+
+
+Segundos. 
+
+Rango válido:\+ 0 -\/ 59. 
+
+La documentación de esta estructura está generada del siguiente archivo:\+\begin{DoxyCompactItemize}
+\item 
+main/\+drivers/\+\doxymbox{\hyperlink{ds3231_8h}{ds3231.\+h}}\end{DoxyCompactItemize}

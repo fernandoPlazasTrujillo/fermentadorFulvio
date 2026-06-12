@@ -1,0 +1,249 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\babel@toc {spanish}{}\relax 
+\contentsline {chapter}{\numberline {1}Jerarquía de directorios}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Directorios}{1}{section.1.1}%
+\contentsline {chapter}{\numberline {2}Índice de clases}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Lista de clases}{3}{section.2.1}%
+\contentsline {chapter}{\numberline {3}Índice de archivos}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Lista de archivos}{5}{section.3.1}%
+\contentsline {chapter}{\numberline {4}Documentación de directorios}{7}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Referencia del directorio main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers}{7}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Referencia del directorio main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}include}{7}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Referencia del directorio main}{8}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Referencia del directorio main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}mqtt}{8}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Referencia del directorio main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}tasks}{8}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Referencia del directorio main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}wifi}{8}{section.4.6}%
+\contentsline {chapter}{\numberline {5}Documentación de clases}{9}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Referencia de la estructura datos\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}ambiente\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}t}{9}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Descripción detallada}{9}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Documentación de datos miembro}{10}{subsection.5.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.2.1}anio}{10}{subsubsection.5.1.2.1}%
+\contentsline {subsubsection}{\numberline {5.1.2.2}dia}{10}{subsubsection.5.1.2.2}%
+\contentsline {subsubsection}{\numberline {5.1.2.3}hora}{10}{subsubsection.5.1.2.3}%
+\contentsline {subsubsection}{\numberline {5.1.2.4}humedad}{10}{subsubsection.5.1.2.4}%
+\contentsline {subsubsection}{\numberline {5.1.2.5}mes}{10}{subsubsection.5.1.2.5}%
+\contentsline {subsubsection}{\numberline {5.1.2.6}minuto}{10}{subsubsection.5.1.2.6}%
+\contentsline {subsubsection}{\numberline {5.1.2.7}segundo}{10}{subsubsection.5.1.2.7}%
+\contentsline {subsubsection}{\numberline {5.1.2.8}temperatura}{11}{subsubsection.5.1.2.8}%
+\contentsline {section}{\numberline {5.2}Referencia de la estructura dht11\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}data\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}t}{11}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Descripción detallada}{11}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Documentación de datos miembro}{11}{subsection.5.2.2}%
+\contentsline {subsubsection}{\numberline {5.2.2.1}humedad}{11}{subsubsection.5.2.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2.2}temperatura}{11}{subsubsection.5.2.2.2}%
+\contentsline {section}{\numberline {5.3}Referencia de la estructura rtc\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}time\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}t}{12}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Descripción detallada}{12}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Documentación de datos miembro}{12}{subsection.5.3.2}%
+\contentsline {subsubsection}{\numberline {5.3.2.1}anio}{12}{subsubsection.5.3.2.1}%
+\contentsline {subsubsection}{\numberline {5.3.2.2}dia}{12}{subsubsection.5.3.2.2}%
+\contentsline {subsubsection}{\numberline {5.3.2.3}horas}{13}{subsubsection.5.3.2.3}%
+\contentsline {subsubsection}{\numberline {5.3.2.4}mes}{13}{subsubsection.5.3.2.4}%
+\contentsline {subsubsection}{\numberline {5.3.2.5}minutos}{13}{subsubsection.5.3.2.5}%
+\contentsline {subsubsection}{\numberline {5.3.2.6}segundos}{13}{subsubsection.5.3.2.6}%
+\contentsline {chapter}{\numberline {6}Documentación de archivos}{15}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}dht11.c}{15}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Descripción detallada}{15}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Documentación de «define»}{16}{subsection.6.1.2}%
+\contentsline {subsubsection}{\numberline {6.1.2.1}DHT11\_GPIO}{16}{subsubsection.6.1.2.1}%
+\contentsline {subsection}{\numberline {6.1.3}Documentación de funciones}{16}{subsection.6.1.3}%
+\contentsline {subsubsection}{\numberline {6.1.3.1}dht11\_read()}{16}{subsubsection.6.1.3.1}%
+\contentsline {subsubsection}{\numberline {6.1.3.2}set\_input()}{17}{subsubsection.6.1.3.2}%
+\contentsline {subsubsection}{\numberline {6.1.3.3}set\_output()}{18}{subsubsection.6.1.3.3}%
+\contentsline {section}{\numberline {6.2}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}dht11.h}{18}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Descripción detallada}{18}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Documentación de funciones}{19}{subsection.6.2.2}%
+\contentsline {subsubsection}{\numberline {6.2.2.1}dht11\_read()}{19}{subsubsection.6.2.2.1}%
+\contentsline {section}{\numberline {6.3}dht11.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{20}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}ds3231.c}{20}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Descripción detallada}{21}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.2}Documentación de «define»}{21}{subsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.2.1}DS3231\_ADDR}{21}{subsubsection.6.4.2.1}%
+\contentsline {subsubsection}{\numberline {6.4.2.2}I2C\_PORT}{21}{subsubsection.6.4.2.2}%
+\contentsline {subsubsection}{\numberline {6.4.2.3}TAG}{22}{subsubsection.6.4.2.3}%
+\contentsline {subsection}{\numberline {6.4.3}Arquitectura del sistema}{22}{subsection.6.4.3}%
+\contentsline {subsection}{\numberline {6.4.4}Documentación de funciones}{22}{subsection.6.4.4}%
+\contentsline {subsubsection}{\numberline {6.4.4.1}bcd\_to\_dec()}{22}{subsubsection.6.4.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.4.2}dec\_to\_bcd()}{23}{subsubsection.6.4.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.4.3}ds3231\_clear\_alarm\_flag()}{23}{subsubsection.6.4.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4.4}ds3231\_read\_time()}{24}{subsubsection.6.4.4.4}%
+\contentsline {subsubsection}{\numberline {6.4.4.5}ds3231\_set\_alarm\_every\_minute()}{25}{subsubsection.6.4.4.5}%
+\contentsline {subsubsection}{\numberline {6.4.4.6}ds3231\_set\_time()}{26}{subsubsection.6.4.4.6}%
+\contentsline {section}{\numberline {6.5}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}ds3231.h}{27}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}Descripción detallada}{27}{subsection.6.5.1}%
+\contentsline {subsection}{\numberline {6.5.2}Arquitectura del sistema}{28}{subsection.6.5.2}%
+\contentsline {subsection}{\numberline {6.5.3}Documentación de funciones}{28}{subsection.6.5.3}%
+\contentsline {subsubsection}{\numberline {6.5.3.1}ds3231\_clear\_alarm\_flag()}{28}{subsubsection.6.5.3.1}%
+\contentsline {subsubsection}{\numberline {6.5.3.2}ds3231\_read\_time()}{29}{subsubsection.6.5.3.2}%
+\contentsline {subsubsection}{\numberline {6.5.3.3}ds3231\_set\_alarm\_every\_minute()}{30}{subsubsection.6.5.3.3}%
+\contentsline {subsubsection}{\numberline {6.5.3.4}ds3231\_set\_time()}{31}{subsubsection.6.5.3.4}%
+\contentsline {section}{\numberline {6.6}ds3231.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{32}{section.6.6}%
+\contentsline {section}{\numberline {6.7}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}lcd\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}parallel.c}{33}{section.6.7}%
+\contentsline {subsection}{\numberline {6.7.1}Descripción detallada}{33}{subsection.6.7.1}%
+\contentsline {subsection}{\numberline {6.7.2}Rol dentro del sistema}{34}{subsection.6.7.2}%
+\contentsline {subsection}{\numberline {6.7.3}Documentación de «define»}{34}{subsection.6.7.3}%
+\contentsline {subsubsection}{\numberline {6.7.3.1}LCD\_D4}{34}{subsubsection.6.7.3.1}%
+\contentsline {subsubsection}{\numberline {6.7.3.2}LCD\_D5}{34}{subsubsection.6.7.3.2}%
+\contentsline {subsubsection}{\numberline {6.7.3.3}LCD\_D6}{35}{subsubsection.6.7.3.3}%
+\contentsline {subsubsection}{\numberline {6.7.3.4}LCD\_D7}{35}{subsubsection.6.7.3.4}%
+\contentsline {subsubsection}{\numberline {6.7.3.5}LCD\_E}{35}{subsubsection.6.7.3.5}%
+\contentsline {subsubsection}{\numberline {6.7.3.6}LCD\_RS}{35}{subsubsection.6.7.3.6}%
+\contentsline {subsection}{\numberline {6.7.4}Documentación de funciones}{35}{subsection.6.7.4}%
+\contentsline {subsubsection}{\numberline {6.7.4.1}lcd\_clear()}{35}{subsubsection.6.7.4.1}%
+\contentsline {subsubsection}{\numberline {6.7.4.2}lcd\_cmd()}{36}{subsubsection.6.7.4.2}%
+\contentsline {subsubsection}{\numberline {6.7.4.3}lcd\_data()}{36}{subsubsection.6.7.4.3}%
+\contentsline {subsubsection}{\numberline {6.7.4.4}lcd\_init()}{36}{subsubsection.6.7.4.4}%
+\contentsline {subsubsection}{\numberline {6.7.4.5}lcd\_print()}{37}{subsubsection.6.7.4.5}%
+\contentsline {subsubsection}{\numberline {6.7.4.6}lcd\_send\_byte()}{37}{subsubsection.6.7.4.6}%
+\contentsline {subsubsection}{\numberline {6.7.4.7}lcd\_send\_nibble()}{38}{subsubsection.6.7.4.7}%
+\contentsline {subsubsection}{\numberline {6.7.4.8}lcd\_set\_cursor()}{38}{subsubsection.6.7.4.8}%
+\contentsline {section}{\numberline {6.8}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}lcd\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}parallel.h}{39}{section.6.8}%
+\contentsline {subsection}{\numberline {6.8.1}Descripción detallada}{39}{subsection.6.8.1}%
+\contentsline {subsection}{\numberline {6.8.2}Integración en el sistema}{39}{subsection.6.8.2}%
+\contentsline {subsection}{\numberline {6.8.3}Documentación de funciones}{40}{subsection.6.8.3}%
+\contentsline {subsubsection}{\numberline {6.8.3.1}lcd\_clear()}{40}{subsubsection.6.8.3.1}%
+\contentsline {subsubsection}{\numberline {6.8.3.2}lcd\_init()}{40}{subsubsection.6.8.3.2}%
+\contentsline {subsubsection}{\numberline {6.8.3.3}lcd\_print()}{41}{subsubsection.6.8.3.3}%
+\contentsline {subsubsection}{\numberline {6.8.3.4}lcd\_set\_cursor()}{41}{subsubsection.6.8.3.4}%
+\contentsline {section}{\numberline {6.9}lcd\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}parallel.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{42}{section.6.9}%
+\contentsline {section}{\numberline {6.10}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}sd\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}card.c}{42}{section.6.10}%
+\contentsline {subsection}{\numberline {6.10.1}Descripción detallada}{43}{subsection.6.10.1}%
+\contentsline {subsection}{\numberline {6.10.2}Rol dentro del sistema}{43}{subsection.6.10.2}%
+\contentsline {subsection}{\numberline {6.10.3}Estrategia Store-\/and-\/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Forward}{44}{subsection.6.10.3}%
+\contentsline {subsection}{\numberline {6.10.4}Documentación de «define»}{44}{subsection.6.10.4}%
+\contentsline {subsubsection}{\numberline {6.10.4.1}PIN\_NUM\_CLK}{44}{subsubsection.6.10.4.1}%
+\contentsline {subsubsection}{\numberline {6.10.4.2}PIN\_NUM\_CS}{44}{subsubsection.6.10.4.2}%
+\contentsline {subsubsection}{\numberline {6.10.4.3}PIN\_NUM\_MISO}{44}{subsubsection.6.10.4.3}%
+\contentsline {subsubsection}{\numberline {6.10.4.4}PIN\_NUM\_MOSI}{45}{subsubsection.6.10.4.4}%
+\contentsline {subsubsection}{\numberline {6.10.4.5}SD\_PENDING\_MQTT\_PATH}{45}{subsubsection.6.10.4.5}%
+\contentsline {subsubsection}{\numberline {6.10.4.6}SD\_SPI\_MAX\_FREQ\_KHZ}{45}{subsubsection.6.10.4.6}%
+\contentsline {subsection}{\numberline {6.10.5}Documentación de funciones}{45}{subsection.6.10.5}%
+\contentsline {subsubsection}{\numberline {6.10.5.1}sd\_append\_pending\_mqtt()}{45}{subsubsection.6.10.5.1}%
+\contentsline {subsubsection}{\numberline {6.10.5.2}sd\_close\_pending\_mqtt()}{46}{subsubsection.6.10.5.2}%
+\contentsline {subsubsection}{\numberline {6.10.5.3}sd\_delete\_pending\_mqtt()}{46}{subsubsection.6.10.5.3}%
+\contentsline {subsubsection}{\numberline {6.10.5.4}sd\_init()}{47}{subsubsection.6.10.5.4}%
+\contentsline {subsubsection}{\numberline {6.10.5.5}sd\_open\_pending\_mqtt\_read()}{47}{subsubsection.6.10.5.5}%
+\contentsline {subsubsection}{\numberline {6.10.5.6}sd\_pending\_mqtt\_exists()}{48}{subsubsection.6.10.5.6}%
+\contentsline {subsubsection}{\numberline {6.10.5.7}sd\_read\_pending\_mqtt\_line()}{48}{subsubsection.6.10.5.7}%
+\contentsline {subsubsection}{\numberline {6.10.5.8}sd\_write\_line()}{49}{subsubsection.6.10.5.8}%
+\contentsline {section}{\numberline {6.11}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}drivers/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}sd\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}card.h}{50}{section.6.11}%
+\contentsline {subsection}{\numberline {6.11.1}Descripción detallada}{50}{subsection.6.11.1}%
+\contentsline {subsection}{\numberline {6.11.2}Integración en el sistema}{51}{subsection.6.11.2}%
+\contentsline {subsection}{\numberline {6.11.3}Documentación de funciones}{51}{subsection.6.11.3}%
+\contentsline {subsubsection}{\numberline {6.11.3.1}sd\_append\_pending\_mqtt()}{51}{subsubsection.6.11.3.1}%
+\contentsline {subsubsection}{\numberline {6.11.3.2}sd\_close\_pending\_mqtt()}{52}{subsubsection.6.11.3.2}%
+\contentsline {subsubsection}{\numberline {6.11.3.3}sd\_delete\_pending\_mqtt()}{52}{subsubsection.6.11.3.3}%
+\contentsline {subsubsection}{\numberline {6.11.3.4}sd\_init()}{53}{subsubsection.6.11.3.4}%
+\contentsline {subsubsection}{\numberline {6.11.3.5}sd\_open\_pending\_mqtt\_read()}{54}{subsubsection.6.11.3.5}%
+\contentsline {subsubsection}{\numberline {6.11.3.6}sd\_pending\_mqtt\_exists()}{54}{subsubsection.6.11.3.6}%
+\contentsline {subsubsection}{\numberline {6.11.3.7}sd\_read\_pending\_mqtt\_line()}{55}{subsubsection.6.11.3.7}%
+\contentsline {subsubsection}{\numberline {6.11.3.8}sd\_write\_line()}{55}{subsubsection.6.11.3.8}%
+\contentsline {section}{\numberline {6.12}sd\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}card.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{56}{section.6.12}%
+\contentsline {section}{\numberline {6.13}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}include/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}common.h}{56}{section.6.13}%
+\contentsline {subsection}{\numberline {6.13.1}Descripción detallada}{57}{subsection.6.13.1}%
+\contentsline {section}{\numberline {6.14}common.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{57}{section.6.14}%
+\contentsline {section}{\numberline {6.15}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}include/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}queues.h}{57}{section.6.15}%
+\contentsline {subsection}{\numberline {6.15.1}Descripción detallada}{58}{subsection.6.15.1}%
+\contentsline {subsection}{\numberline {6.15.2}Arquitectura de comunicación}{58}{subsection.6.15.2}%
+\contentsline {subsection}{\numberline {6.15.3}Documentación de variables}{58}{subsection.6.15.3}%
+\contentsline {subsubsection}{\numberline {6.15.3.1}cola\_datos}{58}{subsubsection.6.15.3.1}%
+\contentsline {subsubsection}{\numberline {6.15.3.2}cola\_display}{59}{subsubsection.6.15.3.2}%
+\contentsline {subsubsection}{\numberline {6.15.3.3}cola\_mqtt}{59}{subsubsection.6.15.3.3}%
+\contentsline {section}{\numberline {6.16}queues.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{59}{section.6.16}%
+\contentsline {section}{\numberline {6.17}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}main.c}{59}{section.6.17}%
+\contentsline {subsection}{\numberline {6.17.1}Descripción detallada}{60}{subsection.6.17.1}%
+\contentsline {subsection}{\numberline {6.17.2}Documentación de «define»}{62}{subsection.6.17.2}%
+\contentsline {subsubsection}{\numberline {6.17.2.1}I2C\_MASTER\_FREQ\_HZ}{62}{subsubsection.6.17.2.1}%
+\contentsline {subsubsection}{\numberline {6.17.2.2}I2C\_MASTER\_SCL\_IO}{62}{subsubsection.6.17.2.2}%
+\contentsline {subsubsection}{\numberline {6.17.2.3}I2C\_MASTER\_SDA\_IO}{62}{subsubsection.6.17.2.3}%
+\contentsline {subsubsection}{\numberline {6.17.2.4}RTC\_INT\_GPIO}{62}{subsubsection.6.17.2.4}%
+\contentsline {subsubsection}{\numberline {6.17.2.5}WIFI\_CONNECT\_TIMEOUT\_MS}{62}{subsubsection.6.17.2.5}%
+\contentsline {subsection}{\numberline {6.17.3}Documentación de funciones}{62}{subsection.6.17.3}%
+\contentsline {subsubsection}{\numberline {6.17.3.1}app\_main()}{62}{subsubsection.6.17.3.1}%
+\contentsline {subsubsection}{\numberline {6.17.3.2}i2c\_init()}{64}{subsubsection.6.17.3.2}%
+\contentsline {subsubsection}{\numberline {6.17.3.3}task\_display()}{64}{subsubsection.6.17.3.3}%
+\contentsline {subsubsection}{\numberline {6.17.3.4}task\_logger()}{64}{subsubsection.6.17.3.4}%
+\contentsline {subsubsection}{\numberline {6.17.3.5}task\_mqtt()}{64}{subsubsection.6.17.3.5}%
+\contentsline {subsubsection}{\numberline {6.17.3.6}task\_sensores()}{65}{subsubsection.6.17.3.6}%
+\contentsline {subsection}{\numberline {6.17.4}Documentación de variables}{65}{subsection.6.17.4}%
+\contentsline {subsubsection}{\numberline {6.17.4.1}cola\_datos}{65}{subsubsection.6.17.4.1}%
+\contentsline {subsubsection}{\numberline {6.17.4.2}cola\_display}{65}{subsubsection.6.17.4.2}%
+\contentsline {subsubsection}{\numberline {6.17.4.3}cola\_mqtt}{66}{subsubsection.6.17.4.3}%
+\contentsline {subsubsection}{\numberline {6.17.4.4}main\_task\_handle}{66}{subsubsection.6.17.4.4}%
+\contentsline {section}{\numberline {6.18}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}mqtt/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}mqtt\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}manager.c}{66}{section.6.18}%
+\contentsline {subsection}{\numberline {6.18.1}Descripción detallada}{67}{subsection.6.18.1}%
+\contentsline {subsection}{\numberline {6.18.2}Documentación de «define»}{67}{subsection.6.18.2}%
+\contentsline {subsubsection}{\numberline {6.18.2.1}MQTT\_BROKER\_URI}{67}{subsubsection.6.18.2.1}%
+\contentsline {subsubsection}{\numberline {6.18.2.2}MQTT\_CONNECTED\_BIT}{68}{subsubsection.6.18.2.2}%
+\contentsline {subsubsection}{\numberline {6.18.2.3}MQTT\_ERROR\_BIT}{68}{subsubsection.6.18.2.3}%
+\contentsline {subsubsection}{\numberline {6.18.2.4}MQTT\_PUBLISHED\_BIT}{68}{subsubsection.6.18.2.4}%
+\contentsline {subsection}{\numberline {6.18.3}Documentación de funciones}{68}{subsection.6.18.3}%
+\contentsline {subsubsection}{\numberline {6.18.3.1}mqtt\_event\_handler()}{68}{subsubsection.6.18.3.1}%
+\contentsline {subsubsection}{\numberline {6.18.3.2}mqtt\_manager\_start()}{69}{subsubsection.6.18.3.2}%
+\contentsline {subsubsection}{\numberline {6.18.3.3}mqtt\_manager\_stop()}{69}{subsubsection.6.18.3.3}%
+\contentsline {subsubsection}{\numberline {6.18.3.4}mqtt\_publish()}{69}{subsubsection.6.18.3.4}%
+\contentsline {subsubsection}{\numberline {6.18.3.5}mqtt\_wait\_connected()}{70}{subsubsection.6.18.3.5}%
+\contentsline {subsection}{\numberline {6.18.4}Documentación de variables}{71}{subsection.6.18.4}%
+\contentsline {subsubsection}{\numberline {6.18.4.1}mqtt\_client}{71}{subsubsection.6.18.4.1}%
+\contentsline {subsubsection}{\numberline {6.18.4.2}mqtt\_event\_group}{71}{subsubsection.6.18.4.2}%
+\contentsline {subsubsection}{\numberline {6.18.4.3}TAG}{71}{subsubsection.6.18.4.3}%
+\contentsline {section}{\numberline {6.19}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}mqtt/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}mqtt\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}manager.h}{71}{section.6.19}%
+\contentsline {subsection}{\numberline {6.19.1}Descripción detallada}{71}{subsection.6.19.1}%
+\contentsline {subsection}{\numberline {6.19.2}Documentación de funciones}{72}{subsection.6.19.2}%
+\contentsline {subsubsection}{\numberline {6.19.2.1}mqtt\_manager\_start()}{72}{subsubsection.6.19.2.1}%
+\contentsline {subsubsection}{\numberline {6.19.2.2}mqtt\_manager\_stop()}{72}{subsubsection.6.19.2.2}%
+\contentsline {subsubsection}{\numberline {6.19.2.3}mqtt\_publish()}{72}{subsubsection.6.19.2.3}%
+\contentsline {subsubsection}{\numberline {6.19.2.4}mqtt\_wait\_connected()}{73}{subsubsection.6.19.2.4}%
+\contentsline {section}{\numberline {6.20}mqtt\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}manager.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{74}{section.6.20}%
+\contentsline {section}{\numberline {6.21}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}tasks/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}task\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}display.c}{74}{section.6.21}%
+\contentsline {subsection}{\numberline {6.21.1}Descripción detallada}{74}{subsection.6.21.1}%
+\contentsline {subsection}{\numberline {6.21.2}Documentación de funciones}{75}{subsection.6.21.2}%
+\contentsline {subsubsection}{\numberline {6.21.2.1}task\_display()}{75}{subsubsection.6.21.2.1}%
+\contentsline {subsection}{\numberline {6.21.3}Documentación de variables}{76}{subsection.6.21.3}%
+\contentsline {subsubsection}{\numberline {6.21.3.1}main\_task\_handle}{76}{subsubsection.6.21.3.1}%
+\contentsline {section}{\numberline {6.22}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}tasks/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}task\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}logger.c}{76}{section.6.22}%
+\contentsline {subsection}{\numberline {6.22.1}Descripción detallada}{76}{subsection.6.22.1}%
+\contentsline {subsection}{\numberline {6.22.2}Documentación de funciones}{77}{subsection.6.22.2}%
+\contentsline {subsubsection}{\numberline {6.22.2.1}task\_logger()}{77}{subsubsection.6.22.2.1}%
+\contentsline {section}{\numberline {6.23}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}tasks/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}task\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}mqtt.c}{77}{section.6.23}%
+\contentsline {subsection}{\numberline {6.23.1}Descripción detallada}{78}{subsection.6.23.1}%
+\contentsline {subsection}{\numberline {6.23.2}Documentación de «define»}{79}{subsection.6.23.2}%
+\contentsline {subsubsection}{\numberline {6.23.2.1}MQTT\_CONNECT\_TIMEOUT\_MS}{79}{subsubsection.6.23.2.1}%
+\contentsline {subsubsection}{\numberline {6.23.2.2}MQTT\_PENDING\_PAYLOAD\_SIZE}{79}{subsubsection.6.23.2.2}%
+\contentsline {subsubsection}{\numberline {6.23.2.3}MQTT\_PUBLISH\_TIMEOUT\_MS}{79}{subsubsection.6.23.2.3}%
+\contentsline {subsubsection}{\numberline {6.23.2.4}MQTT\_TOPIC}{79}{subsubsection.6.23.2.4}%
+\contentsline {subsection}{\numberline {6.23.3}Documentación de funciones}{79}{subsection.6.23.3}%
+\contentsline {subsubsection}{\numberline {6.23.3.1}resend\_pending\_mqtt\_messages()}{79}{subsubsection.6.23.3.1}%
+\contentsline {subsubsection}{\numberline {6.23.3.2}save\_pending\_payload()}{80}{subsubsection.6.23.3.2}%
+\contentsline {subsubsection}{\numberline {6.23.3.3}task\_mqtt()}{80}{subsubsection.6.23.3.3}%
+\contentsline {subsection}{\numberline {6.23.4}Documentación de variables}{81}{subsection.6.23.4}%
+\contentsline {subsubsection}{\numberline {6.23.4.1}main\_task\_handle}{81}{subsubsection.6.23.4.1}%
+\contentsline {section}{\numberline {6.24}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}tasks/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}task\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}sensores.c}{81}{section.6.24}%
+\contentsline {subsection}{\numberline {6.24.1}Descripción detallada}{81}{subsection.6.24.1}%
+\contentsline {subsection}{\numberline {6.24.2}Documentación de funciones}{83}{subsection.6.24.2}%
+\contentsline {subsubsection}{\numberline {6.24.2.1}task\_sensores()}{83}{subsubsection.6.24.2.1}%
+\contentsline {section}{\numberline {6.25}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}wifi/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}wifi\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}manager.c}{83}{section.6.25}%
+\contentsline {subsection}{\numberline {6.25.1}Descripción detallada}{84}{subsection.6.25.1}%
+\contentsline {subsection}{\numberline {6.25.2}Documentación de «define»}{84}{subsection.6.25.2}%
+\contentsline {subsubsection}{\numberline {6.25.2.1}WIFI\_CONNECTED\_BIT}{84}{subsubsection.6.25.2.1}%
+\contentsline {subsubsection}{\numberline {6.25.2.2}WIFI\_FAIL\_BIT}{85}{subsubsection.6.25.2.2}%
+\contentsline {subsubsection}{\numberline {6.25.2.3}WIFI\_MAX\_RETRIES}{85}{subsubsection.6.25.2.3}%
+\contentsline {subsubsection}{\numberline {6.25.2.4}WIFI\_PASS}{85}{subsubsection.6.25.2.4}%
+\contentsline {subsubsection}{\numberline {6.25.2.5}WIFI\_SCAN\_MAX\_AP}{85}{subsubsection.6.25.2.5}%
+\contentsline {subsubsection}{\numberline {6.25.2.6}WIFI\_SSID}{85}{subsubsection.6.25.2.6}%
+\contentsline {subsection}{\numberline {6.25.3}Documentación de funciones}{85}{subsection.6.25.3}%
+\contentsline {subsubsection}{\numberline {6.25.3.1}auth\_mode\_name()}{85}{subsubsection.6.25.3.1}%
+\contentsline {subsubsection}{\numberline {6.25.3.2}wifi\_event\_handler()}{86}{subsubsection.6.25.3.2}%
+\contentsline {subsubsection}{\numberline {6.25.3.3}wifi\_init()}{86}{subsubsection.6.25.3.3}%
+\contentsline {subsubsection}{\numberline {6.25.3.4}wifi\_scan\_print()}{87}{subsubsection.6.25.3.4}%
+\contentsline {subsubsection}{\numberline {6.25.3.5}wifi\_wait\_connected()}{88}{subsubsection.6.25.3.5}%
+\contentsline {subsection}{\numberline {6.25.4}Documentación de variables}{88}{subsection.6.25.4}%
+\contentsline {subsubsection}{\numberline {6.25.4.1}retry\_count}{88}{subsubsection.6.25.4.1}%
+\contentsline {subsubsection}{\numberline {6.25.4.2}TAG}{89}{subsubsection.6.25.4.2}%
+\contentsline {subsubsection}{\numberline {6.25.4.3}wifi\_event\_group}{89}{subsubsection.6.25.4.3}%
+\contentsline {section}{\numberline {6.26}Referencia del archivo main/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}wifi/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}wifi\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}manager.h}{89}{section.6.26}%
+\contentsline {subsection}{\numberline {6.26.1}Descripción detallada}{89}{subsection.6.26.1}%
+\contentsline {subsection}{\numberline {6.26.2}Documentación de funciones}{90}{subsection.6.26.2}%
+\contentsline {subsubsection}{\numberline {6.26.2.1}wifi\_init()}{90}{subsubsection.6.26.2.1}%
+\contentsline {subsubsection}{\numberline {6.26.2.2}wifi\_scan\_print()}{91}{subsubsection.6.26.2.2}%
+\contentsline {subsubsection}{\numberline {6.26.2.3}wifi\_wait\_connected()}{91}{subsubsection.6.26.2.3}%
+\contentsline {section}{\numberline {6.27}wifi\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}manager.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}h}{92}{section.6.27}%
+\contentsline {chapter}{\'{I}ndice alfab\'{e}tico}{93}{section*.45}%

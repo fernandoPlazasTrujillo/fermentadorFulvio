@@ -1,0 +1,29 @@
+\doxysection{sd\+\_\+card.\+h}
+\hypertarget{sd__card_8h_source}{}\label{sd__card_8h_source}\index{main/drivers/sd\_card.h@{main/drivers/sd\_card.h}}
+\doxymbox{\hyperlink{sd__card_8h}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00060\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{sd__card_8h_a51531c835e2323129f557b6086f4d7bd}{sd\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00076\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{sd__card_8h_a7f2e43cca841713799b304fae14fa244}{sd\_write\_line}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *line);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00093\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{sd__card_8h_ab9b9e7d860b3adae26854c93cc017f76}{sd\_append\_pending\_mqtt}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *payload);}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00104\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{sd__card_8h_a0f5240853cc216a16b4467ac1c306f04}{sd\_pending\_mqtt\_exists}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00115\ FILE\ *\doxymbox{\hyperlink{sd__card_8h_af30330e2078aa3f5868ad73c8de35878}{sd\_open\_pending\_mqtt\_read}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00130\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{sd__card_8h_ad43f1f56660a67a965b8d0c3e022b082}{sd\_read\_pending\_mqtt\_line}}(FILE\ *file,\ \textcolor{keywordtype}{char}\ *buffer,\ \textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00139\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{sd__card_8h_aedddff57b26b5a33b8674b343e40ded6}{sd\_close\_pending\_mqtt}}(FILE\ *file);}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00150\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{sd__card_8h_a40bae311396af261e87c23456b8d95b1}{sd\_delete\_pending\_mqtt}}(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}
