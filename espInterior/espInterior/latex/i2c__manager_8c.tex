@@ -1,0 +1,516 @@
+\doxysection{Referencia del archivo main/\+hal/\+i2c\+\_\+manager.c}
+\hypertarget{i2c__manager_8c}{}\label{i2c__manager_8c}\index{main/hal/i2c\_manager.c@{main/hal/i2c\_manager.c}}
+
+
+Implementación de la capa de abstracción para el bus I2C del ESP32.  
+
+
+{\ttfamily \+\#include "{}i2c\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+i2c.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{i2c__manager_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}~"{}I2\+C"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada por el sistema de logging. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{i2c__manager_8c_a033b5e8a30541fe4ff939a62fdb7a43d}{I2\+C\+\_\+\+MASTER\+\_\+\+SCL\+\_\+\+IO}}~22
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como línea SCL. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{i2c__manager_8c_af47631d568bba17edf9d1ea042602bb6}{I2\+C\+\_\+\+MASTER\+\_\+\+SDA\+\_\+\+IO}}~21
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como línea SDA. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{i2c__manager_8c_aab9e642b6200f95fcbd2ad7466aaa2d3}{I2\+C\+\_\+\+MASTER\+\_\+\+NUM}}~I2\+C\+\_\+\+NUM\+\_\+0
+\begin{DoxyCompactList}\small\item\em Puerto I2C utilizado por el sistema. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{i2c__manager_8c_a5c22ca4de37a83a59014e48b0a0b043d}{I2\+C\+\_\+\+MASTER\+\_\+\+FREQ\+\_\+\+HZ}}~100000
+\begin{DoxyCompactList}\small\item\em Frecuencia de operación del bus I2C. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{i2c__manager_8c_a87d680c63f56a29ae4e40228349c0e9a}{i2c\+\_\+manager\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa el bus I2C en modo maestro. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b}{i2c\+\_\+manager\+\_\+write}} (uint8\+\_\+t addr, uint8\+\_\+t reg, uint8\+\_\+t \texorpdfstring{$\ast$}{*}data, size\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Escribe datos en un registro de un dispositivo I2C. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{i2c__manager_8c_a2b26a5dc8d840e8e3ab4c6d07d772f41}{i2c\+\_\+manager\+\_\+read}} (uint8\+\_\+t addr, uint8\+\_\+t reg, uint8\+\_\+t \texorpdfstring{$\ast$}{*}data, size\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Lee datos desde un registro de un dispositivo I2C. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{i2c__manager_8c_a08d3014e9596e0c13d21fb4473754f31}{i2c\+\_\+manager\+\_\+write\+\_\+raw}} (uint8\+\_\+t addr, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}data, size\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Envía un bloque de datos sin especificar registro. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Semaphore\+Handle\+\_\+t \doxymbox{\hyperlink{i2c__manager_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\+\_\+i2c}} = NULL
+\begin{DoxyCompactList}\small\item\em Mutex global para acceso seguro al bus I2C. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación de la capa de abstracción para el bus I2C del ESP32. 
+
+Este módulo configura el ESP32 como maestro I2C y proporciona funciones genéricas para comunicación con dispositivos conectados al bus.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Inicialización del bus I2C.
+\item Escritura de registros.
+\item Lectura de registros.
+\item Escritura de bloques de datos.
+\item Protección mediante mutex para acceso concurrente.
+\end{DoxyItemize}
+
+Los módulos que utilizan esta capa incluyen:\+
+\begin{DoxyItemize}
+\item rtc\+\_\+ds3231
+\item oled\+\_\+display
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+
+
+\label{i2c__manager_8c_doc-define-members}
+\Hypertarget{i2c__manager_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{i2c__manager_8c_a5c22ca4de37a83a59014e48b0a0b043d}\index{i2c\_manager.c@{i2c\_manager.c}!I2C\_MASTER\_FREQ\_HZ@{I2C\_MASTER\_FREQ\_HZ}}
+\index{I2C\_MASTER\_FREQ\_HZ@{I2C\_MASTER\_FREQ\_HZ}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{I2C\_MASTER\_FREQ\_HZ}{I2C\_MASTER\_FREQ\_HZ}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_a5c22ca4de37a83a59014e48b0a0b043d} 
+\+\#define I2\+C\+\_\+\+MASTER\+\_\+\+FREQ\+\_\+\+HZ~100000}
+
+
+
+Frecuencia de operación del bus I2C. 
+
+Configurada a 100 k\+Hz para garantizar compatibilidad con todos los dispositivos conectados. 
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00057}{57}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+\Hypertarget{i2c__manager_8c_aab9e642b6200f95fcbd2ad7466aaa2d3}\index{i2c\_manager.c@{i2c\_manager.c}!I2C\_MASTER\_NUM@{I2C\_MASTER\_NUM}}
+\index{I2C\_MASTER\_NUM@{I2C\_MASTER\_NUM}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{I2C\_MASTER\_NUM}{I2C\_MASTER\_NUM}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_aab9e642b6200f95fcbd2ad7466aaa2d3} 
+\+\#define I2\+C\+\_\+\+MASTER\+\_\+\+NUM~I2\+C\+\_\+\+NUM\+\_\+0}
+
+
+
+Puerto I2C utilizado por el sistema. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00049}{49}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+\Hypertarget{i2c__manager_8c_a033b5e8a30541fe4ff939a62fdb7a43d}\index{i2c\_manager.c@{i2c\_manager.c}!I2C\_MASTER\_SCL\_IO@{I2C\_MASTER\_SCL\_IO}}
+\index{I2C\_MASTER\_SCL\_IO@{I2C\_MASTER\_SCL\_IO}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{I2C\_MASTER\_SCL\_IO}{I2C\_MASTER\_SCL\_IO}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_a033b5e8a30541fe4ff939a62fdb7a43d} 
+\+\#define I2\+C\+\_\+\+MASTER\+\_\+\+SCL\+\_\+\+IO~22}
+
+
+
+GPIO utilizado como línea SCL. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00039}{39}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+\Hypertarget{i2c__manager_8c_af47631d568bba17edf9d1ea042602bb6}\index{i2c\_manager.c@{i2c\_manager.c}!I2C\_MASTER\_SDA\_IO@{I2C\_MASTER\_SDA\_IO}}
+\index{I2C\_MASTER\_SDA\_IO@{I2C\_MASTER\_SDA\_IO}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{I2C\_MASTER\_SDA\_IO}{I2C\_MASTER\_SDA\_IO}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_af47631d568bba17edf9d1ea042602bb6} 
+\+\#define I2\+C\+\_\+\+MASTER\+\_\+\+SDA\+\_\+\+IO~21}
+
+
+
+GPIO utilizado como línea SDA. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00044}{44}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+\Hypertarget{i2c__manager_8c_afc3d101f633a076cc1ca84b85b6224b2}\index{i2c\_manager.c@{i2c\_manager.c}!TAG@{TAG}}
+\index{TAG@{TAG}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_afc3d101f633a076cc1ca84b85b6224b2} 
+\+\#define TAG~"{}I2\+C"{}}
+
+
+
+Etiqueta utilizada por el sistema de logging. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00034}{34}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+
+
+\label{i2c__manager_8c_doc-func-members}
+\Hypertarget{i2c__manager_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{i2c__manager_8c_a87d680c63f56a29ae4e40228349c0e9a}\index{i2c\_manager.c@{i2c\_manager.c}!i2c\_manager\_init@{i2c\_manager\_init}}
+\index{i2c\_manager\_init@{i2c\_manager\_init}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{i2c\_manager\_init()}{i2c\_manager\_init()}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_a87d680c63f56a29ae4e40228349c0e9a} 
+void i2c\+\_\+manager\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el bus I2C en modo maestro. 
+
+Configura:\+
+\begin{DoxyItemize}
+\item Pines SDA y SCL.
+\item Pull-\/ups internas.
+\item Frecuencia de operación.
+\item Driver I2C de ESP-\/\+IDF.
+\end{DoxyItemize}
+
+Además crea el mutex utilizado para sincronizar el acceso concurrente al bus.
+
+Configura los pines SDA y SCL, la frecuencia del bus y crea los recursos necesarios para la comunicación.
+
+Esta función debe ejecutarse una única vez durante la inicialización del sistema. 
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00084}{84}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00085\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ i2c\_config\_t\ conf\ =\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ .mode\ =\ I2C\_MODE\_MASTER,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ .sda\_io\_num\ =\ \doxymbox{\hyperlink{i2c__manager_8c_af47631d568bba17edf9d1ea042602bb6}{I2C\_MASTER\_SDA\_IO}},}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ .scl\_io\_num\ =\ \doxymbox{\hyperlink{i2c__manager_8c_a033b5e8a30541fe4ff939a62fdb7a43d}{I2C\_MASTER\_SCL\_IO}},}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ .sda\_pullup\_en\ =\ GPIO\_PULLUP\_ENABLE,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ .scl\_pullup\_en\ =\ GPIO\_PULLUP\_ENABLE,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ .master.clk\_speed\ =\ \doxymbox{\hyperlink{i2c__manager_8c_a5c22ca4de37a83a59014e48b0a0b043d}{I2C\_MASTER\_FREQ\_HZ}}}
+\DoxyCodeLine{00093\ \ \ \ \ \};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ Configuración\ del\ periférico\ I2C. }}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00098\ \ \ \ \ i2c\_param\_config(}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_aab9e642b6200f95fcbd2ad7466aaa2d3}{I2C\_MASTER\_NUM}},}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \&conf);}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ Instalación\ del\ driver\ I2C. }}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00105\ \ \ \ \ i2c\_driver\_install(}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_aab9e642b6200f95fcbd2ad7466aaa2d3}{I2C\_MASTER\_NUM}},}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ conf.mode,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ 0);}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ Creación\ del\ mutex\ global\ para\ protección }}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ de\ acceso\ al\ bus\ compartido. }}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00116\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}}\ =\ xSemaphoreCreateMutex();}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}I2C\ inicializado"{}});}
+\DoxyCodeLine{00119\ \}}
+
+\end{DoxyCode}
+\Hypertarget{i2c__manager_8c_a2b26a5dc8d840e8e3ab4c6d07d772f41}\index{i2c\_manager.c@{i2c\_manager.c}!i2c\_manager\_read@{i2c\_manager\_read}}
+\index{i2c\_manager\_read@{i2c\_manager\_read}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{i2c\_manager\_read()}{i2c\_manager\_read()}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_a2b26a5dc8d840e8e3ab4c6d07d772f41} 
+esp\+\_\+err\+\_\+t i2c\+\_\+manager\+\_\+read (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{addr}{, }\item[{uint8\+\_\+t}]{reg}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{size\+\_\+t}]{len}{}\end{DoxyParamCaption})}
+
+
+
+Lee datos desde un registro de un dispositivo I2C. 
+
+La secuencia implementada es:\+
+
+START -\/\texorpdfstring{$>$}{>} Dirección dispositivo + Write -\/\texorpdfstring{$>$}{>} Registro origen -\/\texorpdfstring{$>$}{>} RESTART -\/\texorpdfstring{$>$}{>} Dirección dispositivo + Read -\/\texorpdfstring{$>$}{>} Datos -\/\texorpdfstring{$>$}{>} STOP
+
+
+\begin{DoxyParams}{Parámetros}
+{\em addr} & Dirección I2C del dispositivo. \\
+\hline
+{\em reg} & Registro origen. \\
+\hline
+{\em data} & Buffer de recepción. \\
+\hline
+{\em len} & Número de bytes a leer.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Código de error ESP-\/\+IDF.
+\end{DoxyReturn}
+Realiza una transacción de lectura a partir del registro especificado.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em addr} & Dirección I2C del dispositivo. \\
+\hline
+{\em reg} & Registro interno a leer. \\
+\hline
+{\em data} & Buffer donde se almacenarán los datos. \\
+\hline
+{\em len} & Número de bytes a recibir.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Operación exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00207}{207}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00212\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ i2c\_cmd\_handle\_t\ cmd\ =}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ i2c\_cmd\_link\_create();}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ i2c\_master\_start(cmd);}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ i2c\_master\_write\_byte(}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ (addr\ <<\ 1)\ |\ I2C\_MASTER\_WRITE,}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keyword}{true});}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \ \ \ i2c\_master\_write\_byte(}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ reg,}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keyword}{true});}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \ \ i2c\_master\_start(cmd);}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ i2c\_master\_write\_byte(}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ (addr\ <<\ 1)\ |\ I2C\_MASTER\_READ,}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keyword}{true});}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordflow}{if}\ (len\ >\ 1)\ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ i2c\_master\_read(}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ data,}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ len\ -\/\ 1,}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ I2C\_MASTER\_ACK);}
+\DoxyCodeLine{00241\ \ \ \ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ i2c\_master\_read\_byte(}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ data\ +\ len\ -\/\ 1,}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ I2C\_MASTER\_NACK);}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ i2c\_master\_stop(cmd);}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ esp\_err\_t\ ret\ =}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ i2c\_master\_cmd\_begin(}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_aab9e642b6200f95fcbd2ad7466aaa2d3}{I2C\_MASTER\_NUM}},}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(100));}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ i2c\_cmd\_link\_delete(cmd);}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00259\ \}}
+
+\end{DoxyCode}
+\Hypertarget{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b}\index{i2c\_manager.c@{i2c\_manager.c}!i2c\_manager\_write@{i2c\_manager\_write}}
+\index{i2c\_manager\_write@{i2c\_manager\_write}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{i2c\_manager\_write()}{i2c\_manager\_write()}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b} 
+esp\+\_\+err\+\_\+t i2c\+\_\+manager\+\_\+write (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{addr}{, }\item[{uint8\+\_\+t}]{reg}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{size\+\_\+t}]{len}{}\end{DoxyParamCaption})}
+
+
+
+Escribe datos en un registro de un dispositivo I2C. 
+
+La secuencia implementada es:\+
+
+START -\/\texorpdfstring{$>$}{>} Dirección dispositivo + Write -\/\texorpdfstring{$>$}{>} Registro destino -\/\texorpdfstring{$>$}{>} Datos -\/\texorpdfstring{$>$}{>} STOP
+
+
+\begin{DoxyParams}{Parámetros}
+{\em addr} & Dirección I2C del dispositivo. \\
+\hline
+{\em reg} & Registro de destino. \\
+\hline
+{\em data} & Datos a transmitir. \\
+\hline
+{\em len} & Número de bytes a enviar.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Código de error ESP-\/\+IDF.
+\end{DoxyReturn}
+Realiza una transacción de escritura compuesta por:\+
+\begin{DoxyItemize}
+\item Dirección del dispositivo.
+\item Dirección del registro.
+\item Datos asociados.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em addr} & Dirección I2C del dispositivo. \\
+\hline
+{\em reg} & Registro interno de destino. \\
+\hline
+{\em data} & Buffer con los datos a transmitir. \\
+\hline
+{\em len} & Número de bytes a escribir.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Operación exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00143}{143}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00148\ \{}
+\DoxyCodeLine{00149\ \ \ \ \ i2c\_cmd\_handle\_t\ cmd\ =}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ i2c\_cmd\_link\_create();}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ i2c\_master\_start(cmd);}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ i2c\_master\_write\_byte(}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ (addr\ <<\ 1)\ |\ I2C\_MASTER\_WRITE,}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keyword}{true});}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ i2c\_master\_write\_byte(}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ reg,}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keyword}{true});}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ i2c\_master\_write(}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ data,}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ len,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keyword}{true});}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ i2c\_master\_stop(cmd);}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ esp\_err\_t\ ret\ =}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ i2c\_master\_cmd\_begin(}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_aab9e642b6200f95fcbd2ad7466aaa2d3}{I2C\_MASTER\_NUM}},}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(100));}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ i2c\_cmd\_link\_delete(cmd);}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00181\ \}}
+
+\end{DoxyCode}
+\Hypertarget{i2c__manager_8c_a08d3014e9596e0c13d21fb4473754f31}\index{i2c\_manager.c@{i2c\_manager.c}!i2c\_manager\_write\_raw@{i2c\_manager\_write\_raw}}
+\index{i2c\_manager\_write\_raw@{i2c\_manager\_write\_raw}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{i2c\_manager\_write\_raw()}{i2c\_manager\_write\_raw()}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_a08d3014e9596e0c13d21fb4473754f31} 
+esp\+\_\+err\+\_\+t i2c\+\_\+manager\+\_\+write\+\_\+raw (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{addr}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{size\+\_\+t}]{len}{}\end{DoxyParamCaption})}
+
+
+
+Envía un bloque de datos sin especificar registro. 
+
+Esta función es utilizada por dispositivos que requieren transmisiones directas de comandos o datos, como el controlador OLED SSD1306.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em addr} & Dirección I2C del dispositivo. \\
+\hline
+{\em data} & Datos a transmitir. \\
+\hline
+{\em len} & Cantidad de bytes.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Código de error ESP-\/\+IDF.
+\end{DoxyReturn}
+Esta función es utilizada por dispositivos que requieren transmisiones directas de comandos o datos, como la pantalla OLED SSD1306.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em addr} & Dirección I2C del dispositivo. \\
+\hline
+{\em data} & Datos a transmitir. \\
+\hline
+{\em len} & Número de bytes a enviar.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Operación exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00278}{278}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00282\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ i2c\_cmd\_handle\_t\ cmd\ =}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ i2c\_cmd\_link\_create();}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ i2c\_master\_start(cmd);}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \ \ i2c\_master\_write\_byte(}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ (addr\ <<\ 1)\ |\ I2C\_MASTER\_WRITE,}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keyword}{true});}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ i2c\_master\_write(}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ (uint8\_t\ *)data,}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ len,}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keyword}{true});}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ i2c\_master\_stop(cmd);}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ esp\_err\_t\ ret\ =}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ i2c\_master\_cmd\_begin(}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_aab9e642b6200f95fcbd2ad7466aaa2d3}{I2C\_MASTER\_NUM}},}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ cmd,}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(100));}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ i2c\_cmd\_link\_delete(cmd);}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00310\ \}}
+
+\end{DoxyCode}
+
+
+\label{i2c__manager_8c_doc-var-members}
+\Hypertarget{i2c__manager_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{i2c__manager_8c_a60bdaef4d905b9f3d244350633a80080}\index{i2c\_manager.c@{i2c\_manager.c}!mutex\_i2c@{mutex\_i2c}}
+\index{mutex\_i2c@{mutex\_i2c}!i2c\_manager.c@{i2c\_manager.c}}
+\doxysubsubsection{\texorpdfstring{mutex\_i2c}{mutex\_i2c}}
+{\footnotesize\ttfamily \label{i2c__manager_8c_a60bdaef4d905b9f3d244350633a80080} 
+Semaphore\+Handle\+\_\+t mutex\+\_\+i2c = NULL}
+
+
+
+Mutex global para acceso seguro al bus I2C. 
+
+Mutex compartido para acceso exclusivo al bus I2C.
+
+Garantiza exclusión mutua cuando múltiples tareas intentan acceder simultáneamente a dispositivos conectados al mismo bus.
+
+Mutex global para acceso seguro al bus I2C.
+
+Utilizado por todos los periféricos que comparten el mismo bus, evitando condiciones de carrera entre tareas concurrentes. 
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00066}{66}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+

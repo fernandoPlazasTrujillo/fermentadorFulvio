@@ -1,0 +1,416 @@
+\doxysection{Referencia del archivo main/\+drivers/\+servo.c}
+\hypertarget{servo_8c}{}\label{servo_8c}\index{main/drivers/servo.c@{main/drivers/servo.c}}
+
+
+Implementación del control de servomotor usando PWM mediante LEDC.  
+
+
+{\ttfamily \+\#include "{}drivers/\+servo.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+ledc.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_a7d9c36e285f4f83cc8d30e9ccfe403af}{SERVO\+\_\+\+FREQ}}~50
+\begin{DoxyCompactList}\small\item\em Frecuencia PWM utilizada por el servomotor. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_a5ae00189f7e5d8ce80129f55f066e73d}{SERVO\+\_\+\+TIMER}}~LEDC\+\_\+\+TIMER\+\_\+0
+\begin{DoxyCompactList}\small\item\em Temporizador LEDC utilizado. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\+\_\+\+MODE}}~LEDC\+\_\+\+HIGH\+\_\+\+SPEED\+\_\+\+MODE
+\begin{DoxyCompactList}\small\item\em Modo de operación LEDC. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}{SERVO\+\_\+\+CHANNEL}}~LEDC\+\_\+\+CHANNEL\+\_\+0
+\begin{DoxyCompactList}\small\item\em Canal PWM utilizado. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_ac10969d83b9cdee051df76a50fe6ab93}{SERVO\+\_\+\+RESOLUTION}}~LEDC\+\_\+\+TIMER\+\_\+16\+\_\+\+BIT
+\begin{DoxyCompactList}\small\item\em Resolución PWM configurada. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_a24500855a2a7aab1ec9e7bfeeb00fb7a}{SERVO\+\_\+\+MAX\+\_\+\+DUTY}}~65535
+\begin{DoxyCompactList}\small\item\em Ciclo de trabajo máximo para resolución de 16 bits. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_a32d8db9baf0700270731ea14edf1932b}{SERVO\+\_\+\+PERIOD\+\_\+\+US}}~20000.\+0f
+\begin{DoxyCompactList}\small\item\em Periodo PWM en microsegundos. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_a474f2012d6528c25168fae40ba3c7190}{SERVO\+\_\+\+MIN\+\_\+\+PULSE\+\_\+\+US}}~1000.\+0f
+\begin{DoxyCompactList}\small\item\em Ancho de pulso correspondiente a 0°. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{servo_8c_ad1fd3164150a73e22d4a9e870cdb4731}{SERVO\+\_\+\+MAX\+\_\+\+PULSE\+\_\+\+US}}~2000.\+0f
+\begin{DoxyCompactList}\small\item\em Ancho de pulso correspondiente a 180°. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{servo_8c_a6006789c547dabfec48ef14f0d9a9191}{servo\+\_\+init}} (gpio\+\_\+num\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Inicializa el servomotor. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{servo_8c_a76f48098c22562b7dd7185f2fc3142f7}{servo\+\_\+set\+\_\+angle}} (float angle)
+\begin{DoxyCompactList}\small\item\em Posiciona el servomotor en el ángulo especificado. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{servo_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}SERVO"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada por el sistema de logging. \end{DoxyCompactList}\item 
+static gpio\+\_\+num\+\_\+t \doxymbox{\hyperlink{servo_8c_ae9acca8e58d2713207db3538b31e7afa}{servo\+\_\+pin}}
+\begin{DoxyCompactList}\small\item\em GPIO utilizado para el servomotor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del control de servomotor usando PWM mediante LEDC. 
+
+Este módulo genera señales PWM compatibles con servomotores estándar utilizando el periférico LEDC del ESP32.
+
+Características:\+
+\begin{DoxyItemize}
+\item Frecuencia de operación de 50 Hz.
+\item Resolución PWM de 16 bits.
+\item Conversión automática de ángulo a ciclo de trabajo.
+\end{DoxyItemize}
+
+El servomotor puede utilizarse para accionar mecanismos físicos dentro del sistema de fermentación, como sistemas de mezcla o posicionamiento.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+
+
+\label{servo_8c_doc-define-members}
+\Hypertarget{servo_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}\index{servo.c@{servo.c}!SERVO\_CHANNEL@{SERVO\_CHANNEL}}
+\index{SERVO\_CHANNEL@{SERVO\_CHANNEL}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_CHANNEL}{SERVO\_CHANNEL}}
+{\footnotesize\ttfamily \label{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4} 
+\+\#define SERVO\+\_\+\+CHANNEL~LEDC\+\_\+\+CHANNEL\+\_\+0}
+
+
+
+Canal PWM utilizado. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00053}{53}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_a7d9c36e285f4f83cc8d30e9ccfe403af}\index{servo.c@{servo.c}!SERVO\_FREQ@{SERVO\_FREQ}}
+\index{SERVO\_FREQ@{SERVO\_FREQ}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_FREQ}{SERVO\_FREQ}}
+{\footnotesize\ttfamily \label{servo_8c_a7d9c36e285f4f83cc8d30e9ccfe403af} 
+\+\#define SERVO\+\_\+\+FREQ~50}
+
+
+
+Frecuencia PWM utilizada por el servomotor. 
+
+Los servomotores convencionales utilizan una frecuencia de aproximadamente 50 Hz (periodo de 20 ms). 
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00038}{38}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_a24500855a2a7aab1ec9e7bfeeb00fb7a}\index{servo.c@{servo.c}!SERVO\_MAX\_DUTY@{SERVO\_MAX\_DUTY}}
+\index{SERVO\_MAX\_DUTY@{SERVO\_MAX\_DUTY}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_MAX\_DUTY}{SERVO\_MAX\_DUTY}}
+{\footnotesize\ttfamily \label{servo_8c_a24500855a2a7aab1ec9e7bfeeb00fb7a} 
+\+\#define SERVO\+\_\+\+MAX\+\_\+\+DUTY~65535}
+
+
+
+Ciclo de trabajo máximo para resolución de 16 bits. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00063}{63}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_ad1fd3164150a73e22d4a9e870cdb4731}\index{servo.c@{servo.c}!SERVO\_MAX\_PULSE\_US@{SERVO\_MAX\_PULSE\_US}}
+\index{SERVO\_MAX\_PULSE\_US@{SERVO\_MAX\_PULSE\_US}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_MAX\_PULSE\_US}{SERVO\_MAX\_PULSE\_US}}
+{\footnotesize\ttfamily \label{servo_8c_ad1fd3164150a73e22d4a9e870cdb4731} 
+\+\#define SERVO\+\_\+\+MAX\+\_\+\+PULSE\+\_\+\+US~2000.\+0f}
+
+
+
+Ancho de pulso correspondiente a 180°. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00080}{80}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_a474f2012d6528c25168fae40ba3c7190}\index{servo.c@{servo.c}!SERVO\_MIN\_PULSE\_US@{SERVO\_MIN\_PULSE\_US}}
+\index{SERVO\_MIN\_PULSE\_US@{SERVO\_MIN\_PULSE\_US}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_MIN\_PULSE\_US}{SERVO\_MIN\_PULSE\_US}}
+{\footnotesize\ttfamily \label{servo_8c_a474f2012d6528c25168fae40ba3c7190} 
+\+\#define SERVO\+\_\+\+MIN\+\_\+\+PULSE\+\_\+\+US~1000.\+0f}
+
+
+
+Ancho de pulso correspondiente a 0°. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00075}{75}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}\index{servo.c@{servo.c}!SERVO\_MODE@{SERVO\_MODE}}
+\index{SERVO\_MODE@{SERVO\_MODE}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_MODE}{SERVO\_MODE}}
+{\footnotesize\ttfamily \label{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37} 
+\+\#define SERVO\+\_\+\+MODE~LEDC\+\_\+\+HIGH\+\_\+\+SPEED\+\_\+\+MODE}
+
+
+
+Modo de operación LEDC. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00048}{48}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_a32d8db9baf0700270731ea14edf1932b}\index{servo.c@{servo.c}!SERVO\_PERIOD\_US@{SERVO\_PERIOD\_US}}
+\index{SERVO\_PERIOD\_US@{SERVO\_PERIOD\_US}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_PERIOD\_US}{SERVO\_PERIOD\_US}}
+{\footnotesize\ttfamily \label{servo_8c_a32d8db9baf0700270731ea14edf1932b} 
+\+\#define SERVO\+\_\+\+PERIOD\+\_\+\+US~20000.\+0f}
+
+
+
+Periodo PWM en microsegundos. 
+
+50 Hz = 20 ms = 20000 us 
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00070}{70}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_ac10969d83b9cdee051df76a50fe6ab93}\index{servo.c@{servo.c}!SERVO\_RESOLUTION@{SERVO\_RESOLUTION}}
+\index{SERVO\_RESOLUTION@{SERVO\_RESOLUTION}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_RESOLUTION}{SERVO\_RESOLUTION}}
+{\footnotesize\ttfamily \label{servo_8c_ac10969d83b9cdee051df76a50fe6ab93} 
+\+\#define SERVO\+\_\+\+RESOLUTION~LEDC\+\_\+\+TIMER\+\_\+16\+\_\+\+BIT}
+
+
+
+Resolución PWM configurada. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00058}{58}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_a5ae00189f7e5d8ce80129f55f066e73d}\index{servo.c@{servo.c}!SERVO\_TIMER@{SERVO\_TIMER}}
+\index{SERVO\_TIMER@{SERVO\_TIMER}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{SERVO\_TIMER}{SERVO\_TIMER}}
+{\footnotesize\ttfamily \label{servo_8c_a5ae00189f7e5d8ce80129f55f066e73d} 
+\+\#define SERVO\+\_\+\+TIMER~LEDC\+\_\+\+TIMER\+\_\+0}
+
+
+
+Temporizador LEDC utilizado. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00043}{43}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+
+
+\label{servo_8c_doc-func-members}
+\Hypertarget{servo_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{servo_8c_a6006789c547dabfec48ef14f0d9a9191}\index{servo.c@{servo.c}!servo\_init@{servo\_init}}
+\index{servo\_init@{servo\_init}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{servo\_init()}{servo\_init()}}
+{\footnotesize\ttfamily \label{servo_8c_a6006789c547dabfec48ef14f0d9a9191} 
+esp\+\_\+err\+\_\+t servo\+\_\+init (\begin{DoxyParamCaption}\item[{gpio\+\_\+num\+\_\+t}]{pin}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el servomotor. 
+
+Configura el temporizador LEDC y el canal PWM asociado al GPIO indicado.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pin} & GPIO conectado al servomotor.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Inicialización exitosa.
+\item Código de error en caso contrario.
+\end{DoxyItemize}
+\end{DoxyReturn}
+Configura el temporizador y canal PWM del periférico LEDC necesarios para generar la señal de control del servo.
+
+Esta función debe ejecutarse una única vez antes de utilizar cualquier otra función del módulo.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pin} & GPIO al que se encuentra conectado el servomotor.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Inicialización exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00103}{103}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00104\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \doxymbox{\hyperlink{servo_8c_ae9acca8e58d2713207db3538b31e7afa}{servo\_pin}}\ =\ pin;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ ledc\_timer\_config\_t\ timer\ =\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ .speed\_mode\ =\ \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\_MODE}},}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ .timer\_num\ =\ \doxymbox{\hyperlink{servo_8c_a5ae00189f7e5d8ce80129f55f066e73d}{SERVO\_TIMER}},}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ .duty\_resolution\ =\ \doxymbox{\hyperlink{servo_8c_ac10969d83b9cdee051df76a50fe6ab93}{SERVO\_RESOLUTION}},}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ .freq\_hz\ =\ \doxymbox{\hyperlink{servo_8c_a7d9c36e285f4f83cc8d30e9ccfe403af}{SERVO\_FREQ}},}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ .clk\_cfg\ =\ LEDC\_AUTO\_CLK}
+\DoxyCodeLine{00113\ \ \ \ \ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ ledc\_timer\_config(\&timer);}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ ledc\_channel\_config\_t\ channel\ =\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ .gpio\_num\ =\ \doxymbox{\hyperlink{servo_8c_ae9acca8e58d2713207db3538b31e7afa}{servo\_pin}},}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ .speed\_mode\ =\ \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\_MODE}},}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ .channel\ =\ \doxymbox{\hyperlink{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}{SERVO\_CHANNEL}},}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ .intr\_type\ =\ LEDC\_INTR\_DISABLE,}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ .timer\_sel\ =\ \doxymbox{\hyperlink{servo_8c_a5ae00189f7e5d8ce80129f55f066e73d}{SERVO\_TIMER}},}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ .duty\ =\ 0,}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ .hpoint\ =\ 0}
+\DoxyCodeLine{00125\ \ \ \ \ \};}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ ledc\_channel\_config(\&channel);}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Servo\ inicializado\ en\ GPIO\ \%d"{}},\ pin);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00132\ \}}
+
+\end{DoxyCode}
+\Hypertarget{servo_8c_a76f48098c22562b7dd7185f2fc3142f7}\index{servo.c@{servo.c}!servo\_set\_angle@{servo\_set\_angle}}
+\index{servo\_set\_angle@{servo\_set\_angle}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{servo\_set\_angle()}{servo\_set\_angle()}}
+{\footnotesize\ttfamily \label{servo_8c_a76f48098c22562b7dd7185f2fc3142f7} 
+esp\+\_\+err\+\_\+t servo\+\_\+set\+\_\+angle (\begin{DoxyParamCaption}\item[{float}]{angle}{}\end{DoxyParamCaption})}
+
+
+
+Posiciona el servomotor en el ángulo especificado. 
+
+Posiciona el servomotor en un ángulo específico.
+
+Convierte el ángulo solicitado en un ancho de pulso PWM:\+
+
+
+\begin{DoxyItemize}
+\item 0° -\/\texorpdfstring{$>$}{>} 1.\+0 ms
+\item 90° -\/\texorpdfstring{$>$}{>} 1.\+5 ms
+\item 180° -\/\texorpdfstring{$>$}{>} 2.\+0 ms
+\end{DoxyItemize}
+
+Posteriormente el ancho de pulso se transforma al valor de duty cycle requerido por el periférico LEDC.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em angle} & Ángulo deseado en grados.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Operación realizada correctamente.
+\end{DoxyItemize}
+\end{DoxyReturn}
+Posiciona el servomotor en el ángulo especificado.
+
+Convierte el ángulo solicitado a un ciclo de trabajo PWM compatible con servomotores estándar de 50 Hz.
+
+El rango válido de operación es de 0° a 180°.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em angle} & Ángulo deseado en grados.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Operación realizada correctamente.
+\item ESP\+\_\+\+ERR\+\_\+\+INVALID\+\_\+\+ARG:\+ Ángulo fuera de rango. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00155}{155}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00156\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordflow}{if}\ (angle\ <\ 0.0f)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ angle\ =\ 0.0f;}
+\DoxyCodeLine{00159\ \ \ \ \ \}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordflow}{if}\ (angle\ >\ 180.0f)\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ angle\ =\ 180.0f;}
+\DoxyCodeLine{00163\ \ \ \ \ \}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ lineal\ de\ ángulo\ a\ ancho\ de\ pulso. }}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordtype}{float}\ pulse\_us\ =}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a474f2012d6528c25168fae40ba3c7190}{SERVO\_MIN\_PULSE\_US}}\ +}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ ((angle\ /\ 180.0f)\ *}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ (\doxymbox{\hyperlink{servo_8c_ad1fd3164150a73e22d4a9e870cdb4731}{SERVO\_MAX\_PULSE\_US}}\ -\/\ \doxymbox{\hyperlink{servo_8c_a474f2012d6528c25168fae40ba3c7190}{SERVO\_MIN\_PULSE\_US}}));}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ de\ ancho\ de\ pulso\ a\ duty\ cycle. }}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00176\ \ \ \ \ uint32\_t\ duty\ =}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ (uint32\_t)((pulse\_us\ /\ \doxymbox{\hyperlink{servo_8c_a32d8db9baf0700270731ea14edf1932b}{SERVO\_PERIOD\_US}})\ *}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a24500855a2a7aab1ec9e7bfeeb00fb7a}{SERVO\_MAX\_DUTY}});}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ ledc\_set\_duty(}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\_MODE}},}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}{SERVO\_CHANNEL}},}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ duty);}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ ledc\_update\_duty(}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\_MODE}},}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}{SERVO\_CHANNEL}});}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ ESP\_LOGI(}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Servo\ angle:\ \%.2f\ deg\ |\ pulse:\ \%.2f\ us\ |\ duty:\ \%lu"{}},}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ angle,}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ pulse\_us,}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long})duty);}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00197\ \}}
+
+\end{DoxyCode}
+
+
+\label{servo_8c_doc-var-members}
+\Hypertarget{servo_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{servo_8c_ae9acca8e58d2713207db3538b31e7afa}\index{servo.c@{servo.c}!servo\_pin@{servo\_pin}}
+\index{servo\_pin@{servo\_pin}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{servo\_pin}{servo\_pin}}
+{\footnotesize\ttfamily \label{servo_8c_ae9acca8e58d2713207db3538b31e7afa} 
+gpio\+\_\+num\+\_\+t servo\+\_\+pin\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+GPIO utilizado para el servomotor. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00085}{85}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+
+\Hypertarget{servo_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{servo.c@{servo.c}!TAG@{TAG}}
+\index{TAG@{TAG}!servo.c@{servo.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{servo_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}SERVO"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada por el sistema de logging. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{servo_8c_source_l00030}{30}} del archivo \doxymbox{\hyperlink{servo_8c_source}{servo.\+c}}.
+

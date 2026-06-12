@@ -1,0 +1,319 @@
+\doxysection{Referencia del archivo main/\+drivers/\+ph\+\_\+sensor.c}
+\hypertarget{ph__sensor_8c}{}\label{ph__sensor_8c}\index{main/drivers/ph\_sensor.c@{main/drivers/ph\_sensor.c}}
+
+
+Implementación del driver para sensor de pH basado en adquisición analógica.  
+
+
+{\ttfamily \+\#include "{}ph\+\_\+sensor.\+h"{}}\newline
+{\ttfamily \+\#include "{}hal/\+adc\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{ph__sensor_8c_afe07d63548e90671ed265d67e7f0df8e}{PH\+\_\+\+ADC\+\_\+\+CHANNEL}}~ADC\+\_\+\+CHANNEL\+\_\+3
+\begin{DoxyCompactList}\small\item\em Canal ADC asociado al sensor de pH. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{ph__sensor_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\+\_\+\+SAMPLES}}~20
+\begin{DoxyCompactList}\small\item\em Cantidad de muestras utilizadas para el cálculo del promedio. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{ph__sensor_8c_acb6161a3ffb103e0367458060062d929}{PH\+\_\+\+SLOPE}}~(-\/5.\+7f)
+\begin{DoxyCompactList}\small\item\em Pendiente de la ecuación de calibración. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{ph__sensor_8c_ac1260df376cca2240c3820d7efd45334}{PH\+\_\+\+OFFSET}}~(21.\+34f)
+\begin{DoxyCompactList}\small\item\em Offset de la ecuación de calibración. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{ph__sensor_8c_a87abd31489e1cf7514ed303a5194c684}{PH\+\_\+\+MIN\+\_\+\+VOLTAGE}}~(0.\+1f)
+\begin{DoxyCompactList}\small\item\em Voltaje mínimo válido para el sensor. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{ph__sensor_8c_a6bbdd19ffa0606b6ca36388f17b9d435}{PH\+\_\+\+MAX\+\_\+\+VOLTAGE}}~(3.\+2f)
+\begin{DoxyCompactList}\small\item\em Voltaje máximo válido para el sensor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{ph__sensor_8c_ac7ceffc8562ed45df0636de74fc23eb5}{ph\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa el módulo de pH. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{ph__sensor_8c_ad0fdfecb914c25c0826286634e9be584}{ph\+\_\+read\+\_\+voltage}} (void)
+\begin{DoxyCompactList}\small\item\em Obtiene el voltaje promedio del sensor de pH. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{ph__sensor_8c_a73824c716592fbbaadcf307213d31c77}{ph\+\_\+read}} (void)
+\begin{DoxyCompactList}\small\item\em Calcula el valor de pH a partir del voltaje medido. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{ph__sensor_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}PH"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada por el sistema de logging. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del driver para sensor de pH basado en adquisición analógica. 
+
+Este módulo obtiene mediciones analógicas desde un sensor de pH, calcula un voltaje promedio mediante múltiples muestras y convierte dicho voltaje a unidades de pH utilizando una ecuación de calibración lineal.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Lectura de voltaje.
+\item Filtrado mediante promediado.
+\item Conversión voltaje-\/pH.
+\item Validación básica de rango de operación.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+
+
+\label{ph__sensor_8c_doc-define-members}
+\Hypertarget{ph__sensor_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{ph__sensor_8c_af0b23eedf2352de4c1eff77e1401730c}\index{ph\_sensor.c@{ph\_sensor.c}!NUM\_SAMPLES@{NUM\_SAMPLES}}
+\index{NUM\_SAMPLES@{NUM\_SAMPLES}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{NUM\_SAMPLES}{NUM\_SAMPLES}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_af0b23eedf2352de4c1eff77e1401730c} 
+\+\#define NUM\+\_\+\+SAMPLES~20}
+
+
+
+Cantidad de muestras utilizadas para el cálculo del promedio. 
+
+El promediado reduce el ruido presente en la señal analógica. 
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00039}{39}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+\Hypertarget{ph__sensor_8c_afe07d63548e90671ed265d67e7f0df8e}\index{ph\_sensor.c@{ph\_sensor.c}!PH\_ADC\_CHANNEL@{PH\_ADC\_CHANNEL}}
+\index{PH\_ADC\_CHANNEL@{PH\_ADC\_CHANNEL}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{PH\_ADC\_CHANNEL}{PH\_ADC\_CHANNEL}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_afe07d63548e90671ed265d67e7f0df8e} 
+\+\#define PH\+\_\+\+ADC\+\_\+\+CHANNEL~ADC\+\_\+\+CHANNEL\+\_\+3}
+
+
+
+Canal ADC asociado al sensor de pH. 
+
+Corresponde al GPIO39 del ESP32. 
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00032}{32}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+\Hypertarget{ph__sensor_8c_a6bbdd19ffa0606b6ca36388f17b9d435}\index{ph\_sensor.c@{ph\_sensor.c}!PH\_MAX\_VOLTAGE@{PH\_MAX\_VOLTAGE}}
+\index{PH\_MAX\_VOLTAGE@{PH\_MAX\_VOLTAGE}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{PH\_MAX\_VOLTAGE}{PH\_MAX\_VOLTAGE}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_a6bbdd19ffa0606b6ca36388f17b9d435} 
+\+\#define PH\+\_\+\+MAX\+\_\+\+VOLTAGE~(3.\+2f)}
+
+
+
+Voltaje máximo válido para el sensor. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00064}{64}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+\Hypertarget{ph__sensor_8c_a87abd31489e1cf7514ed303a5194c684}\index{ph\_sensor.c@{ph\_sensor.c}!PH\_MIN\_VOLTAGE@{PH\_MIN\_VOLTAGE}}
+\index{PH\_MIN\_VOLTAGE@{PH\_MIN\_VOLTAGE}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{PH\_MIN\_VOLTAGE}{PH\_MIN\_VOLTAGE}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_a87abd31489e1cf7514ed303a5194c684} 
+\+\#define PH\+\_\+\+MIN\+\_\+\+VOLTAGE~(0.\+1f)}
+
+
+
+Voltaje mínimo válido para el sensor. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00059}{59}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+\Hypertarget{ph__sensor_8c_ac1260df376cca2240c3820d7efd45334}\index{ph\_sensor.c@{ph\_sensor.c}!PH\_OFFSET@{PH\_OFFSET}}
+\index{PH\_OFFSET@{PH\_OFFSET}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{PH\_OFFSET}{PH\_OFFSET}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_ac1260df376cca2240c3820d7efd45334} 
+\+\#define PH\+\_\+\+OFFSET~(21.\+34f)}
+
+
+
+Offset de la ecuación de calibración. 
+
+Corresponde al término independiente obtenido durante el proceso de calibración experimental. 
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00054}{54}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+\Hypertarget{ph__sensor_8c_acb6161a3ffb103e0367458060062d929}\index{ph\_sensor.c@{ph\_sensor.c}!PH\_SLOPE@{PH\_SLOPE}}
+\index{PH\_SLOPE@{PH\_SLOPE}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{PH\_SLOPE}{PH\_SLOPE}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_acb6161a3ffb103e0367458060062d929} 
+\+\#define PH\+\_\+\+SLOPE~(-\/5.\+7f)}
+
+
+
+Pendiente de la ecuación de calibración. 
+
+Relaciona el voltaje medido con el valor de pH. 
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00046}{46}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+
+
+\label{ph__sensor_8c_doc-func-members}
+\Hypertarget{ph__sensor_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{ph__sensor_8c_ac7ceffc8562ed45df0636de74fc23eb5}\index{ph\_sensor.c@{ph\_sensor.c}!ph\_init@{ph\_init}}
+\index{ph\_init@{ph\_init}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{ph\_init()}{ph\_init()}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_ac7ceffc8562ed45df0636de74fc23eb5} 
+void ph\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el módulo de pH. 
+
+Inicializa el módulo del sensor de pH.
+
+Actualmente no requiere configuración específica, ya que la adquisición ADC es gestionada por adc\+\_\+manager.
+
+Inicializa el módulo de pH.
+
+Realiza la configuración necesaria para habilitar la adquisición de señales analógicas asociadas al sensor.
+
+Debe ejecutarse una única vez durante la inicialización del sistema. 
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00081}{81}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00082\ \{}
+\DoxyCodeLine{00083\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ph__sensor_8c_a73824c716592fbbaadcf307213d31c77}\index{ph\_sensor.c@{ph\_sensor.c}!ph\_read@{ph\_read}}
+\index{ph\_read@{ph\_read}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{ph\_read()}{ph\_read()}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_a73824c716592fbbaadcf307213d31c77} 
+float ph\+\_\+read (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Calcula el valor de pH a partir del voltaje medido. 
+
+Obtiene una medición de pH.
+
+Utiliza una ecuación de calibración lineal:\+
+
+pH = (PH\+\_\+\+SLOPE \texorpdfstring{$\ast$}{*} V) + PH\+\_\+\+OFFSET
+
+donde:\+
+\begin{DoxyItemize}
+\item V corresponde al voltaje medido.
+\item PH\+\_\+\+SLOPE es la pendiente de calibración.
+\item PH\+\_\+\+OFFSET es el offset de calibración.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Devuelve}
+Valor estimado de pH. 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em -\/1.\+0} & Lectura inválida o fuera de rango.\\
+\hline
+\end{DoxyRetVals}
+Calcula el valor de pH a partir del voltaje medido.
+
+Convierte el voltaje medido por el sensor a una estimación de pH utilizando la ecuación de calibración definida para el sistema.
+
+\begin{DoxyReturn}{Devuelve}
+Valor estimado de pH. 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em -\/1.\+0} & Lectura inválida o fuera de rango. \\
+\hline
+\end{DoxyRetVals}
+
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00134}{134}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00135\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{float}\ voltage\ =\ \doxymbox{\hyperlink{ph__sensor_8c_ad0fdfecb914c25c0826286634e9be584}{ph\_read\_voltage}}();}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordflow}{if}\ (voltage\ >\ \doxymbox{\hyperlink{ph__sensor_8c_a6bbdd19ffa0606b6ca36388f17b9d435}{PH\_MAX\_VOLTAGE}}\ ||}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ voltage\ <\ \doxymbox{\hyperlink{ph__sensor_8c_a87abd31489e1cf7514ed303a5194c684}{PH\_MIN\_VOLTAGE}})}
+\DoxyCodeLine{00140\ \ \ \ \ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ ESP\_LOGW(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Sensor\ pH\ fuera\ de\ rango"{}});}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1.0;}
+\DoxyCodeLine{00143\ \ \ \ \ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ lineal\ obtenida\ durante\ el\ proceso }}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ de\ calibración\ del\ sensor. }}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{ph__sensor_8c_acb6161a3ffb103e0367458060062d929}{PH\_SLOPE}}\ *\ voltage\ +\ \doxymbox{\hyperlink{ph__sensor_8c_ac1260df376cca2240c3820d7efd45334}{PH\_OFFSET}};}
+\DoxyCodeLine{00150\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ph__sensor_8c_ad0fdfecb914c25c0826286634e9be584}\index{ph\_sensor.c@{ph\_sensor.c}!ph\_read\_voltage@{ph\_read\_voltage}}
+\index{ph\_read\_voltage@{ph\_read\_voltage}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{ph\_read\_voltage()}{ph\_read\_voltage()}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_ad0fdfecb914c25c0826286634e9be584} 
+float ph\+\_\+read\+\_\+voltage (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene el voltaje promedio del sensor de pH. 
+
+Obtiene el voltaje de salida del sensor.
+
+Realiza múltiples lecturas ADC y calcula un promedio para reducir el efecto del ruido presente en la señal.
+
+\begin{DoxyReturn}{Devuelve}
+Voltaje promedio en voltios.
+\end{DoxyReturn}
+Obtiene el voltaje promedio del sensor de pH.
+
+Realiza múltiples conversiones ADC y calcula un valor promedio para reducir el efecto del ruido presente en la señal analógica.
+
+\begin{DoxyReturn}{Devuelve}
+Voltaje promedio en voltios. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00097}{97}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00098\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{float}\ sum\ =\ 0;}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \doxymbox{\hyperlink{mq135_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\_SAMPLES}};\ i++)\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ sum\ +=\ \doxymbox{\hyperlink{adc__manager_8c_a228d08c460b3c57ca3f7efc00c5e3f0c}{adc\_manager\_read\_voltage}}(\doxymbox{\hyperlink{ph__sensor_8c_afe07d63548e90671ed265d67e7f0df8e}{PH\_ADC\_CHANNEL}});}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Se\ introduce\ un\ pequeño\ retardo\ entre\ muestras }}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ para\ evitar\ lecturas\ consecutivas\ excesivamente }}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ correlacionadas\ y\ mejorar\ el\ promedio\ obtenido. }}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ vTaskDelay(pdMS\_TO\_TICKS(10));}
+\DoxyCodeLine{00110\ \ \ \ \ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordflow}{return}\ sum\ /\ \doxymbox{\hyperlink{mq135_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\_SAMPLES}};}
+\DoxyCodeLine{00113\ \}}
+
+\end{DoxyCode}
+
+
+\label{ph__sensor_8c_doc-var-members}
+\Hypertarget{ph__sensor_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{ph__sensor_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{ph\_sensor.c@{ph\_sensor.c}!TAG@{TAG}}
+\index{TAG@{TAG}!ph\_sensor.c@{ph\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{ph__sensor_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}PH"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada por el sistema de logging. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{ph__sensor_8c_source_l00069}{69}} del archivo \doxymbox{\hyperlink{ph__sensor_8c_source}{ph\+\_\+sensor.\+c}}.
+

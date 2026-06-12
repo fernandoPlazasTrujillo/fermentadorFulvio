@@ -1,0 +1,342 @@
+\doxysection{Referencia del archivo main/\+mqtt/\+mqtt\+\_\+manager.h}
+\hypertarget{mqtt__manager_8h}{}\label{mqtt__manager_8h}\index{main/mqtt/mqtt\_manager.h@{main/mqtt/mqtt\_manager.h}}
+
+
+Interfaz para la gestión de comunicación MQTT.  
+
+
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{mqtt__manager_8h_aade8d25902d34a7a7ae601ba023bff4f}{mqtt\+\_\+manager\+\_\+start}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa y pone en marcha el cliente MQTT. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{mqtt__manager_8h_abc2b7e54cf9f610d6ce01fcc17a56aa9}{mqtt\+\_\+wait\+\_\+connected}} (uint32\+\_\+t timeout\+\_\+ms)
+\begin{DoxyCompactList}\small\item\em Espera hasta que se establezca la conexión MQTT. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{mqtt__manager_8h_a0aa78fdc87dda9713ff09eefc5d1bfb8}{mqtt\+\_\+publish}} (const char \texorpdfstring{$\ast$}{*}topic, const char \texorpdfstring{$\ast$}{*}payload, int qos, uint32\+\_\+t timeout\+\_\+ms)
+\begin{DoxyCompactList}\small\item\em Publica un mensaje en un tópico MQTT. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{mqtt__manager_8h_a9d085201987e683cf0725e1cdc249d5f}{mqtt\+\_\+manager\+\_\+stop}} (void)
+\begin{DoxyCompactList}\small\item\em Detiene el cliente MQTT. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{mqtt__manager_8h_a14a4eb1d82363ee8fb9bf053b48fc4a2}{mqtt\+\_\+is\+\_\+connected}} (void)
+\begin{DoxyCompactList}\small\item\em Consulta el estado actual de la conexión MQTT. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Interfaz para la gestión de comunicación MQTT. 
+
+Este módulo encapsula la configuración y operación del cliente MQTT utilizado por el sistema de monitoreo ambiental basado en ESP32.
+
+Permite:\+
+\begin{DoxyItemize}
+\item Inicializar la conexión MQTT.
+\item Verificar el estado de conexión con el broker.
+\item Publicar mensajes en tópicos específicos.
+\item Detener el servicio MQTT.
+\item Consultar el estado actual de conectividad.
+\end{DoxyItemize}
+
+El módulo abstrae los detalles de la biblioteca MQTT utilizada, proporcionando una interfaz sencilla para las tareas de aplicación.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{mqtt__manager_8h_source}{mqtt\+\_\+manager.\+h}}.
+
+
+
+\label{mqtt__manager_8h_doc-func-members}
+\Hypertarget{mqtt__manager_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{mqtt__manager_8h_a14a4eb1d82363ee8fb9bf053b48fc4a2}\index{mqtt\_manager.h@{mqtt\_manager.h}!mqtt\_is\_connected@{mqtt\_is\_connected}}
+\index{mqtt\_is\_connected@{mqtt\_is\_connected}!mqtt\_manager.h@{mqtt\_manager.h}}
+\doxysubsubsection{\texorpdfstring{mqtt\_is\_connected()}{mqtt\_is\_connected()}}
+{\footnotesize\ttfamily \label{mqtt__manager_8h_a14a4eb1d82363ee8fb9bf053b48fc4a2} 
+bool mqtt\+\_\+is\+\_\+connected (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Consulta el estado actual de la conexión MQTT. 
+
+Consulta el estado de conexión MQTT.
+
+\begin{DoxyReturn}{Devuelve}
+true si el cliente está conectado al broker. 
+
+false si no existe conexión activa.
+\end{DoxyReturn}
+Consulta el estado actual de la conexión MQTT.
+
+\begin{DoxyReturn}{Devuelve}
+true si existe conexión activa con el broker. 
+
+false en caso contrario. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{mqtt__manager_8c_source_l00297}{297}} del archivo \doxymbox{\hyperlink{mqtt__manager_8c_source}{mqtt\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00298\ \{}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{mqtt__manager_8c_a6a99fbef218ac40fc0b77e18f0e9a708}{mqtt\_connected}};}
+\DoxyCodeLine{00300\ \}}
+
+\end{DoxyCode}
+\Hypertarget{mqtt__manager_8h_aade8d25902d34a7a7ae601ba023bff4f}\index{mqtt\_manager.h@{mqtt\_manager.h}!mqtt\_manager\_start@{mqtt\_manager\_start}}
+\index{mqtt\_manager\_start@{mqtt\_manager\_start}!mqtt\_manager.h@{mqtt\_manager.h}}
+\doxysubsubsection{\texorpdfstring{mqtt\_manager\_start()}{mqtt\_manager\_start()}}
+{\footnotesize\ttfamily \label{mqtt__manager_8h_aade8d25902d34a7a7ae601ba023bff4f} 
+void mqtt\+\_\+manager\+\_\+start (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa y pone en marcha el cliente MQTT. 
+
+Inicializa y arranca el cliente MQTT.
+
+Configura el cliente MQTT, registra los eventos asociados y establece la conexión con el broker configurado.
+
+Inicializa y pone en marcha el cliente MQTT.
+
+Crea el grupo de eventos utilizado para sincronización, configura el cliente MQTT, registra el manejador de eventos y establece la conexión con el broker configurado. 
+
+Definición en la línea \doxymbox{\hyperlink{mqtt__manager_8c_source_l00145}{145}} del archivo \doxymbox{\hyperlink{mqtt__manager_8c_source}{mqtt\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00146\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{00148\ \ \ \ \ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ =\ xEventGroupCreate();}
+\DoxyCodeLine{00150\ \ \ \ \ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{00153\ \ \ \ \ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}No\ se\ pudo\ crear\ grupo\ de\ eventos\ MQTT"{}});}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00156\ \ \ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ xEventGroupClearBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}});}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ !=\ NULL)}
+\DoxyCodeLine{00162\ \ \ \ \ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00164\ \ \ \ \ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ esp\_mqtt\_client\_config\_t\ mqtt\_cfg\ =\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ .broker.address.uri\ =\ \doxymbox{\hyperlink{mqtt__manager_8c_a547a77358f516584c3c31c6c69983b4e}{MQTT\_BROKER\_URI}},}
+\DoxyCodeLine{00168\ \ \ \ \ \};}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ =\ esp\_mqtt\_client\_init(\&mqtt\_cfg);}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ ==\ NULL)}
+\DoxyCodeLine{00172\ \ \ \ \ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}No\ se\ pudo\ crear\ cliente\ MQTT"{}});}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00175\ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ esp\_mqtt\_client\_register\_event(}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}},}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ ESP\_EVENT\_ANY\_ID,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aa52dab722f8622a7067617397f9c7d88}{mqtt\_event\_handler}},}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ NULL);}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Conectando\ a\ broker\ MQTT:\ \%s"{}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a547a77358f516584c3c31c6c69983b4e}{MQTT\_BROKER\_URI}});}
+\DoxyCodeLine{00184\ \ \ \ \ esp\_mqtt\_client\_start(\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}});}
+\DoxyCodeLine{00185\ \}}
+
+\end{DoxyCode}
+\Hypertarget{mqtt__manager_8h_a9d085201987e683cf0725e1cdc249d5f}\index{mqtt\_manager.h@{mqtt\_manager.h}!mqtt\_manager\_stop@{mqtt\_manager\_stop}}
+\index{mqtt\_manager\_stop@{mqtt\_manager\_stop}!mqtt\_manager.h@{mqtt\_manager.h}}
+\doxysubsubsection{\texorpdfstring{mqtt\_manager\_stop()}{mqtt\_manager\_stop()}}
+{\footnotesize\ttfamily \label{mqtt__manager_8h_a9d085201987e683cf0725e1cdc249d5f} 
+void mqtt\+\_\+manager\+\_\+stop (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Detiene el cliente MQTT. 
+
+Detiene el servicio MQTT.
+
+Finaliza la conexión con el broker y libera los recursos utilizados por el módulo.
+
+Detiene el cliente MQTT.
+
+Finaliza la conexión con el broker, destruye el cliente MQTT y limpia los bits de sincronización utilizados por el sistema. 
+
+Definición en la línea \doxymbox{\hyperlink{mqtt__manager_8c_source_l00276}{276}} del archivo \doxymbox{\hyperlink{mqtt__manager_8c_source}{mqtt\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00277\ \{}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ !=\ NULL)}
+\DoxyCodeLine{00279\ \ \ \ \ \{}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ esp\_mqtt\_client\_stop(\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}});}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ esp\_mqtt\_client\_destroy(\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}});}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ =\ NULL;}
+\DoxyCodeLine{00283\ \ \ \ \ \}}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ !=\ NULL)}
+\DoxyCodeLine{00286\ \ \ \ \ \{}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ xEventGroupClearBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}});}
+\DoxyCodeLine{00289\ \ \ \ \ \}}
+\DoxyCodeLine{00290\ \}}
+
+\end{DoxyCode}
+\Hypertarget{mqtt__manager_8h_a0aa78fdc87dda9713ff09eefc5d1bfb8}\index{mqtt\_manager.h@{mqtt\_manager.h}!mqtt\_publish@{mqtt\_publish}}
+\index{mqtt\_publish@{mqtt\_publish}!mqtt\_manager.h@{mqtt\_manager.h}}
+\doxysubsubsection{\texorpdfstring{mqtt\_publish()}{mqtt\_publish()}}
+{\footnotesize\ttfamily \label{mqtt__manager_8h_a0aa78fdc87dda9713ff09eefc5d1bfb8} 
+bool mqtt\+\_\+publish (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{topic}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{payload}{, }\item[{int}]{qos}{, }\item[{uint32\+\_\+t}]{timeout\+\_\+ms}{}\end{DoxyParamCaption})}
+
+
+
+Publica un mensaje en un tópico MQTT. 
+
+Envía una cadena de texto a un tópico específico utilizando el nivel de calidad de servicio (QoS) indicado.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em topic} & Tópico MQTT de destino. \\
+\hline
+{\em payload} & Mensaje a publicar. \\
+\hline
+{\em qos} & Nivel de QoS utilizado en la publicación. \\
+\hline
+{\em timeout\+\_\+ms} & Tiempo máximo de espera para completar la operación.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si la publicación fue exitosa. 
+
+false si ocurrió un error o timeout.
+\end{DoxyReturn}
+Envía un mensaje al broker MQTT utilizando el nivel de QoS especificado.
+
+Para QoS mayores a cero, la función espera la confirmación de publicación mediante Event Groups.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em topic} & Tópico MQTT de destino. \\
+\hline
+{\em payload} & Mensaje a publicar. \\
+\hline
+{\em qos} & Nivel de calidad de servicio. \\
+\hline
+{\em timeout\+\_\+ms} & Tiempo máximo de espera para la confirmación.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si la publicación fue exitosa. 
+
+false si ocurrió un error o timeout. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{mqtt__manager_8c_source_l00232}{232}} del archivo \doxymbox{\hyperlink{mqtt__manager_8c_source}{mqtt\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00233\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ ==\ NULL\ ||\ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{00235\ \ \ \ \ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00237\ \ \ \ \ \}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ xEventGroupClearBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}});}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keywordtype}{int}\ msg\_id\ =\ esp\_mqtt\_client\_publish(}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}},}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ topic,}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ payload,}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ qos,}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ 0);}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordflow}{if}\ (msg\_id\ <\ 0)}
+\DoxyCodeLine{00250\ \ \ \ \ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}No\ se\ pudo\ publicar\ en\ MQTT"{}});}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00253\ \ \ \ \ \}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keywordflow}{if}\ (qos\ ==\ 0)}
+\DoxyCodeLine{00256\ \ \ \ \ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00258\ \ \ \ \ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ EventBits\_t\ bits\ =\ xEventGroupWaitBits(}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}},}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(timeout\_ms));}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keywordflow}{return}\ (bits\ \&\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}})\ !=\ 0;}
+\DoxyCodeLine{00268\ \}}
+
+\end{DoxyCode}
+\Hypertarget{mqtt__manager_8h_abc2b7e54cf9f610d6ce01fcc17a56aa9}\index{mqtt\_manager.h@{mqtt\_manager.h}!mqtt\_wait\_connected@{mqtt\_wait\_connected}}
+\index{mqtt\_wait\_connected@{mqtt\_wait\_connected}!mqtt\_manager.h@{mqtt\_manager.h}}
+\doxysubsubsection{\texorpdfstring{mqtt\_wait\_connected()}{mqtt\_wait\_connected()}}
+{\footnotesize\ttfamily \label{mqtt__manager_8h_abc2b7e54cf9f610d6ce01fcc17a56aa9} 
+bool mqtt\+\_\+wait\+\_\+connected (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{timeout\+\_\+ms}{}\end{DoxyParamCaption})}
+
+
+
+Espera hasta que se establezca la conexión MQTT. 
+
+Espera la conexión con el broker MQTT.
+
+Bloquea la ejecución hasta que el cliente MQTT se conecte al broker o hasta que expire el tiempo de espera.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em timeout\+\_\+ms} & Tiempo máximo de espera en milisegundos.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si la conexión se estableció correctamente. 
+
+false si ocurrió un timeout o error de conexión.
+\end{DoxyReturn}
+Espera hasta que se establezca la conexión MQTT.
+
+La función bloquea la ejecución hasta que se reciba el evento de conexión o se alcance el tiempo máximo especificado.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em timeout\+\_\+ms} & Tiempo máximo de espera en milisegundos.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si se estableció la conexión. 
+
+false si ocurrió timeout o error. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{mqtt__manager_8c_source_l00198}{198}} del archivo \doxymbox{\hyperlink{mqtt__manager_8c_source}{mqtt\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00199\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{00201\ \ \ \ \ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00203\ \ \ \ \ \}}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ EventBits\_t\ bits\ =\ xEventGroupWaitBits(}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}},}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(timeout\_ms));}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordflow}{return}\ (bits\ \&\ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}})\ !=\ 0;}
+\DoxyCodeLine{00213\ \}}
+
+\end{DoxyCode}

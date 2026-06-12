@@ -1,0 +1,166 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+mqtt.h}
+\hypertarget{task__mqtt_8h}{}\label{task__mqtt_8h}\index{main/tasks/task\_mqtt.h@{main/tasks/task\_mqtt.h}}
+
+
+Declaración de la tarea de comunicación MQTT.  
+
+
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__mqtt_8h_a376c1e55c392503ef2bd96eedae58a21}{task\+\_\+mqtt}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea principal de publicación MQTT. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Declaración de la tarea de comunicación MQTT. 
+
+Este módulo define la tarea responsable de publicar los datos del sistema en un broker MQTT para monitoreo remoto.
+
+La tarea recibe mediciones provenientes de los sensores mediante una cola Free\+RTOS y realiza su envío utilizando el módulo mqtt\+\_\+manager.
+
+Funciones principales:\+
+\begin{DoxyItemize}
+\item Recepción de datos de sensores.
+\item Formateo de mensajes MQTT.
+\item Publicación en tópicos MQTT.
+\item Monitoreo del estado de conexión.
+\end{DoxyItemize}
+
+Arquitectura:\+
+
+queue\+\_\+mqtt \texorpdfstring{$\vert$}{|} v task\+\_\+mqtt \texorpdfstring{$\vert$}{|} v Broker MQTT
+
+Esta tarea desacopla las comunicaciones de red de las tareas de adquisición y control del sistema.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{task__mqtt_8h_source}{task\+\_\+mqtt.\+h}}.
+
+
+
+\label{task__mqtt_8h_doc-func-members}
+\Hypertarget{task__mqtt_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__mqtt_8h_a376c1e55c392503ef2bd96eedae58a21}\index{task\_mqtt.h@{task\_mqtt.h}!task\_mqtt@{task\_mqtt}}
+\index{task\_mqtt@{task\_mqtt}!task\_mqtt.h@{task\_mqtt.h}}
+\doxysubsubsection{\texorpdfstring{task\_mqtt()}{task\_mqtt()}}
+{\footnotesize\ttfamily \label{task__mqtt_8h_a376c1e55c392503ef2bd96eedae58a21} 
+void task\+\_\+mqtt (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea principal de publicación MQTT. 
+
+Tarea principal de comunicación MQTT.
+
+Espera datos provenientes de queue\+\_\+mqtt, genera los mensajes correspondientes y los publica en el broker MQTT.
+
+La tarea opera de forma independiente para evitar que las latencias de red afecten la adquisición de sensores o la ejecución de la lógica de control.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados).\\
+\hline
+\end{DoxyParams}
+Tarea principal de publicación MQTT.
+
+Espera nuevas mediciones desde queue\+\_\+mqtt, genera el payload JSON correspondiente y realiza la publicación en el broker MQTT.
+
+En caso de fallo:\+
+\begin{DoxyItemize}
+\item El dato se almacena en SD.
+\item Se reintentará posteriormente.
+\end{DoxyItemize}
+
+Una vez finalizado el proceso, se notifica a task\+\_\+energia para continuar el ciclo operativo.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+
+
+Definición en la línea \doxymbox{\hyperlink{task__mqtt_8c_source_l00231}{231}} del archivo \doxymbox{\hyperlink{task__mqtt_8c_source}{task\+\_\+mqtt.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00232\ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}\ data;}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordtype}{char}\ payload[\doxymbox{\hyperlink{task__mqtt_8c_a2fdbe826e17a13bf27012646c9b74635}{MQTT\_PENDING\_PAYLOAD\_SIZE}}];}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)}
+\DoxyCodeLine{00237\ \ \ \ \ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xQueueReceive(}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a526da114a431a9b62400f5080beb70da}{queue\_mqtt}},}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&data,}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY))}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__mqtt_8c_a666538dbb24b20eaa9b931665337dda1}{build\_payload}}(}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&data,}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ payload,}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(payload));}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ printf(}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}MQTT\ payload\ -\/>\ \%s\(\backslash\)n"{}},}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ payload);}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aade8d25902d34a7a7ae601ba023bff4f}{mqtt\_manager\_start}}();}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{mqtt__manager_8c_abc2b7e54cf9f610d6ce01fcc17a56aa9}{mqtt\_wait\_connected}}(}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__mqtt_8c_a26528eb0ea53fcc2f08b0a31e0d918e5}{MQTT\_CONNECT\_TIMEOUT\_MS}}))}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}MQTT\ no\ conectado\(\backslash\)n"{}});}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__mqtt_8c_ad319f078b1f8cc29d7ef190e6634d758}{save\_pending\_payload}}(payload);}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a9d085201987e683cf0725e1cdc249d5f}{mqtt\_manager\_stop}}();}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xTaskNotifyGive(}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\_energia\_handle}});}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{task__mqtt_8c_a0aa1439b5051346af3120c189cf56f16}{resend\_pending\_mqtt\_messages}}())}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}No\ se\ pudieron\ reenviar\ todos\ los\ pendientes\ MQTT\(\backslash\)n"{}});}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__mqtt_8c_ad319f078b1f8cc29d7ef190e6634d758}{save\_pending\_payload}}(payload);}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a9d085201987e683cf0725e1cdc249d5f}{mqtt\_manager\_stop}}();}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xTaskNotifyGive(}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\_energia\_handle}});}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_a0aa78fdc87dda9713ff09eefc5d1bfb8}{mqtt\_publish}}(}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__mqtt_8c_a400d28e1af2bcd57bf651dc23290a6d3}{MQTT\_TOPIC}},}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ payload,}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1,}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__mqtt_8c_a171ce00cd4c77b8836211f14d77df95e}{MQTT\_PUBLISH\_TIMEOUT\_MS}}))}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Dato\ publicado\ por\ MQTT\(\backslash\)n"{}});}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Error\ publicando\ por\ MQTT"{}});}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__mqtt_8c_ad319f078b1f8cc29d7ef190e6634d758}{save\_pending\_payload}}(payload);}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a9d085201987e683cf0725e1cdc249d5f}{mqtt\_manager\_stop}}();}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ xTaskNotifyGive(}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\_energia\_handle}});}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00303\ \ \ \ \ \}}
+\DoxyCodeLine{00304\ \}}
+
+\end{DoxyCode}

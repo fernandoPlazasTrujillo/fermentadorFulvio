@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Archivo de código fuente main/utils/queues.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('queues_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">queues.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="queues_8h.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#ifndef QUEUES_H</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#define QUEUES_H</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#include &quot;freertos/FreeRTOS.h&quot;</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#include &quot;freertos/queue.h&quot;</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#include &quot;<a class="code" href="data__types_8h.html">utils/data_types.h</a>&quot;</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="keyword">extern</span> QueueHandle_t <a class="code hl_variable" href="queues_8c.html#a9ac1175b5e7231953bed172a42b5161d">queue_sensores</a>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="keyword">extern</span> QueueHandle_t <a class="code hl_variable" href="queues_8c.html#ae944909fe4a2b18292a96cdb6bef3d1c">queue_control</a>;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="keyword">extern</span> QueueHandle_t <a class="code hl_variable" href="queues_8c.html#a84471e3465c562d8336b3c2366b605cb">queue_logger</a>;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="keyword">extern</span> QueueHandle_t <a class="code hl_variable" href="queues_8c.html#a526da114a431a9b62400f5080beb70da">queue_mqtt</a>;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keyword">extern</span> QueueHandle_t <a class="code hl_variable" href="queues_8c.html#ac32bf9d351fcc767fdcadd39574eb74c">queue_display</a>;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="keywordtype">void</span> <a class="code hl_function" href="queues_8h.html#a28e124a6b8d5d663be75b1649f51e44a">queues_init</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="preprocessor">#endif </span><span class="comment">/* QUEUES_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="adata__types_8h_html"><div class="ttname"><a href="data__types_8h.html">data_types.h</a></div><div class="ttdoc">Definición de estructuras de datos compartidas del sistema.</div></div>
+<div class="ttc" id="aqueues_8c_html_a526da114a431a9b62400f5080beb70da"><div class="ttname"><a href="queues_8c.html#a526da114a431a9b62400f5080beb70da">queue_mqtt</a></div><div class="ttdeci">QueueHandle_t queue_mqtt</div><div class="ttdoc">Cola para publicación MQTT.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00067">queues.c:67</a></div></div>
+<div class="ttc" id="aqueues_8c_html_a84471e3465c562d8336b3c2366b605cb"><div class="ttname"><a href="queues_8c.html#a84471e3465c562d8336b3c2366b605cb">queue_logger</a></div><div class="ttdeci">QueueHandle_t queue_logger</div><div class="ttdoc">Cola para almacenamiento de datos.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00059">queues.c:59</a></div></div>
+<div class="ttc" id="aqueues_8c_html_a9ac1175b5e7231953bed172a42b5161d"><div class="ttname"><a href="queues_8c.html#a9ac1175b5e7231953bed172a42b5161d">queue_sensores</a></div><div class="ttdeci">QueueHandle_t queue_sensores</div><div class="ttdoc">Cola de datos provenientes de sensores.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00043">queues.c:43</a></div></div>
+<div class="ttc" id="aqueues_8c_html_ac32bf9d351fcc767fdcadd39574eb74c"><div class="ttname"><a href="queues_8c.html#ac32bf9d351fcc767fdcadd39574eb74c">queue_display</a></div><div class="ttdeci">QueueHandle_t queue_display</div><div class="ttdoc">Cola de actualización de pantalla.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00075">queues.c:75</a></div></div>
+<div class="ttc" id="aqueues_8c_html_ae944909fe4a2b18292a96cdb6bef3d1c"><div class="ttname"><a href="queues_8c.html#ae944909fe4a2b18292a96cdb6bef3d1c">queue_control</a></div><div class="ttdeci">QueueHandle_t queue_control</div><div class="ttdoc">Cola de comandos de control.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00051">queues.c:51</a></div></div>
+<div class="ttc" id="aqueues_8h_html_a28e124a6b8d5d663be75b1649f51e44a"><div class="ttname"><a href="queues_8h.html#a28e124a6b8d5d663be75b1649f51e44a">queues_init</a></div><div class="ttdeci">void queues_init(void)</div><div class="ttdoc">Inicializa todas las colas del sistema.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00090">queues.c:90</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_babc61dbcb95c33f0eafde3d36fed87e.html">utils</a></li><li class="navelem"><a href="queues_8h.html">queues.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

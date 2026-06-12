@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/tasks/task_logger.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('task__logger_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo task_logger.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Declaración de la tarea de registro de datos.  
+<a href="#details">Más...</a></p>
+
+<p><a href="task__logger_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:af38783d3b22fb6c2783f14a88308c330" id="r_af38783d3b22fb6c2783f14a88308c330"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af38783d3b22fb6c2783f14a88308c330">task_logger</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:af38783d3b22fb6c2783f14a88308c330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tarea principal de registro de datos.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Declaración de la tarea de registro de datos. </p>
+<p>Este módulo define la tarea responsable de almacenar las mediciones generadas durante el proceso de fermentación.</p>
+<p>La tarea recibe datos provenientes de los sensores mediante una cola FreeRTOS, los formatea adecuadamente y los registra en la tarjeta SD para su posterior análisis.</p>
+<p>Funciones principales:</p><ul>
+<li>Recepción de mediciones del sistema.</li>
+<li>Formateo de registros en formato CSV.</li>
+<li>Almacenamiento persistente en tarjeta SD.</li>
+<li>Conservación del historial de fermentación.</li>
+</ul>
+<p>Arquitectura:</p>
+<p>queue_logger | v task_logger | v SD Card</p>
+<p>Esta tarea permite desacoplar el almacenamiento de datos de las tareas de adquisición y control.</p>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="task__logger_8h_source.html">task_logger.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="af38783d3b22fb6c2783f14a88308c330" name="af38783d3b22fb6c2783f14a88308c330"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af38783d3b22fb6c2783f14a88308c330">&#9670;&#160;</a></span>task_logger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void task_logger </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>pvParameters</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tarea principal de registro de datos. </p>
+<p>Espera información proveniente de queue_logger, genera registros en formato CSV y los almacena en la tarjeta SD.</p>
+<p>La tarea se ejecuta de forma independiente para evitar que las operaciones de escritura afecten el tiempo de respuesta de las tareas críticas del sistema.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td>Parámetros de la tarea (no utilizados).</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Espera mediciones provenientes de queue_logger, genera una línea en formato CSV y la almacena en la tarjeta SD.</p>
+<p>Cada registro contiene:</p><ul>
+<li>Fecha.</li>
+<li>Hora.</li>
+<li>Temperatura.</li>
+<li>pH.</li>
+<li>CO2 procesado.</li>
+<li>CO2 crudo.</li>
+<li>Voltaje.</li>
+<li>Corriente.</li>
+</ul>
+<p>La tarea permanece bloqueada mientras no existan nuevos datos disponibles, optimizando el uso de CPU.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td>Parámetros de la tarea (no utilizados). </td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Buffer utilizado para generar la línea CSV.</p>
+<p>Inicializar tarjeta SD.</p>
+<p>Esperar nuevos datos para registrar.</p>
+<p>Generar registro CSV.</p>
+<p>Almacenar registro en tarjeta SD.</p>
+
+<p class="definition">Definición en la línea <a class="el" href="task__logger_8c_source.html#l00077">77</a> del archivo <a class="el" href="task__logger_8c_source.html">task_logger.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   78</span>{</div>
+<div class="line"><span class="lineno">   79</span>    <a class="code hl_struct" href="structsensor__data__t.html">sensor_data_t</a> data;</div>
+<div class="line"><span class="lineno">   80</span></div>
+<div class="line"><span class="lineno">   84</span>    <span class="keywordtype">char</span> line[160];</div>
+<div class="line"><span class="lineno">   85</span></div>
+<div class="line"><span class="lineno">   89</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="sd__card_8c.html#ad78a50dfc8be1e28effacc58f9a18aa1">sd_card_init</a>() != ESP_OK)</div>
+<div class="line"><span class="lineno">   90</span>    {</div>
+<div class="line"><span class="lineno">   91</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;SD no inicializada&quot;</span>);</div>
+<div class="line"><span class="lineno">   92</span>    }</div>
+<div class="line"><span class="lineno">   93</span> </div>
+<div class="line"><span class="lineno">   94</span>    <span class="keywordflow">while</span> (1)</div>
+<div class="line"><span class="lineno">   95</span>    {</div>
+<div class="line"><span class="lineno">   99</span>        <span class="keywordflow">if</span> (xQueueReceive(</div>
+<div class="line"><span class="lineno">  100</span>                <a class="code hl_variable" href="queues_8c.html#a84471e3465c562d8336b3c2366b605cb">queue_logger</a>,</div>
+<div class="line"><span class="lineno">  101</span>                &amp;data,</div>
+<div class="line"><span class="lineno">  102</span>                portMAX_DELAY))</div>
+<div class="line"><span class="lineno">  103</span>        {</div>
+<div class="line"><span class="lineno">  107</span>            snprintf(</div>
+<div class="line"><span class="lineno">  108</span>                line,</div>
+<div class="line"><span class="lineno">  109</span>                <span class="keyword">sizeof</span>(line),</div>
+<div class="line"><span class="lineno">  110</span>                <span class="stringliteral">&quot;%02d-%02d-%04d, %02d:%02d:%02d, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f&quot;</span>,</div>
+<div class="line"><span class="lineno">  111</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a7d05b78837724317acaaefe8de6a7a89">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#afabded25c81cb29402963646e458e652">day</a>,</div>
+<div class="line"><span class="lineno">  112</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a7d05b78837724317acaaefe8de6a7a89">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#a69a3491a78234c70fcd6dbdf7cd4c8c4">month</a>,</div>
+<div class="line"><span class="lineno">  113</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a7d05b78837724317acaaefe8de6a7a89">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#ad8118505f760f56db69081b45943b9d4">year</a>,</div>
+<div class="line"><span class="lineno">  114</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a7d05b78837724317acaaefe8de6a7a89">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#aff39f3c2079c7d3c0f465f9eb1e566b8">hours</a>,</div>
+<div class="line"><span class="lineno">  115</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a7d05b78837724317acaaefe8de6a7a89">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#aa0c767273ddef75d440a6650691b7f8e">minutes</a>,</div>
+<div class="line"><span class="lineno">  116</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a7d05b78837724317acaaefe8de6a7a89">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#a059ad89b95fd58b6e782970181f0ac64">seconds</a>,</div>
+<div class="line"><span class="lineno">  117</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#ae9f44daaf071cadf9887239f0913af12">temperatura</a>,</div>
+<div class="line"><span class="lineno">  118</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#abddfa565d5cd714994d766dc490f1f45">ph</a>,</div>
+<div class="line"><span class="lineno">  119</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a1ac52f75cb0a613148535e9cbb60dc8f">co2</a>,</div>
+<div class="line"><span class="lineno">  120</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a826880ddf83c7c8a9ef2d7610659d288">co2_raw</a>,</div>
+<div class="line"><span class="lineno">  121</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#a5826cdd684b224914026f072905a43b1">voltaje</a>,</div>
+<div class="line"><span class="lineno">  122</span>                data.<a class="code hl_variable" href="structsensor__data__t.html#acb48cb4500b3a3a5174c92620c5a04f7">corriente</a>);</div>
+<div class="line"><span class="lineno">  123</span> </div>
+<div class="line"><span class="lineno">  124</span>            ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;LOG -&gt; %s&quot;</span>, line);</div>
+<div class="line"><span class="lineno">  125</span></div>
+<div class="line"><span class="lineno">  129</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="sd__card_8c.html#a44ca2b4d5f9ee8fdb3a5cedd19f2b334">sd_card_write_line</a>(line) != ESP_OK)</div>
+<div class="line"><span class="lineno">  130</span>            {</div>
+<div class="line"><span class="lineno">  131</span>                ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error escribiendo en SD&quot;</span>);</div>
+<div class="line"><span class="lineno">  132</span>            }</div>
+<div class="line"><span class="lineno">  133</span>            <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  134</span>            {</div>
+<div class="line"><span class="lineno">  135</span>                ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Dato guardado en SD&quot;</span>);</div>
+<div class="line"><span class="lineno">  136</span>            }</div>
+<div class="line"><span class="lineno">  137</span>        }</div>
+<div class="line"><span class="lineno">  138</span>    }</div>
+<div class="line"><span class="lineno">  139</span>}</div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+<div class="ttc" id="aqueues_8c_html_a84471e3465c562d8336b3c2366b605cb"><div class="ttname"><a href="queues_8c.html#a84471e3465c562d8336b3c2366b605cb">queue_logger</a></div><div class="ttdeci">QueueHandle_t queue_logger</div><div class="ttdoc">Cola para almacenamiento de datos.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00059">queues.c:59</a></div></div>
+<div class="ttc" id="asd__card_8c_html_a44ca2b4d5f9ee8fdb3a5cedd19f2b334"><div class="ttname"><a href="sd__card_8c.html#a44ca2b4d5f9ee8fdb3a5cedd19f2b334">sd_card_write_line</a></div><div class="ttdeci">esp_err_t sd_card_write_line(const char *line)</div><div class="ttdoc">Escribe una línea en el archivo log.csv de la SD.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00190">sd_card.c:190</a></div></div>
+<div class="ttc" id="asd__card_8c_html_ad78a50dfc8be1e28effacc58f9a18aa1"><div class="ttname"><a href="sd__card_8c.html#ad78a50dfc8be1e28effacc58f9a18aa1">sd_card_init</a></div><div class="ttdeci">esp_err_t sd_card_init(void)</div><div class="ttdoc">Inicializa y monta la tarjeta SD.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00112">sd_card.c:112</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_a059ad89b95fd58b6e782970181f0ac64"><div class="ttname"><a href="structdatetime__t.html#a059ad89b95fd58b6e782970181f0ac64">datetime_t::seconds</a></div><div class="ttdeci">uint8_t seconds</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00042">data_types.h:42</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_a69a3491a78234c70fcd6dbdf7cd4c8c4"><div class="ttname"><a href="structdatetime__t.html#a69a3491a78234c70fcd6dbdf7cd4c8c4">datetime_t::month</a></div><div class="ttdeci">uint8_t month</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00046">data_types.h:46</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_aa0c767273ddef75d440a6650691b7f8e"><div class="ttname"><a href="structdatetime__t.html#aa0c767273ddef75d440a6650691b7f8e">datetime_t::minutes</a></div><div class="ttdeci">uint8_t minutes</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00043">data_types.h:43</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_ad8118505f760f56db69081b45943b9d4"><div class="ttname"><a href="structdatetime__t.html#ad8118505f760f56db69081b45943b9d4">datetime_t::year</a></div><div class="ttdeci">uint16_t year</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00047">data_types.h:47</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_afabded25c81cb29402963646e458e652"><div class="ttname"><a href="structdatetime__t.html#afabded25c81cb29402963646e458e652">datetime_t::day</a></div><div class="ttdeci">uint8_t day</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00045">data_types.h:45</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_aff39f3c2079c7d3c0f465f9eb1e566b8"><div class="ttname"><a href="structdatetime__t.html#aff39f3c2079c7d3c0f465f9eb1e566b8">datetime_t::hours</a></div><div class="ttdeci">uint8_t hours</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00044">data_types.h:44</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html"><div class="ttname"><a href="structsensor__data__t.html">sensor_data_t</a></div><div class="ttdoc">Datos adquiridos por los sensores del sistema.</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00063">data_types.h:64</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html_a1ac52f75cb0a613148535e9cbb60dc8f"><div class="ttname"><a href="structsensor__data__t.html#a1ac52f75cb0a613148535e9cbb60dc8f">sensor_data_t::co2</a></div><div class="ttdeci">float co2</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00067">data_types.h:67</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html_a5826cdd684b224914026f072905a43b1"><div class="ttname"><a href="structsensor__data__t.html#a5826cdd684b224914026f072905a43b1">sensor_data_t::voltaje</a></div><div class="ttdeci">float voltaje</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00070">data_types.h:70</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html_a7d05b78837724317acaaefe8de6a7a89"><div class="ttname"><a href="structsensor__data__t.html#a7d05b78837724317acaaefe8de6a7a89">sensor_data_t::datetime</a></div><div class="ttdeci">datetime_t datetime</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00073">data_types.h:73</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html_a826880ddf83c7c8a9ef2d7610659d288"><div class="ttname"><a href="structsensor__data__t.html#a826880ddf83c7c8a9ef2d7610659d288">sensor_data_t::co2_raw</a></div><div class="ttdeci">float co2_raw</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00068">data_types.h:68</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html_abddfa565d5cd714994d766dc490f1f45"><div class="ttname"><a href="structsensor__data__t.html#abddfa565d5cd714994d766dc490f1f45">sensor_data_t::ph</a></div><div class="ttdeci">float ph</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00066">data_types.h:66</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html_acb48cb4500b3a3a5174c92620c5a04f7"><div class="ttname"><a href="structsensor__data__t.html#acb48cb4500b3a3a5174c92620c5a04f7">sensor_data_t::corriente</a></div><div class="ttdeci">float corriente</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00071">data_types.h:71</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html_ae9f44daaf071cadf9887239f0913af12"><div class="ttname"><a href="structsensor__data__t.html#ae9f44daaf071cadf9887239f0913af12">sensor_data_t::temperatura</a></div><div class="ttdeci">float temperatura</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00065">data_types.h:65</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_76dd8867a16d204aa2db31affc56d971.html">tasks</a></li><li class="navelem"><a href="task__logger_8h.html">task_logger.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

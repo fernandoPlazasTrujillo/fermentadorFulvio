@@ -1,0 +1,109 @@
+\doxysection{task\+\_\+actuadores.\+c}
+\hypertarget{task__actuadores_8c_source}{}\label{task__actuadores_8c_source}\index{main/tasks/task\_actuadores.c@{main/tasks/task\_actuadores.c}}
+\doxymbox{\hyperlink{task__actuadores_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00029}00029\ \textcolor{preprocessor}{\#include\ "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00030}00030\ \textcolor{preprocessor}{\#include\ "{}freertos/task.h"{}}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00031}00031\ \textcolor{preprocessor}{\#include\ "{}driver/gpio.h"{}}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00032}00032\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00034}00034\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{data__types_8h}{utils/data\_types.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00035}00035\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{queues_8h}{queues.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00036}00036\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{servo_8h}{drivers/servo.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00044}00044\ \textcolor{keyword}{extern}\ TaskHandle\_t\ \doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\_energia\_handle}};}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00049}\doxymbox{\hyperlink{task__actuadores_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{00049}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}\ =\ \textcolor{stringliteral}{"{}ACTUADORES"{}};}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00051}00051\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00052}00052\ \textcolor{comment}{//\ PINES}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00053}00053\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00057}\doxymbox{\hyperlink{task__actuadores_8c_a04c091f47b05cd33db87cbb066492c68}{00057}}\ \textcolor{preprocessor}{\#define\ PIN\_BOMBA\ GPIO\_NUM\_25}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00062}\doxymbox{\hyperlink{task__actuadores_8c_ab9c7d85b16a34449359f93d0ef160af8}{00062}}\ \textcolor{preprocessor}{\#define\ PIN\_MOTOR\ GPIO\_NUM\_26}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00067}\doxymbox{\hyperlink{task__actuadores_8c_a683a2f1ac846d9e7c7f68fd29130ee1a}{00067}}\ \textcolor{preprocessor}{\#define\ PIN\_SERVO\ GPIO\_NUM\_27}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00074}\doxymbox{\hyperlink{task__actuadores_8c_a83618a6cda6ceda41ea6c705c971ca20}{00074}}\ \textcolor{preprocessor}{\#define\ MIX\_DURATION\_MS\ 20000}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00076}00076\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00077}00077\ \textcolor{comment}{//\ INIT\ GPIO\ +\ SERVO}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00078}00078\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00089}\doxymbox{\hyperlink{task__actuadores_8c_a9eb71071f666476ca3b27418af9a7c9d}{00089}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{task__actuadores_8c_a9eb71071f666476ca3b27418af9a7c9d}{actuadores\_init}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00090}00090\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00091}00091\ \ \ \ \ gpio\_config\_t\ io\_conf\ =\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00092}00092\ \ \ \ \ \ \ \ \ .pin\_bit\_mask\ =\ (1ULL\ <<\ \doxymbox{\hyperlink{task__actuadores_8c_a04c091f47b05cd33db87cbb066492c68}{PIN\_BOMBA}})\ |\ (1ULL\ <<\ \doxymbox{\hyperlink{task__actuadores_8c_ab9c7d85b16a34449359f93d0ef160af8}{PIN\_MOTOR}}),}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00093}00093\ \ \ \ \ \ \ \ \ .mode\ =\ GPIO\_MODE\_OUTPUT,}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00094}00094\ \ \ \ \ \ \ \ \ .pull\_up\_en\ =\ GPIO\_PULLUP\_DISABLE,}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ .pull\_down\_en\ =\ GPIO\_PULLDOWN\_DISABLE,}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00096}00096\ \ \ \ \ \ \ \ \ .intr\_type\ =\ GPIO\_INTR\_DISABLE}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00097}00097\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00099}00099\ \ \ \ \ gpio\_config(\&io\_conf);}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00101}00101\ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{task__actuadores_8c_a04c091f47b05cd33db87cbb066492c68}{PIN\_BOMBA}},\ 0);}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00102}00102\ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{task__actuadores_8c_ab9c7d85b16a34449359f93d0ef160af8}{PIN\_MOTOR}},\ 0);}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00104}00104\ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a6006789c547dabfec48ef14f0d9a9191}{servo\_init}}(\doxymbox{\hyperlink{task__actuadores_8c_a683a2f1ac846d9e7c7f68fd29130ee1a}{PIN\_SERVO}});}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00105}00105\ \}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00125}\doxymbox{\hyperlink{task__actuadores_8c_a500d896ff89010d54c413e2bec4ee20d}{00125}}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{task__actuadores_8c_a500d896ff89010d54c413e2bec4ee20d}{task\_actuadores}}(\textcolor{keywordtype}{void}\ *pvParameters)}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00126}00126\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00127}00127\ \ \ \ \ \doxymbox{\hyperlink{structcontrol__cmd__t}{control\_cmd\_t}}\ cmd;}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00129}00129\ \ \ \ \ \doxymbox{\hyperlink{task__actuadores_8c_a9eb71071f666476ca3b27418af9a7c9d}{actuadores\_init}}();}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00131}00131\ \ \ \ \ \textcolor{keywordtype}{bool}\ motor\_activo\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00132}00132\ \ \ \ \ TickType\_t\ motor\_start\_time\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00134}00134\ \ \ \ \ \textcolor{keywordtype}{float}\ last\_servo\_angle\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00136}00136\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Task\ actuadores\ iniciada"{}});}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00138}00138\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00140}00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xQueueReceive(\doxymbox{\hyperlink{queues_8c_ae944909fe4a2b18292a96cdb6bef3d1c}{queue\_control}},\ \&cmd,\ pdMS\_TO\_TICKS(100)))\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Ejecutando\ acciones..."{}});}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{task__actuadores_8c_a04c091f47b05cd33db87cbb066492c68}{PIN\_BOMBA}},\ cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a9bb80e4ab633a54fcb7d22d979f08054}{bomba}}\ ?\ 1\ :\ 0);}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00145}00145\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00146}00146\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a5157b8f70428717e5214f428df519c86}{servo\_angle}}\ !=\ last\_servo\_angle)\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00147}00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a76f48098c22562b7dd7185f2fc3142f7}{servo\_set\_angle}}(cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a5157b8f70428717e5214f428df519c86}{servo\_angle}});}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ last\_servo\_angle\ =\ cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a5157b8f70428717e5214f428df519c86}{servo\_angle}};}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a29ea2808b8c154a5a5b14c08af80c6ea}{mezclar}}\ \&\&\ !motor\_activo)\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Iniciando\ mezcla"{}});}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{task__actuadores_8c_ab9c7d85b16a34449359f93d0ef160af8}{PIN\_MOTOR}},\ 1);}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ motor\_activo\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ motor\_start\_time\ =\ xTaskGetTickCount();}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00160}00160\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00162}00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (motor\_activo)\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ TickType\_t\ now\ =\ xTaskGetTickCount();}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((now\ -\/\ motor\_start\_time)\ >=\ pdMS\_TO\_TICKS(\doxymbox{\hyperlink{task__actuadores_8c_a83618a6cda6ceda41ea6c705c971ca20}{MIX\_DURATION\_MS}}))\ \{}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00168}00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Deteniendo\ mezcla"{}});}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00169}00169\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{task__actuadores_8c_ab9c7d85b16a34449359f93d0ef160af8}{PIN\_MOTOR}},\ 0);}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ motor\_activo\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00173}00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xTaskNotifyGive(\doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\_energia\_handle}});}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00174}00174\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00175}00175\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00177}00177\ \ \ \ \ \ \ \ \ vTaskDelay(pdMS\_TO\_TICKS(50));}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00178}00178\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{task__actuadores_8c_source_l00179}00179\ \}}
+
+\end{DoxyCode}

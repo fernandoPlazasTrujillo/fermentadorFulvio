@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['pending_5fmqtt_5fpath_0',['pending_mqtt_path',['../sd__card_8c.html#a2e30b1b8f3af73b81aceb3e1b63fff2b',1,'sd_card.c']]],
+  ['ph_1',['ph',['../structsensor__data__t.html#abddfa565d5cd714994d766dc490f1f45',1,'sensor_data_t::ph'],['../structdisplay__data__t.html#a8229f3db2525a9976ecbc82fa7597a9a',1,'display_data_t::ph']]],
+  ['ph_5fadc_5fchannel_2',['PH_ADC_CHANNEL',['../ph__sensor_8c.html#afe07d63548e90671ed265d67e7f0df8e',1,'ph_sensor.c']]],
+  ['ph_5finit_3',['ph_init',['../ph__sensor_8c.html#ac7ceffc8562ed45df0636de74fc23eb5',1,'ph_init(void):&#160;ph_sensor.c'],['../ph__sensor_8h.html#ac7ceffc8562ed45df0636de74fc23eb5',1,'ph_init(void):&#160;ph_sensor.c']]],
+  ['ph_5fmax_5fvoltage_4',['PH_MAX_VOLTAGE',['../ph__sensor_8c.html#a6bbdd19ffa0606b6ca36388f17b9d435',1,'ph_sensor.c']]],
+  ['ph_5fmin_5fvoltage_5',['PH_MIN_VOLTAGE',['../ph__sensor_8c.html#a87abd31489e1cf7514ed303a5194c684',1,'ph_sensor.c']]],
+  ['ph_5foffset_6',['PH_OFFSET',['../ph__sensor_8c.html#ac1260df376cca2240c3820d7efd45334',1,'ph_sensor.c']]],
+  ['ph_5fread_7',['ph_read',['../ph__sensor_8c.html#a73824c716592fbbaadcf307213d31c77',1,'ph_read(void):&#160;ph_sensor.c'],['../ph__sensor_8h.html#a73824c716592fbbaadcf307213d31c77',1,'ph_read(void):&#160;ph_sensor.c']]],
+  ['ph_5fread_5fvoltage_8',['ph_read_voltage',['../ph__sensor_8c.html#ad0fdfecb914c25c0826286634e9be584',1,'ph_read_voltage(void):&#160;ph_sensor.c'],['../ph__sensor_8h.html#ad0fdfecb914c25c0826286634e9be584',1,'ph_read_voltage(void):&#160;ph_sensor.c']]],
+  ['ph_5fsensor_2ec_9',['ph_sensor.c',['../ph__sensor_8c.html',1,'']]],
+  ['ph_5fsensor_2eh_10',['ph_sensor.h',['../ph__sensor_8h.html',1,'']]],
+  ['ph_5fslope_11',['PH_SLOPE',['../ph__sensor_8c.html#acb6161a3ffb103e0367458060062d929',1,'ph_sensor.c']]],
+  ['pin_5fbomba_12',['PIN_BOMBA',['../task__actuadores_8c.html#a04c091f47b05cd33db87cbb066492c68',1,'task_actuadores.c']]],
+  ['pin_5fclk_13',['PIN_CLK',['../sd__card_8c.html#a29e4cd8304fdcdd2e715189dfaaf31c2',1,'sd_card.c']]],
+  ['pin_5fcs_14',['PIN_CS',['../sd__card_8c.html#afa592f8fcb7a301edfe97aa121fd28ce',1,'sd_card.c']]],
+  ['pin_5fmiso_15',['PIN_MISO',['../sd__card_8c.html#a46bdd417480dec5cb9cf196af3c7489c',1,'sd_card.c']]],
+  ['pin_5fmosi_16',['PIN_MOSI',['../sd__card_8c.html#abaeddda4b992af7165ed898ab8b2b4ac',1,'sd_card.c']]],
+  ['pin_5fmotor_17',['PIN_MOTOR',['../task__actuadores_8c.html#ab9c7d85b16a34449359f93d0ef160af8',1,'task_actuadores.c']]],
+  ['pin_5fservo_18',['PIN_SERVO',['../task__actuadores_8c.html#a683a2f1ac846d9e7c7f68fd29130ee1a',1,'task_actuadores.c']]]
+];

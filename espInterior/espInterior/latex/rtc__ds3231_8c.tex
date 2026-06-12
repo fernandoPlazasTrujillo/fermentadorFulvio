@@ -1,0 +1,462 @@
+\doxysection{Referencia del archivo main/\+drivers/\+rtc\+\_\+ds3231.c}
+\hypertarget{rtc__ds3231_8c}{}\label{rtc__ds3231_8c}\index{main/drivers/rtc\_ds3231.c@{main/drivers/rtc\_ds3231.c}}
+
+
+Implementación del driver para el RTC DS3231.  
+
+
+{\ttfamily \+\#include "{}rtc\+\_\+ds3231.\+h"{}}\newline
+{\ttfamily \+\#include "{}hal/\+i2c\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+semphr.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\+\_\+\+ADDR}}~0x68
+\begin{DoxyCompactList}\small\item\em Dirección I2C del RTC DS3231. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{rtc__ds3231_8c_acb8d02ca6db63c50bcb04d6b38803d13}{DS3231\+\_\+\+CONTROL\+\_\+\+A1\+\_\+\+INTERRUPT}}~0x05
+\begin{DoxyCompactList}\small\item\em Valor de configuración del registro de control. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{rtc__ds3231_8c_a2a1750bb44d1a047f327cf54a3146ccd}{ds3231\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa el módulo RTC DS3231. \end{DoxyCompactList}\item 
+static uint8\+\_\+t \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\+\_\+to\+\_\+dec}} (uint8\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Convierte un valor codificado en BCD a decimal. \end{DoxyCompactList}\item 
+static uint8\+\_\+t \doxymbox{\hyperlink{rtc__ds3231_8c_a24b3d8dbee18df34f1133e358b959f74}{dec\+\_\+to\+\_\+bcd}} (uint8\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Convierte un valor decimal a formato BCD. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{rtc__ds3231_8c_a7d6b92b6796f068787606003b7653075}{ds3231\+\_\+get\+\_\+datetime}} (\doxymbox{\hyperlink{structdatetime__t}{datetime\+\_\+t}} \texorpdfstring{$\ast$}{*}dt)
+\begin{DoxyCompactList}\small\item\em Lee la fecha y hora actual desde el DS3231. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{rtc__ds3231_8c_a85015e3ba9b8a4e2e6e8043d78431e50}{ds3231\+\_\+clear\+\_\+alarm\+\_\+flag}} (void)
+\begin{DoxyCompactList}\small\item\em Limpia el flag de alarma del DS3231. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{rtc__ds3231_8c_ac86af95cd378d3044d6ebecd116410b1}{ds3231\+\_\+set\+\_\+alarm\+\_\+seconds}} (uint8\+\_\+t seconds)
+\begin{DoxyCompactList}\small\item\em Configura una alarma basada en coincidencia de segundos. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Semaphore\+Handle\+\_\+t \doxymbox{\hyperlink{rtc__ds3231_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\+\_\+i2c}}
+\begin{DoxyCompactList}\small\item\em Mutex compartido para acceso exclusivo al bus I2C. \end{DoxyCompactList}\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{rtc__ds3231_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}DS3231"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada por el sistema de logging. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del driver para el RTC DS3231. 
+
+Maneja la comunicación I2C para lectura de fecha/\+hora, configuración de alarmas y control del dispositivo.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Lectura de fecha y hora.
+\item Configuración de alarmas.
+\item Limpieza de flags de alarma.
+\item Conversión entre formato BCD y decimal.
+\end{DoxyItemize}
+
+El RTC DS3231 actúa como referencia temporal del sistema de fermentación y permite la generación de eventos periódicos mediante interrupciones configuradas por alarma.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+
+
+\label{rtc__ds3231_8c_doc-define-members}
+\Hypertarget{rtc__ds3231_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!DS3231\_ADDR@{DS3231\_ADDR}}
+\index{DS3231\_ADDR@{DS3231\_ADDR}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{DS3231\_ADDR}{DS3231\_ADDR}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524} 
+\+\#define DS3231\+\_\+\+ADDR~0x68}
+
+
+
+Dirección I2C del RTC DS3231. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00035}{35}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+\Hypertarget{rtc__ds3231_8c_acb8d02ca6db63c50bcb04d6b38803d13}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!DS3231\_CONTROL\_A1\_INTERRUPT@{DS3231\_CONTROL\_A1\_INTERRUPT}}
+\index{DS3231\_CONTROL\_A1\_INTERRUPT@{DS3231\_CONTROL\_A1\_INTERRUPT}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{DS3231\_CONTROL\_A1\_INTERRUPT}{DS3231\_CONTROL\_A1\_INTERRUPT}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_acb8d02ca6db63c50bcb04d6b38803d13} 
+\+\#define DS3231\+\_\+\+CONTROL\+\_\+\+A1\+\_\+\+INTERRUPT~0x05}
+
+
+
+Valor de configuración del registro de control. 
+
+INTCN = 1 -\/\texorpdfstring{$>$}{>} Modo interrupción. A1\+IE = 1 -\/\texorpdfstring{$>$}{>} Habilita interrupción de Alarm 1. 
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00043}{43}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+
+
+\label{rtc__ds3231_8c_doc-func-members}
+\Hypertarget{rtc__ds3231_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!bcd\_to\_dec@{bcd\_to\_dec}}
+\index{bcd\_to\_dec@{bcd\_to\_dec}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{bcd\_to\_dec()}{bcd\_to\_dec()}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd} 
+uint8\+\_\+t bcd\+\_\+to\+\_\+dec (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Convierte un valor codificado en BCD a decimal. 
+
+El DS3231 almacena los valores de fecha y hora en formato Binary Coded Decimal (BCD), por lo que es necesario convertirlos antes de utilizarlos en la aplicación.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em val} & Valor en formato BCD.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Valor equivalente en decimal. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00092}{92}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00093\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordflow}{return}\ (val\ >>\ 4)\ *\ 10\ +\ (val\ \&\ 0x0F);}
+\DoxyCodeLine{00095\ \}}
+
+\end{DoxyCode}
+\Hypertarget{rtc__ds3231_8c_a24b3d8dbee18df34f1133e358b959f74}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!dec\_to\_bcd@{dec\_to\_bcd}}
+\index{dec\_to\_bcd@{dec\_to\_bcd}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{dec\_to\_bcd()}{dec\_to\_bcd()}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_a24b3d8dbee18df34f1133e358b959f74} 
+uint8\+\_\+t dec\+\_\+to\+\_\+bcd (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Convierte un valor decimal a formato BCD. 
+
+Utilizado para escribir configuraciones de tiempo y alarmas en los registros internos del DS3231.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em val} & Valor decimal.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Valor equivalente en formato BCD. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00107}{107}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00108\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{return}\ ((val\ /\ 10)\ <<\ 4)\ |\ (val\ \%\ 10);}
+\DoxyCodeLine{00110\ \}}
+
+\end{DoxyCode}
+\Hypertarget{rtc__ds3231_8c_a85015e3ba9b8a4e2e6e8043d78431e50}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!ds3231\_clear\_alarm\_flag@{ds3231\_clear\_alarm\_flag}}
+\index{ds3231\_clear\_alarm\_flag@{ds3231\_clear\_alarm\_flag}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{ds3231\_clear\_alarm\_flag()}{ds3231\_clear\_alarm\_flag()}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_a85015e3ba9b8a4e2e6e8043d78431e50} 
+esp\+\_\+err\+\_\+t ds3231\+\_\+clear\+\_\+alarm\+\_\+flag (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Limpia el flag de alarma del DS3231. 
+
+Limpia el indicador de alarma del DS3231.
+
+Borra el bit A1F del registro de estado para permitir futuras interrupciones de alarma.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Operación exitosa.
+\item ESP\+\_\+\+ERR\+\_\+\+TIMEOUT:\+ No fue posible obtener el mutex I2C.
+\end{DoxyItemize}
+\end{DoxyReturn}
+Limpia el flag de alarma del DS3231.
+
+Borra el flag de alarma almacenado en el registro de estado del dispositivo, permitiendo la generación de nuevas interrupciones.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Operación realizada correctamente.
+\item Código de error en caso de fallo. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00169}{169}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00170\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ uint8\_t\ status;}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100))\ !=\ pdTRUE)\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_ERR\_TIMEOUT;}
+\DoxyCodeLine{00175\ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a2b26a5dc8d840e8e3ab4c6d07d772f41}{i2c\_manager\_read}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x0F,\ \&status,\ 1);}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ status\ \&=\ \string~0x01;}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b}{i2c\_manager\_write}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x0F,\ \&status,\ 1);}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00186\ \}}
+
+\end{DoxyCode}
+\Hypertarget{rtc__ds3231_8c_a7d6b92b6796f068787606003b7653075}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!ds3231\_get\_datetime@{ds3231\_get\_datetime}}
+\index{ds3231\_get\_datetime@{ds3231\_get\_datetime}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{ds3231\_get\_datetime()}{ds3231\_get\_datetime()}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_a7d6b92b6796f068787606003b7653075} 
+esp\+\_\+err\+\_\+t ds3231\+\_\+get\+\_\+datetime (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structdatetime__t}{datetime\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dt}{}\end{DoxyParamCaption})}
+
+
+
+Lee la fecha y hora actual desde el DS3231. 
+
+Obtiene la fecha y hora actual del RTC.
+
+Lee los registros internos del dispositivo y convierte los valores almacenados en formato BCD a formato decimal.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em dt} & Puntero a la estructura donde se almacenará la fecha y hora obtenida.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Lectura exitosa.
+\item ESP\+\_\+\+ERR\+\_\+\+TIMEOUT:\+ No fue posible obtener el mutex I2C.
+\end{DoxyItemize}
+\end{DoxyReturn}
+Lee la fecha y hora actual desde el DS3231.
+
+Lee los registros internos del DS3231 y convierte los datos almacenados en formato BCD a formato decimal.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em dt} & Puntero a la estructura donde se almacenará la fecha y hora obtenida.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Lectura exitosa.
+\item Código de error en caso de fallo de comunicación. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00129}{129}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00130\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ uint8\_t\ data[7];}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100))\ !=\ pdTRUE)\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_ERR\_TIMEOUT;}
+\DoxyCodeLine{00135\ \ \ \ \ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a2b26a5dc8d840e8e3ab4c6d07d772f41}{i2c\_manager\_read}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x00,\ data,\ 7);}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ de\ registros\ DS3231\ almacenados }}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ en\ formato\ BCD\ hacia\ formato\ decimal. }}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00145\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_a059ad89b95fd58b6e782970181f0ac64}{seconds}}\ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[0]);}
+\DoxyCodeLine{00146\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_aa0c767273ddef75d440a6650691b7f8e}{minutes}}\ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[1]);}
+\DoxyCodeLine{00147\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_aff39f3c2079c7d3c0f465f9eb1e566b8}{hours}}\ \ \ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[2]);}
+\DoxyCodeLine{00148\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_afabded25c81cb29402963646e458e652}{day}}\ \ \ \ \ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[4]);}
+\DoxyCodeLine{00149\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_a69a3491a78234c70fcd6dbdf7cd4c8c4}{month}}\ \ \ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[5]\ \&\ 0x1F);}
+\DoxyCodeLine{00150\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_ad8118505f760f56db69081b45943b9d4}{year}}\ \ \ \ =\ 2000\ +\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[6]);}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00153\ \}}
+
+\end{DoxyCode}
+\Hypertarget{rtc__ds3231_8c_a2a1750bb44d1a047f327cf54a3146ccd}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!ds3231\_init@{ds3231\_init}}
+\index{ds3231\_init@{ds3231\_init}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{ds3231\_init()}{ds3231\_init()}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_a2a1750bb44d1a047f327cf54a3146ccd} 
+esp\+\_\+err\+\_\+t ds3231\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el módulo RTC DS3231. 
+
+Actualmente no requiere configuración específica, ya que el acceso al dispositivo se realiza bajo demanda mediante transacciones I2C.
+
+\begin{DoxyReturn}{Devuelve}
+ESP\+\_\+\+OK.
+\end{DoxyReturn}
+Verifica la comunicación con el dispositivo y prepara el acceso a los registros internos mediante I2C.
+
+Esta función debe ejecutarse durante la fase de inicialización del sistema.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Inicialización exitosa.
+\item Código de error en caso de fallo de comunicación. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00071}{71}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00072\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}DS3231\ inicializado"{}});}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00075\ \}}
+
+\end{DoxyCode}
+\Hypertarget{rtc__ds3231_8c_ac86af95cd378d3044d6ebecd116410b1}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!ds3231\_set\_alarm\_seconds@{ds3231\_set\_alarm\_seconds}}
+\index{ds3231\_set\_alarm\_seconds@{ds3231\_set\_alarm\_seconds}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{ds3231\_set\_alarm\_seconds()}{ds3231\_set\_alarm\_seconds()}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_ac86af95cd378d3044d6ebecd116410b1} 
+esp\+\_\+err\+\_\+t ds3231\+\_\+set\+\_\+alarm\+\_\+seconds (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{seconds}{}\end{DoxyParamCaption})}
+
+
+
+Configura una alarma basada en coincidencia de segundos. 
+
+Configura una alarma basada en segundos.
+
+Programa la Alarm 1 del DS3231 para generar una interrupción cuando el campo de segundos coincida con el valor indicado.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em seconds} & Segundo objetivo de activación (0-\/59).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Configuración exitosa.
+\item ESP\+\_\+\+ERR\+\_\+\+TIMEOUT:\+ No fue posible obtener el mutex I2C.
+\end{DoxyItemize}
+\end{DoxyReturn}
+Configura una alarma basada en coincidencia de segundos.
+
+Programa la alarma 1 del DS3231 para activarse cuando el valor de segundos coincida con el parámetro indicado.
+
+Esta funcionalidad puede utilizarse para generar interrupciones periódicas que despierten al sistema desde modos de bajo consumo.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em seconds} & Segundo de activación de la alarma. Rango válido:\+ 0 a 59.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Configuración exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00204}{204}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00205\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ uint8\_t\ data[4];}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ Configuración\ de\ Alarm\ 1: }}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ *\ -\/\ Coincidencia\ únicamente\ sobre\ segundos. }}
+\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ *\ -\/\ Minutos,\ horas\ y\ día\ ignorados\ mediante\ bits\ A1Mx. }}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00213\ \ \ \ \ data[0]\ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24b3d8dbee18df34f1133e358b959f74}{dec\_to\_bcd}}(seconds);}
+\DoxyCodeLine{00214\ \ \ \ \ data[1]\ =\ 0x80;}
+\DoxyCodeLine{00215\ \ \ \ \ data[2]\ =\ 0x80;}
+\DoxyCodeLine{00216\ \ \ \ \ data[3]\ =\ 0x80;}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100))\ !=\ pdTRUE)\ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_ERR\_TIMEOUT;}
+\DoxyCodeLine{00220\ \ \ \ \ \}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b}{i2c\_manager\_write}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x07,\ data,\ 4);}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ *\ INTCN\ =\ 1\ \ -\/>\ modo\ interrupción }}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ A1IE\ \ =\ 1\ \ -\/>\ habilita\ Alarm\ 1 }}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00228\ \ \ \ \ uint8\_t\ control\ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_acb8d02ca6db63c50bcb04d6b38803d13}{DS3231\_CONTROL\_A1\_INTERRUPT}};}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b}{i2c\_manager\_write}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x0E,\ \&control,\ 1);}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Alarma\ configurada\ en\ segundo:\ \%d"{}},\ seconds);}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00237\ \}}
+
+\end{DoxyCode}
+
+
+\label{rtc__ds3231_8c_doc-var-members}
+\Hypertarget{rtc__ds3231_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{rtc__ds3231_8c_a60bdaef4d905b9f3d244350633a80080}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!mutex\_i2c@{mutex\_i2c}}
+\index{mutex\_i2c@{mutex\_i2c}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{mutex\_i2c}{mutex\_i2c}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_a60bdaef4d905b9f3d244350633a80080} 
+Semaphore\+Handle\+\_\+t mutex\+\_\+i2c\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Mutex compartido para acceso exclusivo al bus I2C. 
+
+Mutex global para acceso seguro al bus I2C.
+
+Garantiza acceso seguro al RTC cuando múltiples tareas utilizan periféricos conectados al mismo bus.
+
+Mutex compartido para acceso exclusivo al bus I2C.
+
+Garantiza exclusión mutua cuando múltiples tareas intentan acceder simultáneamente a dispositivos conectados al mismo bus.
+
+Mutex global para acceso seguro al bus I2C.
+
+Utilizado por todos los periféricos que comparten el mismo bus, evitando condiciones de carrera entre tareas concurrentes. 
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00066}{66}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+
+\Hypertarget{rtc__ds3231_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{rtc\_ds3231.c@{rtc\_ds3231.c}!TAG@{TAG}}
+\index{TAG@{TAG}!rtc\_ds3231.c@{rtc\_ds3231.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{rtc__ds3231_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}DS3231"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada por el sistema de logging. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{rtc__ds3231_8c_source_l00056}{56}} del archivo \doxymbox{\hyperlink{rtc__ds3231_8c_source}{rtc\+\_\+ds3231.\+c}}.
+

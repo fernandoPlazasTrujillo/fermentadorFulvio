@@ -1,0 +1,865 @@
+\begin{theindex}
+
+  \item {actuadores\_init}
+    \subitem {task\_actuadores.c}, \hyperpage{173}
+  \item {adc1\_cali\_handle}
+    \subitem {adc\_manager.c}, \hyperpage{124}
+  \item {adc1\_handle}
+    \subitem {adc\_manager.c}, \hyperpage{124}
+  \item {adc\_manager.c}
+    \subitem {adc1\_cali\_handle}, \hyperpage{124}
+    \subitem {adc1\_handle}, \hyperpage{124}
+    \subitem {adc\_manager\_init}, \hyperpage{122}
+    \subitem {adc\_manager\_read\_voltage}, \hyperpage{123}
+    \subitem {TAG}, \hyperpage{124}
+  \item {adc\_manager.h}
+    \subitem {adc\_manager\_init}, \hyperpage{127}
+    \subitem {adc\_manager\_read\_voltage}, \hyperpage{128}
+  \item {adc\_manager\_init}
+    \subitem {adc\_manager.c}, \hyperpage{122}
+    \subitem {adc\_manager.h}, \hyperpage{127}
+  \item {adc\_manager\_read\_voltage}
+    \subitem {adc\_manager.c}, \hyperpage{123}
+    \subitem {adc\_manager.h}, \hyperpage{128}
+  \item {ADC\_OFFSET}
+    \subitem {voltage\_sensor.c}, \hyperpage{115}
+  \item {ALPHA}
+    \subitem {task\_sensores.c}, \hyperpage{219}
+  \item {app\_main}
+    \subitem {main.c}, \hyperpage{148}
+  \item {auth\_mode\_name}
+    \subitem {wifi\_manager.c}, \hyperpage{241}
+
+  \indexspace
+
+  \item {baseline}
+    \subitem {task\_sensores.c}, \hyperpage{222}
+  \item {baseline\_initialized}
+    \subitem {task\_sensores.c}, \hyperpage{222}
+  \item {bcd\_to\_dec}
+    \subitem {rtc\_ds3231.c}, \hyperpage{71}
+  \item {bomba}
+    \subitem {control\_cmd\_t}, \hyperpage{13}
+  \item {build\_payload}
+    \subitem {task\_mqtt.c}, \hyperpage{208}
+
+  \indexspace
+
+  \item {co2}
+    \subitem {display\_data\_t}, \hyperpage{16}
+    \subitem {sensor\_data\_t}, \hyperpage{18}
+  \item {co2\_raw}
+    \subitem {sensor\_data\_t}, \hyperpage{18}
+  \item {CO2\_THRESHOLD}
+    \subitem {task\_control.c}, \hyperpage{180}
+  \item {control\_cmd\_t}, \hyperpage{13}
+    \subitem {bomba}, \hyperpage{13}
+    \subitem {enfriar}, \hyperpage{13}
+    \subitem {mezclar}, \hyperpage{14}
+    \subitem {servo\_angle}, \hyperpage{14}
+  \item {corriente}
+    \subitem {sensor\_data\_t}, \hyperpage{18}
+
+  \indexspace
+
+  \item {datetime}
+    \subitem {display\_data\_t}, \hyperpage{16}
+    \subitem {sensor\_data\_t}, \hyperpage{18}
+  \item {datetime\_t}, \hyperpage{14}
+    \subitem {day}, \hyperpage{15}
+    \subitem {hours}, \hyperpage{15}
+    \subitem {minutes}, \hyperpage{15}
+    \subitem {month}, \hyperpage{15}
+    \subitem {seconds}, \hyperpage{15}
+    \subitem {year}, \hyperpage{15}
+  \item {day}
+    \subitem {datetime\_t}, \hyperpage{15}
+  \item {dec\_to\_bcd}
+    \subitem {rtc\_ds3231.c}, \hyperpage{71}
+  \item {display\_data\_t}, \hyperpage{16}
+    \subitem {co2}, \hyperpage{16}
+    \subitem {datetime}, \hyperpage{16}
+    \subitem {mqtt\_ok}, \hyperpage{16}
+    \subitem {ph}, \hyperpage{16}
+    \subitem {sd\_ok}, \hyperpage{17}
+    \subitem {temperatura}, \hyperpage{17}
+    \subitem {wifi\_ok}, \hyperpage{17}
+  \item {DIVIDER\_RATIO}
+    \subitem {voltage\_sensor.c}, \hyperpage{115}
+  \item {ds18b20.c}
+    \subitem {ds18b20\_init}, \hyperpage{22}
+    \subitem {ds18b20\_read\_temperature}, \hyperpage{23}
+    \subitem {ds\_pin}, \hyperpage{27}
+    \subitem {ow\_low}, \hyperpage{24}
+    \subitem {ow\_read}, \hyperpage{24}
+    \subitem {ow\_read\_bit}, \hyperpage{24}
+    \subitem {ow\_read\_byte}, \hyperpage{25}
+    \subitem {ow\_release}, \hyperpage{25}
+    \subitem {ow\_reset}, \hyperpage{25}
+    \subitem {ow\_write\_bit}, \hyperpage{26}
+    \subitem {ow\_write\_byte}, \hyperpage{26}
+    \subitem {TAG}, \hyperpage{27}
+  \item {ds18b20.h}
+    \subitem {ds18b20\_init}, \hyperpage{30}
+    \subitem {ds18b20\_read\_temperature}, \hyperpage{31}
+  \item {ds18b20\_init}
+    \subitem {ds18b20.c}, \hyperpage{22}
+    \subitem {ds18b20.h}, \hyperpage{30}
+  \item {ds18b20\_read\_temperature}
+    \subitem {ds18b20.c}, \hyperpage{23}
+    \subitem {ds18b20.h}, \hyperpage{31}
+  \item {DS3231\_ADDR}
+    \subitem {rtc\_ds3231.c}, \hyperpage{70}
+  \item {ds3231\_clear\_alarm\_flag}
+    \subitem {rtc\_ds3231.c}, \hyperpage{71}
+    \subitem {rtc\_ds3231.h}, \hyperpage{78}
+  \item {DS3231\_CONTROL\_A1\_INTERRUPT}
+    \subitem {rtc\_ds3231.c}, \hyperpage{70}
+  \item {ds3231\_get\_datetime}
+    \subitem {rtc\_ds3231.c}, \hyperpage{72}
+    \subitem {rtc\_ds3231.h}, \hyperpage{79}
+  \item {ds3231\_init}
+    \subitem {rtc\_ds3231.c}, \hyperpage{73}
+    \subitem {rtc\_ds3231.h}, \hyperpage{80}
+  \item {ds3231\_set\_alarm\_seconds}
+    \subitem {rtc\_ds3231.c}, \hyperpage{74}
+    \subitem {rtc\_ds3231.h}, \hyperpage{80}
+  \item {ds\_pin}
+    \subitem {ds18b20.c}, \hyperpage{27}
+
+  \indexspace
+
+  \item {enfriar}
+    \subitem {control\_cmd\_t}, \hyperpage{13}
+
+  \indexspace
+
+  \item {filtered}
+    \subitem {task\_sensores.c}, \hyperpage{222}
+  \item {font5x7}
+    \subitem {font5x7.h}, \hyperpage{33}
+  \item {font5x7.h}
+    \subitem {font5x7}, \hyperpage{33}
+  \item {framebuffer}
+    \subitem {oled\_display.c}, \hyperpage{51}
+
+  \indexspace
+
+  \item {hours}
+    \subitem {datetime\_t}, \hyperpage{15}
+
+  \indexspace
+
+  \item {i2c\_manager.c}
+    \subitem {i2c\_manager\_init}, \hyperpage{132}
+    \subitem {i2c\_manager\_read}, \hyperpage{132}
+    \subitem {i2c\_manager\_write}, \hyperpage{134}
+    \subitem {i2c\_manager\_write\_raw}, \hyperpage{135}
+    \subitem {I2C\_MASTER\_FREQ\_HZ}, \hyperpage{131}
+    \subitem {I2C\_MASTER\_NUM}, \hyperpage{131}
+    \subitem {I2C\_MASTER\_SCL\_IO}, \hyperpage{131}
+    \subitem {I2C\_MASTER\_SDA\_IO}, \hyperpage{131}
+    \subitem {mutex\_i2c}, \hyperpage{136}
+    \subitem {TAG}, \hyperpage{131}
+  \item {i2c\_manager.h}
+    \subitem {i2c\_manager\_init}, \hyperpage{140}
+    \subitem {i2c\_manager\_read}, \hyperpage{141}
+    \subitem {i2c\_manager\_write}, \hyperpage{142}
+    \subitem {i2c\_manager\_write\_raw}, \hyperpage{144}
+    \subitem {mutex\_i2c}, \hyperpage{145}
+  \item {i2c\_manager\_init}
+    \subitem {i2c\_manager.c}, \hyperpage{132}
+    \subitem {i2c\_manager.h}, \hyperpage{140}
+  \item {i2c\_manager\_read}
+    \subitem {i2c\_manager.c}, \hyperpage{132}
+    \subitem {i2c\_manager.h}, \hyperpage{141}
+  \item {i2c\_manager\_write}
+    \subitem {i2c\_manager.c}, \hyperpage{134}
+    \subitem {i2c\_manager.h}, \hyperpage{142}
+  \item {i2c\_manager\_write\_raw}
+    \subitem {i2c\_manager.c}, \hyperpage{135}
+    \subitem {i2c\_manager.h}, \hyperpage{144}
+  \item {I2C\_MASTER\_FREQ\_HZ}
+    \subitem {i2c\_manager.c}, \hyperpage{131}
+  \item {I2C\_MASTER\_NUM}
+    \subitem {i2c\_manager.c}, \hyperpage{131}
+  \item {I2C\_MASTER\_SCL\_IO}
+    \subitem {i2c\_manager.c}, \hyperpage{131}
+  \item {I2C\_MASTER\_SDA\_IO}
+    \subitem {i2c\_manager.c}, \hyperpage{131}
+
+  \indexspace
+
+  \item {main.c}
+    \subitem {app\_main}, \hyperpage{148}
+    \subitem {TAG}, \hyperpage{151}
+    \subitem {task\_energia\_handle}, \hyperpage{151}
+    \subitem {task\_sensores\_handle}, \hyperpage{151}
+    \subitem {WIFI\_CONNECT\_TIMEOUT\_MS}, \hyperpage{148}
+  \item {main/drivers/ds18b20.c}, \hyperpage{21}, \hyperpage{27}
+  \item {main/drivers/ds18b20.h}, \hyperpage{29}, \hyperpage{32}
+  \item {main/drivers/font5x7.h}, \hyperpage{32}, \hyperpage{34}
+  \item {main/drivers/mq135.c}, \hyperpage{35}, \hyperpage{39}
+  \item {main/drivers/mq135.h}, \hyperpage{39}, \hyperpage{42}
+  \item {main/drivers/oled\_display.c}, \hyperpage{43}, \hyperpage{51}
+  \item {main/drivers/oled\_display.h}, \hyperpage{54}, \hyperpage{59}
+  \item {main/drivers/ph\_sensor.c}, \hyperpage{59}, \hyperpage{64}
+  \item {main/drivers/ph\_sensor.h}, \hyperpage{65}, \hyperpage{68}
+  \item {main/drivers/rtc\_ds3231.c}, \hyperpage{69}, \hyperpage{76}
+  \item {main/drivers/rtc\_ds3231.h}, \hyperpage{77}, \hyperpage{82}
+  \item {main/drivers/sd\_card.c}, \hyperpage{82}, \hyperpage{92}
+  \item {main/drivers/sd\_card.h}, \hyperpage{95}, \hyperpage{102}
+  \item {main/drivers/servo.c}, \hyperpage{103}, \hyperpage{109}
+  \item {main/drivers/servo.h}, \hyperpage{110}, \hyperpage{113}
+  \item {main/drivers/voltage\_sensor.c}, \hyperpage{114}, 
+		\hyperpage{117}
+  \item {main/drivers/voltage\_sensor.h}, \hyperpage{118}, 
+		\hyperpage{120}
+  \item {main/hal/adc\_manager.c}, \hyperpage{120}, \hyperpage{125}
+  \item {main/hal/adc\_manager.h}, \hyperpage{126}, \hyperpage{129}
+  \item {main/hal/i2c\_manager.c}, \hyperpage{129}, \hyperpage{137}
+  \item {main/hal/i2c\_manager.h}, \hyperpage{139}, \hyperpage{146}
+  \item {main/main.c}, \hyperpage{146}, \hyperpage{152}
+  \item {main/mqtt/mqtt\_manager.c}, \hyperpage{154}, \hyperpage{163}
+  \item {main/mqtt/mqtt\_manager.h}, \hyperpage{165}, \hyperpage{170}
+  \item {main/tasks/task\_actuadores.c}, \hyperpage{171}, 
+		\hyperpage{175}
+  \item {main/tasks/task\_actuadores.h}, \hyperpage{176}, 
+		\hyperpage{178}
+  \item {main/tasks/task\_control.c}, \hyperpage{179}, \hyperpage{182}
+  \item {main/tasks/task\_control.h}, \hyperpage{183}, \hyperpage{185}
+  \item {main/tasks/task\_display.c}, \hyperpage{185}, \hyperpage{189}
+  \item {main/tasks/task\_display.h}, \hyperpage{190}, \hyperpage{193}
+  \item {main/tasks/task\_energia.c}, \hyperpage{193}, \hyperpage{196}
+  \item {main/tasks/task\_energia.h}, \hyperpage{197}, \hyperpage{199}
+  \item {main/tasks/task\_logger.c}, \hyperpage{199}, \hyperpage{202}
+  \item {main/tasks/task\_logger.h}, \hyperpage{203}, \hyperpage{205}
+  \item {main/tasks/task\_mqtt.c}, \hyperpage{205}, \hyperpage{212}
+  \item {main/tasks/task\_mqtt.h}, \hyperpage{214}, \hyperpage{217}
+  \item {main/tasks/task\_sensores.c}, \hyperpage{217}, \hyperpage{223}
+  \item {main/tasks/task\_sensores.h}, \hyperpage{225}, \hyperpage{229}
+  \item {main/utils/data\_types.h}, \hyperpage{229, 230}
+  \item {main/utils/queues.c}, \hyperpage{231}, \hyperpage{234}
+  \item {main/utils/queues.h}, \hyperpage{234}, \hyperpage{238}
+  \item {main/wifi/wifi\_manager.c}, \hyperpage{238}, \hyperpage{248}
+  \item {main/wifi/wifi\_manager.h}, \hyperpage{251}, \hyperpage{256}
+  \item {mezclar}
+    \subitem {control\_cmd\_t}, \hyperpage{14}
+  \item {minutes}
+    \subitem {datetime\_t}, \hyperpage{15}
+  \item {MIX\_DURATION\_MS}
+    \subitem {task\_actuadores.c}, \hyperpage{172}
+  \item {MIX\_INTERVAL\_CYCLES}
+    \subitem {task\_control.c}, \hyperpage{180}
+  \item {month}
+    \subitem {datetime\_t}, \hyperpage{15}
+  \item {mount\_point}
+    \subitem {sd\_card.c}, \hyperpage{91}
+  \item {mq135.c}
+    \subitem {MQ135\_ADC\_CHANNEL}, \hyperpage{36}
+    \subitem {mq135\_init}, \hyperpage{37}
+    \subitem {mq135\_read}, \hyperpage{37}
+    \subitem {mq135\_read\_raw}, \hyperpage{37}
+    \subitem {mq135\_read\_voltage}, \hyperpage{38}
+    \subitem {NUM\_SAMPLES}, \hyperpage{36}
+    \subitem {TAG}, \hyperpage{36}
+  \item {mq135.h}
+    \subitem {mq135\_init}, \hyperpage{40}
+    \subitem {mq135\_read}, \hyperpage{40}
+    \subitem {mq135\_read\_raw}, \hyperpage{41}
+    \subitem {mq135\_read\_voltage}, \hyperpage{41}
+  \item {MQ135\_ADC\_CHANNEL}
+    \subitem {mq135.c}, \hyperpage{36}
+  \item {mq135\_init}
+    \subitem {mq135.c}, \hyperpage{37}
+    \subitem {mq135.h}, \hyperpage{40}
+  \item {mq135\_read}
+    \subitem {mq135.c}, \hyperpage{37}
+    \subitem {mq135.h}, \hyperpage{40}
+  \item {mq135\_read\_raw}
+    \subitem {mq135.c}, \hyperpage{37}
+    \subitem {mq135.h}, \hyperpage{41}
+  \item {mq135\_read\_voltage}
+    \subitem {mq135.c}, \hyperpage{38}
+    \subitem {mq135.h}, \hyperpage{41}
+  \item {MQTT\_BROKER\_URI}
+    \subitem {mqtt\_manager.c}, \hyperpage{156}
+  \item {mqtt\_client}
+    \subitem {mqtt\_manager.c}, \hyperpage{162}
+  \item {MQTT\_CONNECT\_TIMEOUT\_MS}
+    \subitem {task\_mqtt.c}, \hyperpage{207}
+  \item {mqtt\_connected}
+    \subitem {mqtt\_manager.c}, \hyperpage{162}
+  \item {MQTT\_CONNECTED\_BIT}
+    \subitem {mqtt\_manager.c}, \hyperpage{156}
+  \item {MQTT\_ERROR\_BIT}
+    \subitem {mqtt\_manager.c}, \hyperpage{157}
+  \item {mqtt\_event\_group}
+    \subitem {mqtt\_manager.c}, \hyperpage{163}
+  \item {mqtt\_event\_handler}
+    \subitem {mqtt\_manager.c}, \hyperpage{157}
+  \item {mqtt\_is\_connected}
+    \subitem {mqtt\_manager.c}, \hyperpage{158}
+    \subitem {mqtt\_manager.h}, \hyperpage{166}
+  \item {mqtt\_manager.c}
+    \subitem {MQTT\_BROKER\_URI}, \hyperpage{156}
+    \subitem {mqtt\_client}, \hyperpage{162}
+    \subitem {mqtt\_connected}, \hyperpage{162}
+    \subitem {MQTT\_CONNECTED\_BIT}, \hyperpage{156}
+    \subitem {MQTT\_ERROR\_BIT}, \hyperpage{157}
+    \subitem {mqtt\_event\_group}, \hyperpage{163}
+    \subitem {mqtt\_event\_handler}, \hyperpage{157}
+    \subitem {mqtt\_is\_connected}, \hyperpage{158}
+    \subitem {mqtt\_manager\_start}, \hyperpage{159}
+    \subitem {mqtt\_manager\_stop}, \hyperpage{159}
+    \subitem {mqtt\_publish}, \hyperpage{160}
+    \subitem {MQTT\_PUBLISHED\_BIT}, \hyperpage{157}
+    \subitem {mqtt\_wait\_connected}, \hyperpage{161}
+    \subitem {TAG}, \hyperpage{163}
+  \item {mqtt\_manager.h}
+    \subitem {mqtt\_is\_connected}, \hyperpage{166}
+    \subitem {mqtt\_manager\_start}, \hyperpage{166}
+    \subitem {mqtt\_manager\_stop}, \hyperpage{167}
+    \subitem {mqtt\_publish}, \hyperpage{168}
+    \subitem {mqtt\_wait\_connected}, \hyperpage{169}
+  \item {mqtt\_manager\_start}
+    \subitem {mqtt\_manager.c}, \hyperpage{159}
+    \subitem {mqtt\_manager.h}, \hyperpage{166}
+  \item {mqtt\_manager\_stop}
+    \subitem {mqtt\_manager.c}, \hyperpage{159}
+    \subitem {mqtt\_manager.h}, \hyperpage{167}
+  \item {mqtt\_ok}
+    \subitem {display\_data\_t}, \hyperpage{16}
+  \item {MQTT\_PENDING\_PAYLOAD\_SIZE}
+    \subitem {task\_mqtt.c}, \hyperpage{207}
+  \item {mqtt\_publish}
+    \subitem {mqtt\_manager.c}, \hyperpage{160}
+    \subitem {mqtt\_manager.h}, \hyperpage{168}
+  \item {MQTT\_PUBLISH\_TIMEOUT\_MS}
+    \subitem {task\_mqtt.c}, \hyperpage{207}
+  \item {MQTT\_PUBLISHED\_BIT}
+    \subitem {mqtt\_manager.c}, \hyperpage{157}
+  \item {MQTT\_TOPIC}
+    \subitem {task\_mqtt.c}, \hyperpage{207}
+  \item {mqtt\_wait\_connected}
+    \subitem {mqtt\_manager.c}, \hyperpage{161}
+    \subitem {mqtt\_manager.h}, \hyperpage{169}
+  \item {mutex\_i2c}
+    \subitem {i2c\_manager.c}, \hyperpage{136}
+    \subitem {i2c\_manager.h}, \hyperpage{145}
+    \subitem {oled\_display.c}, \hyperpage{51}
+    \subitem {rtc\_ds3231.c}, \hyperpage{75}
+
+  \indexspace
+
+  \item {NUM\_SAMPLES}
+    \subitem {mq135.c}, \hyperpage{36}
+    \subitem {ph\_sensor.c}, \hyperpage{61}
+    \subitem {voltage\_sensor.c}, \hyperpage{115}
+
+  \indexspace
+
+  \item {OLED\_ADDR}
+    \subitem {oled\_display.c}, \hyperpage{44}
+  \item {oled\_clear}
+    \subitem {oled\_display.c}, \hyperpage{45}
+    \subitem {oled\_display.h}, \hyperpage{55}
+  \item {oled\_display.c}
+    \subitem {framebuffer}, \hyperpage{51}
+    \subitem {mutex\_i2c}, \hyperpage{51}
+    \subitem {OLED\_ADDR}, \hyperpage{44}
+    \subitem {oled\_clear}, \hyperpage{45}
+    \subitem {oled\_draw\_char}, \hyperpage{45}
+    \subitem {oled\_draw\_pixel}, \hyperpage{46}
+    \subitem {oled\_draw\_string}, \hyperpage{47}
+    \subitem {OLED\_HEIGHT}, \hyperpage{44}
+    \subitem {oled\_init}, \hyperpage{47}
+    \subitem {OLED\_PAGES}, \hyperpage{44}
+    \subitem {oled\_send\_command}, \hyperpage{48}
+    \subitem {oled\_send\_data}, \hyperpage{49}
+    \subitem {oled\_update}, \hyperpage{50}
+    \subitem {OLED\_WIDTH}, \hyperpage{45}
+  \item {oled\_display.h}
+    \subitem {oled\_clear}, \hyperpage{55}
+    \subitem {oled\_draw\_char}, \hyperpage{55}
+    \subitem {oled\_draw\_pixel}, \hyperpage{56}
+    \subitem {oled\_draw\_string}, \hyperpage{56}
+    \subitem {oled\_init}, \hyperpage{57}
+    \subitem {oled\_update}, \hyperpage{58}
+  \item {oled\_draw\_char}
+    \subitem {oled\_display.c}, \hyperpage{45}
+    \subitem {oled\_display.h}, \hyperpage{55}
+  \item {oled\_draw\_pixel}
+    \subitem {oled\_display.c}, \hyperpage{46}
+    \subitem {oled\_display.h}, \hyperpage{56}
+  \item {oled\_draw\_string}
+    \subitem {oled\_display.c}, \hyperpage{47}
+    \subitem {oled\_display.h}, \hyperpage{56}
+  \item {OLED\_HEIGHT}
+    \subitem {oled\_display.c}, \hyperpage{44}
+  \item {oled\_init}
+    \subitem {oled\_display.c}, \hyperpage{47}
+    \subitem {oled\_display.h}, \hyperpage{57}
+  \item {OLED\_PAGES}
+    \subitem {oled\_display.c}, \hyperpage{44}
+  \item {oled\_send\_command}
+    \subitem {oled\_display.c}, \hyperpage{48}
+  \item {oled\_send\_data}
+    \subitem {oled\_display.c}, \hyperpage{49}
+  \item {oled\_update}
+    \subitem {oled\_display.c}, \hyperpage{50}
+    \subitem {oled\_display.h}, \hyperpage{58}
+  \item {OLED\_WIDTH}
+    \subitem {oled\_display.c}, \hyperpage{45}
+  \item {ow\_low}
+    \subitem {ds18b20.c}, \hyperpage{24}
+  \item {ow\_read}
+    \subitem {ds18b20.c}, \hyperpage{24}
+  \item {ow\_read\_bit}
+    \subitem {ds18b20.c}, \hyperpage{24}
+  \item {ow\_read\_byte}
+    \subitem {ds18b20.c}, \hyperpage{25}
+  \item {ow\_release}
+    \subitem {ds18b20.c}, \hyperpage{25}
+  \item {ow\_reset}
+    \subitem {ds18b20.c}, \hyperpage{25}
+  \item {ow\_write\_bit}
+    \subitem {ds18b20.c}, \hyperpage{26}
+  \item {ow\_write\_byte}
+    \subitem {ds18b20.c}, \hyperpage{26}
+
+  \indexspace
+
+  \item {pending\_mqtt\_path}
+    \subitem {sd\_card.c}, \hyperpage{91}
+  \item {ph}
+    \subitem {display\_data\_t}, \hyperpage{16}
+    \subitem {sensor\_data\_t}, \hyperpage{18}
+  \item {PH\_ADC\_CHANNEL}
+    \subitem {ph\_sensor.c}, \hyperpage{61}
+  \item {ph\_init}
+    \subitem {ph\_sensor.c}, \hyperpage{62}
+    \subitem {ph\_sensor.h}, \hyperpage{66}
+  \item {PH\_MAX\_VOLTAGE}
+    \subitem {ph\_sensor.c}, \hyperpage{61}
+  \item {PH\_MIN\_VOLTAGE}
+    \subitem {ph\_sensor.c}, \hyperpage{61}
+  \item {PH\_OFFSET}
+    \subitem {ph\_sensor.c}, \hyperpage{61}
+  \item {ph\_read}
+    \subitem {ph\_sensor.c}, \hyperpage{62}
+    \subitem {ph\_sensor.h}, \hyperpage{66}
+  \item {ph\_read\_voltage}
+    \subitem {ph\_sensor.c}, \hyperpage{63}
+    \subitem {ph\_sensor.h}, \hyperpage{67}
+  \item {ph\_sensor.c}
+    \subitem {NUM\_SAMPLES}, \hyperpage{61}
+    \subitem {PH\_ADC\_CHANNEL}, \hyperpage{61}
+    \subitem {ph\_init}, \hyperpage{62}
+    \subitem {PH\_MAX\_VOLTAGE}, \hyperpage{61}
+    \subitem {PH\_MIN\_VOLTAGE}, \hyperpage{61}
+    \subitem {PH\_OFFSET}, \hyperpage{61}
+    \subitem {ph\_read}, \hyperpage{62}
+    \subitem {ph\_read\_voltage}, \hyperpage{63}
+    \subitem {PH\_SLOPE}, \hyperpage{61}
+    \subitem {TAG}, \hyperpage{64}
+  \item {ph\_sensor.h}
+    \subitem {ph\_init}, \hyperpage{66}
+    \subitem {ph\_read}, \hyperpage{66}
+    \subitem {ph\_read\_voltage}, \hyperpage{67}
+  \item {PH\_SLOPE}
+    \subitem {ph\_sensor.c}, \hyperpage{61}
+  \item {PIN\_BOMBA}
+    \subitem {task\_actuadores.c}, \hyperpage{172}
+  \item {PIN\_CLK}
+    \subitem {sd\_card.c}, \hyperpage{84}
+  \item {PIN\_CS}
+    \subitem {sd\_card.c}, \hyperpage{84}
+  \item {PIN\_MISO}
+    \subitem {sd\_card.c}, \hyperpage{84}
+  \item {PIN\_MOSI}
+    \subitem {sd\_card.c}, \hyperpage{84}
+  \item {PIN\_MOTOR}
+    \subitem {task\_actuadores.c}, \hyperpage{172}
+  \item {PIN\_SERVO}
+    \subitem {task\_actuadores.c}, \hyperpage{172}
+
+  \indexspace
+
+  \item {queue\_control}
+    \subitem {queues.c}, \hyperpage{233}
+    \subitem {queues.h}, \hyperpage{236}
+  \item {queue\_display}
+    \subitem {queues.c}, \hyperpage{233}
+    \subitem {queues.h}, \hyperpage{236}
+  \item {queue\_logger}
+    \subitem {queues.c}, \hyperpage{233}
+    \subitem {queues.h}, \hyperpage{237}
+  \item {queue\_mqtt}
+    \subitem {queues.c}, \hyperpage{233}
+    \subitem {queues.h}, \hyperpage{237}
+  \item {queue\_sensores}
+    \subitem {queues.c}, \hyperpage{233}
+    \subitem {queues.h}, \hyperpage{237}
+  \item {queues.c}
+    \subitem {queue\_control}, \hyperpage{233}
+    \subitem {queue\_display}, \hyperpage{233}
+    \subitem {queue\_logger}, \hyperpage{233}
+    \subitem {queue\_mqtt}, \hyperpage{233}
+    \subitem {queue\_sensores}, \hyperpage{233}
+    \subitem {queues\_init}, \hyperpage{232}
+  \item {queues.h}
+    \subitem {queue\_control}, \hyperpage{236}
+    \subitem {queue\_display}, \hyperpage{236}
+    \subitem {queue\_logger}, \hyperpage{237}
+    \subitem {queue\_mqtt}, \hyperpage{237}
+    \subitem {queue\_sensores}, \hyperpage{237}
+    \subitem {queues\_init}, \hyperpage{236}
+  \item {queues\_init}
+    \subitem {queues.c}, \hyperpage{232}
+    \subitem {queues.h}, \hyperpage{236}
+
+  \indexspace
+
+  \item {Referencia del directorio main}, \hyperpage{10}
+  \item {Referencia del directorio main/drivers}, \hyperpage{9}
+  \item {Referencia del directorio main/hal}, \hyperpage{10}
+  \item {Referencia del directorio main/mqtt}, \hyperpage{10}
+  \item {Referencia del directorio main/tasks}, \hyperpage{11}
+  \item {Referencia del directorio main/utils}, \hyperpage{11}
+  \item {Referencia del directorio main/wifi}, \hyperpage{11}
+  \item {resend\_pending\_mqtt\_messages}
+    \subitem {task\_mqtt.c}, \hyperpage{208}
+  \item {retry\_count}
+    \subitem {wifi\_manager.c}, \hyperpage{247}
+  \item {rtc\_ds3231.c}
+    \subitem {bcd\_to\_dec}, \hyperpage{71}
+    \subitem {dec\_to\_bcd}, \hyperpage{71}
+    \subitem {DS3231\_ADDR}, \hyperpage{70}
+    \subitem {ds3231\_clear\_alarm\_flag}, \hyperpage{71}
+    \subitem {DS3231\_CONTROL\_A1\_INTERRUPT}, \hyperpage{70}
+    \subitem {ds3231\_get\_datetime}, \hyperpage{72}
+    \subitem {ds3231\_init}, \hyperpage{73}
+    \subitem {ds3231\_set\_alarm\_seconds}, \hyperpage{74}
+    \subitem {mutex\_i2c}, \hyperpage{75}
+    \subitem {TAG}, \hyperpage{75}
+  \item {rtc\_ds3231.h}
+    \subitem {ds3231\_clear\_alarm\_flag}, \hyperpage{78}
+    \subitem {ds3231\_get\_datetime}, \hyperpage{79}
+    \subitem {ds3231\_init}, \hyperpage{80}
+    \subitem {ds3231\_set\_alarm\_seconds}, \hyperpage{80}
+
+  \indexspace
+
+  \item {save\_pending\_payload}
+    \subitem {task\_mqtt.c}, \hyperpage{209}
+  \item {sd\_card.c}
+    \subitem {mount\_point}, \hyperpage{91}
+    \subitem {pending\_mqtt\_path}, \hyperpage{91}
+    \subitem {PIN\_CLK}, \hyperpage{84}
+    \subitem {PIN\_CS}, \hyperpage{84}
+    \subitem {PIN\_MISO}, \hyperpage{84}
+    \subitem {PIN\_MOSI}, \hyperpage{84}
+    \subitem {sd\_card\_append\_pending\_mqtt}, \hyperpage{85}
+    \subitem {sd\_card\_close\_pending\_mqtt}, \hyperpage{85}
+    \subitem {sd\_card\_delete\_pending\_mqtt}, \hyperpage{86}
+    \subitem {sd\_card\_init}, \hyperpage{86}
+    \subitem {sd\_card\_is\_mounted}, \hyperpage{87}
+    \subitem {sd\_card\_open\_pending\_mqtt\_read}, \hyperpage{88}
+    \subitem {sd\_card\_pending\_mqtt\_exists}, \hyperpage{88}
+    \subitem {sd\_card\_read\_pending\_mqtt\_line}, \hyperpage{89}
+    \subitem {sd\_card\_write\_line}, \hyperpage{89}
+    \subitem {sd\_mounted}, \hyperpage{91}
+    \subitem {spi\_mutex}, \hyperpage{91}
+    \subitem {TAG}, \hyperpage{91}
+  \item {sd\_card.h}
+    \subitem {sd\_card\_append\_pending\_mqtt}, \hyperpage{96}
+    \subitem {sd\_card\_close\_pending\_mqtt}, \hyperpage{97}
+    \subitem {sd\_card\_delete\_pending\_mqtt}, \hyperpage{97}
+    \subitem {sd\_card\_init}, \hyperpage{98}
+    \subitem {sd\_card\_is\_mounted}, \hyperpage{99}
+    \subitem {sd\_card\_open\_pending\_mqtt\_read}, \hyperpage{100}
+    \subitem {sd\_card\_pending\_mqtt\_exists}, \hyperpage{100}
+    \subitem {sd\_card\_read\_pending\_mqtt\_line}, \hyperpage{100}
+    \subitem {sd\_card\_write\_line}, \hyperpage{101}
+  \item {sd\_card\_append\_pending\_mqtt}
+    \subitem {sd\_card.c}, \hyperpage{85}
+    \subitem {sd\_card.h}, \hyperpage{96}
+  \item {sd\_card\_close\_pending\_mqtt}
+    \subitem {sd\_card.c}, \hyperpage{85}
+    \subitem {sd\_card.h}, \hyperpage{97}
+  \item {sd\_card\_delete\_pending\_mqtt}
+    \subitem {sd\_card.c}, \hyperpage{86}
+    \subitem {sd\_card.h}, \hyperpage{97}
+  \item {sd\_card\_init}
+    \subitem {sd\_card.c}, \hyperpage{86}
+    \subitem {sd\_card.h}, \hyperpage{98}
+  \item {sd\_card\_is\_mounted}
+    \subitem {sd\_card.c}, \hyperpage{87}
+    \subitem {sd\_card.h}, \hyperpage{99}
+  \item {sd\_card\_open\_pending\_mqtt\_read}
+    \subitem {sd\_card.c}, \hyperpage{88}
+    \subitem {sd\_card.h}, \hyperpage{100}
+  \item {sd\_card\_pending\_mqtt\_exists}
+    \subitem {sd\_card.c}, \hyperpage{88}
+    \subitem {sd\_card.h}, \hyperpage{100}
+  \item {sd\_card\_read\_pending\_mqtt\_line}
+    \subitem {sd\_card.c}, \hyperpage{89}
+    \subitem {sd\_card.h}, \hyperpage{100}
+  \item {sd\_card\_write\_line}
+    \subitem {sd\_card.c}, \hyperpage{89}
+    \subitem {sd\_card.h}, \hyperpage{101}
+  \item {sd\_mounted}
+    \subitem {sd\_card.c}, \hyperpage{91}
+  \item {sd\_ok}
+    \subitem {display\_data\_t}, \hyperpage{17}
+  \item {seconds}
+    \subitem {datetime\_t}, \hyperpage{15}
+  \item {sensor\_data\_t}, \hyperpage{17}
+    \subitem {co2}, \hyperpage{18}
+    \subitem {co2\_raw}, \hyperpage{18}
+    \subitem {corriente}, \hyperpage{18}
+    \subitem {datetime}, \hyperpage{18}
+    \subitem {ph}, \hyperpage{18}
+    \subitem {temperatura}, \hyperpage{19}
+    \subitem {voltaje}, \hyperpage{19}
+  \item {servo.c}
+    \subitem {SERVO\_CHANNEL}, \hyperpage{104}
+    \subitem {SERVO\_FREQ}, \hyperpage{104}
+    \subitem {servo\_init}, \hyperpage{106}
+    \subitem {SERVO\_MAX\_DUTY}, \hyperpage{105}
+    \subitem {SERVO\_MAX\_PULSE\_US}, \hyperpage{105}
+    \subitem {SERVO\_MIN\_PULSE\_US}, \hyperpage{105}
+    \subitem {SERVO\_MODE}, \hyperpage{105}
+    \subitem {SERVO\_PERIOD\_US}, \hyperpage{105}
+    \subitem {servo\_pin}, \hyperpage{108}
+    \subitem {SERVO\_RESOLUTION}, \hyperpage{105}
+    \subitem {servo\_set\_angle}, \hyperpage{107}
+    \subitem {SERVO\_TIMER}, \hyperpage{106}
+    \subitem {TAG}, \hyperpage{108}
+  \item {servo.h}
+    \subitem {servo\_init}, \hyperpage{111}
+    \subitem {servo\_set\_angle}, \hyperpage{112}
+  \item {servo\_angle}
+    \subitem {control\_cmd\_t}, \hyperpage{14}
+  \item {SERVO\_CHANNEL}
+    \subitem {servo.c}, \hyperpage{104}
+  \item {SERVO\_FREQ}
+    \subitem {servo.c}, \hyperpage{104}
+  \item {servo\_init}
+    \subitem {servo.c}, \hyperpage{106}
+    \subitem {servo.h}, \hyperpage{111}
+  \item {SERVO\_MAX\_DUTY}
+    \subitem {servo.c}, \hyperpage{105}
+  \item {SERVO\_MAX\_PULSE\_US}
+    \subitem {servo.c}, \hyperpage{105}
+  \item {SERVO\_MIN\_PULSE\_US}
+    \subitem {servo.c}, \hyperpage{105}
+  \item {SERVO\_MODE}
+    \subitem {servo.c}, \hyperpage{105}
+  \item {SERVO\_PERIOD\_US}
+    \subitem {servo.c}, \hyperpage{105}
+  \item {servo\_pin}
+    \subitem {servo.c}, \hyperpage{108}
+  \item {SERVO\_RESOLUTION}
+    \subitem {servo.c}, \hyperpage{105}
+  \item {servo\_set\_angle}
+    \subitem {servo.c}, \hyperpage{107}
+    \subitem {servo.h}, \hyperpage{112}
+  \item {SERVO\_TIMER}
+    \subitem {servo.c}, \hyperpage{106}
+  \item {spi\_mutex}
+    \subitem {sd\_card.c}, \hyperpage{91}
+
+  \indexspace
+
+  \item {TAG}
+    \subitem {adc\_manager.c}, \hyperpage{124}
+    \subitem {ds18b20.c}, \hyperpage{27}
+    \subitem {i2c\_manager.c}, \hyperpage{131}
+    \subitem {main.c}, \hyperpage{151}
+    \subitem {mq135.c}, \hyperpage{36}
+    \subitem {mqtt\_manager.c}, \hyperpage{163}
+    \subitem {ph\_sensor.c}, \hyperpage{64}
+    \subitem {rtc\_ds3231.c}, \hyperpage{75}
+    \subitem {sd\_card.c}, \hyperpage{91}
+    \subitem {servo.c}, \hyperpage{108}
+    \subitem {task\_actuadores.c}, \hyperpage{175}
+    \subitem {task\_control.c}, \hyperpage{182}
+    \subitem {task\_energia.c}, \hyperpage{196}
+    \subitem {task\_logger.c}, \hyperpage{202}
+    \subitem {task\_sensores.c}, \hyperpage{222}
+    \subitem {voltage\_sensor.c}, \hyperpage{115}
+    \subitem {wifi\_manager.c}, \hyperpage{247}
+  \item {task\_actuadores}
+    \subitem {task\_actuadores.c}, \hyperpage{173}
+    \subitem {task\_actuadores.h}, \hyperpage{177}
+  \item {task\_actuadores.c}
+    \subitem {actuadores\_init}, \hyperpage{173}
+    \subitem {MIX\_DURATION\_MS}, \hyperpage{172}
+    \subitem {PIN\_BOMBA}, \hyperpage{172}
+    \subitem {PIN\_MOTOR}, \hyperpage{172}
+    \subitem {PIN\_SERVO}, \hyperpage{172}
+    \subitem {TAG}, \hyperpage{175}
+    \subitem {task\_actuadores}, \hyperpage{173}
+    \subitem {task\_energia\_handle}, \hyperpage{175}
+  \item {task\_actuadores.h}
+    \subitem {task\_actuadores}, \hyperpage{177}
+  \item {task\_control}
+    \subitem {task\_control.c}, \hyperpage{181}
+    \subitem {task\_control.h}, \hyperpage{184}
+  \item {task\_control.c}
+    \subitem {CO2\_THRESHOLD}, \hyperpage{180}
+    \subitem {MIX\_INTERVAL\_CYCLES}, \hyperpage{180}
+    \subitem {TAG}, \hyperpage{182}
+    \subitem {task\_control}, \hyperpage{181}
+  \item {task\_control.h}
+    \subitem {task\_control}, \hyperpage{184}
+  \item {task\_display}
+    \subitem {task\_display.c}, \hyperpage{187}
+    \subitem {task\_display.h}, \hyperpage{191}
+  \item {task\_display.c}
+    \subitem {task\_display}, \hyperpage{187}
+  \item {task\_display.h}
+    \subitem {task\_display}, \hyperpage{191}
+  \item {task\_energia}
+    \subitem {task\_energia.c}, \hyperpage{195}
+    \subitem {task\_energia.h}, \hyperpage{198}
+  \item {task\_energia.c}
+    \subitem {TAG}, \hyperpage{196}
+    \subitem {task\_energia}, \hyperpage{195}
+    \subitem {task\_sensores\_handle}, \hyperpage{196}
+  \item {task\_energia.h}
+    \subitem {task\_energia}, \hyperpage{198}
+  \item {task\_energia\_handle}
+    \subitem {main.c}, \hyperpage{151}
+    \subitem {task\_actuadores.c}, \hyperpage{175}
+    \subitem {task\_mqtt.c}, \hyperpage{211}
+  \item {task\_logger}
+    \subitem {task\_logger.c}, \hyperpage{200}
+    \subitem {task\_logger.h}, \hyperpage{204}
+  \item {task\_logger.c}
+    \subitem {TAG}, \hyperpage{202}
+    \subitem {task\_logger}, \hyperpage{200}
+  \item {task\_logger.h}
+    \subitem {task\_logger}, \hyperpage{204}
+  \item {task\_mqtt}
+    \subitem {task\_mqtt.c}, \hyperpage{210}
+    \subitem {task\_mqtt.h}, \hyperpage{215}
+  \item {task\_mqtt.c}
+    \subitem {build\_payload}, \hyperpage{208}
+    \subitem {MQTT\_CONNECT\_TIMEOUT\_MS}, \hyperpage{207}
+    \subitem {MQTT\_PENDING\_PAYLOAD\_SIZE}, \hyperpage{207}
+    \subitem {MQTT\_PUBLISH\_TIMEOUT\_MS}, \hyperpage{207}
+    \subitem {MQTT\_TOPIC}, \hyperpage{207}
+    \subitem {resend\_pending\_mqtt\_messages}, \hyperpage{208}
+    \subitem {save\_pending\_payload}, \hyperpage{209}
+    \subitem {task\_energia\_handle}, \hyperpage{211}
+    \subitem {task\_mqtt}, \hyperpage{210}
+  \item {task\_mqtt.h}
+    \subitem {task\_mqtt}, \hyperpage{215}
+  \item {task\_sensores}
+    \subitem {task\_sensores.c}, \hyperpage{219}
+    \subitem {task\_sensores.h}, \hyperpage{226}
+  \item {task\_sensores.c}
+    \subitem {ALPHA}, \hyperpage{219}
+    \subitem {baseline}, \hyperpage{222}
+    \subitem {baseline\_initialized}, \hyperpage{222}
+    \subitem {filtered}, \hyperpage{222}
+    \subitem {TAG}, \hyperpage{222}
+    \subitem {task\_sensores}, \hyperpage{219}
+  \item {task\_sensores.h}
+    \subitem {task\_sensores}, \hyperpage{226}
+  \item {task\_sensores\_handle}
+    \subitem {main.c}, \hyperpage{151}
+    \subitem {task\_energia.c}, \hyperpage{196}
+  \item {temperatura}
+    \subitem {display\_data\_t}, \hyperpage{17}
+    \subitem {sensor\_data\_t}, \hyperpage{19}
+
+  \indexspace
+
+  \item {VOLTAGE\_ADC\_CHANNEL}
+    \subitem {voltage\_sensor.c}, \hyperpage{115}
+  \item {voltage\_sensor.c}
+    \subitem {ADC\_OFFSET}, \hyperpage{115}
+    \subitem {DIVIDER\_RATIO}, \hyperpage{115}
+    \subitem {NUM\_SAMPLES}, \hyperpage{115}
+    \subitem {TAG}, \hyperpage{115}
+    \subitem {VOLTAGE\_ADC\_CHANNEL}, \hyperpage{115}
+    \subitem {voltage\_sensor\_init}, \hyperpage{116}
+    \subitem {voltage\_sensor\_read}, \hyperpage{116}
+  \item {voltage\_sensor.h}
+    \subitem {voltage\_sensor\_init}, \hyperpage{119}
+    \subitem {voltage\_sensor\_read}, \hyperpage{119}
+  \item {voltage\_sensor\_init}
+    \subitem {voltage\_sensor.c}, \hyperpage{116}
+    \subitem {voltage\_sensor.h}, \hyperpage{119}
+  \item {voltage\_sensor\_read}
+    \subitem {voltage\_sensor.c}, \hyperpage{116}
+    \subitem {voltage\_sensor.h}, \hyperpage{119}
+  \item {voltaje}
+    \subitem {sensor\_data\_t}, \hyperpage{19}
+
+  \indexspace
+
+  \item {WIFI\_CONNECT\_TIMEOUT\_MS}
+    \subitem {main.c}, \hyperpage{148}
+  \item {WIFI\_CONNECTED\_BIT}
+    \subitem {wifi\_manager.c}, \hyperpage{240}
+  \item {wifi\_event\_group}
+    \subitem {wifi\_manager.c}, \hyperpage{247}
+  \item {wifi\_event\_handler}
+    \subitem {wifi\_manager.c}, \hyperpage{241}
+  \item {WIFI\_FAIL\_BIT}
+    \subitem {wifi\_manager.c}, \hyperpage{240}
+  \item {wifi\_init}
+    \subitem {wifi\_manager.c}, \hyperpage{243}
+    \subitem {wifi\_manager.h}, \hyperpage{252}
+  \item {wifi\_is\_connected}
+    \subitem {wifi\_manager.c}, \hyperpage{244}
+    \subitem {wifi\_manager.h}, \hyperpage{253}
+  \item {wifi\_manager.c}
+    \subitem {auth\_mode\_name}, \hyperpage{241}
+    \subitem {retry\_count}, \hyperpage{247}
+    \subitem {TAG}, \hyperpage{247}
+    \subitem {WIFI\_CONNECTED\_BIT}, \hyperpage{240}
+    \subitem {wifi\_event\_group}, \hyperpage{247}
+    \subitem {wifi\_event\_handler}, \hyperpage{241}
+    \subitem {WIFI\_FAIL\_BIT}, \hyperpage{240}
+    \subitem {wifi\_init}, \hyperpage{243}
+    \subitem {wifi\_is\_connected}, \hyperpage{244}
+    \subitem {WIFI\_MAX\_RETRIES}, \hyperpage{240}
+    \subitem {WIFI\_PASS}, \hyperpage{240}
+    \subitem {WIFI\_SCAN\_MAX\_AP}, \hyperpage{240}
+    \subitem {wifi\_scan\_print}, \hyperpage{245}
+    \subitem {WIFI\_SSID}, \hyperpage{240}
+    \subitem {wifi\_wait\_connected}, \hyperpage{246}
+  \item {wifi\_manager.h}
+    \subitem {wifi\_init}, \hyperpage{252}
+    \subitem {wifi\_is\_connected}, \hyperpage{253}
+    \subitem {wifi\_scan\_print}, \hyperpage{254}
+    \subitem {wifi\_wait\_connected}, \hyperpage{255}
+  \item {WIFI\_MAX\_RETRIES}
+    \subitem {wifi\_manager.c}, \hyperpage{240}
+  \item {wifi\_ok}
+    \subitem {display\_data\_t}, \hyperpage{17}
+  \item {WIFI\_PASS}
+    \subitem {wifi\_manager.c}, \hyperpage{240}
+  \item {WIFI\_SCAN\_MAX\_AP}
+    \subitem {wifi\_manager.c}, \hyperpage{240}
+  \item {wifi\_scan\_print}
+    \subitem {wifi\_manager.c}, \hyperpage{245}
+    \subitem {wifi\_manager.h}, \hyperpage{254}
+  \item {WIFI\_SSID}
+    \subitem {wifi\_manager.c}, \hyperpage{240}
+  \item {wifi\_wait\_connected}
+    \subitem {wifi\_manager.c}, \hyperpage{246}
+    \subitem {wifi\_manager.h}, \hyperpage{255}
+
+  \indexspace
+
+  \item {year}
+    \subitem {datetime\_t}, \hyperpage{15}
+
+\end{theindex}

@@ -1,0 +1,142 @@
+\doxysection{Referencia del archivo main/\+drivers/\+voltage\+\_\+sensor.h}
+\hypertarget{voltage__sensor_8h}{}\label{voltage__sensor_8h}\index{main/drivers/voltage\_sensor.h@{main/drivers/voltage\_sensor.h}}
+
+
+Driver para medición de voltaje mediante conversión ADC.  
+
+
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{voltage__sensor_8h_a13350d9937b7c986d04fe4d4c12ffeec}{voltage\+\_\+sensor\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa el módulo de medición de voltaje. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{voltage__sensor_8h_a15875926fbadec7cb188fe2437f945bc}{voltage\+\_\+sensor\+\_\+read}} (void)
+\begin{DoxyCompactList}\small\item\em Obtiene el voltaje real medido. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Driver para medición de voltaje mediante conversión ADC. 
+
+Este módulo permite medir niveles de voltaje utilizando el convertidor analógico-\/digital (ADC) del ESP32.
+
+Debido a las limitaciones de entrada del ADC, la señal es acondicionada mediante un divisor resistivo externo, permitiendo medir tensiones superiores al rango soportado directamente por el microcontrolador.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Inicialización del módulo.
+\item Lectura de voltaje compensada.
+\item Conversión a voltaje real del sistema.
+\end{DoxyItemize}
+
+El módulo es utilizado para monitorear el nivel de batería y apoyar las estrategias de gestión energética del sistema de fermentación.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{voltage__sensor_8h_source}{voltage\+\_\+sensor.\+h}}.
+
+
+
+\label{voltage__sensor_8h_doc-func-members}
+\Hypertarget{voltage__sensor_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{voltage__sensor_8h_a13350d9937b7c986d04fe4d4c12ffeec}\index{voltage\_sensor.h@{voltage\_sensor.h}!voltage\_sensor\_init@{voltage\_sensor\_init}}
+\index{voltage\_sensor\_init@{voltage\_sensor\_init}!voltage\_sensor.h@{voltage\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{voltage\_sensor\_init()}{voltage\_sensor\_init()}}
+{\footnotesize\ttfamily \label{voltage__sensor_8h_a13350d9937b7c986d04fe4d4c12ffeec} 
+void voltage\+\_\+sensor\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el módulo de medición de voltaje. 
+
+Prepara los recursos necesarios para realizar conversiones ADC a través de la capa HAL.
+
+Esta función debe ejecutarse durante la fase de inicialización del sistema.
+
+Actualmente no requiere configuración específica, ya que la adquisición ADC es gestionada por adc\+\_\+manager. 
+
+Definición en la línea \doxymbox{\hyperlink{voltage__sensor_8c_source_l00073}{73}} del archivo \doxymbox{\hyperlink{voltage__sensor_8c_source}{voltage\+\_\+sensor.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00074\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Voltage\ sensor\ inicializado"{}});}
+\DoxyCodeLine{00076\ \}}
+
+\end{DoxyCode}
+\Hypertarget{voltage__sensor_8h_a15875926fbadec7cb188fe2437f945bc}\index{voltage\_sensor.h@{voltage\_sensor.h}!voltage\_sensor\_read@{voltage\_sensor\_read}}
+\index{voltage\_sensor\_read@{voltage\_sensor\_read}!voltage\_sensor.h@{voltage\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{voltage\_sensor\_read()}{voltage\_sensor\_read()}}
+{\footnotesize\ttfamily \label{voltage__sensor_8h_a15875926fbadec7cb188fe2437f945bc} 
+float voltage\+\_\+sensor\+\_\+read (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene el voltaje real medido. 
+
+Obtiene el voltaje real del sistema.
+
+Realiza una lectura ADC, aplica las correcciones necesarias y compensa el efecto del divisor resistivo utilizado en la etapa de acondicionamiento.
+
+El valor retornado corresponde al voltaje real presente en la fuente o batería monitoreada.
+
+\begin{DoxyReturn}{Devuelve}
+Voltaje medido en voltios.
+\end{DoxyReturn}
+Obtiene el voltaje real medido.
+
+El procedimiento de medición consiste en:\+
+\begin{DoxyItemize}
+\item Adquirir múltiples muestras ADC.
+\item Calcular un promedio.
+\item Aplicar corrección de offset.
+\item Compensar el divisor resistivo.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Devuelve}
+Voltaje real medido en voltios. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{voltage__sensor_8c_source_l00093}{93}} del archivo \doxymbox{\hyperlink{voltage__sensor_8c_source}{voltage\+\_\+sensor.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00094\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{float}\ sum\ =\ 0.0f;}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ Promediado\ simple\ para\ reducir\ ruido. }}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \doxymbox{\hyperlink{mq135_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\_SAMPLES}};\ i++)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ sum\ +=\ \doxymbox{\hyperlink{adc__manager_8c_a228d08c460b3c57ca3f7efc00c5e3f0c}{adc\_manager\_read\_voltage}}(\doxymbox{\hyperlink{voltage__sensor_8c_a1aa0734029d3be2499de31ebd0bdf65c}{VOLTAGE\_ADC\_CHANNEL}});}
+\DoxyCodeLine{00102\ \ \ \ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{float}\ v\_adc\ =\ sum\ /\ \doxymbox{\hyperlink{mq135_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\_SAMPLES}};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ Corrección\ de\ offset\ obtenida\ durante }}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ la\ calibración\ experimental. }}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00110\ \ \ \ \ v\_adc\ -\/=\ \doxymbox{\hyperlink{voltage__sensor_8c_a827907ee6183e98bb8a50727540d4bb1}{ADC\_OFFSET}};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordflow}{if}\ (v\_adc\ <\ 0.0f)\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ v\_adc\ =\ 0.0f;}
+\DoxyCodeLine{00114\ \ \ \ \ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ del\ voltaje\ medido\ en\ el\ ADC }}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ al\ voltaje\ real\ mediante\ el\ divisor\ resistivo. }}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{float}\ v\_real\ =\ v\_adc\ *\ \doxymbox{\hyperlink{voltage__sensor_8c_ada12fcd9aed6fefc5255f46b58e8f42c}{DIVIDER\_RATIO}};}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Vadc\ corregido:\ \%.3f\ V"{}},\ v\_adc);}
+\DoxyCodeLine{00123\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Voltaje\ final:\ \%.2f\ V"{}},\ v\_real);}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_real;}
+\DoxyCodeLine{00126\ \}}
+
+\end{DoxyCode}

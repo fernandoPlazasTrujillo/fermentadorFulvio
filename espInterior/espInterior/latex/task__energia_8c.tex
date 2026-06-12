@@ -1,0 +1,182 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+energia.c}
+\hypertarget{task__energia_8c}{}\label{task__energia_8c}\index{main/tasks/task\_energia.c@{main/tasks/task\_energia.c}}
+
+
+Implementación de la gestión energética del sistema.  
+
+
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+sleep.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__energia_8c_ac7b7fee9849a033c0657c650e2dbfc9b}{task\+\_\+energia}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea principal de gestión energética. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{task__energia_8c_a545de6958783ff726c116adffaebbcfb}{task\+\_\+sensores\+\_\+handle}}
+\begin{DoxyCompactList}\small\item\em Handle de la tarea de sensores. \end{DoxyCompactList}\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{task__energia_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}ENERGIA"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada para mensajes de depuración. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación de la gestión energética del sistema. 
+
+Esta tarea coordina el ciclo operativo general del sistema de fermentación y gestiona la transición hacia modos de bajo consumo.
+
+El flujo de operación sigue la secuencia:\+
+
+Medir ↓ Procesar ↓ Actuar ↓ Registrar ↓ Dormir
+
+La sincronización entre tareas se realiza mediante notificaciones de Free\+RTOS, permitiendo una ejecución eficiente y evitando ciclos de espera activa.
+
+Funciones principales:\+
+\begin{DoxyItemize}
+\item Inicio de ciclos de adquisición.
+\item Coordinación entre tareas.
+\item Espera de finalización de procesos.
+\item Activación del modo Deep Sleep.
+\end{DoxyItemize}
+
+Mecanismos Free\+RTOS utilizados:\+
+\begin{DoxyItemize}
+\item Notificaciones entre tareas.
+\end{DoxyItemize}
+
+Modos de bajo consumo:\+
+\begin{DoxyItemize}
+\item Deep Sleep.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{task__energia_8c_source}{task\+\_\+energia.\+c}}.
+
+
+
+\label{task__energia_8c_doc-func-members}
+\Hypertarget{task__energia_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__energia_8c_ac7b7fee9849a033c0657c650e2dbfc9b}\index{task\_energia.c@{task\_energia.c}!task\_energia@{task\_energia}}
+\index{task\_energia@{task\_energia}!task\_energia.c@{task\_energia.c}}
+\doxysubsubsection{\texorpdfstring{task\_energia()}{task\_energia()}}
+{\footnotesize\ttfamily \label{task__energia_8c_ac7b7fee9849a033c0657c650e2dbfc9b} 
+void task\+\_\+energia (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea principal de gestión energética. 
+
+La tarea permanece bloqueada esperando una notificación que indique el inicio de un nuevo ciclo operativo.
+
+Flujo de ejecución:\+
+\begin{DoxyItemize}
+\item Esperar activación.
+\item Iniciar adquisición de sensores.
+\item Esperar finalización de procesos.
+\item Entrar en modo Deep Sleep.
+\end{DoxyItemize}
+
+La coordinación se realiza mediante notificaciones directas de Free\+RTOS para minimizar el uso de memoria y CPU.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados).\\
+\hline
+\end{DoxyParams}
+Coordina el ciclo de ejecución del sistema y supervisa la finalización de las tareas necesarias antes de activar mecanismos de ahorro energético.
+
+Dependiendo del estado del sistema, puede preparar la transición hacia modos de bajo consumo como Deep Sleep.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+Esperar inicio de ciclo.
+
+Activar adquisición de sensores.
+
+Esperar finalización de procesamiento y actuación.
+
+Actualmente se utiliza un tiempo máximo de espera como mecanismo de sincronización.
+
+Esperar finalización de tareas pendientes como almacenamiento o comunicaciones.
+
+Transición al modo Deep Sleep.
+
+El sistema permanecerá suspendido hasta que ocurra el evento de despertar configurado.
+
+Definición en la línea \doxymbox{\hyperlink{task__energia_8c_source_l00079}{79}} del archivo \doxymbox{\hyperlink{task__energia_8c_source}{task\+\_\+energia.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00080\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)}
+\DoxyCodeLine{00082\ \ \ \ \ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Ciclo\ iniciado"{}});}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ xTaskNotifyGive(}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{main_8c_a545de6958783ff726c116adffaebbcfb}{task\_sensores\_handle}});}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(25000));}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(5000));}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Entrando\ en\ deep\ sleep"{}});}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ esp\_deep\_sleep\_start();}
+\DoxyCodeLine{00126\ \ \ \ \ \}}
+\DoxyCodeLine{00127\ \}}
+
+\end{DoxyCode}
+
+
+\label{task__energia_8c_doc-var-members}
+\Hypertarget{task__energia_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{task__energia_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{task\_energia.c@{task\_energia.c}!TAG@{TAG}}
+\index{TAG@{TAG}!task\_energia.c@{task\_energia.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{task__energia_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}ENERGIA"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada para mensajes de depuración. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{task__energia_8c_source_l00059}{59}} del archivo \doxymbox{\hyperlink{task__energia_8c_source}{task\+\_\+energia.\+c}}.
+
+\Hypertarget{task__energia_8c_a545de6958783ff726c116adffaebbcfb}\index{task\_energia.c@{task\_energia.c}!task\_sensores\_handle@{task\_sensores\_handle}}
+\index{task\_sensores\_handle@{task\_sensores\_handle}!task\_energia.c@{task\_energia.c}}
+\doxysubsubsection{\texorpdfstring{task\_sensores\_handle}{task\_sensores\_handle}}
+{\footnotesize\ttfamily \label{task__energia_8c_a545de6958783ff726c116adffaebbcfb} 
+Task\+Handle\+\_\+t task\+\_\+sensores\+\_\+handle\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Handle de la tarea de sensores. 
+
+Utilizado para iniciar un nuevo ciclo de adquisición.
+
+Utilizado por task\+\_\+energia para iniciar nuevos ciclos de adquisición. 
+
+Definición en la línea \doxymbox{\hyperlink{main_8c_source_l00101}{101}} del archivo \doxymbox{\hyperlink{main_8c_source}{main.\+c}}.
+

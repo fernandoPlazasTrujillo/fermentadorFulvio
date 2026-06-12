@@ -1,0 +1,188 @@
+\doxysection{mqtt\+\_\+manager.\+c}
+\hypertarget{mqtt__manager_8c_source}{}\label{mqtt__manager_8c_source}\index{main/mqtt/mqtt\_manager.c@{main/mqtt/mqtt\_manager.c}}
+\doxymbox{\hyperlink{mqtt__manager_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00032}00032\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{mqtt__manager_8h}{mqtt\_manager.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00034}00034\ \textcolor{preprocessor}{\#include\ "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00035}00035\ \textcolor{preprocessor}{\#include\ "{}freertos/event\_groups.h"{}}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00037}00037\ \textcolor{preprocessor}{\#include\ "{}esp\_event.h"{}}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00038}00038\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00039}00039\ \textcolor{preprocessor}{\#include\ "{}mqtt\_client.h"{}}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00041}\doxymbox{\hyperlink{mqtt__manager_8c_a547a77358f516584c3c31c6c69983b4e}{00041}}\ \textcolor{preprocessor}{\#define\ MQTT\_BROKER\_URI\ "{}mqtt://192.168.0.110:1883"{}}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00046}\doxymbox{\hyperlink{mqtt__manager_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{00046}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}\ =\ \textcolor{stringliteral}{"{}mqtt\_manager"{}};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00051}\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{00051}}\ \textcolor{keyword}{static}\ esp\_mqtt\_client\_handle\_t\ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00056}\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{00056}}\ \textcolor{keyword}{static}\ EventGroupHandle\_t\ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00061}\doxymbox{\hyperlink{mqtt__manager_8c_a6a99fbef218ac40fc0b77e18f0e9a708}{00061}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{mqtt__manager_8c_a6a99fbef218ac40fc0b77e18f0e9a708}{mqtt\_connected}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00066}\doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{00066}}\ \textcolor{preprocessor}{\#define\ MQTT\_CONNECTED\_BIT\ BIT0}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00071}\doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{00071}}\ \textcolor{preprocessor}{\#define\ MQTT\_PUBLISHED\_BIT\ BIT1}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00076}\doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{00076}}\ \textcolor{preprocessor}{\#define\ MQTT\_ERROR\_BIT\ BIT2}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00098}\doxymbox{\hyperlink{mqtt__manager_8c_aa52dab722f8622a7067617397f9c7d88}{00098}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{mqtt__manager_8c_aa52dab722f8622a7067617397f9c7d88}{mqtt\_event\_handler}}(\textcolor{keywordtype}{void}\ *handler\_args,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ esp\_event\_base\_t\ base,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int32\_t\ event\_id,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ *event\_data)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00102}00102\ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00103}00103\ \ \ \ \ esp\_mqtt\_event\_handle\_t\ \textcolor{keyword}{event}\ =\ event\_data;}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00105}00105\ \ \ \ \ \textcolor{keywordflow}{switch}\ ((esp\_mqtt\_event\_id\_t)\ event\_id)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00106}00106\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00107}00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MQTT\_EVENT\_CONNECTED:}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}MQTT\ conectado"{}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a6a99fbef218ac40fc0b77e18f0e9a708}{mqtt\_connected}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ xEventGroupSetBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ xEventGroupClearBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00116}00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MQTT\_EVENT\_DISCONNECTED:}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGW(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}MQTT\ desconectado"{}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a6a99fbef218ac40fc0b77e18f0e9a708}{mqtt\_connected}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00121}00121\ \ \ \ \ \ \ \ \ \ \ \ \ xEventGroupClearBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00122}00122\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00124}00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MQTT\_EVENT\_PUBLISHED:}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00125}00125\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}MQTT\ publicado,\ msg\_id=\%d"{}},\ event-\/>msg\_id);}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00126}00126\ \ \ \ \ \ \ \ \ \ \ \ \ xEventGroupSetBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00127}00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00129}00129\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MQTT\_EVENT\_ERROR:}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00130}00130\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ MQTT"{}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00131}00131\ \ \ \ \ \ \ \ \ \ \ \ \ xEventGroupSetBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00135}00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00136}00136\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00137}00137\ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00145}\doxymbox{\hyperlink{mqtt__manager_8c_aade8d25902d34a7a7ae601ba023bff4f}{00145}}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{mqtt__manager_8c_aade8d25902d34a7a7ae601ba023bff4f}{mqtt\_manager\_start}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00146}00146\ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00147}00147\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00148}00148\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00149}00149\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ =\ xEventGroupCreate();}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00150}00150\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00152}00152\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00153}00153\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00154}00154\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}No\ se\ pudo\ crear\ grupo\ de\ eventos\ MQTT"{}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00155}00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00156}00156\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00158}00158\ \ \ \ \ xEventGroupClearBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00161}00161\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00162}00162\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00163}00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00164}00164\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00166}00166\ \ \ \ \ esp\_mqtt\_client\_config\_t\ mqtt\_cfg\ =\ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00167}00167\ \ \ \ \ \ \ \ \ .broker.address.uri\ =\ \doxymbox{\hyperlink{mqtt__manager_8c_a547a77358f516584c3c31c6c69983b4e}{MQTT\_BROKER\_URI}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00168}00168\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00169}00169\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00170}00170\ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ =\ esp\_mqtt\_client\_init(\&mqtt\_cfg);}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00171}00171\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00172}00172\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00173}00173\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}No\ se\ pudo\ crear\ cliente\ MQTT"{}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00174}00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00175}00175\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00177}00177\ \ \ \ \ esp\_mqtt\_client\_register\_event(}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00178}00178\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00179}00179\ \ \ \ \ \ \ \ \ ESP\_EVENT\_ANY\_ID,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00180}00180\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aa52dab722f8622a7067617397f9c7d88}{mqtt\_event\_handler}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00181}00181\ \ \ \ \ \ \ \ \ NULL);}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00182}00182\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00183}00183\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Conectando\ a\ broker\ MQTT:\ \%s"{}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a547a77358f516584c3c31c6c69983b4e}{MQTT\_BROKER\_URI}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00184}00184\ \ \ \ \ esp\_mqtt\_client\_start(\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00185}00185\ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00198}\doxymbox{\hyperlink{mqtt__manager_8c_abc2b7e54cf9f610d6ce01fcc17a56aa9}{00198}}\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{mqtt__manager_8c_abc2b7e54cf9f610d6ce01fcc17a56aa9}{mqtt\_wait\_connected}}(uint32\_t\ timeout\_ms)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00199}00199\ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00200}00200\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00201}00201\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00202}00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00203}00203\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00204}00204\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00205}00205\ \ \ \ \ EventBits\_t\ bits\ =\ xEventGroupWaitBits(}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00206}00206\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00208}00208\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00209}00209\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00210}00210\ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(timeout\_ms));}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00211}00211\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00212}00212\ \ \ \ \ \textcolor{keywordflow}{return}\ (bits\ \&\ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}})\ !=\ 0;}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00213}00213\ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00214}00214\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00232}\doxymbox{\hyperlink{mqtt__manager_8c_a0aa78fdc87dda9713ff09eefc5d1bfb8}{00232}}\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{mqtt__manager_8c_a0aa78fdc87dda9713ff09eefc5d1bfb8}{mqtt\_publish}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *topic,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *payload,\ \textcolor{keywordtype}{int}\ qos,\ uint32\_t\ timeout\_ms)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00233}00233\ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00234}00234\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ ==\ NULL\ ||\ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00235}00235\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00236}00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00237}00237\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00239}00239\ \ \ \ \ xEventGroupClearBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00240}00240\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00241}00241\ \ \ \ \ \textcolor{keywordtype}{int}\ msg\_id\ =\ esp\_mqtt\_client\_publish(}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00242}00242\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00243}00243\ \ \ \ \ \ \ \ \ topic,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00244}00244\ \ \ \ \ \ \ \ \ payload,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00245}00245\ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00246}00246\ \ \ \ \ \ \ \ \ qos,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00247}00247\ \ \ \ \ \ \ \ \ 0);}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00249}00249\ \ \ \ \ \textcolor{keywordflow}{if}\ (msg\_id\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00250}00250\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00251}00251\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}No\ se\ pudo\ publicar\ en\ MQTT"{}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00252}00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00253}00253\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00255}00255\ \ \ \ \ \textcolor{keywordflow}{if}\ (qos\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00256}00256\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00257}00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00258}00258\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00260}00260\ \ \ \ \ EventBits\_t\ bits\ =\ xEventGroupWaitBits(}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00261}00261\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00263}00263\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00265}00265\ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(timeout\_ms));}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00266}00266\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00267}00267\ \ \ \ \ \textcolor{keywordflow}{return}\ (bits\ \&\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}})\ !=\ 0;}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00268}00268\ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00269}00269\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00276}\doxymbox{\hyperlink{mqtt__manager_8c_a9d085201987e683cf0725e1cdc249d5f}{00276}}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{mqtt__manager_8c_a9d085201987e683cf0725e1cdc249d5f}{mqtt\_manager\_stop}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00277}00277\ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00278}00278\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00279}00279\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00280}00280\ \ \ \ \ \ \ \ \ esp\_mqtt\_client\_stop(\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00281}00281\ \ \ \ \ \ \ \ \ esp\_mqtt\_client\_destroy(\doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00282}00282\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_ad9332f302ae79b5195a71d791a9ccecd}{mqtt\_client}}\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00283}00283\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00284}00284\ }
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00285}00285\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00286}00286\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00287}00287\ \ \ \ \ \ \ \ \ xEventGroupClearBits(\doxymbox{\hyperlink{mqtt__manager_8c_aec2c91b2eaca6d01b9cf0927d903ed3f}{mqtt\_event\_group}},}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a1e80d8829bc152cc952c4a118fcde270}{MQTT\_CONNECTED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a1af8627745313cfd7ec63711203fd2c1}{MQTT\_PUBLISHED\_BIT}}\ |\ \doxymbox{\hyperlink{mqtt__manager_8c_a78f2cbc86cf701e5327a3d22120f4b7c}{MQTT\_ERROR\_BIT}});}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00289}00289\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00290}00290\ \}}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00297}\doxymbox{\hyperlink{mqtt__manager_8c_a14a4eb1d82363ee8fb9bf053b48fc4a2}{00297}}\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{mqtt__manager_8c_a14a4eb1d82363ee8fb9bf053b48fc4a2}{mqtt\_is\_connected}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00298}00298\ \{}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00299}00299\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{mqtt__manager_8c_a6a99fbef218ac40fc0b77e18f0e9a708}{mqtt\_connected}};}
+\DoxyCodeLine{\Hypertarget{mqtt__manager_8c_source_l00300}00300\ \}}
+
+\end{DoxyCode}

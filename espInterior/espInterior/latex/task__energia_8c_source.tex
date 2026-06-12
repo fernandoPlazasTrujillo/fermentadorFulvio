@@ -1,0 +1,44 @@
+\doxysection{task\+\_\+energia.\+c}
+\hypertarget{task__energia_8c_source}{}\label{task__energia_8c_source}\index{main/tasks/task\_energia.c@{main/tasks/task\_energia.c}}
+\doxymbox{\hyperlink{task__energia_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00043}00043\ \textcolor{preprocessor}{\#include\ "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00044}00044\ \textcolor{preprocessor}{\#include\ "{}freertos/task.h"{}}}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00046}00046\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00047}00047\ \textcolor{preprocessor}{\#include\ "{}esp\_sleep.h"{}}}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00054}00054\ \textcolor{keyword}{extern}\ TaskHandle\_t\ \doxymbox{\hyperlink{main_8c_a545de6958783ff726c116adffaebbcfb}{task\_sensores\_handle}};}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00059}\doxymbox{\hyperlink{task__energia_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{00059}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}\ =\ \textcolor{stringliteral}{"{}ENERGIA"{}};}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00079}\doxymbox{\hyperlink{task__energia_8c_ac7b7fee9849a033c0657c650e2dbfc9b}{00079}}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{task__energia_8c_ac7b7fee9849a033c0657c650e2dbfc9b}{task\_energia}}(\textcolor{keywordtype}{void}\ *pvParameters)}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00080}00080\ \{}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00081}00081\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00082}00082\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00086}00086\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY);}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00090}00090\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Ciclo\ iniciado"{}});}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ xTaskNotifyGive(}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{main_8c_a545de6958783ff726c116adffaebbcfb}{task\_sensores\_handle}});}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(25000));}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00113}00113\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(5000));}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Entrando\ en\ deep\ sleep"{}});}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00125}00125\ \ \ \ \ \ \ \ \ esp\_deep\_sleep\_start();}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00126}00126\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{task__energia_8c_source_l00127}00127\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,117 @@
+\doxysection{Referencia del archivo main/\+drivers/\+font5x7.h}
+\hypertarget{font5x7_8h}{}\label{font5x7_8h}\index{main/drivers/font5x7.h@{main/drivers/font5x7.h}}
+
+
+Definición de una fuente bitmap de 5x7 píxeles para pantallas OLED.  
+
+
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const uint8\+\_\+t \doxymbox{\hyperlink{font5x7_8h_a5a4a37b630489fec087a365d2ca3fc9c}{font5x7}} \+[$\,$]\+\+[5]\+
+\begin{DoxyCompactList}\small\item\em Tabla de caracteres bitmap de 5x7 píxeles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Definición de una fuente bitmap de 5x7 píxeles para pantallas OLED. 
+
+Este archivo contiene una tabla de caracteres ASCII representados mediante matrices de 5 columnas y 7 filas.
+
+La fuente es utilizada por el módulo oled\+\_\+display para renderizar texto sobre la pantalla SSD1306.
+
+Características:\+
+\begin{DoxyItemize}
+\item Fuente monoespaciada.
+\item Caracteres numéricos (0-\/9).
+\item Letras mayúsculas (A-\/Z).
+\item Símbolos básicos.
+\end{DoxyItemize}
+
+Cada entrada contiene 5 bytes donde cada bit representa un píxel de la columna correspondiente.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{font5x7_8h_source}{font5x7.\+h}}.
+
+
+
+\label{font5x7_8h_doc-var-members}
+\Hypertarget{font5x7_8h_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{font5x7_8h_a5a4a37b630489fec087a365d2ca3fc9c}\index{font5x7.h@{font5x7.h}!font5x7@{font5x7}}
+\index{font5x7@{font5x7}!font5x7.h@{font5x7.h}}
+\doxysubsubsection{\texorpdfstring{font5x7}{font5x7}}
+{\footnotesize\ttfamily \label{font5x7_8h_a5a4a37b630489fec087a365d2ca3fc9c} 
+const uint8\+\_\+t font5x7\+[$\,$]\+\+[5]\+\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Tabla de caracteres bitmap de 5x7 píxeles. 
+
+Cada índice corresponde a un código ASCII.
+
+El contenido de cada carácter está almacenado en 5 bytes, donde cada byte representa una columna vertical de píxeles.
+
+Ejemplo:\+
+\begin{DoxyItemize}
+\item font5x7\+[\textquotesingle{}A\textquotesingle{}]\+ devuelve la representación gráfica de la letra A.
+\item font5x7\+[\textquotesingle{}0\textquotesingle{}]\+ devuelve la representación gráfica del número 0.
+\end{DoxyItemize}
+
+Esta tabla es utilizada por el controlador OLED para generar texto sobre la pantalla SSD1306. 
+
+Definición en la línea \doxymbox{\hyperlink{font5x7_8h_source_l00045}{45}} del archivo \doxymbox{\hyperlink{font5x7_8h_source}{font5x7.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ [48]\ =\ \{0x3E,0x51,0x49,0x45,0x3E\},\ \textcolor{comment}{//\ 0}}
+\DoxyCodeLine{00048\ \ \ \ \ [49]\ =\ \{0x00,0x42,0x7F,0x40,0x00\},\ \textcolor{comment}{//\ 1}}
+\DoxyCodeLine{00049\ \ \ \ \ [50]\ =\ \{0x42,0x61,0x51,0x49,0x46\},\ \textcolor{comment}{//\ 2}}
+\DoxyCodeLine{00050\ \ \ \ \ [51]\ =\ \{0x21,0x41,0x45,0x4B,0x31\},\ \textcolor{comment}{//\ 3}}
+\DoxyCodeLine{00051\ \ \ \ \ [52]\ =\ \{0x18,0x14,0x12,0x7F,0x10\},\ \textcolor{comment}{//\ 4}}
+\DoxyCodeLine{00052\ \ \ \ \ [53]\ =\ \{0x27,0x45,0x45,0x45,0x39\},\ \textcolor{comment}{//\ 5}}
+\DoxyCodeLine{00053\ \ \ \ \ [54]\ =\ \{0x3C,0x4A,0x49,0x49,0x30\},\ \textcolor{comment}{//\ 6}}
+\DoxyCodeLine{00054\ \ \ \ \ [55]\ =\ \{0x01,0x71,0x09,0x05,0x03\},\ \textcolor{comment}{//\ 7}}
+\DoxyCodeLine{00055\ \ \ \ \ [56]\ =\ \{0x36,0x49,0x49,0x49,0x36\},\ \textcolor{comment}{//\ 8}}
+\DoxyCodeLine{00056\ \ \ \ \ [57]\ =\ \{0x06,0x49,0x49,0x29,0x1E\},\ \textcolor{comment}{//\ 9}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ [65]\ =\ \{0x7E,0x11,0x11,0x11,0x7E\},\ \textcolor{comment}{//\ A}}
+\DoxyCodeLine{00059\ \ \ \ \ [66]\ =\ \{0x7F,0x49,0x49,0x49,0x36\},\ \textcolor{comment}{//\ B}}
+\DoxyCodeLine{00060\ \ \ \ \ [67]\ =\ \{0x3E,0x41,0x41,0x41,0x22\},\ \textcolor{comment}{//\ C}}
+\DoxyCodeLine{00061\ \ \ \ \ [68]\ =\ \{0x7F,0x41,0x41,0x22,0x1C\},\ \textcolor{comment}{//\ D}}
+\DoxyCodeLine{00062\ \ \ \ \ [69]\ =\ \{0x7F,0x49,0x49,0x49,0x41\},\ \textcolor{comment}{//\ E}}
+\DoxyCodeLine{00063\ \ \ \ \ [70]\ =\ \{0x7F,0x09,0x09,0x09,0x01\},\ \textcolor{comment}{//\ F}}
+\DoxyCodeLine{00064\ \ \ \ \ [71]\ =\ \{0x3E,0x41,0x49,0x49,0x7A\},\ \textcolor{comment}{//\ G}}
+\DoxyCodeLine{00065\ \ \ \ \ [72]\ =\ \{0x7F,0x08,0x08,0x08,0x7F\},\ \textcolor{comment}{//\ H}}
+\DoxyCodeLine{00066\ \ \ \ \ [73]\ =\ \{0x00,0x41,0x7F,0x41,0x00\},\ \textcolor{comment}{//\ I}}
+\DoxyCodeLine{00067\ \ \ \ \ [74]\ =\ \{0x20,0x40,0x41,0x3F,0x01\},\ \textcolor{comment}{//\ J}}
+\DoxyCodeLine{00068\ \ \ \ \ [75]\ =\ \{0x7F,0x08,0x14,0x22,0x41\},\ \textcolor{comment}{//\ K}}
+\DoxyCodeLine{00069\ \ \ \ \ [76]\ =\ \{0x7F,0x40,0x40,0x40,0x40\},\ \textcolor{comment}{//\ L}}
+\DoxyCodeLine{00070\ \ \ \ \ [77]\ =\ \{0x7F,0x02,0x0C,0x02,0x7F\},\ \textcolor{comment}{//\ M}}
+\DoxyCodeLine{00071\ \ \ \ \ [78]\ =\ \{0x7F,0x04,0x08,0x10,0x7F\},\ \textcolor{comment}{//\ N}}
+\DoxyCodeLine{00072\ \ \ \ \ [79]\ =\ \{0x3E,0x41,0x41,0x41,0x3E\},\ \textcolor{comment}{//\ O}}
+\DoxyCodeLine{00073\ \ \ \ \ [80]\ =\ \{0x7F,0x09,0x09,0x09,0x06\},\ \textcolor{comment}{//\ P}}
+\DoxyCodeLine{00074\ \ \ \ \ [81]\ =\ \{0x3E,0x41,0x51,0x21,0x5E\},\ \textcolor{comment}{//\ Q}}
+\DoxyCodeLine{00075\ \ \ \ \ [82]\ =\ \{0x7F,0x09,0x19,0x29,0x46\},\ \textcolor{comment}{//\ R}}
+\DoxyCodeLine{00076\ \ \ \ \ [83]\ =\ \{0x46,0x49,0x49,0x49,0x31\},\ \textcolor{comment}{//\ S}}
+\DoxyCodeLine{00077\ \ \ \ \ [84]\ =\ \{0x01,0x01,0x7F,0x01,0x01\},\ \textcolor{comment}{//\ T}}
+\DoxyCodeLine{00078\ \ \ \ \ [85]\ =\ \{0x3F,0x40,0x40,0x40,0x3F\},\ \textcolor{comment}{//\ U}}
+\DoxyCodeLine{00079\ \ \ \ \ [86]\ =\ \{0x1F,0x20,0x40,0x20,0x1F\},\ \textcolor{comment}{//\ V}}
+\DoxyCodeLine{00080\ \ \ \ \ [87]\ =\ \{0x7F,0x20,0x18,0x20,0x7F\},\ \textcolor{comment}{//\ W}}
+\DoxyCodeLine{00081\ \ \ \ \ [88]\ =\ \{0x63,0x14,0x08,0x14,0x63\},\ \textcolor{comment}{//\ X}}
+\DoxyCodeLine{00082\ \ \ \ \ [89]\ =\ \{0x03,0x04,0x78,0x04,0x03\},\ \textcolor{comment}{//\ Y}}
+\DoxyCodeLine{00083\ \ \ \ \ [90]\ =\ \{0x61,0x51,0x49,0x45,0x43\},\ \textcolor{comment}{//\ Z}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ [32]\ =\ \{0,0,0,0,0\},}
+\DoxyCodeLine{00086\ \ \ \ \ [46]\ =\ \{0,0x60,0x60,0,0\},}
+\DoxyCodeLine{00087\ \ \ \ \ [58]\ =\ \{0,0x36,0x36,0,0\},}
+\DoxyCodeLine{00088\ \ \ \ \ [45]\ =\ \{0x08,0x08,0x08,0x08,0x08\}}
+\DoxyCodeLine{00089\ \};}
+
+\end{DoxyCode}

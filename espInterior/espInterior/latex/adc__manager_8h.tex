@@ -1,0 +1,215 @@
+\doxysection{Referencia del archivo main/\+hal/\+adc\+\_\+manager.h}
+\hypertarget{adc__manager_8h}{}\label{adc__manager_8h}\index{main/hal/adc\_manager.h@{main/hal/adc\_manager.h}}
+
+
+Capa de abstracción para el convertidor analógico-\/digital (ADC) del ESP32.  
+
+
+{\ttfamily \+\#include "{}esp\+\_\+adc/\+adc\+\_\+oneshot.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{adc__manager_8h_a680e6c7fca574971070af6b808ef98d1}{adc\+\_\+manager\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa el subsistema ADC. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{adc__manager_8h_a228d08c460b3c57ca3f7efc00c5e3f0c}{adc\+\_\+manager\+\_\+read\+\_\+voltage}} (adc\+\_\+channel\+\_\+t channel)
+\begin{DoxyCompactList}\small\item\em Obtiene el voltaje asociado a un canal ADC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Capa de abstracción para el convertidor analógico-\/digital (ADC) del ESP32. 
+
+Este módulo implementa una interfaz de acceso al ADC utilizando el modo One-\/\+Shot proporcionado por ESP-\/\+IDF.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Inicialización del periférico ADC.
+\item Configuración de canales analógicos.
+\item Calibración de lecturas.
+\item Conversión de valores ADC a voltaje.
+\end{DoxyItemize}
+
+Esta capa permite desacoplar los drivers de sensores del hardware específico del ESP32, facilitando la reutilización y mantenimiento del software.
+
+Los módulos:\+
+\begin{DoxyItemize}
+\item mq135
+\item ph\+\_\+sensor
+\item voltage\+\_\+sensor
+\end{DoxyItemize}
+
+utilizan este HAL para adquirir señales analógicas.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{adc__manager_8h_source}{adc\+\_\+manager.\+h}}.
+
+
+
+\label{adc__manager_8h_doc-func-members}
+\Hypertarget{adc__manager_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{adc__manager_8h_a680e6c7fca574971070af6b808ef98d1}\index{adc\_manager.h@{adc\_manager.h}!adc\_manager\_init@{adc\_manager\_init}}
+\index{adc\_manager\_init@{adc\_manager\_init}!adc\_manager.h@{adc\_manager.h}}
+\doxysubsubsection{\texorpdfstring{adc\_manager\_init()}{adc\_manager\_init()}}
+{\footnotesize\ttfamily \label{adc__manager_8h_a680e6c7fca574971070af6b808ef98d1} 
+void adc\+\_\+manager\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el subsistema ADC. 
+
+Inicializa el ADC y el sistema de calibración.
+
+Configura la unidad ADC en modo One-\/\+Shot y prepara los mecanismos de calibración utilizados para mejorar la precisión de las conversiones.
+
+Esta función debe ejecutarse una única vez durante la inicialización del sistema.
+
+Inicializa el subsistema ADC.
+
+Configura:\+
+\begin{DoxyItemize}
+\item ADC Unit 1.
+\item Resolución por defecto.
+\item Atenuación de 12 dB.
+\item Esquema de calibración Line Fitting.
+\end{DoxyItemize}
+
+Además registra todos los canales utilizados por los sensores analógicos del sistema. Configuración de la unidad ADC1.
+
+Configuración común para todos los canales.
+
+Atenuación de 12 dB para ampliar el rango de medida.
+
+Configuración de calibración ADC.
+
+El esquema Line Fitting mejora la precisión de las conversiones compensando errores internos.
+
+Definición en la línea \doxymbox{\hyperlink{adc__manager_8c_source_l00073}{73}} del archivo \doxymbox{\hyperlink{adc__manager_8c_source}{adc\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00074\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ adc\_oneshot\_unit\_init\_cfg\_t\ init\_config\ =\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ .unit\_id\ =\ ADC\_UNIT\_1,}
+\DoxyCodeLine{00080\ \ \ \ \ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ adc\_oneshot\_new\_unit(}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \&init\_config,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \&\doxymbox{\hyperlink{adc__manager_8c_a0b95b5937de8bdf11f73c2636d897c49}{adc1\_handle}});}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00091\ \ \ \ \ adc\_oneshot\_chan\_cfg\_t\ config\ =\ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ .bitwidth\ =\ ADC\_BITWIDTH\_DEFAULT,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ .atten\ =\ ADC\_ATTEN\_DB\_12,}
+\DoxyCodeLine{00094\ \ \ \ \ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ ADC\_CHANNEL\_0\ -\/>\ MQ135 }}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ ADC\_CHANNEL\_3\ -\/>\ Sensor\ pH }}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ ADC\_CHANNEL\_4\ -\/>\ Sensor\ voltaje }}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00101\ \ \ \ \ adc\_oneshot\_config\_channel(}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{adc__manager_8c_a0b95b5937de8bdf11f73c2636d897c49}{adc1\_handle}},}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ ADC\_CHANNEL\_0,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \&config);}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ adc\_oneshot\_config\_channel(}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{adc__manager_8c_a0b95b5937de8bdf11f73c2636d897c49}{adc1\_handle}},}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ ADC\_CHANNEL\_3,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \&config);}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ adc\_oneshot\_config\_channel(}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{adc__manager_8c_a0b95b5937de8bdf11f73c2636d897c49}{adc1\_handle}},}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ ADC\_CHANNEL\_4,}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \&config);}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00122\ \ \ \ \ adc\_cali\_line\_fitting\_config\_t\ cali\_config\ =\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ .unit\_id\ =\ ADC\_UNIT\_1,}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ .atten\ =\ ADC\_ATTEN\_DB\_12,}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ .bitwidth\ =\ ADC\_BITWIDTH\_DEFAULT,}
+\DoxyCodeLine{00126\ \ \ \ \ \};}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ adc\_cali\_create\_scheme\_line\_fitting(}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \&cali\_config,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \&\doxymbox{\hyperlink{adc__manager_8c_a49ce44847deee2ea73bb6920a9e82a7c}{adc1\_cali\_handle}});}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}ADC1\ inicializado\ y\ calibrado"{}});}
+\DoxyCodeLine{00133\ \}}
+
+\end{DoxyCode}
+\Hypertarget{adc__manager_8h_a228d08c460b3c57ca3f7efc00c5e3f0c}\index{adc\_manager.h@{adc\_manager.h}!adc\_manager\_read\_voltage@{adc\_manager\_read\_voltage}}
+\index{adc\_manager\_read\_voltage@{adc\_manager\_read\_voltage}!adc\_manager.h@{adc\_manager.h}}
+\doxysubsubsection{\texorpdfstring{adc\_manager\_read\_voltage()}{adc\_manager\_read\_voltage()}}
+{\footnotesize\ttfamily \label{adc__manager_8h_a228d08c460b3c57ca3f7efc00c5e3f0c} 
+float adc\+\_\+manager\+\_\+read\+\_\+voltage (\begin{DoxyParamCaption}\item[{adc\+\_\+channel\+\_\+t}]{channel}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene el voltaje asociado a un canal ADC. 
+
+El procedimiento incluye:\+
+\begin{DoxyItemize}
+\item Conversión analógica-\/digital.
+\item Calibración de la lectura.
+\item Conversión de milivoltios a voltios.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em channel} & Canal ADC a convertir.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Voltaje medido en voltios.
+\end{DoxyReturn}
+El procedimiento consiste en:\+
+\begin{DoxyItemize}
+\item Leer el valor ADC crudo.
+\item Aplicar calibración.
+\item Convertir milivoltios a voltios.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em channel} & Canal ADC a convertir.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+Voltaje medido en voltios. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{adc__manager_8c_source_l00151}{151}} del archivo \doxymbox{\hyperlink{adc__manager_8c_source}{adc\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00152\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{int}\ raw;}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keywordtype}{int}\ voltage\_mv;}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ Lectura\ ADC\ sin\ procesar. }}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00159\ \ \ \ \ adc\_oneshot\_read(}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{adc__manager_8c_a0b95b5937de8bdf11f73c2636d897c49}{adc1\_handle}},}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ channel,}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \&raw);}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ de\ lectura\ cruda\ a\ milivoltios }}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ mediante\ calibración. }}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00168\ \ \ \ \ adc\_cali\_raw\_to\_voltage(}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{adc__manager_8c_a49ce44847deee2ea73bb6920a9e82a7c}{adc1\_cali\_handle}},}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ raw,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \&voltage\_mv);}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ de\ mV\ a\ V. }}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordflow}{return}\ voltage\_mv\ /\ 1000.0f;}
+\DoxyCodeLine{00177\ \}}
+
+\end{DoxyCode}

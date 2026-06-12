@@ -1,0 +1,675 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/hal/i2c_manager.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('i2c__manager_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo i2c_manager.c</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Implementación de la capa de abstracción para el bus I2C del ESP32.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="i2c__manager_8h_source.html">i2c_manager.h</a>&quot;</code><br />
+<code>#include &quot;driver/i2c.h&quot;</code><br />
+<code>#include &quot;esp_log.h&quot;</code><br />
+</div>
+<p><a href="i2c__manager_8c_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+defines</h2></td></tr>
+<tr class="memitem:afc3d101f633a076cc1ca84b85b6224b2" id="r_afc3d101f633a076cc1ca84b85b6224b2"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>&#160;&#160;&#160;&quot;I2C&quot;</td></tr>
+<tr class="memdesc:afc3d101f633a076cc1ca84b85b6224b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Etiqueta utilizada por el sistema de logging.  <br /></td></tr>
+<tr class="memitem:a033b5e8a30541fe4ff939a62fdb7a43d" id="r_a033b5e8a30541fe4ff939a62fdb7a43d"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a033b5e8a30541fe4ff939a62fdb7a43d">I2C_MASTER_SCL_IO</a>&#160;&#160;&#160;22</td></tr>
+<tr class="memdesc:a033b5e8a30541fe4ff939a62fdb7a43d"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO utilizado como línea SCL.  <br /></td></tr>
+<tr class="memitem:af47631d568bba17edf9d1ea042602bb6" id="r_af47631d568bba17edf9d1ea042602bb6"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#af47631d568bba17edf9d1ea042602bb6">I2C_MASTER_SDA_IO</a>&#160;&#160;&#160;21</td></tr>
+<tr class="memdesc:af47631d568bba17edf9d1ea042602bb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO utilizado como línea SDA.  <br /></td></tr>
+<tr class="memitem:aab9e642b6200f95fcbd2ad7466aaa2d3" id="r_aab9e642b6200f95fcbd2ad7466aaa2d3"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#aab9e642b6200f95fcbd2ad7466aaa2d3">I2C_MASTER_NUM</a>&#160;&#160;&#160;I2C_NUM_0</td></tr>
+<tr class="memdesc:aab9e642b6200f95fcbd2ad7466aaa2d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puerto I2C utilizado por el sistema.  <br /></td></tr>
+<tr class="memitem:a5c22ca4de37a83a59014e48b0a0b043d" id="r_a5c22ca4de37a83a59014e48b0a0b043d"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a5c22ca4de37a83a59014e48b0a0b043d">I2C_MASTER_FREQ_HZ</a>&#160;&#160;&#160;100000</td></tr>
+<tr class="memdesc:a5c22ca4de37a83a59014e48b0a0b043d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frecuencia de operación del bus I2C.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a87d680c63f56a29ae4e40228349c0e9a" id="r_a87d680c63f56a29ae4e40228349c0e9a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a87d680c63f56a29ae4e40228349c0e9a">i2c_manager_init</a> (void)</td></tr>
+<tr class="memdesc:a87d680c63f56a29ae4e40228349c0e9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa el bus I2C en modo maestro.  <br /></td></tr>
+<tr class="memitem:ab0f72d2693079f4ba12276a7b2516b0b" id="r_ab0f72d2693079f4ba12276a7b2516b0b"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#ab0f72d2693079f4ba12276a7b2516b0b">i2c_manager_write</a> (uint8_t addr, uint8_t reg, uint8_t *data, size_t len)</td></tr>
+<tr class="memdesc:ab0f72d2693079f4ba12276a7b2516b0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Escribe datos en un registro de un dispositivo I2C.  <br /></td></tr>
+<tr class="memitem:a2b26a5dc8d840e8e3ab4c6d07d772f41" id="r_a2b26a5dc8d840e8e3ab4c6d07d772f41"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#a2b26a5dc8d840e8e3ab4c6d07d772f41">i2c_manager_read</a> (uint8_t addr, uint8_t reg, uint8_t *data, size_t len)</td></tr>
+<tr class="memdesc:a2b26a5dc8d840e8e3ab4c6d07d772f41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lee datos desde un registro de un dispositivo I2C.  <br /></td></tr>
+<tr class="memitem:a08d3014e9596e0c13d21fb4473754f31" id="r_a08d3014e9596e0c13d21fb4473754f31"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#a08d3014e9596e0c13d21fb4473754f31">i2c_manager_write_raw</a> (uint8_t addr, const uint8_t *data, size_t len)</td></tr>
+<tr class="memdesc:a08d3014e9596e0c13d21fb4473754f31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envía un bloque de datos sin especificar registro.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a60bdaef4d905b9f3d244350633a80080" id="r_a60bdaef4d905b9f3d244350633a80080"><td class="memItemLeft">SemaphoreHandle_t&#160;</td><td class="memItemRight"><a class="el" href="#a60bdaef4d905b9f3d244350633a80080">mutex_i2c</a> = NULL</td></tr>
+<tr class="memdesc:a60bdaef4d905b9f3d244350633a80080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex global para acceso seguro al bus I2C.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Implementación de la capa de abstracción para el bus I2C del ESP32. </p>
+<p>Este módulo configura el ESP32 como maestro I2C y proporciona funciones genéricas para comunicación con dispositivos conectados al bus.</p>
+<p>Funcionalidades:</p><ul>
+<li>Inicialización del bus I2C.</li>
+<li>Escritura de registros.</li>
+<li>Lectura de registros.</li>
+<li>Escritura de bloques de datos.</li>
+<li>Protección mediante mutex para acceso concurrente.</li>
+</ul>
+<p>Los módulos que utilizan esta capa incluyen:</p><ul>
+<li>rtc_ds3231</li>
+<li>oled_display</li>
+</ul>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Documentación de «define»</h2>
+<a id="a5c22ca4de37a83a59014e48b0a0b043d" name="a5c22ca4de37a83a59014e48b0a0b043d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c22ca4de37a83a59014e48b0a0b043d">&#9670;&#160;</a></span>I2C_MASTER_FREQ_HZ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define I2C_MASTER_FREQ_HZ&#160;&#160;&#160;100000</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Frecuencia de operación del bus I2C. </p>
+<p>Configurada a 100 kHz para garantizar compatibilidad con todos los dispositivos conectados. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00057">57</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="aab9e642b6200f95fcbd2ad7466aaa2d3" name="aab9e642b6200f95fcbd2ad7466aaa2d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab9e642b6200f95fcbd2ad7466aaa2d3">&#9670;&#160;</a></span>I2C_MASTER_NUM</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define I2C_MASTER_NUM&#160;&#160;&#160;I2C_NUM_0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Puerto I2C utilizado por el sistema. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00049">49</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a033b5e8a30541fe4ff939a62fdb7a43d" name="a033b5e8a30541fe4ff939a62fdb7a43d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a033b5e8a30541fe4ff939a62fdb7a43d">&#9670;&#160;</a></span>I2C_MASTER_SCL_IO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define I2C_MASTER_SCL_IO&#160;&#160;&#160;22</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GPIO utilizado como línea SCL. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00039">39</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="af47631d568bba17edf9d1ea042602bb6" name="af47631d568bba17edf9d1ea042602bb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af47631d568bba17edf9d1ea042602bb6">&#9670;&#160;</a></span>I2C_MASTER_SDA_IO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define I2C_MASTER_SDA_IO&#160;&#160;&#160;21</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GPIO utilizado como línea SDA. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00044">44</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="afc3d101f633a076cc1ca84b85b6224b2" name="afc3d101f633a076cc1ca84b85b6224b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc3d101f633a076cc1ca84b85b6224b2">&#9670;&#160;</a></span>TAG</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TAG&#160;&#160;&#160;&quot;I2C&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Etiqueta utilizada por el sistema de logging. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00034">34</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a87d680c63f56a29ae4e40228349c0e9a" name="a87d680c63f56a29ae4e40228349c0e9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87d680c63f56a29ae4e40228349c0e9a">&#9670;&#160;</a></span>i2c_manager_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void i2c_manager_init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa el bus I2C en modo maestro. </p>
+<p>Configura:</p><ul>
+<li>Pines SDA y SCL.</li>
+<li>Pull-ups internas.</li>
+<li>Frecuencia de operación.</li>
+<li>Driver I2C de ESP-IDF.</li>
+</ul>
+<p>Además crea el mutex utilizado para sincronizar el acceso concurrente al bus.</p>
+<p>Configura los pines SDA y SCL, la frecuencia del bus y crea los recursos necesarios para la comunicación.</p>
+<p>Esta función debe ejecutarse una única vez durante la inicialización del sistema. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00084">84</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   85</span>{</div>
+<div class="line"><span class="lineno">   86</span>    i2c_config_t conf = {</div>
+<div class="line"><span class="lineno">   87</span>        .mode = I2C_MODE_MASTER,</div>
+<div class="line"><span class="lineno">   88</span>        .sda_io_num = <a class="code hl_define" href="#af47631d568bba17edf9d1ea042602bb6">I2C_MASTER_SDA_IO</a>,</div>
+<div class="line"><span class="lineno">   89</span>        .scl_io_num = <a class="code hl_define" href="#a033b5e8a30541fe4ff939a62fdb7a43d">I2C_MASTER_SCL_IO</a>,</div>
+<div class="line"><span class="lineno">   90</span>        .sda_pullup_en = GPIO_PULLUP_ENABLE,</div>
+<div class="line"><span class="lineno">   91</span>        .scl_pullup_en = GPIO_PULLUP_ENABLE,</div>
+<div class="line"><span class="lineno">   92</span>        .master.clk_speed = <a class="code hl_define" href="#a5c22ca4de37a83a59014e48b0a0b043d">I2C_MASTER_FREQ_HZ</a></div>
+<div class="line"><span class="lineno">   93</span>    };</div>
+<div class="line"><span class="lineno">   94</span> </div>
+<div class="line"><span class="lineno">   95</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">   96</span><span class="comment">     * Configuración del periférico I2C.</span></div>
+<div class="line"><span class="lineno">   97</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">   98</span>    i2c_param_config(</div>
+<div class="line"><span class="lineno">   99</span>        <a class="code hl_define" href="#aab9e642b6200f95fcbd2ad7466aaa2d3">I2C_MASTER_NUM</a>,</div>
+<div class="line"><span class="lineno">  100</span>        &amp;conf);</div>
+<div class="line"><span class="lineno">  101</span> </div>
+<div class="line"><span class="lineno">  102</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  103</span><span class="comment">     * Instalación del driver I2C.</span></div>
+<div class="line"><span class="lineno">  104</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  105</span>    i2c_driver_install(</div>
+<div class="line"><span class="lineno">  106</span>        <a class="code hl_define" href="#aab9e642b6200f95fcbd2ad7466aaa2d3">I2C_MASTER_NUM</a>,</div>
+<div class="line"><span class="lineno">  107</span>        conf.mode,</div>
+<div class="line"><span class="lineno">  108</span>        0,</div>
+<div class="line"><span class="lineno">  109</span>        0,</div>
+<div class="line"><span class="lineno">  110</span>        0);</div>
+<div class="line"><span class="lineno">  111</span> </div>
+<div class="line"><span class="lineno">  112</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  113</span><span class="comment">     * Creación del mutex global para protección</span></div>
+<div class="line"><span class="lineno">  114</span><span class="comment">     * de acceso al bus compartido.</span></div>
+<div class="line"><span class="lineno">  115</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  116</span>    <a class="code hl_variable" href="oled__display_8c.html#a60bdaef4d905b9f3d244350633a80080">mutex_i2c</a> = xSemaphoreCreateMutex();</div>
+<div class="line"><span class="lineno">  117</span> </div>
+<div class="line"><span class="lineno">  118</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;I2C inicializado&quot;</span>);</div>
+<div class="line"><span class="lineno">  119</span>}</div>
+<div class="ttc" id="ai2c__manager_8c_html_a033b5e8a30541fe4ff939a62fdb7a43d"><div class="ttname"><a href="#a033b5e8a30541fe4ff939a62fdb7a43d">I2C_MASTER_SCL_IO</a></div><div class="ttdeci">#define I2C_MASTER_SCL_IO</div><div class="ttdoc">GPIO utilizado como línea SCL.</div><div class="ttdef"><b>Definition</b> <a href="i2c__manager_8c_source.html#l00039">i2c_manager.c:39</a></div></div>
+<div class="ttc" id="ai2c__manager_8c_html_a5c22ca4de37a83a59014e48b0a0b043d"><div class="ttname"><a href="#a5c22ca4de37a83a59014e48b0a0b043d">I2C_MASTER_FREQ_HZ</a></div><div class="ttdeci">#define I2C_MASTER_FREQ_HZ</div><div class="ttdoc">Frecuencia de operación del bus I2C.</div><div class="ttdef"><b>Definition</b> <a href="i2c__manager_8c_source.html#l00057">i2c_manager.c:57</a></div></div>
+<div class="ttc" id="ai2c__manager_8c_html_aab9e642b6200f95fcbd2ad7466aaa2d3"><div class="ttname"><a href="#aab9e642b6200f95fcbd2ad7466aaa2d3">I2C_MASTER_NUM</a></div><div class="ttdeci">#define I2C_MASTER_NUM</div><div class="ttdoc">Puerto I2C utilizado por el sistema.</div><div class="ttdef"><b>Definition</b> <a href="i2c__manager_8c_source.html#l00049">i2c_manager.c:49</a></div></div>
+<div class="ttc" id="ai2c__manager_8c_html_af47631d568bba17edf9d1ea042602bb6"><div class="ttname"><a href="#af47631d568bba17edf9d1ea042602bb6">I2C_MASTER_SDA_IO</a></div><div class="ttdeci">#define I2C_MASTER_SDA_IO</div><div class="ttdoc">GPIO utilizado como línea SDA.</div><div class="ttdef"><b>Definition</b> <a href="i2c__manager_8c_source.html#l00044">i2c_manager.c:44</a></div></div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+<div class="ttc" id="aoled__display_8c_html_a60bdaef4d905b9f3d244350633a80080"><div class="ttname"><a href="oled__display_8c.html#a60bdaef4d905b9f3d244350633a80080">mutex_i2c</a></div><div class="ttdeci">SemaphoreHandle_t mutex_i2c</div><div class="ttdoc">Mutex compartido para acceso exclusivo al bus I2C.</div><div class="ttdef"><b>Definition</b> <a href="i2c__manager_8c_source.html#l00066">i2c_manager.c:66</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a2b26a5dc8d840e8e3ab4c6d07d772f41" name="a2b26a5dc8d840e8e3ab4c6d07d772f41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b26a5dc8d840e8e3ab4c6d07d772f41">&#9670;&#160;</a></span>i2c_manager_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t i2c_manager_read </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>addr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>reg</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>len</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Lee datos desde un registro de un dispositivo I2C. </p>
+<p>La secuencia implementada es:</p>
+<p>START -&gt; Dirección dispositivo + Write -&gt; Registro origen -&gt; RESTART -&gt; Dirección dispositivo + Read -&gt; Datos -&gt; STOP</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addr</td><td>Dirección I2C del dispositivo. </td></tr>
+    <tr><td class="paramname">reg</td><td>Registro origen. </td></tr>
+    <tr><td class="paramname">data</td><td>Buffer de recepción. </td></tr>
+    <tr><td class="paramname">len</td><td>Número de bytes a leer.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Código de error ESP-IDF.</dd></dl>
+<p>Realiza una transacción de lectura a partir del registro especificado.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addr</td><td>Dirección I2C del dispositivo. </td></tr>
+    <tr><td class="paramname">reg</td><td>Registro interno a leer. </td></tr>
+    <tr><td class="paramname">data</td><td>Buffer donde se almacenarán los datos. </td></tr>
+    <tr><td class="paramname">len</td><td>Número de bytes a recibir.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Operación exitosa.</li>
+<li>Código de error en caso contrario. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00207">207</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  212</span>{</div>
+<div class="line"><span class="lineno">  213</span>    i2c_cmd_handle_t cmd =</div>
+<div class="line"><span class="lineno">  214</span>        i2c_cmd_link_create();</div>
+<div class="line"><span class="lineno">  215</span> </div>
+<div class="line"><span class="lineno">  216</span>    i2c_master_start(cmd);</div>
+<div class="line"><span class="lineno">  217</span> </div>
+<div class="line"><span class="lineno">  218</span>    i2c_master_write_byte(</div>
+<div class="line"><span class="lineno">  219</span>        cmd,</div>
+<div class="line"><span class="lineno">  220</span>        (addr &lt;&lt; 1) | I2C_MASTER_WRITE,</div>
+<div class="line"><span class="lineno">  221</span>        <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  222</span> </div>
+<div class="line"><span class="lineno">  223</span>    i2c_master_write_byte(</div>
+<div class="line"><span class="lineno">  224</span>        cmd,</div>
+<div class="line"><span class="lineno">  225</span>        reg,</div>
+<div class="line"><span class="lineno">  226</span>        <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  227</span> </div>
+<div class="line"><span class="lineno">  228</span>    i2c_master_start(cmd);</div>
+<div class="line"><span class="lineno">  229</span> </div>
+<div class="line"><span class="lineno">  230</span>    i2c_master_write_byte(</div>
+<div class="line"><span class="lineno">  231</span>        cmd,</div>
+<div class="line"><span class="lineno">  232</span>        (addr &lt;&lt; 1) | I2C_MASTER_READ,</div>
+<div class="line"><span class="lineno">  233</span>        <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  234</span> </div>
+<div class="line"><span class="lineno">  235</span>    <span class="keywordflow">if</span> (len &gt; 1) {</div>
+<div class="line"><span class="lineno">  236</span>        i2c_master_read(</div>
+<div class="line"><span class="lineno">  237</span>            cmd,</div>
+<div class="line"><span class="lineno">  238</span>            data,</div>
+<div class="line"><span class="lineno">  239</span>            len - 1,</div>
+<div class="line"><span class="lineno">  240</span>            I2C_MASTER_ACK);</div>
+<div class="line"><span class="lineno">  241</span>    }</div>
+<div class="line"><span class="lineno">  242</span> </div>
+<div class="line"><span class="lineno">  243</span>    i2c_master_read_byte(</div>
+<div class="line"><span class="lineno">  244</span>        cmd,</div>
+<div class="line"><span class="lineno">  245</span>        data + len - 1,</div>
+<div class="line"><span class="lineno">  246</span>        I2C_MASTER_NACK);</div>
+<div class="line"><span class="lineno">  247</span> </div>
+<div class="line"><span class="lineno">  248</span>    i2c_master_stop(cmd);</div>
+<div class="line"><span class="lineno">  249</span> </div>
+<div class="line"><span class="lineno">  250</span>    esp_err_t ret =</div>
+<div class="line"><span class="lineno">  251</span>        i2c_master_cmd_begin(</div>
+<div class="line"><span class="lineno">  252</span>            <a class="code hl_define" href="#aab9e642b6200f95fcbd2ad7466aaa2d3">I2C_MASTER_NUM</a>,</div>
+<div class="line"><span class="lineno">  253</span>            cmd,</div>
+<div class="line"><span class="lineno">  254</span>            pdMS_TO_TICKS(100));</div>
+<div class="line"><span class="lineno">  255</span> </div>
+<div class="line"><span class="lineno">  256</span>    i2c_cmd_link_delete(cmd);</div>
+<div class="line"><span class="lineno">  257</span> </div>
+<div class="line"><span class="lineno">  258</span>    <span class="keywordflow">return</span> ret;</div>
+<div class="line"><span class="lineno">  259</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ab0f72d2693079f4ba12276a7b2516b0b" name="ab0f72d2693079f4ba12276a7b2516b0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0f72d2693079f4ba12276a7b2516b0b">&#9670;&#160;</a></span>i2c_manager_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t i2c_manager_write </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>addr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>reg</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>len</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Escribe datos en un registro de un dispositivo I2C. </p>
+<p>La secuencia implementada es:</p>
+<p>START -&gt; Dirección dispositivo + Write -&gt; Registro destino -&gt; Datos -&gt; STOP</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addr</td><td>Dirección I2C del dispositivo. </td></tr>
+    <tr><td class="paramname">reg</td><td>Registro de destino. </td></tr>
+    <tr><td class="paramname">data</td><td>Datos a transmitir. </td></tr>
+    <tr><td class="paramname">len</td><td>Número de bytes a enviar.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Código de error ESP-IDF.</dd></dl>
+<p>Realiza una transacción de escritura compuesta por:</p><ul>
+<li>Dirección del dispositivo.</li>
+<li>Dirección del registro.</li>
+<li>Datos asociados.</li>
+</ul>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addr</td><td>Dirección I2C del dispositivo. </td></tr>
+    <tr><td class="paramname">reg</td><td>Registro interno de destino. </td></tr>
+    <tr><td class="paramname">data</td><td>Buffer con los datos a transmitir. </td></tr>
+    <tr><td class="paramname">len</td><td>Número de bytes a escribir.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Operación exitosa.</li>
+<li>Código de error en caso contrario. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00143">143</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  148</span>{</div>
+<div class="line"><span class="lineno">  149</span>    i2c_cmd_handle_t cmd =</div>
+<div class="line"><span class="lineno">  150</span>        i2c_cmd_link_create();</div>
+<div class="line"><span class="lineno">  151</span> </div>
+<div class="line"><span class="lineno">  152</span>    i2c_master_start(cmd);</div>
+<div class="line"><span class="lineno">  153</span> </div>
+<div class="line"><span class="lineno">  154</span>    i2c_master_write_byte(</div>
+<div class="line"><span class="lineno">  155</span>        cmd,</div>
+<div class="line"><span class="lineno">  156</span>        (addr &lt;&lt; 1) | I2C_MASTER_WRITE,</div>
+<div class="line"><span class="lineno">  157</span>        <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  158</span> </div>
+<div class="line"><span class="lineno">  159</span>    i2c_master_write_byte(</div>
+<div class="line"><span class="lineno">  160</span>        cmd,</div>
+<div class="line"><span class="lineno">  161</span>        reg,</div>
+<div class="line"><span class="lineno">  162</span>        <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  163</span> </div>
+<div class="line"><span class="lineno">  164</span>    i2c_master_write(</div>
+<div class="line"><span class="lineno">  165</span>        cmd,</div>
+<div class="line"><span class="lineno">  166</span>        data,</div>
+<div class="line"><span class="lineno">  167</span>        len,</div>
+<div class="line"><span class="lineno">  168</span>        <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  169</span> </div>
+<div class="line"><span class="lineno">  170</span>    i2c_master_stop(cmd);</div>
+<div class="line"><span class="lineno">  171</span> </div>
+<div class="line"><span class="lineno">  172</span>    esp_err_t ret =</div>
+<div class="line"><span class="lineno">  173</span>        i2c_master_cmd_begin(</div>
+<div class="line"><span class="lineno">  174</span>            <a class="code hl_define" href="#aab9e642b6200f95fcbd2ad7466aaa2d3">I2C_MASTER_NUM</a>,</div>
+<div class="line"><span class="lineno">  175</span>            cmd,</div>
+<div class="line"><span class="lineno">  176</span>            pdMS_TO_TICKS(100));</div>
+<div class="line"><span class="lineno">  177</span> </div>
+<div class="line"><span class="lineno">  178</span>    i2c_cmd_link_delete(cmd);</div>
+<div class="line"><span class="lineno">  179</span> </div>
+<div class="line"><span class="lineno">  180</span>    <span class="keywordflow">return</span> ret;</div>
+<div class="line"><span class="lineno">  181</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a08d3014e9596e0c13d21fb4473754f31" name="a08d3014e9596e0c13d21fb4473754f31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08d3014e9596e0c13d21fb4473754f31">&#9670;&#160;</a></span>i2c_manager_write_raw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t i2c_manager_write_raw </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>addr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>len</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Envía un bloque de datos sin especificar registro. </p>
+<p>Esta función es utilizada por dispositivos que requieren transmisiones directas de comandos o datos, como el controlador OLED SSD1306.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addr</td><td>Dirección I2C del dispositivo. </td></tr>
+    <tr><td class="paramname">data</td><td>Datos a transmitir. </td></tr>
+    <tr><td class="paramname">len</td><td>Cantidad de bytes.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Código de error ESP-IDF.</dd></dl>
+<p>Esta función es utilizada por dispositivos que requieren transmisiones directas de comandos o datos, como la pantalla OLED SSD1306.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addr</td><td>Dirección I2C del dispositivo. </td></tr>
+    <tr><td class="paramname">data</td><td>Datos a transmitir. </td></tr>
+    <tr><td class="paramname">len</td><td>Número de bytes a enviar.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Operación exitosa.</li>
+<li>Código de error en caso contrario. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00278">278</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  282</span>{</div>
+<div class="line"><span class="lineno">  283</span>    i2c_cmd_handle_t cmd =</div>
+<div class="line"><span class="lineno">  284</span>        i2c_cmd_link_create();</div>
+<div class="line"><span class="lineno">  285</span> </div>
+<div class="line"><span class="lineno">  286</span>    i2c_master_start(cmd);</div>
+<div class="line"><span class="lineno">  287</span> </div>
+<div class="line"><span class="lineno">  288</span>    i2c_master_write_byte(</div>
+<div class="line"><span class="lineno">  289</span>        cmd,</div>
+<div class="line"><span class="lineno">  290</span>        (addr &lt;&lt; 1) | I2C_MASTER_WRITE,</div>
+<div class="line"><span class="lineno">  291</span>        <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  292</span> </div>
+<div class="line"><span class="lineno">  293</span>    i2c_master_write(</div>
+<div class="line"><span class="lineno">  294</span>        cmd,</div>
+<div class="line"><span class="lineno">  295</span>        (uint8_t *)data,</div>
+<div class="line"><span class="lineno">  296</span>        len,</div>
+<div class="line"><span class="lineno">  297</span>        <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  298</span> </div>
+<div class="line"><span class="lineno">  299</span>    i2c_master_stop(cmd);</div>
+<div class="line"><span class="lineno">  300</span> </div>
+<div class="line"><span class="lineno">  301</span>    esp_err_t ret =</div>
+<div class="line"><span class="lineno">  302</span>        i2c_master_cmd_begin(</div>
+<div class="line"><span class="lineno">  303</span>            <a class="code hl_define" href="#aab9e642b6200f95fcbd2ad7466aaa2d3">I2C_MASTER_NUM</a>,</div>
+<div class="line"><span class="lineno">  304</span>            cmd,</div>
+<div class="line"><span class="lineno">  305</span>            pdMS_TO_TICKS(100));</div>
+<div class="line"><span class="lineno">  306</span> </div>
+<div class="line"><span class="lineno">  307</span>    i2c_cmd_link_delete(cmd);</div>
+<div class="line"><span class="lineno">  308</span> </div>
+<div class="line"><span class="lineno">  309</span>    <span class="keywordflow">return</span> ret;</div>
+<div class="line"><span class="lineno">  310</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Documentación de variables</h2>
+<a id="a60bdaef4d905b9f3d244350633a80080" name="a60bdaef4d905b9f3d244350633a80080"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60bdaef4d905b9f3d244350633a80080">&#9670;&#160;</a></span>mutex_i2c</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SemaphoreHandle_t mutex_i2c = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mutex global para acceso seguro al bus I2C. </p>
+<p>Mutex compartido para acceso exclusivo al bus I2C.</p>
+<p>Garantiza exclusión mutua cuando múltiples tareas intentan acceder simultáneamente a dispositivos conectados al mismo bus.</p>
+<p>Mutex global para acceso seguro al bus I2C.</p>
+<p>Utilizado por todos los periféricos que comparten el mismo bus, evitando condiciones de carrera entre tareas concurrentes. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="i2c__manager_8c_source.html#l00066">66</a> del archivo <a class="el" href="i2c__manager_8c_source.html">i2c_manager.c</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_2c1795b0295572423fca70fe6201093a.html">hal</a></li><li class="navelem"><a href="i2c__manager_8c.html">i2c_manager.c</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,724 @@
+\doxysection{Referencia del archivo main/\+drivers/\+sd\+\_\+card.c}
+\hypertarget{sd__card_8c}{}\label{sd__card_8c}\index{main/drivers/sd\_card.c@{main/drivers/sd\_card.c}}
+
+
+Implementación del módulo de almacenamiento en tarjeta SD mediante SPI.  
+
+
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \+\#include $<$errno.\+h$>$}\newline
+{\ttfamily \+\#include $<$string.\+h$>$}\newline
+{\ttfamily \+\#include $<$sys/\+stat.\+h$>$}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+vfs\+\_\+fat.\+h"{}}\newline
+{\ttfamily \+\#include "{}sdmmc\+\_\+cmd.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+spi\+\_\+common.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+sdspi\+\_\+host.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+semphr.\+h"{}}\newline
+{\ttfamily \+\#include "{}sd\+\_\+card.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_a46bdd417480dec5cb9cf196af3c7489c}{PIN\+\_\+\+MISO}}~19
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como línea MISO. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_abaeddda4b992af7165ed898ab8b2b4ac}{PIN\+\_\+\+MOSI}}~23
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como línea MOSI. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_a29e4cd8304fdcdd2e715189dfaaf31c2}{PIN\+\_\+\+CLK}}~18
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como reloj SPI. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{sd__card_8c_afa592f8fcb7a301edfe97aa121fd28ce}{PIN\+\_\+\+CS}}~5
+\begin{DoxyCompactList}\small\item\em GPIO utilizado como Chip Select. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\+\_\+card\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa y monta la tarjeta SD. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{sd__card_8c_a44ca2b4d5f9ee8fdb3a5cedd19f2b334}{sd\+\_\+card\+\_\+write\+\_\+line}} (const char \texorpdfstring{$\ast$}{*}line)
+\begin{DoxyCompactList}\small\item\em Escribe una línea en el archivo log.\+csv de la SD. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{sd__card_8c_a9709250696c3a23e2e05891c019b8e88}{sd\+\_\+card\+\_\+append\+\_\+pending\+\_\+mqtt}} (const char \texorpdfstring{$\ast$}{*}payload)
+\begin{DoxyCompactList}\small\item\em Guarda un payload MQTT pendiente de publicación. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{sd__card_8c_a4b7f64560c914a0223302fbd144c8f26}{sd\+\_\+card\+\_\+pending\+\_\+mqtt\+\_\+exists}} (void)
+\begin{DoxyCompactList}\small\item\em Verifica la existencia de mensajes MQTT pendientes. \end{DoxyCompactList}\item 
+FILE \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sd__card_8c_a07d076d37d4d84bb737fb156fb4e01fd}{sd\+\_\+card\+\_\+open\+\_\+pending\+\_\+mqtt\+\_\+read}} (void)
+\begin{DoxyCompactList}\small\item\em Abre el archivo de mensajes MQTT pendientes. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sd__card_8c_a35ae42e918762a7bc304f39cec1d330c}{sd\+\_\+card\+\_\+read\+\_\+pending\+\_\+mqtt\+\_\+line}} (FILE \texorpdfstring{$\ast$}{*}file, char \texorpdfstring{$\ast$}{*}buffer, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Lee una línea del archivo de mensajes MQTT pendientes. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{sd__card_8c_a07dd8178e8630f2cc8d381af7f6ec9d9}{sd\+\_\+card\+\_\+close\+\_\+pending\+\_\+mqtt}} (FILE \texorpdfstring{$\ast$}{*}file)
+\begin{DoxyCompactList}\small\item\em Cierra el archivo de mensajes MQTT pendientes. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{sd__card_8c_a36756946bae9f06f242754f9af59d944}{sd\+\_\+card\+\_\+delete\+\_\+pending\+\_\+mqtt}} (void)
+\begin{DoxyCompactList}\small\item\em Elimina el archivo de mensajes MQTT pendientes. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{sd__card_8c_ac9ae86642649b9c94602adb5b313104e}{sd\+\_\+card\+\_\+is\+\_\+mounted}} (void)
+\begin{DoxyCompactList}\small\item\em Verifica si la tarjeta SD se encuentra montada. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{sd__card_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}SD"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada por el sistema de logging. \end{DoxyCompactList}\item 
+static const char \doxymbox{\hyperlink{sd__card_8c_a265dbe8dd1c8bf0f771a15e941c13fae}{mount\+\_\+point}} \+[$\,$]\+ = "{}/\+sdcard"{}
+\begin{DoxyCompactList}\small\item\em Punto de montaje del sistema de archivos FAT. \end{DoxyCompactList}\item 
+static const char \doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\+\_\+mqtt\+\_\+path}} \+[$\,$]\+ = "{}/\+sdcard/\+mqtt\+\_\+pending.\+txt"{}
+\begin{DoxyCompactList}\small\item\em Archivo utilizado para almacenar mensajes MQTT pendientes. \end{DoxyCompactList}\item 
+static Semaphore\+Handle\+\_\+t \doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\+\_\+mutex}} = NULL
+\begin{DoxyCompactList}\small\item\em Mutex para acceso exclusivo al bus SPI. \end{DoxyCompactList}\item 
+static bool \doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{sd\+\_\+mounted}} = false
+\begin{DoxyCompactList}\small\item\em Indica si la tarjeta SD fue montada correctamente. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del módulo de almacenamiento en tarjeta SD mediante SPI. 
+
+Este módulo proporciona funciones para:\+
+\begin{DoxyItemize}
+\item Inicialización y montaje de la tarjeta SD.
+\item Escritura de registros históricos en formato CSV.
+\item Almacenamiento temporal de mensajes MQTT pendientes.
+\item Recuperación de mensajes pendientes.
+\item Gestión segura de acceso concurrente mediante mutex.
+\end{DoxyItemize}
+
+El módulo permite mantener la persistencia de datos del sistema de fermentación incluso ante fallos de conectividad MQTT.
+
+El acceso al bus SPI se encuentra protegido mediante exclusión mutua para evitar condiciones de carrera entre tareas Free\+RTOS.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+
+\label{sd__card_8c_doc-define-members}
+\Hypertarget{sd__card_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{sd__card_8c_a29e4cd8304fdcdd2e715189dfaaf31c2}\index{sd\_card.c@{sd\_card.c}!PIN\_CLK@{PIN\_CLK}}
+\index{PIN\_CLK@{PIN\_CLK}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{PIN\_CLK}{PIN\_CLK}}
+{\footnotesize\ttfamily \label{sd__card_8c_a29e4cd8304fdcdd2e715189dfaaf31c2} 
+\+\#define PIN\+\_\+\+CLK~18}
+
+
+
+GPIO utilizado como reloj SPI. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00063}{63}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+\Hypertarget{sd__card_8c_afa592f8fcb7a301edfe97aa121fd28ce}\index{sd\_card.c@{sd\_card.c}!PIN\_CS@{PIN\_CS}}
+\index{PIN\_CS@{PIN\_CS}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{PIN\_CS}{PIN\_CS}}
+{\footnotesize\ttfamily \label{sd__card_8c_afa592f8fcb7a301edfe97aa121fd28ce} 
+\+\#define PIN\+\_\+\+CS~5}
+
+
+
+GPIO utilizado como Chip Select. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00068}{68}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+\Hypertarget{sd__card_8c_a46bdd417480dec5cb9cf196af3c7489c}\index{sd\_card.c@{sd\_card.c}!PIN\_MISO@{PIN\_MISO}}
+\index{PIN\_MISO@{PIN\_MISO}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{PIN\_MISO}{PIN\_MISO}}
+{\footnotesize\ttfamily \label{sd__card_8c_a46bdd417480dec5cb9cf196af3c7489c} 
+\+\#define PIN\+\_\+\+MISO~19}
+
+
+
+GPIO utilizado como línea MISO. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00053}{53}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+\Hypertarget{sd__card_8c_abaeddda4b992af7165ed898ab8b2b4ac}\index{sd\_card.c@{sd\_card.c}!PIN\_MOSI@{PIN\_MOSI}}
+\index{PIN\_MOSI@{PIN\_MOSI}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{PIN\_MOSI}{PIN\_MOSI}}
+{\footnotesize\ttfamily \label{sd__card_8c_abaeddda4b992af7165ed898ab8b2b4ac} 
+\+\#define PIN\+\_\+\+MOSI~23}
+
+
+
+GPIO utilizado como línea MOSI. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00058}{58}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+
+\label{sd__card_8c_doc-func-members}
+\Hypertarget{sd__card_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{sd__card_8c_a9709250696c3a23e2e05891c019b8e88}\index{sd\_card.c@{sd\_card.c}!sd\_card\_append\_pending\_mqtt@{sd\_card\_append\_pending\_mqtt}}
+\index{sd\_card\_append\_pending\_mqtt@{sd\_card\_append\_pending\_mqtt}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_append\_pending\_mqtt()}{sd\_card\_append\_pending\_mqtt()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a9709250696c3a23e2e05891c019b8e88} 
+esp\+\_\+err\+\_\+t sd\+\_\+card\+\_\+append\+\_\+pending\+\_\+mqtt (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{payload}{}\end{DoxyParamCaption})}
+
+
+
+Guarda un payload MQTT pendiente de publicación. 
+
+Cuando no existe conectividad con el broker MQTT, el mensaje se almacena temporalmente en la tarjeta SD para su posterior retransmisión.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em payload} & Mensaje MQTT a almacenar.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Operación exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00232}{232}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00233\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordflow}{if}\ (payload\ ==\ NULL)\ \{}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00236\ \ \ \ \ \}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00240\ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ xSemaphoreTake(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}},\ portMAX\_DELAY);}
+\DoxyCodeLine{00244\ \ \ \ \ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ FILE\ *f\ =\ fopen(\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ \textcolor{stringliteral}{"{}a"{}});}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keywordflow}{if}\ (f\ ==\ NULL)\ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ abriendo\ pendientes\ MQTT\ (\%s),\ errno=\%d"{}},\ \doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ errno);}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00256\ \ \ \ \ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ fprintf(f,\ \textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}},\ payload);}
+\DoxyCodeLine{00259\ \ \ \ \ fflush(f);}
+\DoxyCodeLine{00260\ \ \ \ \ fclose(f);}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{00264\ \ \ \ \ \}}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00267\ \}}
+
+\end{DoxyCode}
+\Hypertarget{sd__card_8c_a07dd8178e8630f2cc8d381af7f6ec9d9}\index{sd\_card.c@{sd\_card.c}!sd\_card\_close\_pending\_mqtt@{sd\_card\_close\_pending\_mqtt}}
+\index{sd\_card\_close\_pending\_mqtt@{sd\_card\_close\_pending\_mqtt}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_close\_pending\_mqtt()}{sd\_card\_close\_pending\_mqtt()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a07dd8178e8630f2cc8d381af7f6ec9d9} 
+void sd\+\_\+card\+\_\+close\+\_\+pending\+\_\+mqtt (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{}\end{DoxyParamCaption})}
+
+
+
+Cierra el archivo de mensajes MQTT pendientes. 
+
+Libera los recursos asociados al archivo abierto.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em file} & Puntero al archivo. \\
+\hline
+\end{DoxyParams}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00312}{312}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00313\ \{}
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keywordflow}{if}\ (file\ !=\ NULL)\ \{}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{00316\ \ \ \ \ \}}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{00320\ \ \ \ \ \}}
+\DoxyCodeLine{00321\ \}}
+
+\end{DoxyCode}
+\Hypertarget{sd__card_8c_a36756946bae9f06f242754f9af59d944}\index{sd\_card.c@{sd\_card.c}!sd\_card\_delete\_pending\_mqtt@{sd\_card\_delete\_pending\_mqtt}}
+\index{sd\_card\_delete\_pending\_mqtt@{sd\_card\_delete\_pending\_mqtt}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_delete\_pending\_mqtt()}{sd\_card\_delete\_pending\_mqtt()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a36756946bae9f06f242754f9af59d944} 
+esp\+\_\+err\+\_\+t sd\+\_\+card\+\_\+delete\+\_\+pending\+\_\+mqtt (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Elimina el archivo de mensajes MQTT pendientes. 
+
+Se utiliza una vez que todos los mensajes almacenados han sido retransmitidos correctamente al broker MQTT.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Archivo eliminado correctamente.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00323}{323}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00324\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00327\ \ \ \ \ \}}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ xSemaphoreTake(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}},\ portMAX\_DELAY);}
+\DoxyCodeLine{00331\ \ \ \ \ \}}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \ \ \textcolor{keywordtype}{int}\ result\ =\ remove(\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}});}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{00337\ \ \ \ \ \}}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keywordflow}{if}\ (result\ ==\ 0\ ||\ errno\ ==\ ENOENT)\ \{}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00341\ \ \ \ \ \}}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ eliminando\ pendientes\ MQTT\ (\%s),\ errno=\%d"{}},\ \doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ errno);}
+\DoxyCodeLine{00344\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00345\ \}}
+
+\end{DoxyCode}
+\Hypertarget{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}\index{sd\_card.c@{sd\_card.c}!sd\_card\_init@{sd\_card\_init}}
+\index{sd\_card\_init@{sd\_card\_init}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_init()}{sd\_card\_init()}}
+{\footnotesize\ttfamily \label{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1} 
+esp\+\_\+err\+\_\+t sd\+\_\+card\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa y monta la tarjeta SD. 
+
+Inicializa la tarjeta SD.
+
+Configura el bus SPI, el dispositivo SD y el sistema de archivos.
+
+\begin{DoxyReturn}{Devuelve}
+ESP\+\_\+\+OK si la tarjeta se monta correctamente.
+\end{DoxyReturn}
+Inicializa y monta la tarjeta SD.
+
+Configura el bus SPI, monta el sistema de archivos FAT y verifica la disponibilidad del dispositivo de almacenamiento.
+
+Esta función debe ejecutarse durante la inicialización del sistema antes de realizar operaciones de lectura o escritura.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Tarjeta montada correctamente.
+\item Código de error en caso de fallo. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00112}{112}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00113\ \{}
+\DoxyCodeLine{00114\ \ \ \ \ esp\_err\_t\ ret;}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{sd\_mounted}})\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00118\ \ \ \ \ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ ==\ NULL)\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ =\ xSemaphoreCreateMutex();}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ ==\ NULL)\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ creando\ mutex\ SPI"{}});}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ \ \ \ \ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ sdmmc\_host\_t\ host\ =\ SDSPI\_HOST\_DEFAULT();}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ spi\_bus\_config\_t\ bus\_cfg\ =\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ .mosi\_io\_num\ =\ \doxymbox{\hyperlink{sd__card_8c_abaeddda4b992af7165ed898ab8b2b4ac}{PIN\_MOSI}},}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ .miso\_io\_num\ =\ \doxymbox{\hyperlink{sd__card_8c_a46bdd417480dec5cb9cf196af3c7489c}{PIN\_MISO}},}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ .sclk\_io\_num\ =\ \doxymbox{\hyperlink{sd__card_8c_a29e4cd8304fdcdd2e715189dfaaf31c2}{PIN\_CLK}},}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ .quadwp\_io\_num\ =\ -\/1,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ .quadhd\_io\_num\ =\ -\/1,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ .max\_transfer\_sz\ =\ 4000,}
+\DoxyCodeLine{00137\ \ \ \ \ \};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ *\ Configuración\ del\ bus\ SPI\ utilizado\ para\ la\ comunicación}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ *\ con\ la\ tarjeta\ SD.}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00143\ \ \ \ \ ret\ =\ spi\_bus\_initialize(host.slot,\ \&bus\_cfg,\ SDSPI\_DEFAULT\_DMA);}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ ESP\_OK\ \&\&\ ret\ !=\ ESP\_ERR\_INVALID\_STATE)\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ inicializando\ SPI"{}});}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00147\ \ \ \ \ \}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ sdspi\_device\_config\_t\ slot\_config\ =\ SDSPI\_DEVICE\_CONFIG\_DEFAULT();}
+\DoxyCodeLine{00150\ \ \ \ \ slot\_config.gpio\_cs\ =\ \doxymbox{\hyperlink{sd__card_8c_afa592f8fcb7a301edfe97aa121fd28ce}{PIN\_CS}};}
+\DoxyCodeLine{00151\ \ \ \ \ slot\_config.host\_id\ =\ host.slot;}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ *\ Montaje\ del\ sistema\ de\ archivos\ FAT\ sobre\ la\ tarjeta\ SD.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00156\ \ \ \ \ esp\_vfs\_fat\_sdmmc\_mount\_config\_t\ mount\_config\ =\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ .format\_if\_mount\_failed\ =\ \textcolor{keyword}{false},}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ .max\_files\ =\ 5,}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ .allocation\_unit\_size\ =\ 16\ *\ 1024}
+\DoxyCodeLine{00160\ \ \ \ \ \};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ sdmmc\_card\_t\ *card;}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ ret\ =\ esp\_vfs\_fat\_sdspi\_mount(\doxymbox{\hyperlink{sd__card_8c_a265dbe8dd1c8bf0f771a15e941c13fae}{mount\_point}},\ \&host,\ \&slot\_config,\ \&mount\_config,\ \&card);}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ montando\ SD\ (\%s)"{}},\ esp\_err\_to\_name(ret));}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00169\ \ \ \ \ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}SD\ montada\ correctamente"{}});}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{sd\_mounted}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00176\ \}}
+
+\end{DoxyCode}
+\Hypertarget{sd__card_8c_ac9ae86642649b9c94602adb5b313104e}\index{sd\_card.c@{sd\_card.c}!sd\_card\_is\_mounted@{sd\_card\_is\_mounted}}
+\index{sd\_card\_is\_mounted@{sd\_card\_is\_mounted}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_is\_mounted()}{sd\_card\_is\_mounted()}}
+{\footnotesize\ttfamily \label{sd__card_8c_ac9ae86642649b9c94602adb5b313104e} 
+bool sd\+\_\+card\+\_\+is\+\_\+mounted (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Verifica si la tarjeta SD se encuentra montada. 
+
+Permite a otras tareas validar la disponibilidad del sistema de almacenamiento antes de realizar operaciones de lectura o escritura.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item true:\+ Tarjeta montada correctamente.
+\item false:\+ Tarjeta no disponible. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00347}{347}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00348\ \{}
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{sd\_mounted}};}
+\DoxyCodeLine{00350\ \}}
+
+\end{DoxyCode}
+\Hypertarget{sd__card_8c_a07d076d37d4d84bb737fb156fb4e01fd}\index{sd\_card.c@{sd\_card.c}!sd\_card\_open\_pending\_mqtt\_read@{sd\_card\_open\_pending\_mqtt\_read}}
+\index{sd\_card\_open\_pending\_mqtt\_read@{sd\_card\_open\_pending\_mqtt\_read}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_open\_pending\_mqtt\_read()}{sd\_card\_open\_pending\_mqtt\_read()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a07d076d37d4d84bb737fb156fb4e01fd} 
+FILE \texorpdfstring{$\ast$}{*} sd\+\_\+card\+\_\+open\+\_\+pending\+\_\+mqtt\+\_\+read (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Abre el archivo de mensajes MQTT pendientes. 
+
+El archivo es abierto en modo lectura para permitir la recuperación de mensajes almacenados previamente.
+
+\begin{DoxyReturn}{Devuelve}
+Puntero al archivo abierto o NULL si ocurre un error. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00280}{280}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00281\ \{}
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ xSemaphoreTake(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}},\ portMAX\_DELAY);}
+\DoxyCodeLine{00288\ \ \ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ FILE\ *f\ =\ fopen(\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ \textcolor{stringliteral}{"{}r"{}});}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keywordflow}{if}\ (f\ ==\ NULL)\ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ abriendo\ pendientes\ MQTT\ (\%s),\ errno=\%d"{}},\ \doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ errno);}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00298\ \ \ \ \ \}}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keywordflow}{return}\ f;}
+\DoxyCodeLine{00301\ \}}
+
+\end{DoxyCode}
+\Hypertarget{sd__card_8c_a4b7f64560c914a0223302fbd144c8f26}\index{sd\_card.c@{sd\_card.c}!sd\_card\_pending\_mqtt\_exists@{sd\_card\_pending\_mqtt\_exists}}
+\index{sd\_card\_pending\_mqtt\_exists@{sd\_card\_pending\_mqtt\_exists}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_pending\_mqtt\_exists()}{sd\_card\_pending\_mqtt\_exists()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a4b7f64560c914a0223302fbd144c8f26} 
+bool sd\+\_\+card\+\_\+pending\+\_\+mqtt\+\_\+exists (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Verifica la existencia de mensajes MQTT pendientes. 
+
+Comprueba si existe el archivo de almacenamiento temporal utilizado para guardar mensajes no publicados.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item true:\+ Existen mensajes pendientes.
+\item false:\+ No existen mensajes pendientes. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00269}{269}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00270\ \{}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keyword}{struct\ }stat\ file\_stat;}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00275\ \ \ \ \ \}}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordflow}{return}\ stat(\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ \&file\_stat)\ ==\ 0;}
+\DoxyCodeLine{00278\ \}}
+
+\end{DoxyCode}
+\Hypertarget{sd__card_8c_a35ae42e918762a7bc304f39cec1d330c}\index{sd\_card.c@{sd\_card.c}!sd\_card\_read\_pending\_mqtt\_line@{sd\_card\_read\_pending\_mqtt\_line}}
+\index{sd\_card\_read\_pending\_mqtt\_line@{sd\_card\_read\_pending\_mqtt\_line}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_read\_pending\_mqtt\_line()}{sd\_card\_read\_pending\_mqtt\_line()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a35ae42e918762a7bc304f39cec1d330c} 
+char \texorpdfstring{$\ast$}{*} sd\+\_\+card\+\_\+read\+\_\+pending\+\_\+mqtt\+\_\+line (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{size\+\_\+t}]{size}{}\end{DoxyParamCaption})}
+
+
+
+Lee una línea del archivo de mensajes MQTT pendientes. 
+
+Obtiene el siguiente registro almacenado dentro del archivo.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em file} & Puntero al archivo abierto. \\
+\hline
+{\em buffer} & Buffer donde se almacenará la línea leída. \\
+\hline
+{\em size} & Tamaño del buffer.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item Puntero al buffer si la lectura fue exitosa.
+\item NULL si se alcanza el final del archivo o ocurre un error. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00303}{303}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00304\ \{}
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{keywordflow}{if}\ (file\ ==\ NULL\ ||\ buffer\ ==\ NULL\ ||\ size\ ==\ 0)\ \{}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{00307\ \ \ \ \ \}}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordflow}{return}\ fgets(buffer,\ size,\ file);}
+\DoxyCodeLine{00310\ \}}
+
+\end{DoxyCode}
+\Hypertarget{sd__card_8c_a44ca2b4d5f9ee8fdb3a5cedd19f2b334}\index{sd\_card.c@{sd\_card.c}!sd\_card\_write\_line@{sd\_card\_write\_line}}
+\index{sd\_card\_write\_line@{sd\_card\_write\_line}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_card\_write\_line()}{sd\_card\_write\_line()}}
+{\footnotesize\ttfamily \label{sd__card_8c_a44ca2b4d5f9ee8fdb3a5cedd19f2b334} 
+esp\+\_\+err\+\_\+t sd\+\_\+card\+\_\+write\+\_\+line (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{line}{}\end{DoxyParamCaption})}
+
+
+
+Escribe una línea en el archivo log.\+csv de la SD. 
+
+Escribe una línea en el archivo de registro.
+
+La operación es protegida con mutex para evitar accesos concurrentes.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em line} & Texto a escribir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+ESP\+\_\+\+OK si la escritura fue exitosa.
+\end{DoxyReturn}
+Escribe una línea en el archivo log.\+csv de la SD.
+
+Añade una nueva línea al archivo CSV utilizado para almacenar las variables del proceso de fermentación.
+
+El acceso al archivo se encuentra protegido para evitar conflictos entre tareas concurrentes.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em line} & Cadena de texto a almacenar.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Escritura exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00190}{190}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00191\ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordflow}{if}\ (line\ ==\ NULL)\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00194\ \ \ \ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ xSemaphoreTake(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}},\ portMAX\_DELAY);}
+\DoxyCodeLine{00198\ \ \ \ \ \}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ *\ Apertura\ del\ archivo\ en\ modo\ append\ para\ preservar}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ *\ los\ registros\ históricos\ previamente\ almacenados.}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00204\ \ \ \ \ FILE\ *f\ =\ fopen(\textcolor{stringliteral}{"{}/sdcard/log.csv"{}},\ \textcolor{stringliteral}{"{}a"{}});}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordflow}{if}\ (f\ ==\ NULL)\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ abriendo\ archivo"{}});}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00214\ \ \ \ \ \}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ *\ Cada\ registro\ corresponde\ a\ una\ muestra\ del\ sistema}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ *\ de\ fermentación\ almacenada\ en\ formato\ CSV.}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00220\ \ \ \ \ fprintf(f,\ \textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}},\ line);}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ fflush(f);}
+\DoxyCodeLine{00223\ \ \ \ \ fclose(f);}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{00227\ \ \ \ \ \}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00230\ \}}
+
+\end{DoxyCode}
+
+
+\label{sd__card_8c_doc-var-members}
+\Hypertarget{sd__card_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{sd__card_8c_a265dbe8dd1c8bf0f771a15e941c13fae}\index{sd\_card.c@{sd\_card.c}!mount\_point@{mount\_point}}
+\index{mount\_point@{mount\_point}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{mount\_point}{mount\_point}}
+{\footnotesize\ttfamily \label{sd__card_8c_a265dbe8dd1c8bf0f771a15e941c13fae} 
+const char mount\+\_\+point\+[$\,$]\+ = "{}/\+sdcard"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Punto de montaje del sistema de archivos FAT. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00077}{77}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+\Hypertarget{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}\index{sd\_card.c@{sd\_card.c}!pending\_mqtt\_path@{pending\_mqtt\_path}}
+\index{pending\_mqtt\_path@{pending\_mqtt\_path}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{pending\_mqtt\_path}{pending\_mqtt\_path}}
+{\footnotesize\ttfamily \label{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b} 
+const char pending\+\_\+mqtt\+\_\+path\+[$\,$]\+ = "{}/\+sdcard/\+mqtt\+\_\+pending.\+txt"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Archivo utilizado para almacenar mensajes MQTT pendientes. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00082}{82}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+\Hypertarget{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}\index{sd\_card.c@{sd\_card.c}!sd\_mounted@{sd\_mounted}}
+\index{sd\_mounted@{sd\_mounted}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{sd\_mounted}{sd\_mounted}}
+{\footnotesize\ttfamily \label{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335} 
+bool sd\+\_\+mounted = false\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Indica si la tarjeta SD fue montada correctamente. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00099}{99}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+\Hypertarget{sd__card_8c_a76c0525d646735793add25b18043e600}\index{sd\_card.c@{sd\_card.c}!spi\_mutex@{spi\_mutex}}
+\index{spi\_mutex@{spi\_mutex}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{spi\_mutex}{spi\_mutex}}
+{\footnotesize\ttfamily \label{sd__card_8c_a76c0525d646735793add25b18043e600} 
+Semaphore\+Handle\+\_\+t spi\+\_\+mutex = NULL\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Mutex para acceso exclusivo al bus SPI. 
+
+Evita accesos concurrentes desde múltiples tareas durante operaciones de lectura o escritura. 
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00094}{94}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+
+\Hypertarget{sd__card_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{sd\_card.c@{sd\_card.c}!TAG@{TAG}}
+\index{TAG@{TAG}!sd\_card.c@{sd\_card.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{sd__card_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}SD"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada por el sistema de logging. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{sd__card_8c_source_l00044}{44}} del archivo \doxymbox{\hyperlink{sd__card_8c_source}{sd\+\_\+card.\+c}}.
+

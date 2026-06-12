@@ -1,0 +1,278 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+sensores.h}
+\hypertarget{task__sensores_8h}{}\label{task__sensores_8h}\index{main/tasks/task\_sensores.h@{main/tasks/task\_sensores.h}}
+
+
+Declaración de la tarea de adquisición de sensores.  
+
+
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__sensores_8h_a5b2930d6b5c8d2540af7d0b8e60ec19c}{task\+\_\+sensores}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea principal de adquisición de sensores. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Declaración de la tarea de adquisición de sensores. 
+
+Este módulo define la tarea responsable de realizar la adquisición periódica de las variables físicas del sistema de fermentación.
+
+La tarea obtiene información desde los sensores conectados al ESP32, realiza el procesamiento inicial de los datos y distribuye los resultados hacia las diferentes tareas del sistema mediante colas Free\+RTOS.
+
+Sensores gestionados:\+
+\begin{DoxyItemize}
+\item DS18\+B20 (temperatura).
+\item MQ-\/135 (CO2).
+\item Sensor de pH.
+\item Monitor de voltaje.
+\item Monitor de corriente.
+\item RTC DS3231.
+\end{DoxyItemize}
+
+Arquitectura:\+ \begin{DoxyVerb}   Sensores
+       |
+       v
+task_sensores
+       |
++------+------+------+
+|      |      |      |
+v      v      v      v
+\end{DoxyVerb}
+ logger mqtt display control
+
+Esta tarea actúa como productor principal de datos dentro de la arquitectura del sistema.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{task__sensores_8h_source}{task\+\_\+sensores.\+h}}.
+
+
+
+\label{task__sensores_8h_doc-func-members}
+\Hypertarget{task__sensores_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__sensores_8h_a5b2930d6b5c8d2540af7d0b8e60ec19c}\index{task\_sensores.h@{task\_sensores.h}!task\_sensores@{task\_sensores}}
+\index{task\_sensores@{task\_sensores}!task\_sensores.h@{task\_sensores.h}}
+\doxysubsubsection{\texorpdfstring{task\_sensores()}{task\_sensores()}}
+{\footnotesize\ttfamily \label{task__sensores_8h_a5b2930d6b5c8d2540af7d0b8e60ec19c} 
+void task\+\_\+sensores (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea principal de adquisición de sensores. 
+
+Realiza la lectura de los sensores del sistema, ejecuta el procesamiento inicial de las mediciones y distribuye los datos a través de las colas Free\+RTOS correspondientes.
+
+Funciones principales:\+
+\begin{DoxyItemize}
+\item Lectura de sensores.
+\item Obtención de fecha y hora.
+\item Construcción de estructuras \doxylink{structsensor__data__t}{sensor\+\_\+data\+\_\+t}.
+\item Envío de datos a tareas consumidoras.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados).\\
+\hline
+\end{DoxyParams}
+Permanece bloqueada esperando una notificación de activación proveniente de task\+\_\+energia.
+
+Una vez activada:\+
+\begin{DoxyItemize}
+\item Lee todos los sensores.
+\item Procesa las mediciones.
+\item Obtiene fecha y hora.
+\item Construye estructuras compartidas.
+\item Distribuye los datos mediante colas Free\+RTOS.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+Aplicar filtro exponencial para reducir ruido en la señal.
+
+Inicializar referencia base del sensor.
+
+Definición en la línea \doxymbox{\hyperlink{task__sensores_8c_source_l00116}{116}} del archivo \doxymbox{\hyperlink{task__sensores_8c_source}{task\+\_\+sensores.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00117\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}\ data;}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{//\ INICIALIZACIÓN\ DE\ DRIVERS}}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_a6b00c05f51803783dc6cd451ae0f7f0a}{mq135\_init}}();}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \doxymbox{\hyperlink{ph__sensor_8c_ac7ceffc8562ed45df0636de74fc23eb5}{ph\_init}}();}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_afb1d889451edc3f30db74315af96b963}{ds18b20\_init}}(GPIO\_NUM\_4);}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)}
+\DoxyCodeLine{00131\ \ \ \ \ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ESPERAR\ ACTIVACIÓN}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY);}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Leyendo\ sensores..."{}});}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ SENSOR\ MQ135}}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ raw\_voltage\ =}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_a62d1f381a988acaa8466fc5d1a609561}{mq135\_read}}();}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ raw\_adc\ =}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_aeaeb8445395bbf8d673b83af30b57997}{mq135\_read\_raw}}();}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ ESP\_LOGI(}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}MQ135\ ADC\ RAW:\ \%d"{}},}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ raw\_adc);}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__sensores_8c_af2eed96d0424911b730d85f8304c47a2}{filtered}}\ =}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__sensores_8c_af5abd28c44c29b7397c84f1fec4b1d84}{ALPHA}}\ *\ raw\_voltage\ +}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ (1.0f\ -\/\ \doxymbox{\hyperlink{task__sensores_8c_af5abd28c44c29b7397c84f1fec4b1d84}{ALPHA}})\ *\ \doxymbox{\hyperlink{task__sensores_8c_af2eed96d0424911b730d85f8304c47a2}{filtered}};}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{task__sensores_8c_a0d157587f79d70fcbaebc71841f79f5b}{baseline\_initialized}})}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__sensores_8c_aa97e7a675a0c986e0fa092133af5bcf9}{baseline}}\ =\ \doxymbox{\hyperlink{task__sensores_8c_af2eed96d0424911b730d85f8304c47a2}{filtered}};}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__sensores_8c_a0d157587f79d70fcbaebc71841f79f5b}{baseline\_initialized}}\ =\ 1;}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Baseline\ inicial:\ \%.4f"{}},}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__sensores_8c_aa97e7a675a0c986e0fa092133af5bcf9}{baseline}});}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a826880ddf83c7c8a9ef2d7610659d288}{co2\_raw}}\ =\ raw\_voltage;}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a1ac52f75cb0a613148535e9cbb60dc8f}{co2}}\ =}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__sensores_8c_af2eed96d0424911b730d85f8304c47a2}{filtered}}\ -\/\ \doxymbox{\hyperlink{task__sensores_8c_aa97e7a675a0c986e0fa092133af5bcf9}{baseline}};}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ SENSOR\ DE\ PH}}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_abddfa565d5cd714994d766dc490f1f45}{ph}}\ =}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{ph__sensor_8c_a73824c716592fbbaadcf307213d31c77}{ph\_read}}();}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TEMPERATURA\ DS18B20}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ temp\ =}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a5aac389dc38e235043998b969fe9898e}{ds18b20\_read\_temperature}}();}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (temp\ ==\ -\/127.0f)}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGW(}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Error\ leyendo\ DS18B20"{}});}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ temp\ =\ 25.0f;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_ae9f44daaf071cadf9887239f0913af12}{temperatura}}\ =\ temp;}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ VARIABLES\ DE\ PRUEBA}}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a5826cdd684b224914026f072905a43b1}{voltaje}}\ =\ 5.0f;}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_acb48cb4500b3a3a5174c92620c5a04f7}{corriente}}\ =\ 0.5f;}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ RTC}}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{rtc__ds3231_8c_a7d6b92b6796f068787606003b7653075}{ds3231\_get\_datetime}}(}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \&data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}});}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ printf(}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}RTC\ -\/>\ \%02d:\%02d:\%02d\(\backslash\)n"{}},}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_aff39f3c2079c7d3c0f465f9eb1e566b8}{hours}},}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_aa0c767273ddef75d440a6650691b7f8e}{minutes}},}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_a059ad89b95fd58b6e782970181f0ac64}{seconds}});}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ENVÍO\ A\ TASK\ CONTROL}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ xQueueSend(}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a9ac1175b5e7231953bed172a42b5161d}{queue\_sensores}},}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \&data,}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY);}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ENVÍO\ A\ LOGGER}}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ xQueueSend(}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a84471e3465c562d8336b3c2366b605cb}{queue\_logger}},}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \&data,}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY);}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ENVÍO\ A\ MQTT}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ xQueueSend(}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a526da114a431a9b62400f5080beb70da}{queue\_mqtt}},}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \&data,}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY);}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ DATOS\ DE\ DISPLAY}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structdisplay__data__t}{display\_data\_t}}\ display;}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ display.\doxymbox{\hyperlink{structdisplay__data__t_ab1900e3dd4593f30a237cfeee005b094}{temperatura}}\ =}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_ae9f44daaf071cadf9887239f0913af12}{temperatura}};}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ display.\doxymbox{\hyperlink{structdisplay__data__t_a8229f3db2525a9976ecbc82fa7597a9a}{ph}}\ =}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_abddfa565d5cd714994d766dc490f1f45}{ph}};}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ display.\doxymbox{\hyperlink{structdisplay__data__t_a8c504ccc3452fbdeb168d9f139f77964}{co2}}\ =}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a1ac52f75cb0a613148535e9cbb60dc8f}{co2}};}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ display.\doxymbox{\hyperlink{structdisplay__data__t_a9dd62543a19fac3a6e46658d538e7b77}{wifi\_ok}}\ =}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{wifi__manager_8c_ac2e99f68c3fb924e301871f4388ccc51}{wifi\_is\_connected}}();}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ display.\doxymbox{\hyperlink{structdisplay__data__t_a74d7b87739fdfde90b47311f1ffd1542}{mqtt\_ok}}\ =}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mqtt__manager_8c_a14a4eb1d82363ee8fb9bf053b48fc4a2}{mqtt\_is\_connected}}();}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ display.\doxymbox{\hyperlink{structdisplay__data__t_a559796b9a445833eff9a50927d01855b}{sd\_ok}}\ =}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{sd__card_8c_ac9ae86642649b9c94602adb5b313104e}{sd\_card\_is\_mounted}}();}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ display.\doxymbox{\hyperlink{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}{datetime}}\ =}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}};}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ xQueueSend(}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{queues_8c_ac32bf9d351fcc767fdcadd39574eb74c}{queue\_display}},}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \&display,}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ 0);}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ ESP\_LOGI(}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Datos\ enviados"{}});}
+\DoxyCodeLine{00293\ \ \ \ \ \}}
+\DoxyCodeLine{00294\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Miembros de los archivos</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('globals_vars.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="contents">
+<div class="textblock">Lista de todas las variables con enlaces a los archivos a los que corresponden:</div><br/>
+<div class="qindex"><a class="qindex" href="#index_a">A</a><div class="alphasepar"></div><a class="qindex" href="#index_b">B</a><div class="alphasepar"></div><a class="qindex" href="#index_d">D</a><div class="alphasepar"></div><a class="qindex" href="#index_f">F</a><div class="alphasepar"></div><a class="qindex" href="#index_m">M</a><div class="alphasepar"></div><a class="qindex" href="#index_p">P</a><div class="alphasepar"></div><a class="qindex" href="#index_q">Q</a><div class="alphasepar"></div><a class="qindex" href="#index_r">R</a><div class="alphasepar"></div><a class="qindex" href="#index_s">S</a><div class="alphasepar"></div><a class="qindex" href="#index_t">T</a><div class="alphasepar"></div><a class="qindex" href="#index_w">W</a></div>
+
+
+<h3 class="doxsection"><a id="index_a" name="index_a"></a>- a -</h3><ul>
+<li>adc1_cali_handle&#160;:&#160;<a class="el" href="adc__manager_8c.html#a49ce44847deee2ea73bb6920a9e82a7c">adc_manager.c</a></li>
+<li>adc1_handle&#160;:&#160;<a class="el" href="adc__manager_8c.html#a0b95b5937de8bdf11f73c2636d897c49">adc_manager.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_b" name="index_b"></a>- b -</h3><ul>
+<li>baseline&#160;:&#160;<a class="el" href="task__sensores_8c.html#aa97e7a675a0c986e0fa092133af5bcf9">task_sensores.c</a></li>
+<li>baseline_initialized&#160;:&#160;<a class="el" href="task__sensores_8c.html#a0d157587f79d70fcbaebc71841f79f5b">task_sensores.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_d" name="index_d"></a>- d -</h3><ul>
+<li>ds_pin&#160;:&#160;<a class="el" href="ds18b20_8c.html#ae8e2126058e269f81fc42f25ab4c7b4e">ds18b20.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_f" name="index_f"></a>- f -</h3><ul>
+<li>filtered&#160;:&#160;<a class="el" href="task__sensores_8c.html#af2eed96d0424911b730d85f8304c47a2">task_sensores.c</a></li>
+<li>font5x7&#160;:&#160;<a class="el" href="font5x7_8h.html#a5a4a37b630489fec087a365d2ca3fc9c">font5x7.h</a></li>
+<li>framebuffer&#160;:&#160;<a class="el" href="oled__display_8c.html#adfc751af60cacbb1fc419c85cf3d239c">oled_display.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_m" name="index_m"></a>- m -</h3><ul>
+<li>mount_point&#160;:&#160;<a class="el" href="sd__card_8c.html#a265dbe8dd1c8bf0f771a15e941c13fae">sd_card.c</a></li>
+<li>mqtt_client&#160;:&#160;<a class="el" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_manager.c</a></li>
+<li>mqtt_connected&#160;:&#160;<a class="el" href="mqtt__manager_8c.html#a6a99fbef218ac40fc0b77e18f0e9a708">mqtt_manager.c</a></li>
+<li>mqtt_event_group&#160;:&#160;<a class="el" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_manager.c</a></li>
+<li>mutex_i2c&#160;:&#160;<a class="el" href="oled__display_8c.html#a60bdaef4d905b9f3d244350633a80080">oled_display.c</a>, <a class="el" href="rtc__ds3231_8c.html#a60bdaef4d905b9f3d244350633a80080">rtc_ds3231.c</a>, <a class="el" href="i2c__manager_8c.html#a60bdaef4d905b9f3d244350633a80080">i2c_manager.c</a>, <a class="el" href="i2c__manager_8h.html#a60bdaef4d905b9f3d244350633a80080">i2c_manager.h</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_p" name="index_p"></a>- p -</h3><ul>
+<li>pending_mqtt_path&#160;:&#160;<a class="el" href="sd__card_8c.html#a2e30b1b8f3af73b81aceb3e1b63fff2b">sd_card.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_q" name="index_q"></a>- q -</h3><ul>
+<li>queue_control&#160;:&#160;<a class="el" href="queues_8c.html#ae944909fe4a2b18292a96cdb6bef3d1c">queues.c</a>, <a class="el" href="queues_8h.html#ae944909fe4a2b18292a96cdb6bef3d1c">queues.h</a></li>
+<li>queue_display&#160;:&#160;<a class="el" href="queues_8c.html#ac32bf9d351fcc767fdcadd39574eb74c">queues.c</a>, <a class="el" href="queues_8h.html#ac32bf9d351fcc767fdcadd39574eb74c">queues.h</a></li>
+<li>queue_logger&#160;:&#160;<a class="el" href="queues_8c.html#a84471e3465c562d8336b3c2366b605cb">queues.c</a>, <a class="el" href="queues_8h.html#a84471e3465c562d8336b3c2366b605cb">queues.h</a></li>
+<li>queue_mqtt&#160;:&#160;<a class="el" href="queues_8c.html#a526da114a431a9b62400f5080beb70da">queues.c</a>, <a class="el" href="queues_8h.html#a526da114a431a9b62400f5080beb70da">queues.h</a></li>
+<li>queue_sensores&#160;:&#160;<a class="el" href="queues_8c.html#a9ac1175b5e7231953bed172a42b5161d">queues.c</a>, <a class="el" href="queues_8h.html#a9ac1175b5e7231953bed172a42b5161d">queues.h</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_r" name="index_r"></a>- r -</h3><ul>
+<li>retry_count&#160;:&#160;<a class="el" href="wifi__manager_8c.html#a79d9a1941d35eea97ea57ea98d6ac2ae">wifi_manager.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_s" name="index_s"></a>- s -</h3><ul>
+<li>sd_mounted&#160;:&#160;<a class="el" href="sd__card_8c.html#a619b844a05cfbbdf6c779af42c0bc335">sd_card.c</a></li>
+<li>servo_pin&#160;:&#160;<a class="el" href="servo_8c.html#ae9acca8e58d2713207db3538b31e7afa">servo.c</a></li>
+<li>spi_mutex&#160;:&#160;<a class="el" href="sd__card_8c.html#a76c0525d646735793add25b18043e600">sd_card.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_t" name="index_t"></a>- t -</h3><ul>
+<li>TAG&#160;:&#160;<a class="el" href="ds18b20_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">ds18b20.c</a>, <a class="el" href="ph__sensor_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">ph_sensor.c</a>, <a class="el" href="rtc__ds3231_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">rtc_ds3231.c</a>, <a class="el" href="sd__card_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">sd_card.c</a>, <a class="el" href="servo_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">servo.c</a>, <a class="el" href="adc__manager_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">adc_manager.c</a>, <a class="el" href="main_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">main.c</a>, <a class="el" href="mqtt__manager_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">mqtt_manager.c</a>, <a class="el" href="task__actuadores_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">task_actuadores.c</a>, <a class="el" href="task__control_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">task_control.c</a>, <a class="el" href="task__energia_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">task_energia.c</a>, <a class="el" href="task__logger_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">task_logger.c</a>, <a class="el" href="task__sensores_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">task_sensores.c</a>, <a class="el" href="wifi__manager_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c">wifi_manager.c</a></li>
+<li>task_energia_handle&#160;:&#160;<a class="el" href="main_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71">main.c</a>, <a class="el" href="task__actuadores_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71">task_actuadores.c</a>, <a class="el" href="task__mqtt_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71">task_mqtt.c</a></li>
+<li>task_sensores_handle&#160;:&#160;<a class="el" href="main_8c.html#a545de6958783ff726c116adffaebbcfb">main.c</a>, <a class="el" href="task__energia_8c.html#a545de6958783ff726c116adffaebbcfb">task_energia.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_w" name="index_w"></a>- w -</h3><ul>
+<li>wifi_event_group&#160;:&#160;<a class="el" href="wifi__manager_8c.html#a20c6ba80259caf6916ca631b853d82af">wifi_manager.c</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

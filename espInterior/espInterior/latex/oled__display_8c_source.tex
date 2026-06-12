@@ -1,0 +1,224 @@
+\doxysection{oled\+\_\+display.\+c}
+\hypertarget{oled__display_8c_source}{}\label{oled__display_8c_source}\index{main/drivers/oled\_display.c@{main/drivers/oled\_display.c}}
+\doxymbox{\hyperlink{oled__display_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{oled__display_8h}{drivers/oled\_display.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00026}00026\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00028}00028\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{i2c__manager_8h}{hal/i2c\_manager.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00029}00029\ \textcolor{preprocessor}{\#include\ "{}freertos/semphr.h"{}}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00031}00031\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{font5x7_8h}{font5x7.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00036}\doxymbox{\hyperlink{oled__display_8c_a7dfa2c4cfbfcba36416046052e7943e8}{00036}}\ \textcolor{preprocessor}{\#define\ OLED\_ADDR\ \ \ \ \ \ 0x3C}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00041}\doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{00041}}\ \textcolor{preprocessor}{\#define\ OLED\_WIDTH\ 128}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00046}\doxymbox{\hyperlink{oled__display_8c_a149f081665424602c8c0f90a6e935f3b}{00046}}\ \textcolor{preprocessor}{\#define\ OLED\_HEIGHT\ 64}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00053}\doxymbox{\hyperlink{oled__display_8c_ade7dfe72f52e8da2aeefe0ff95ff255d}{00053}}\ \textcolor{preprocessor}{\#define\ OLED\_PAGES\ 8}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00061}00061\ \textcolor{keyword}{extern}\ SemaphoreHandle\_t\ \doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}};}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00070}\doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{00070}}\ \textcolor{keyword}{static}\ uint8\_t\ \doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}}[1024];}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00084}\doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{00084}}\ \textcolor{keyword}{static}\ esp\_err\_t\ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(uint8\_t\ cmd)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00085}00085\ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00086}00086\ \ \ \ \ uint8\_t\ buffer[2];}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00088}00088\ \ \ \ \ buffer[0]\ =\ 0x00;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00089}00089\ \ \ \ \ buffer[1]\ =\ cmd;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00091}00091\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100)))}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00092}00092\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00093}00093\ \ \ \ \ \ \ \ \ esp\_err\_t\ ret\ =}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a08d3014e9596e0c13d21fb4473754f31}{i2c\_manager\_write\_raw}}(}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a7dfa2c4cfbfcba36416046052e7943e8}{OLED\_ADDR}},}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer,}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(buffer));}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00099}00099\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00101}00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00102}00102\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00104}00104\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00105}00105\ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00120}\doxymbox{\hyperlink{oled__display_8c_a4101f16729b618e9578f0e3bac396652}{00120}}\ \textcolor{keyword}{static}\ esp\_err\_t\ \doxymbox{\hyperlink{oled__display_8c_a4101f16729b618e9578f0e3bac396652}{oled\_send\_data}}(\textcolor{keyword}{const}\ uint8\_t\ *data,\ \textcolor{keywordtype}{size\_t}\ len)\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00121}00121\ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00122}00122\ \ \ \ \ uint8\_t\ buffer[129];}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00124}00124\ \ \ \ \ buffer[0]\ =\ 0x40;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00126}00126\ \ \ \ \ memcpy(\&buffer[1],\ data,\ len);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00128}00128\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100)))}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00129}00129\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00130}00130\ \ \ \ \ \ \ \ \ esp\_err\_t\ ret\ =}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00131}00131\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a08d3014e9596e0c13d21fb4473754f31}{i2c\_manager\_write\_raw}}(}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a7dfa2c4cfbfcba36416046052e7943e8}{OLED\_ADDR}},}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00133}00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer,}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00134}00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ len\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00136}00136\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00138}00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00139}00139\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00141}00141\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00142}00142\ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00144}00144\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00145}00145\ \textcolor{comment}{\ *\ Secuencia\ de\ inicialización\ recomendada\ por\ el\ datasheet}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00146}00146\ \textcolor{comment}{\ *\ del\ controlador\ SSD1306.}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00147}00147\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00148}\doxymbox{\hyperlink{oled__display_8c_a01ea0460f8fb106225254724debf0bcb}{00148}}\ esp\_err\_t\ \doxymbox{\hyperlink{oled__display_8c_a01ea0460f8fb106225254724debf0bcb}{oled\_init}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00149}00149\ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00150}00150\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xAE);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00152}00152\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x20);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00153}00153\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x00);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00155}00155\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xB0);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00157}00157\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xC8);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00159}00159\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x00);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00160}00160\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x10);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00162}00162\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x40);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00164}00164\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x81);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00165}00165\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xFF);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00166}00166\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00167}00167\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xA1);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00169}00169\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xA6);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00171}00171\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xA8);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00172}00172\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x3F);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00174}00174\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xA4);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00176}00176\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xD3);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00177}00177\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x00);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00179}00179\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xD5);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00180}00180\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xF0);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00181}00181\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00182}00182\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xD9);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00183}00183\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x22);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00184}00184\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00185}00185\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xDA);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00186}00186\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x12);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00188}00188\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xDB);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00189}00189\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x20);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00190}00190\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00191}00191\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x8D);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00192}00192\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x14);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00194}00194\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xAF);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00196}00196\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00197}00197\ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00198}00198\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00200}\doxymbox{\hyperlink{oled__display_8c_adbdd2a6d942046ccfc756959d2de0dff}{00200}}\ esp\_err\_t\ \doxymbox{\hyperlink{oled__display_8c_adbdd2a6d942046ccfc756959d2de0dff}{oled\_clear}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00201}00201\ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00202}00202\ \ \ \ \ memset(}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00203}00203\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}},}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00204}00204\ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00205}00205\ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}}));}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00207}00207\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2}{oled\_update}}();}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00208}00208\ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00210}00210\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00211}00211\ \textcolor{comment}{\ *\ Conversión\ de\ coordenadas\ XY\ a\ posición\ dentro}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00212}00212\ \textcolor{comment}{\ *\ de\ la\ memoria\ organizada\ por\ páginas\ del\ SSD1306.}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00213}00213\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00214}\doxymbox{\hyperlink{oled__display_8c_a42dc3f54c57e26640355f34a09bd08b2}{00214}}\ esp\_err\_t\ \doxymbox{\hyperlink{oled__display_8c_a42dc3f54c57e26640355f34a09bd08b2}{oled\_draw\_pixel}}(uint8\_t\ x,\ uint8\_t\ y)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00215}00215\ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00216}00216\ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ >=\ \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\_WIDTH}})}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00218}00218\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00219}00219\ \ \ \ \ \textcolor{keywordflow}{if}\ (y\ >=\ \doxymbox{\hyperlink{oled__display_8c_a149f081665424602c8c0f90a6e935f3b}{OLED\_HEIGHT}})}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00220}00220\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00221}00221\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00222}00222\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}}[}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00223}00223\ \ \ \ \ \ \ \ \ x\ +\ (y\ /\ 8)\ *\ \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\_WIDTH}}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00224}00224\ \ \ \ \ ]\ |=\ (1\ <<\ (y\ \%\ 8));}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00226}00226\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00227}00227\ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00229}00229\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00230}\doxymbox{\hyperlink{oled__display_8c_acafddaff66f9ec50e47246360ecf6d3b}{00230}}\ esp\_err\_t\ \doxymbox{\hyperlink{oled__display_8c_acafddaff66f9ec50e47246360ecf6d3b}{oled\_draw\_char}}(uint8\_t\ x,\ uint8\_t\ y,\ \textcolor{keywordtype}{char}\ c)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00231}00231\ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00232}00232\ \ \ \ \ \textcolor{keywordflow}{if}\ ((uint8\_t)c\ >=\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{font5x7_8h_a5a4a37b630489fec087a365d2ca3fc9c}{font5x7}})/5)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00233}00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00235}00235\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ col\ =\ 0;\ col\ <\ 5;\ col++)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00236}00236\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00237}00237\ \ \ \ \ \ \ \ \ uint8\_t\ line\ =\ \doxymbox{\hyperlink{font5x7_8h_a5a4a37b630489fec087a365d2ca3fc9c}{font5x7}}[(uint8\_t)c][col];}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00239}00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ row\ =\ 0;\ row\ <\ 7;\ row++)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00240}00240\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (line\ \&\ (1\ <<\ row))}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a42dc3f54c57e26640355f34a09bd08b2}{oled\_draw\_pixel}}(}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ x\ +\ col,}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ y\ +\ row);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00247}00247\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00248}00248\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00249}00249\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00250}00250\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00251}00251\ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00252}00252\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00253}\doxymbox{\hyperlink{oled__display_8c_a203632989f59de816bebefef8593147d}{00253}}\ esp\_err\_t\ \doxymbox{\hyperlink{oled__display_8c_a203632989f59de816bebefef8593147d}{oled\_draw\_string}}(}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00254}00254\ \ \ \ \ uint8\_t\ x,}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00255}00255\ \ \ \ \ uint8\_t\ y,}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00256}00256\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00257}00257\ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00258}00258\ \ \ \ \ \textcolor{keywordflow}{while}\ (*str)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00259}00259\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00260}00260\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_acafddaff66f9ec50e47246360ecf6d3b}{oled\_draw\_char}}(}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \ \ x,}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ y,}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ *str);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00264}00264\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00265}00265\ \ \ \ \ \ \ \ \ x\ +=\ 6;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00266}00266\ \ \ \ \ \ \ \ \ str++;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00267}00267\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00268}00268\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00269}00269\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00270}00270\ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00271}00271\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00272}\doxymbox{\hyperlink{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2}{00272}}\ esp\_err\_t\ \doxymbox{\hyperlink{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2}{oled\_update}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00273}00273\ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00274}00274\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ page\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00275}00275\ \ \ \ \ \ \ \ \ \ page\ <\ \doxymbox{\hyperlink{oled__display_8c_ade7dfe72f52e8da2aeefe0ff95ff255d}{OLED\_PAGES}};}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00276}00276\ \ \ \ \ \ \ \ \ \ page++)}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00277}00277\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00278}00278\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ 0xB0\ +\ page);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00280}00280\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00281}00281\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x00);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00282}00282\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x10);}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00284}00284\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a4101f16729b618e9578f0e3bac396652}{oled\_send\_data}}(}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00285}00285\ \ \ \ \ \ \ \ \ \ \ \ \ \&\doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}}[}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ page\ *\ \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\_WIDTH}}],}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00287}00287\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\_WIDTH}});}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00288}00288\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00289}00289\ }
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00290}00290\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00291}00291\ \}}
+\DoxyCodeLine{\Hypertarget{oled__display_8c_source_l00292}00292\ }
+
+\end{DoxyCode}

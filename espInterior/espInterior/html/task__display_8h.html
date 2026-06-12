@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/tasks/task_display.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('task__display_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo task_display.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Declaración de la tarea de visualización del sistema.  
+<a href="#details">Más...</a></p>
+
+<p><a href="task__display_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a0c23017a47c450de05f8c7af642c7461" id="r_a0c23017a47c450de05f8c7af642c7461"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a0c23017a47c450de05f8c7af642c7461">task_display</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:a0c23017a47c450de05f8c7af642c7461"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tarea encargada de actualizar la pantalla OLED.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Declaración de la tarea de visualización del sistema. </p>
+<p>Este módulo define la tarea responsable de actualizar la pantalla OLED con la información más relevante del proceso de fermentación.</p>
+<p>La tarea recibe datos mediante una cola FreeRTOS y se encarga exclusivamente de la presentación de información, manteniendo desacoplada la interfaz de usuario de las tareas de adquisición, control y comunicación.</p>
+<p>Información mostrada:</p><ul>
+<li>Temperatura.</li>
+<li>pH.</li>
+<li>Concentración de CO2.</li>
+<li>Estado de WiFi.</li>
+<li>Estado de MQTT.</li>
+<li>Estado de la tarjeta SD.</li>
+<li>Fecha y hora del sistema.</li>
+</ul>
+<p>Arquitectura:</p>
+<p>queue_display | v task_display | v OLED</p>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="task__display_8h_source.html">task_display.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a0c23017a47c450de05f8c7af642c7461" name="a0c23017a47c450de05f8c7af642c7461"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c23017a47c450de05f8c7af642c7461">&#9670;&#160;</a></span>task_display()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void task_display </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>pvParameters</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tarea encargada de actualizar la pantalla OLED. </p>
+<p>Espera información proveniente de queue_display y actualiza la interfaz de usuario con el estado actual del proceso de fermentación.</p>
+<p>La tarea no realiza procesamiento de sensores ni toma decisiones de control; únicamente presenta información al usuario.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td>Parámetros de la tarea (no utilizados).</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Espera datos provenientes de queue_display y muestra información relevante del proceso de fermentación.</p>
+<p>La tarea permanece bloqueada hasta recibir nuevos datos, minimizando el consumo de CPU.</p>
+<p>Información visualizada:</p><ul>
+<li>Temperatura.</li>
+<li>pH.</li>
+<li>CO2.</li>
+<li>Estado de WiFi.</li>
+<li>Estado de MQTT.</li>
+<li>Estado de la tarjeta SD.</li>
+<li>Hora actual.</li>
+</ul>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td>Parámetros de la tarea (no utilizados). </td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Inicialización de la pantalla OLED.</p>
+<p>Limpiar pantalla antes de redibujar.</p>
+<p>Actualizar contenido físico de la pantalla.</p>
+
+<p class="definition">Definición en la línea <a class="el" href="task__display_8c_source.html#l00074">74</a> del archivo <a class="el" href="task__display_8c_source.html">task_display.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   75</span>{</div>
+<div class="line"><span class="lineno">   76</span>    <a class="code hl_struct" href="structdisplay__data__t.html">display_data_t</a> data;</div>
+<div class="line"><span class="lineno">   77</span> </div>
+<div class="line"><span class="lineno">   78</span>    <span class="keywordtype">char</span> line[32];</div>
+<div class="line"><span class="lineno">   79</span></div>
+<div class="line"><span class="lineno">   83</span>    <a class="code hl_function" href="oled__display_8c.html#a01ea0460f8fb106225254724debf0bcb">oled_init</a>();</div>
+<div class="line"><span class="lineno">   84</span>    <a class="code hl_function" href="oled__display_8c.html#adbdd2a6d942046ccfc756959d2de0dff">oled_clear</a>();</div>
+<div class="line"><span class="lineno">   85</span> </div>
+<div class="line"><span class="lineno">   86</span>    <span class="keywordflow">while</span> (1)</div>
+<div class="line"><span class="lineno">   87</span>    {</div>
+<div class="line"><span class="lineno">   88</span>        <span class="keywordflow">if</span> (xQueueReceive(</div>
+<div class="line"><span class="lineno">   89</span>                <a class="code hl_variable" href="queues_8c.html#ac32bf9d351fcc767fdcadd39574eb74c">queue_display</a>,</div>
+<div class="line"><span class="lineno">   90</span>                &amp;data,</div>
+<div class="line"><span class="lineno">   91</span>                portMAX_DELAY))</div>
+<div class="line"><span class="lineno">   92</span>        {</div>
+<div class="line"><span class="lineno">   96</span>            <a class="code hl_function" href="oled__display_8c.html#adbdd2a6d942046ccfc756959d2de0dff">oled_clear</a>();</div>
+<div class="line"><span class="lineno">   97</span> </div>
+<div class="line"><span class="lineno">   98</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">   99</span>            <span class="comment">// TEMPERATURA</span></div>
+<div class="line"><span class="lineno">  100</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  101</span> </div>
+<div class="line"><span class="lineno">  102</span>            snprintf(</div>
+<div class="line"><span class="lineno">  103</span>                line,</div>
+<div class="line"><span class="lineno">  104</span>                <span class="keyword">sizeof</span>(line),</div>
+<div class="line"><span class="lineno">  105</span>                <span class="stringliteral">&quot;T: %.1f C&quot;</span>,</div>
+<div class="line"><span class="lineno">  106</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#ab1900e3dd4593f30a237cfeee005b094">temperatura</a>);</div>
+<div class="line"><span class="lineno">  107</span> </div>
+<div class="line"><span class="lineno">  108</span>            <a class="code hl_function" href="oled__display_8c.html#a203632989f59de816bebefef8593147d">oled_draw_string</a>(</div>
+<div class="line"><span class="lineno">  109</span>                0,</div>
+<div class="line"><span class="lineno">  110</span>                0,</div>
+<div class="line"><span class="lineno">  111</span>                line);</div>
+<div class="line"><span class="lineno">  112</span> </div>
+<div class="line"><span class="lineno">  113</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  114</span>            <span class="comment">// PH</span></div>
+<div class="line"><span class="lineno">  115</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  116</span> </div>
+<div class="line"><span class="lineno">  117</span>            snprintf(</div>
+<div class="line"><span class="lineno">  118</span>                line,</div>
+<div class="line"><span class="lineno">  119</span>                <span class="keyword">sizeof</span>(line),</div>
+<div class="line"><span class="lineno">  120</span>                <span class="stringliteral">&quot;PH: %.2f&quot;</span>,</div>
+<div class="line"><span class="lineno">  121</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a8229f3db2525a9976ecbc82fa7597a9a">ph</a>);</div>
+<div class="line"><span class="lineno">  122</span> </div>
+<div class="line"><span class="lineno">  123</span>            <a class="code hl_function" href="oled__display_8c.html#a203632989f59de816bebefef8593147d">oled_draw_string</a>(</div>
+<div class="line"><span class="lineno">  124</span>                0,</div>
+<div class="line"><span class="lineno">  125</span>                12,</div>
+<div class="line"><span class="lineno">  126</span>                line);</div>
+<div class="line"><span class="lineno">  127</span> </div>
+<div class="line"><span class="lineno">  128</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  129</span>            <span class="comment">// CO2</span></div>
+<div class="line"><span class="lineno">  130</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  131</span> </div>
+<div class="line"><span class="lineno">  132</span>            snprintf(</div>
+<div class="line"><span class="lineno">  133</span>                line,</div>
+<div class="line"><span class="lineno">  134</span>                <span class="keyword">sizeof</span>(line),</div>
+<div class="line"><span class="lineno">  135</span>                <span class="stringliteral">&quot;CO2: %.2f&quot;</span>,</div>
+<div class="line"><span class="lineno">  136</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a8c504ccc3452fbdeb168d9f139f77964">co2</a>);</div>
+<div class="line"><span class="lineno">  137</span> </div>
+<div class="line"><span class="lineno">  138</span>            <a class="code hl_function" href="oled__display_8c.html#a203632989f59de816bebefef8593147d">oled_draw_string</a>(</div>
+<div class="line"><span class="lineno">  139</span>                0,</div>
+<div class="line"><span class="lineno">  140</span>                24,</div>
+<div class="line"><span class="lineno">  141</span>                line);</div>
+<div class="line"><span class="lineno">  142</span> </div>
+<div class="line"><span class="lineno">  143</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  144</span>            <span class="comment">// ESTADOS DEL SISTEMA</span></div>
+<div class="line"><span class="lineno">  145</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  146</span> </div>
+<div class="line"><span class="lineno">  147</span>            snprintf(</div>
+<div class="line"><span class="lineno">  148</span>                line,</div>
+<div class="line"><span class="lineno">  149</span>                <span class="keyword">sizeof</span>(line),</div>
+<div class="line"><span class="lineno">  150</span>                <span class="stringliteral">&quot;W:%s M:%s S:%s&quot;</span>,</div>
+<div class="line"><span class="lineno">  151</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a9dd62543a19fac3a6e46658d538e7b77">wifi_ok</a> ? <span class="stringliteral">&quot;OK&quot;</span> : <span class="stringliteral">&quot;OFF&quot;</span>,</div>
+<div class="line"><span class="lineno">  152</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a74d7b87739fdfde90b47311f1ffd1542">mqtt_ok</a> ? <span class="stringliteral">&quot;OK&quot;</span> : <span class="stringliteral">&quot;OFF&quot;</span>,</div>
+<div class="line"><span class="lineno">  153</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a559796b9a445833eff9a50927d01855b">sd_ok</a>   ? <span class="stringliteral">&quot;OK&quot;</span> : <span class="stringliteral">&quot;OFF&quot;</span>);</div>
+<div class="line"><span class="lineno">  154</span> </div>
+<div class="line"><span class="lineno">  155</span>            <a class="code hl_function" href="oled__display_8c.html#a203632989f59de816bebefef8593147d">oled_draw_string</a>(</div>
+<div class="line"><span class="lineno">  156</span>                0,</div>
+<div class="line"><span class="lineno">  157</span>                36,</div>
+<div class="line"><span class="lineno">  158</span>                line);</div>
+<div class="line"><span class="lineno">  159</span> </div>
+<div class="line"><span class="lineno">  160</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  161</span>            <span class="comment">// HORA</span></div>
+<div class="line"><span class="lineno">  162</span>            <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  163</span> </div>
+<div class="line"><span class="lineno">  164</span>            printf(</div>
+<div class="line"><span class="lineno">  165</span>                <span class="stringliteral">&quot;DISPLAY -&gt; %02d:%02d:%02d\n&quot;</span>,</div>
+<div class="line"><span class="lineno">  166</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a4e9a8ada1ef962ab3381c4131b56b70a">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#aff39f3c2079c7d3c0f465f9eb1e566b8">hours</a>,</div>
+<div class="line"><span class="lineno">  167</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a4e9a8ada1ef962ab3381c4131b56b70a">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#aa0c767273ddef75d440a6650691b7f8e">minutes</a>,</div>
+<div class="line"><span class="lineno">  168</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a4e9a8ada1ef962ab3381c4131b56b70a">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#a059ad89b95fd58b6e782970181f0ac64">seconds</a>);</div>
+<div class="line"><span class="lineno">  169</span> </div>
+<div class="line"><span class="lineno">  170</span>            snprintf(</div>
+<div class="line"><span class="lineno">  171</span>                line,</div>
+<div class="line"><span class="lineno">  172</span>                <span class="keyword">sizeof</span>(line),</div>
+<div class="line"><span class="lineno">  173</span>                <span class="stringliteral">&quot;%02d:%02d:%02d&quot;</span>,</div>
+<div class="line"><span class="lineno">  174</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a4e9a8ada1ef962ab3381c4131b56b70a">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#aff39f3c2079c7d3c0f465f9eb1e566b8">hours</a>,</div>
+<div class="line"><span class="lineno">  175</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a4e9a8ada1ef962ab3381c4131b56b70a">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#aa0c767273ddef75d440a6650691b7f8e">minutes</a>,</div>
+<div class="line"><span class="lineno">  176</span>                data.<a class="code hl_variable" href="structdisplay__data__t.html#a4e9a8ada1ef962ab3381c4131b56b70a">datetime</a>.<a class="code hl_variable" href="structdatetime__t.html#a059ad89b95fd58b6e782970181f0ac64">seconds</a>);</div>
+<div class="line"><span class="lineno">  177</span> </div>
+<div class="line"><span class="lineno">  178</span>            <a class="code hl_function" href="oled__display_8c.html#a203632989f59de816bebefef8593147d">oled_draw_string</a>(</div>
+<div class="line"><span class="lineno">  179</span>                0,</div>
+<div class="line"><span class="lineno">  180</span>                48,</div>
+<div class="line"><span class="lineno">  181</span>                line);</div>
+<div class="line"><span class="lineno">  182</span></div>
+<div class="line"><span class="lineno">  186</span>            <a class="code hl_function" href="oled__display_8c.html#a3b0040faa9dd7f994e4dc474d9d820a2">oled_update</a>();</div>
+<div class="line"><span class="lineno">  187</span>        }</div>
+<div class="line"><span class="lineno">  188</span>    }</div>
+<div class="line"><span class="lineno">  189</span>}</div>
+<div class="ttc" id="aoled__display_8c_html_a01ea0460f8fb106225254724debf0bcb"><div class="ttname"><a href="oled__display_8c.html#a01ea0460f8fb106225254724debf0bcb">oled_init</a></div><div class="ttdeci">esp_err_t oled_init(void)</div><div class="ttdoc">Inicializa la pantalla OLED.</div><div class="ttdef"><b>Definition</b> <a href="oled__display_8c_source.html#l00148">oled_display.c:148</a></div></div>
+<div class="ttc" id="aoled__display_8c_html_a203632989f59de816bebefef8593147d"><div class="ttname"><a href="oled__display_8c.html#a203632989f59de816bebefef8593147d">oled_draw_string</a></div><div class="ttdeci">esp_err_t oled_draw_string(uint8_t x, uint8_t y, const char *str)</div><div class="ttdoc">Dibuja una cadena de texto en el framebuffer.</div><div class="ttdef"><b>Definition</b> <a href="oled__display_8c_source.html#l00253">oled_display.c:253</a></div></div>
+<div class="ttc" id="aoled__display_8c_html_a3b0040faa9dd7f994e4dc474d9d820a2"><div class="ttname"><a href="oled__display_8c.html#a3b0040faa9dd7f994e4dc474d9d820a2">oled_update</a></div><div class="ttdeci">esp_err_t oled_update(void)</div><div class="ttdoc">Actualiza la pantalla OLED.</div><div class="ttdef"><b>Definition</b> <a href="oled__display_8c_source.html#l00272">oled_display.c:272</a></div></div>
+<div class="ttc" id="aoled__display_8c_html_adbdd2a6d942046ccfc756959d2de0dff"><div class="ttname"><a href="oled__display_8c.html#adbdd2a6d942046ccfc756959d2de0dff">oled_clear</a></div><div class="ttdeci">esp_err_t oled_clear(void)</div><div class="ttdoc">Borra el contenido del framebuffer.</div><div class="ttdef"><b>Definition</b> <a href="oled__display_8c_source.html#l00200">oled_display.c:200</a></div></div>
+<div class="ttc" id="aqueues_8c_html_ac32bf9d351fcc767fdcadd39574eb74c"><div class="ttname"><a href="queues_8c.html#ac32bf9d351fcc767fdcadd39574eb74c">queue_display</a></div><div class="ttdeci">QueueHandle_t queue_display</div><div class="ttdoc">Cola de actualización de pantalla.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00075">queues.c:75</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_a059ad89b95fd58b6e782970181f0ac64"><div class="ttname"><a href="structdatetime__t.html#a059ad89b95fd58b6e782970181f0ac64">datetime_t::seconds</a></div><div class="ttdeci">uint8_t seconds</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00042">data_types.h:42</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_aa0c767273ddef75d440a6650691b7f8e"><div class="ttname"><a href="structdatetime__t.html#aa0c767273ddef75d440a6650691b7f8e">datetime_t::minutes</a></div><div class="ttdeci">uint8_t minutes</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00043">data_types.h:43</a></div></div>
+<div class="ttc" id="astructdatetime__t_html_aff39f3c2079c7d3c0f465f9eb1e566b8"><div class="ttname"><a href="structdatetime__t.html#aff39f3c2079c7d3c0f465f9eb1e566b8">datetime_t::hours</a></div><div class="ttdeci">uint8_t hours</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00044">data_types.h:44</a></div></div>
+<div class="ttc" id="astructdisplay__data__t_html"><div class="ttname"><a href="structdisplay__data__t.html">display_data_t</a></div><div class="ttdoc">Información destinada a la interfaz de usuario.</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00104">data_types.h:105</a></div></div>
+<div class="ttc" id="astructdisplay__data__t_html_a4e9a8ada1ef962ab3381c4131b56b70a"><div class="ttname"><a href="structdisplay__data__t.html#a4e9a8ada1ef962ab3381c4131b56b70a">display_data_t::datetime</a></div><div class="ttdeci">datetime_t datetime</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00114">data_types.h:114</a></div></div>
+<div class="ttc" id="astructdisplay__data__t_html_a559796b9a445833eff9a50927d01855b"><div class="ttname"><a href="structdisplay__data__t.html#a559796b9a445833eff9a50927d01855b">display_data_t::sd_ok</a></div><div class="ttdeci">bool sd_ok</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00112">data_types.h:112</a></div></div>
+<div class="ttc" id="astructdisplay__data__t_html_a74d7b87739fdfde90b47311f1ffd1542"><div class="ttname"><a href="structdisplay__data__t.html#a74d7b87739fdfde90b47311f1ffd1542">display_data_t::mqtt_ok</a></div><div class="ttdeci">bool mqtt_ok</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00111">data_types.h:111</a></div></div>
+<div class="ttc" id="astructdisplay__data__t_html_a8229f3db2525a9976ecbc82fa7597a9a"><div class="ttname"><a href="structdisplay__data__t.html#a8229f3db2525a9976ecbc82fa7597a9a">display_data_t::ph</a></div><div class="ttdeci">float ph</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00107">data_types.h:107</a></div></div>
+<div class="ttc" id="astructdisplay__data__t_html_a8c504ccc3452fbdeb168d9f139f77964"><div class="ttname"><a href="structdisplay__data__t.html#a8c504ccc3452fbdeb168d9f139f77964">display_data_t::co2</a></div><div class="ttdeci">float co2</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00108">data_types.h:108</a></div></div>
+<div class="ttc" id="astructdisplay__data__t_html_a9dd62543a19fac3a6e46658d538e7b77"><div class="ttname"><a href="structdisplay__data__t.html#a9dd62543a19fac3a6e46658d538e7b77">display_data_t::wifi_ok</a></div><div class="ttdeci">bool wifi_ok</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00110">data_types.h:110</a></div></div>
+<div class="ttc" id="astructdisplay__data__t_html_ab1900e3dd4593f30a237cfeee005b094"><div class="ttname"><a href="structdisplay__data__t.html#ab1900e3dd4593f30a237cfeee005b094">display_data_t::temperatura</a></div><div class="ttdeci">float temperatura</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00106">data_types.h:106</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_76dd8867a16d204aa2db31affc56d971.html">tasks</a></li><li class="navelem"><a href="task__display_8h.html">task_display.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

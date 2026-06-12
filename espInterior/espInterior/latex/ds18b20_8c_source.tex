@@ -1,0 +1,172 @@
+\doxysection{ds18b20.\+c}
+\hypertarget{ds18b20_8c_source}{}\label{ds18b20_8c_source}\index{main/drivers/ds18b20.c@{main/drivers/ds18b20.c}}
+\doxymbox{\hyperlink{ds18b20_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00023}00023\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{ds18b20_8h}{drivers/ds18b20.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ "{}driver/gpio.h"{}}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00025}00025\ \textcolor{preprocessor}{\#include\ "{}esp\_rom\_sys.h"{}}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00026}00026\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00028}00028\ \textcolor{preprocessor}{\#include\ "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00029}00029\ \textcolor{preprocessor}{\#include\ "{}freertos/task.h"{}}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00034}\doxymbox{\hyperlink{ds18b20_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{00034}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}\ =\ \textcolor{stringliteral}{"{}DS18B20"{}};}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00042}\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{00042}}\ \textcolor{keyword}{static}\ gpio\_num\_t\ \doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}};}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00044}00044\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00045}00045\ \textcolor{comment}{//\ LOW\ LEVEL}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00046}00046\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00053}\doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{00053}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{ow\_low}}()}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00054}00054\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00055}00055\ \ \ \ \ gpio\_set\_direction(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ GPIO\_MODE\_OUTPUT);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00056}00056\ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ 0);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00057}00057\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00065}\doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{00065}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}()}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00066}00066\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00067}00067\ \ \ \ \ gpio\_set\_direction(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ GPIO\_MODE\_INPUT);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00068}00068\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00075}\doxymbox{\hyperlink{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae}{00075}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae}{ow\_read}}()}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00076}00076\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00077}00077\ \ \ \ \ \textcolor{keywordflow}{return}\ gpio\_get\_level(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}});}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00078}00078\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00080}00080\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00081}00081\ \textcolor{comment}{//\ RESET}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00082}00082\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00091}\doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{00091}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{ow\_reset}}()}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00092}00092\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00093}00093\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{ow\_low}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00094}00094\ \ \ \ \ esp\_rom\_delay\_us(480);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00096}00096\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00097}00097\ \ \ \ \ esp\_rom\_delay\_us(70);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00099}00099\ \ \ \ \ \textcolor{keywordtype}{int}\ presence\ =\ !\doxymbox{\hyperlink{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae}{ow\_read}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00101}00101\ \ \ \ \ esp\_rom\_delay\_us(410);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{return}\ presence;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00104}00104\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00106}00106\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00107}00107\ \textcolor{comment}{//\ WRITE\ BIT}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00108}00108\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00115}\doxymbox{\hyperlink{ds18b20_8c_a27ea41a1651c0181c573ad118bd9057a}{00115}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{ds18b20_8c_a27ea41a1651c0181c573ad118bd9057a}{ow\_write\_bit}}(\textcolor{keywordtype}{int}\ bit)}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00116}00116\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00117}00117\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{ow\_low}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{if}\ (bit)\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00120}00120\ \ \ \ \ \ \ \ \ esp\_rom\_delay\_us(10);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00121}00121\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00122}00122\ \ \ \ \ \ \ \ \ esp\_rom\_delay\_us(55);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00123}00123\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00124}00124\ \ \ \ \ \ \ \ \ esp\_rom\_delay\_us(65);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00125}00125\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00126}00126\ \ \ \ \ \ \ \ \ esp\_rom\_delay\_us(5);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00127}00127\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00128}00128\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00130}00130\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00131}00131\ \textcolor{comment}{//\ READ\ BIT}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00132}00132\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00139}\doxymbox{\hyperlink{ds18b20_8c_a48ba918873b54e04ddcd4dc4482f333a}{00139}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{ds18b20_8c_a48ba918873b54e04ddcd4dc4482f333a}{ow\_read\_bit}}()}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00140}00140\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00141}00141\ \ \ \ \ \textcolor{keywordtype}{int}\ bit;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00142}00142\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00143}00143\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{ow\_low}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00144}00144\ \ \ \ \ esp\_rom\_delay\_us(3);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00145}00145\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00146}00146\ \ \ \ \ esp\_rom\_delay\_us(10);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00148}00148\ \ \ \ \ bit\ =\ \doxymbox{\hyperlink{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae}{ow\_read}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00150}00150\ \ \ \ \ esp\_rom\_delay\_us(53);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00152}00152\ \ \ \ \ \textcolor{keywordflow}{return}\ bit;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00153}00153\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00155}00155\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00156}00156\ \textcolor{comment}{//\ BYTE}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00157}00157\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00164}\doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{00164}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(uint8\_t\ \textcolor{keywordtype}{byte})}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00165}00165\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00166}00166\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 8;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00167}00167\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a27ea41a1651c0181c573ad118bd9057a}{ow\_write\_bit}}(\textcolor{keywordtype}{byte}\ \&\ 0x01);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00168}00168\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{byte}\ >>=\ 1;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00169}00169\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00170}00170\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00177}\doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{00177}}\ \textcolor{keyword}{static}\ uint8\_t\ \doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{ow\_read\_byte}}()}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00178}00178\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00179}00179\ \ \ \ \ uint8\_t\ \textcolor{keywordtype}{byte}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00181}00181\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 8;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00182}00182\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{byte}\ |=\ (\doxymbox{\hyperlink{ds18b20_8c_a48ba918873b54e04ddcd4dc4482f333a}{ow\_read\_bit}}()\ <<\ i);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00183}00183\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00184}00184\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00185}00185\ \ \ \ \ \textcolor{keywordflow}{return}\ byte;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00186}00186\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00188}00188\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00189}00189\ \textcolor{comment}{//\ INIT}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00190}00190\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00198}\doxymbox{\hyperlink{ds18b20_8c_afb1d889451edc3f30db74315af96b963}{00198}}\ esp\_err\_t\ \doxymbox{\hyperlink{ds18b20_8c_afb1d889451edc3f30db74315af96b963}{ds18b20\_init}}(gpio\_num\_t\ pin)}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00199}00199\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00200}00200\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}}\ =\ pin;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00201}00201\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00202}00202\ \ \ \ \ gpio\_set\_pull\_mode(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ GPIO\_PULLUP\_ONLY);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00203}00203\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00204}00204\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}DS18B20\ init\ en\ GPIO\ \%d"{}},\ pin);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00206}00206\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00207}00207\ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00209}00209\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00210}00210\ \textcolor{comment}{//\ READ\ TEMPERATURE}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00211}00211\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00219}\doxymbox{\hyperlink{ds18b20_8c_a5aac389dc38e235043998b969fe9898e}{00219}}\ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{ds18b20_8c_a5aac389dc38e235043998b969fe9898e}{ds18b20\_read\_temperature}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00220}00220\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00221}00221\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{ow\_reset}}())\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00222}00222\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Sensor\ no\ detectado"{}});}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00223}00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/127.0;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00224}00224\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00226}00226\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xCC);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00227}00227\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0x44);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00229}00229\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00230}00230\ \textcolor{comment}{\ \ \ \ *\ Tiempo\ máximo\ de\ conversión\ para\ resolución\ de\ 12\ bits}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00231}00231\ \textcolor{comment}{\ \ \ \ *\ según\ la\ hoja\ de\ datos\ del\ DS18B20.}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00232}00232\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00233}00233\ \ \ \ \ vTaskDelay(pdMS\_TO\_TICKS(750));}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00235}00235\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{ow\_reset}}())\ \{}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00236}00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/127.0;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00237}00237\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00239}00239\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xCC);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00240}00240\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xBE);}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00241}00241\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00242}00242\ \ \ \ \ uint8\_t\ temp\_lsb\ =\ \doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{ow\_read\_byte}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00243}00243\ \ \ \ \ uint8\_t\ temp\_msb\ =\ \doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{ow\_read\_byte}}();}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00244}00244\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00245}00245\ \ \ \ \ int16\_t\ raw\ =\ (temp\_msb\ <<\ 8)\ |\ temp\_lsb;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00246}00246\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00247}00247\ \ \ \ \ \textcolor{keywordtype}{float}\ temp\ =\ raw\ /\ 16.0;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00249}00249\ \ \ \ \ \textcolor{keywordflow}{return}\ temp;}
+\DoxyCodeLine{\Hypertarget{ds18b20_8c_source_l00250}00250\ \}}
+
+\end{DoxyCode}

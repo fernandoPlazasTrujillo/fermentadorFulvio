@@ -1,0 +1,169 @@
+\doxysection{Referencia del archivo main/\+drivers/\+ds18b20.h}
+\hypertarget{ds18b20_8h}{}\label{ds18b20_8h}\index{main/drivers/ds18b20.h@{main/drivers/ds18b20.h}}
+
+
+Driver para el sensor de temperatura DS18\+B20 mediante protocolo One\+Wire.  
+
+
+{\ttfamily \+\#include "{}esp\+\_\+err.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{ds18b20_8h_afb1d889451edc3f30db74315af96b963}{ds18b20\+\_\+init}} (gpio\+\_\+num\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Inicializa el sensor DS18\+B20. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{ds18b20_8h_a5aac389dc38e235043998b969fe9898e}{ds18b20\+\_\+read\+\_\+temperature}} (void)
+\begin{DoxyCompactList}\small\item\em Obtiene una medición de temperatura desde el DS18\+B20. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Driver para el sensor de temperatura DS18\+B20 mediante protocolo One\+Wire. 
+
+Este módulo proporciona las funciones necesarias para inicializar y adquirir mediciones de temperatura desde un sensor DS18\+B20.
+
+El sensor se utiliza para monitorear la temperatura interna del proceso de fermentación de café.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Inicialización del bus One\+Wire.
+\item Lectura de temperatura en grados Celsius.
+\item Detección básica de errores de comunicación.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{ds18b20_8h_source}{ds18b20.\+h}}.
+
+
+
+\label{ds18b20_8h_doc-func-members}
+\Hypertarget{ds18b20_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{ds18b20_8h_afb1d889451edc3f30db74315af96b963}\index{ds18b20.h@{ds18b20.h}!ds18b20\_init@{ds18b20\_init}}
+\index{ds18b20\_init@{ds18b20\_init}!ds18b20.h@{ds18b20.h}}
+\doxysubsubsection{\texorpdfstring{ds18b20\_init()}{ds18b20\_init()}}
+{\footnotesize\ttfamily \label{ds18b20_8h_afb1d889451edc3f30db74315af96b963} 
+esp\+\_\+err\+\_\+t ds18b20\+\_\+init (\begin{DoxyParamCaption}\item[{gpio\+\_\+num\+\_\+t}]{pin}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el sensor DS18\+B20. 
+
+Configura el GPIO utilizado para la comunicación One\+Wire y habilita la resistencia pull-\/up requerida por el protocolo.
+
+Esta función debe ejecutarse una única vez durante la inicialización del sistema.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pin} & GPIO al que se encuentra conectado el sensor.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Inicialización exitosa.
+\item ESP\+\_\+\+FAIL:\+ Error durante la configuración del dispositivo.
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parámetros}
+{\em pin} & GPIO de conexión. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+ESP\+\_\+\+OK si se configura correctamente. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00198}{198}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00199\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}}\ =\ pin;}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ gpio\_set\_pull\_mode(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ GPIO\_PULLUP\_ONLY);}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}DS18B20\ init\ en\ GPIO\ \%d"{}},\ pin);}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00207\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8h_a5aac389dc38e235043998b969fe9898e}\index{ds18b20.h@{ds18b20.h}!ds18b20\_read\_temperature@{ds18b20\_read\_temperature}}
+\index{ds18b20\_read\_temperature@{ds18b20\_read\_temperature}!ds18b20.h@{ds18b20.h}}
+\doxysubsubsection{\texorpdfstring{ds18b20\_read\_temperature()}{ds18b20\_read\_temperature()}}
+{\footnotesize\ttfamily \label{ds18b20_8h_a5aac389dc38e235043998b969fe9898e} 
+float ds18b20\+\_\+read\+\_\+temperature (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene una medición de temperatura desde el DS18\+B20. 
+
+Obtiene la temperatura del sensor DS18\+B20.
+
+Ejecuta la secuencia completa de comunicación One\+Wire:\+
+\begin{DoxyItemize}
+\item Reset del bus.
+\item Inicio de conversión de temperatura.
+\item Lectura de memoria Scratchpad.
+\item Conversión del dato a grados Celsius.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Devuelve}
+Temperatura medida en grados Celsius. 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em -\/127.\+0} & Error de comunicación o ausencia del sensor.\\
+\hline
+\end{DoxyRetVals}
+Obtiene una medición de temperatura desde el DS18\+B20.
+
+\begin{DoxyReturn}{Devuelve}
+Temperatura en °C. 
+
+-\/127.\+0 si el sensor no responde. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00219}{219}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00220\ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{ow\_reset}}())\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Sensor\ no\ detectado"{}});}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/127.0;}
+\DoxyCodeLine{00224\ \ \ \ \ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xCC);}
+\DoxyCodeLine{00227\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0x44);}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ *\ Tiempo\ máximo\ de\ conversión\ para\ resolución\ de\ 12\ bits }}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ *\ según\ la\ hoja\ de\ datos\ del\ DS18B20. }}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00233\ \ \ \ \ vTaskDelay(pdMS\_TO\_TICKS(750));}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{ow\_reset}}())\ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/127.0;}
+\DoxyCodeLine{00237\ \ \ \ \ \}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xCC);}
+\DoxyCodeLine{00240\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xBE);}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ uint8\_t\ temp\_lsb\ =\ \doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{ow\_read\_byte}}();}
+\DoxyCodeLine{00243\ \ \ \ \ uint8\_t\ temp\_msb\ =\ \doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{ow\_read\_byte}}();}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ int16\_t\ raw\ =\ (temp\_msb\ <<\ 8)\ |\ temp\_lsb;}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{float}\ temp\ =\ raw\ /\ 16.0;}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordflow}{return}\ temp;}
+\DoxyCodeLine{00250\ \}}
+
+\end{DoxyCode}

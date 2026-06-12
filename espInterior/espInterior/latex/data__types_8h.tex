@@ -1,0 +1,44 @@
+\doxysection{Referencia del archivo main/\+utils/\+data\+\_\+types.h}
+\hypertarget{data__types_8h}{}\label{data__types_8h}\index{main/utils/data\_types.h@{main/utils/data\_types.h}}
+
+
+Definición de estructuras de datos compartidas del sistema.  
+
+
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Clases}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structdatetime__t}{datetime\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Estructura para almacenar fecha y hora. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structsensor__data__t}{sensor\+\_\+data\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Datos adquiridos por los sensores del sistema. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structcontrol__cmd__t}{control\+\_\+cmd\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Comandos generados por la lógica de control. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structdisplay__data__t}{display\+\_\+data\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Información destinada a la interfaz de usuario. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Definición de estructuras de datos compartidas del sistema. 
+
+Este archivo contiene las estructuras utilizadas para el intercambio de información entre las tareas de Free\+RTOS mediante colas de comunicación.
+
+Define los tipos de datos empleados para:\+
+\begin{DoxyItemize}
+\item Gestión de fecha y hora.
+\item Adquisición de sensores.
+\item Comandos de control.
+\item Información para visualización.
+\end{DoxyItemize}
+
+Estas estructuras permiten desacoplar las tareas del sistema, facilitando una arquitectura modular y escalable.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+

@@ -1,0 +1,929 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/drivers/sd_card.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('sd__card_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo sd_card.c</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Implementación del módulo de almacenamiento en tarjeta SD mediante SPI.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;errno.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+<code>#include &lt;sys/stat.h&gt;</code><br />
+<code>#include &quot;esp_log.h&quot;</code><br />
+<code>#include &quot;esp_vfs_fat.h&quot;</code><br />
+<code>#include &quot;sdmmc_cmd.h&quot;</code><br />
+<code>#include &quot;driver/spi_common.h&quot;</code><br />
+<code>#include &quot;driver/sdspi_host.h&quot;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/semphr.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="sd__card_8h_source.html">sd_card.h</a>&quot;</code><br />
+</div>
+<p><a href="sd__card_8c_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+defines</h2></td></tr>
+<tr class="memitem:a46bdd417480dec5cb9cf196af3c7489c" id="r_a46bdd417480dec5cb9cf196af3c7489c"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a46bdd417480dec5cb9cf196af3c7489c">PIN_MISO</a>&#160;&#160;&#160;19</td></tr>
+<tr class="memdesc:a46bdd417480dec5cb9cf196af3c7489c"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO utilizado como línea MISO.  <br /></td></tr>
+<tr class="memitem:abaeddda4b992af7165ed898ab8b2b4ac" id="r_abaeddda4b992af7165ed898ab8b2b4ac"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#abaeddda4b992af7165ed898ab8b2b4ac">PIN_MOSI</a>&#160;&#160;&#160;23</td></tr>
+<tr class="memdesc:abaeddda4b992af7165ed898ab8b2b4ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO utilizado como línea MOSI.  <br /></td></tr>
+<tr class="memitem:a29e4cd8304fdcdd2e715189dfaaf31c2" id="r_a29e4cd8304fdcdd2e715189dfaaf31c2"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a29e4cd8304fdcdd2e715189dfaaf31c2">PIN_CLK</a>&#160;&#160;&#160;18</td></tr>
+<tr class="memdesc:a29e4cd8304fdcdd2e715189dfaaf31c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO utilizado como reloj SPI.  <br /></td></tr>
+<tr class="memitem:afa592f8fcb7a301edfe97aa121fd28ce" id="r_afa592f8fcb7a301edfe97aa121fd28ce"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#afa592f8fcb7a301edfe97aa121fd28ce">PIN_CS</a>&#160;&#160;&#160;5</td></tr>
+<tr class="memdesc:afa592f8fcb7a301edfe97aa121fd28ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO utilizado como Chip Select.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:ad78a50dfc8be1e28effacc58f9a18aa1" id="r_ad78a50dfc8be1e28effacc58f9a18aa1"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#ad78a50dfc8be1e28effacc58f9a18aa1">sd_card_init</a> (void)</td></tr>
+<tr class="memdesc:ad78a50dfc8be1e28effacc58f9a18aa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa y monta la tarjeta SD.  <br /></td></tr>
+<tr class="memitem:a44ca2b4d5f9ee8fdb3a5cedd19f2b334" id="r_a44ca2b4d5f9ee8fdb3a5cedd19f2b334"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#a44ca2b4d5f9ee8fdb3a5cedd19f2b334">sd_card_write_line</a> (const char *line)</td></tr>
+<tr class="memdesc:a44ca2b4d5f9ee8fdb3a5cedd19f2b334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Escribe una línea en el archivo log.csv de la SD.  <br /></td></tr>
+<tr class="memitem:a9709250696c3a23e2e05891c019b8e88" id="r_a9709250696c3a23e2e05891c019b8e88"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#a9709250696c3a23e2e05891c019b8e88">sd_card_append_pending_mqtt</a> (const char *payload)</td></tr>
+<tr class="memdesc:a9709250696c3a23e2e05891c019b8e88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Guarda un payload MQTT pendiente de publicación.  <br /></td></tr>
+<tr class="memitem:a4b7f64560c914a0223302fbd144c8f26" id="r_a4b7f64560c914a0223302fbd144c8f26"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a4b7f64560c914a0223302fbd144c8f26">sd_card_pending_mqtt_exists</a> (void)</td></tr>
+<tr class="memdesc:a4b7f64560c914a0223302fbd144c8f26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifica la existencia de mensajes MQTT pendientes.  <br /></td></tr>
+<tr class="memitem:a07d076d37d4d84bb737fb156fb4e01fd" id="r_a07d076d37d4d84bb737fb156fb4e01fd"><td class="memItemLeft">FILE *&#160;</td><td class="memItemRight"><a class="el" href="#a07d076d37d4d84bb737fb156fb4e01fd">sd_card_open_pending_mqtt_read</a> (void)</td></tr>
+<tr class="memdesc:a07d076d37d4d84bb737fb156fb4e01fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abre el archivo de mensajes MQTT pendientes.  <br /></td></tr>
+<tr class="memitem:a35ae42e918762a7bc304f39cec1d330c" id="r_a35ae42e918762a7bc304f39cec1d330c"><td class="memItemLeft">char *&#160;</td><td class="memItemRight"><a class="el" href="#a35ae42e918762a7bc304f39cec1d330c">sd_card_read_pending_mqtt_line</a> (FILE *file, char *buffer, size_t size)</td></tr>
+<tr class="memdesc:a35ae42e918762a7bc304f39cec1d330c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lee una línea del archivo de mensajes MQTT pendientes.  <br /></td></tr>
+<tr class="memitem:a07dd8178e8630f2cc8d381af7f6ec9d9" id="r_a07dd8178e8630f2cc8d381af7f6ec9d9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a07dd8178e8630f2cc8d381af7f6ec9d9">sd_card_close_pending_mqtt</a> (FILE *file)</td></tr>
+<tr class="memdesc:a07dd8178e8630f2cc8d381af7f6ec9d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cierra el archivo de mensajes MQTT pendientes.  <br /></td></tr>
+<tr class="memitem:a36756946bae9f06f242754f9af59d944" id="r_a36756946bae9f06f242754f9af59d944"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#a36756946bae9f06f242754f9af59d944">sd_card_delete_pending_mqtt</a> (void)</td></tr>
+<tr class="memdesc:a36756946bae9f06f242754f9af59d944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Elimina el archivo de mensajes MQTT pendientes.  <br /></td></tr>
+<tr class="memitem:ac9ae86642649b9c94602adb5b313104e" id="r_ac9ae86642649b9c94602adb5b313104e"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ac9ae86642649b9c94602adb5b313104e">sd_card_is_mounted</a> (void)</td></tr>
+<tr class="memdesc:ac9ae86642649b9c94602adb5b313104e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifica si la tarjeta SD se encuentra montada.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a5a85b9c772bbeb480b209a3e6ea92b4c" id="r_a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="memItemLeft">static const char *&#160;</td><td class="memItemRight"><a class="el" href="#a5a85b9c772bbeb480b209a3e6ea92b4c">TAG</a> = &quot;SD&quot;</td></tr>
+<tr class="memdesc:a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Etiqueta utilizada por el sistema de logging.  <br /></td></tr>
+<tr class="memitem:a265dbe8dd1c8bf0f771a15e941c13fae" id="r_a265dbe8dd1c8bf0f771a15e941c13fae"><td class="memItemLeft">static const char&#160;</td><td class="memItemRight"><a class="el" href="#a265dbe8dd1c8bf0f771a15e941c13fae">mount_point</a> [] = &quot;/sdcard&quot;</td></tr>
+<tr class="memdesc:a265dbe8dd1c8bf0f771a15e941c13fae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Punto de montaje del sistema de archivos FAT.  <br /></td></tr>
+<tr class="memitem:a2e30b1b8f3af73b81aceb3e1b63fff2b" id="r_a2e30b1b8f3af73b81aceb3e1b63fff2b"><td class="memItemLeft">static const char&#160;</td><td class="memItemRight"><a class="el" href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a> [] = &quot;/sdcard/mqtt_pending.txt&quot;</td></tr>
+<tr class="memdesc:a2e30b1b8f3af73b81aceb3e1b63fff2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Archivo utilizado para almacenar mensajes MQTT pendientes.  <br /></td></tr>
+<tr class="memitem:a76c0525d646735793add25b18043e600" id="r_a76c0525d646735793add25b18043e600"><td class="memItemLeft">static SemaphoreHandle_t&#160;</td><td class="memItemRight"><a class="el" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> = NULL</td></tr>
+<tr class="memdesc:a76c0525d646735793add25b18043e600"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex para acceso exclusivo al bus SPI.  <br /></td></tr>
+<tr class="memitem:a619b844a05cfbbdf6c779af42c0bc335" id="r_a619b844a05cfbbdf6c779af42c0bc335"><td class="memItemLeft">static bool&#160;</td><td class="memItemRight"><a class="el" href="#a619b844a05cfbbdf6c779af42c0bc335">sd_mounted</a> = false</td></tr>
+<tr class="memdesc:a619b844a05cfbbdf6c779af42c0bc335"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indica si la tarjeta SD fue montada correctamente.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Implementación del módulo de almacenamiento en tarjeta SD mediante SPI. </p>
+<p>Este módulo proporciona funciones para:</p><ul>
+<li>Inicialización y montaje de la tarjeta SD.</li>
+<li>Escritura de registros históricos en formato CSV.</li>
+<li>Almacenamiento temporal de mensajes MQTT pendientes.</li>
+<li>Recuperación de mensajes pendientes.</li>
+<li>Gestión segura de acceso concurrente mediante mutex.</li>
+</ul>
+<p>El módulo permite mantener la persistencia de datos del sistema de fermentación incluso ante fallos de conectividad MQTT.</p>
+<p>El acceso al bus SPI se encuentra protegido mediante exclusión mutua para evitar condiciones de carrera entre tareas FreeRTOS.</p>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Documentación de «define»</h2>
+<a id="a29e4cd8304fdcdd2e715189dfaaf31c2" name="a29e4cd8304fdcdd2e715189dfaaf31c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29e4cd8304fdcdd2e715189dfaaf31c2">&#9670;&#160;</a></span>PIN_CLK</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIN_CLK&#160;&#160;&#160;18</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GPIO utilizado como reloj SPI. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00063">63</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+<a id="afa592f8fcb7a301edfe97aa121fd28ce" name="afa592f8fcb7a301edfe97aa121fd28ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa592f8fcb7a301edfe97aa121fd28ce">&#9670;&#160;</a></span>PIN_CS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIN_CS&#160;&#160;&#160;5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GPIO utilizado como Chip Select. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00068">68</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+<a id="a46bdd417480dec5cb9cf196af3c7489c" name="a46bdd417480dec5cb9cf196af3c7489c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46bdd417480dec5cb9cf196af3c7489c">&#9670;&#160;</a></span>PIN_MISO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIN_MISO&#160;&#160;&#160;19</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GPIO utilizado como línea MISO. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00053">53</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+<a id="abaeddda4b992af7165ed898ab8b2b4ac" name="abaeddda4b992af7165ed898ab8b2b4ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaeddda4b992af7165ed898ab8b2b4ac">&#9670;&#160;</a></span>PIN_MOSI</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIN_MOSI&#160;&#160;&#160;23</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GPIO utilizado como línea MOSI. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00058">58</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a9709250696c3a23e2e05891c019b8e88" name="a9709250696c3a23e2e05891c019b8e88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9709250696c3a23e2e05891c019b8e88">&#9670;&#160;</a></span>sd_card_append_pending_mqtt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t sd_card_append_pending_mqtt </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Guarda un payload MQTT pendiente de publicación. </p>
+<p>Cuando no existe conectividad con el broker MQTT, el mensaje se almacena temporalmente en la tarjeta SD para su posterior retransmisión.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">payload</td><td>Mensaje MQTT a almacenar.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Operación exitosa.</li>
+<li>Código de error en caso contrario. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00232">232</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  233</span>{</div>
+<div class="line"><span class="lineno">  234</span>    <span class="keywordflow">if</span> (payload == NULL) {</div>
+<div class="line"><span class="lineno">  235</span>        <span class="keywordflow">return</span> ESP_FAIL;</div>
+<div class="line"><span class="lineno">  236</span>    }</div>
+<div class="line"><span class="lineno">  237</span> </div>
+<div class="line"><span class="lineno">  238</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="#ad78a50dfc8be1e28effacc58f9a18aa1">sd_card_init</a>() != ESP_OK) {</div>
+<div class="line"><span class="lineno">  239</span>        <span class="keywordflow">return</span> ESP_FAIL;</div>
+<div class="line"><span class="lineno">  240</span>    }</div>
+<div class="line"><span class="lineno">  241</span> </div>
+<div class="line"><span class="lineno">  242</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  243</span>        xSemaphoreTake(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>, portMAX_DELAY);</div>
+<div class="line"><span class="lineno">  244</span>    }</div>
+<div class="line"><span class="lineno">  245</span> </div>
+<div class="line"><span class="lineno">  246</span>    FILE *f = fopen(<a class="code hl_variable" href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a>, <span class="stringliteral">&quot;a&quot;</span>);</div>
+<div class="line"><span class="lineno">  247</span> </div>
+<div class="line"><span class="lineno">  248</span>    <span class="keywordflow">if</span> (f == NULL) {</div>
+<div class="line"><span class="lineno">  249</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error abriendo pendientes MQTT (%s), errno=%d&quot;</span>, <a class="code hl_variable" href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a>, errno);</div>
+<div class="line"><span class="lineno">  250</span> </div>
+<div class="line"><span class="lineno">  251</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  252</span>            xSemaphoreGive(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>);</div>
+<div class="line"><span class="lineno">  253</span>        }</div>
+<div class="line"><span class="lineno">  254</span> </div>
+<div class="line"><span class="lineno">  255</span>        <span class="keywordflow">return</span> ESP_FAIL;</div>
+<div class="line"><span class="lineno">  256</span>    }</div>
+<div class="line"><span class="lineno">  257</span> </div>
+<div class="line"><span class="lineno">  258</span>    fprintf(f, <span class="stringliteral">&quot;%s\n&quot;</span>, payload);</div>
+<div class="line"><span class="lineno">  259</span>    fflush(f);</div>
+<div class="line"><span class="lineno">  260</span>    fclose(f);</div>
+<div class="line"><span class="lineno">  261</span> </div>
+<div class="line"><span class="lineno">  262</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  263</span>        xSemaphoreGive(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>);</div>
+<div class="line"><span class="lineno">  264</span>    }</div>
+<div class="line"><span class="lineno">  265</span> </div>
+<div class="line"><span class="lineno">  266</span>    <span class="keywordflow">return</span> ESP_OK;</div>
+<div class="line"><span class="lineno">  267</span>}</div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+<div class="ttc" id="asd__card_8c_html_a2e30b1b8f3af73b81aceb3e1b63fff2b"><div class="ttname"><a href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a></div><div class="ttdeci">static const char pending_mqtt_path[]</div><div class="ttdoc">Archivo utilizado para almacenar mensajes MQTT pendientes.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00082">sd_card.c:82</a></div></div>
+<div class="ttc" id="asd__card_8c_html_a76c0525d646735793add25b18043e600"><div class="ttname"><a href="#a76c0525d646735793add25b18043e600">spi_mutex</a></div><div class="ttdeci">static SemaphoreHandle_t spi_mutex</div><div class="ttdoc">Mutex para acceso exclusivo al bus SPI.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00094">sd_card.c:94</a></div></div>
+<div class="ttc" id="asd__card_8c_html_ad78a50dfc8be1e28effacc58f9a18aa1"><div class="ttname"><a href="#ad78a50dfc8be1e28effacc58f9a18aa1">sd_card_init</a></div><div class="ttdeci">esp_err_t sd_card_init(void)</div><div class="ttdoc">Inicializa y monta la tarjeta SD.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00112">sd_card.c:112</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a07dd8178e8630f2cc8d381af7f6ec9d9" name="a07dd8178e8630f2cc8d381af7f6ec9d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07dd8178e8630f2cc8d381af7f6ec9d9">&#9670;&#160;</a></span>sd_card_close_pending_mqtt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sd_card_close_pending_mqtt </td>
+          <td>(</td>
+          <td class="paramtype">FILE *</td>          <td class="paramname"><span class="paramname"><em>file</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cierra el archivo de mensajes MQTT pendientes. </p>
+<p>Libera los recursos asociados al archivo abierto.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>Puntero al archivo. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00312">312</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  313</span>{</div>
+<div class="line"><span class="lineno">  314</span>    <span class="keywordflow">if</span> (file != NULL) {</div>
+<div class="line"><span class="lineno">  315</span>        fclose(file);</div>
+<div class="line"><span class="lineno">  316</span>    }</div>
+<div class="line"><span class="lineno">  317</span> </div>
+<div class="line"><span class="lineno">  318</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  319</span>        xSemaphoreGive(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>);</div>
+<div class="line"><span class="lineno">  320</span>    }</div>
+<div class="line"><span class="lineno">  321</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a36756946bae9f06f242754f9af59d944" name="a36756946bae9f06f242754f9af59d944"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36756946bae9f06f242754f9af59d944">&#9670;&#160;</a></span>sd_card_delete_pending_mqtt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t sd_card_delete_pending_mqtt </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Elimina el archivo de mensajes MQTT pendientes. </p>
+<p>Se utiliza una vez que todos los mensajes almacenados han sido retransmitidos correctamente al broker MQTT.</p>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Archivo eliminado correctamente.</li>
+<li>Código de error en caso contrario. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00323">323</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  324</span>{</div>
+<div class="line"><span class="lineno">  325</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="#ad78a50dfc8be1e28effacc58f9a18aa1">sd_card_init</a>() != ESP_OK) {</div>
+<div class="line"><span class="lineno">  326</span>        <span class="keywordflow">return</span> ESP_FAIL;</div>
+<div class="line"><span class="lineno">  327</span>    }</div>
+<div class="line"><span class="lineno">  328</span> </div>
+<div class="line"><span class="lineno">  329</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  330</span>        xSemaphoreTake(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>, portMAX_DELAY);</div>
+<div class="line"><span class="lineno">  331</span>    }</div>
+<div class="line"><span class="lineno">  332</span> </div>
+<div class="line"><span class="lineno">  333</span>    <span class="keywordtype">int</span> result = remove(<a class="code hl_variable" href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a>);</div>
+<div class="line"><span class="lineno">  334</span> </div>
+<div class="line"><span class="lineno">  335</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  336</span>        xSemaphoreGive(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>);</div>
+<div class="line"><span class="lineno">  337</span>    }</div>
+<div class="line"><span class="lineno">  338</span> </div>
+<div class="line"><span class="lineno">  339</span>    <span class="keywordflow">if</span> (result == 0 || errno == ENOENT) {</div>
+<div class="line"><span class="lineno">  340</span>        <span class="keywordflow">return</span> ESP_OK;</div>
+<div class="line"><span class="lineno">  341</span>    }</div>
+<div class="line"><span class="lineno">  342</span> </div>
+<div class="line"><span class="lineno">  343</span>    ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error eliminando pendientes MQTT (%s), errno=%d&quot;</span>, <a class="code hl_variable" href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a>, errno);</div>
+<div class="line"><span class="lineno">  344</span>    <span class="keywordflow">return</span> ESP_FAIL;</div>
+<div class="line"><span class="lineno">  345</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ad78a50dfc8be1e28effacc58f9a18aa1" name="ad78a50dfc8be1e28effacc58f9a18aa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad78a50dfc8be1e28effacc58f9a18aa1">&#9670;&#160;</a></span>sd_card_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t sd_card_init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa y monta la tarjeta SD. </p>
+<p>Inicializa la tarjeta SD.</p>
+<p>Configura el bus SPI, el dispositivo SD y el sistema de archivos.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>ESP_OK si la tarjeta se monta correctamente.</dd></dl>
+<p>Inicializa y monta la tarjeta SD.</p>
+<p>Configura el bus SPI, monta el sistema de archivos FAT y verifica la disponibilidad del dispositivo de almacenamiento.</p>
+<p>Esta función debe ejecutarse durante la inicialización del sistema antes de realizar operaciones de lectura o escritura.</p>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Tarjeta montada correctamente.</li>
+<li>Código de error en caso de fallo. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00112">112</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  113</span>{</div>
+<div class="line"><span class="lineno">  114</span>    esp_err_t ret;</div>
+<div class="line"><span class="lineno">  115</span> </div>
+<div class="line"><span class="lineno">  116</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a619b844a05cfbbdf6c779af42c0bc335">sd_mounted</a>) {</div>
+<div class="line"><span class="lineno">  117</span>        <span class="keywordflow">return</span> ESP_OK;</div>
+<div class="line"><span class="lineno">  118</span>    }</div>
+<div class="line"><span class="lineno">  119</span> </div>
+<div class="line"><span class="lineno">  120</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> == NULL) {</div>
+<div class="line"><span class="lineno">  121</span>        <a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> = xSemaphoreCreateMutex();</div>
+<div class="line"><span class="lineno">  122</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> == NULL) {</div>
+<div class="line"><span class="lineno">  123</span>            ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error creando mutex SPI&quot;</span>);</div>
+<div class="line"><span class="lineno">  124</span>            <span class="keywordflow">return</span> ESP_FAIL;</div>
+<div class="line"><span class="lineno">  125</span>        }</div>
+<div class="line"><span class="lineno">  126</span>    }</div>
+<div class="line"><span class="lineno">  127</span> </div>
+<div class="line"><span class="lineno">  128</span>    sdmmc_host_t host = SDSPI_HOST_DEFAULT();</div>
+<div class="line"><span class="lineno">  129</span> </div>
+<div class="line"><span class="lineno">  130</span>    spi_bus_config_t bus_cfg = {</div>
+<div class="line"><span class="lineno">  131</span>        .mosi_io_num = <a class="code hl_define" href="#abaeddda4b992af7165ed898ab8b2b4ac">PIN_MOSI</a>,</div>
+<div class="line"><span class="lineno">  132</span>        .miso_io_num = <a class="code hl_define" href="#a46bdd417480dec5cb9cf196af3c7489c">PIN_MISO</a>,</div>
+<div class="line"><span class="lineno">  133</span>        .sclk_io_num = <a class="code hl_define" href="#a29e4cd8304fdcdd2e715189dfaaf31c2">PIN_CLK</a>,</div>
+<div class="line"><span class="lineno">  134</span>        .quadwp_io_num = -1,</div>
+<div class="line"><span class="lineno">  135</span>        .quadhd_io_num = -1,</div>
+<div class="line"><span class="lineno">  136</span>        .max_transfer_sz = 4000,</div>
+<div class="line"><span class="lineno">  137</span>    };</div>
+<div class="line"><span class="lineno">  138</span> </div>
+<div class="line"><span class="lineno">  139</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  140</span><span class="comment">    * Configuración del bus SPI utilizado para la comunicación</span></div>
+<div class="line"><span class="lineno">  141</span><span class="comment">    * con la tarjeta SD.</span></div>
+<div class="line"><span class="lineno">  142</span><span class="comment">    */</span></div>
+<div class="line"><span class="lineno">  143</span>    ret = spi_bus_initialize(host.slot, &amp;bus_cfg, SDSPI_DEFAULT_DMA);</div>
+<div class="line"><span class="lineno">  144</span>    <span class="keywordflow">if</span> (ret != ESP_OK &amp;&amp; ret != ESP_ERR_INVALID_STATE) {</div>
+<div class="line"><span class="lineno">  145</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error inicializando SPI&quot;</span>);</div>
+<div class="line"><span class="lineno">  146</span>        <span class="keywordflow">return</span> ret;</div>
+<div class="line"><span class="lineno">  147</span>    }</div>
+<div class="line"><span class="lineno">  148</span> </div>
+<div class="line"><span class="lineno">  149</span>    sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();</div>
+<div class="line"><span class="lineno">  150</span>    slot_config.gpio_cs = <a class="code hl_define" href="#afa592f8fcb7a301edfe97aa121fd28ce">PIN_CS</a>;</div>
+<div class="line"><span class="lineno">  151</span>    slot_config.host_id = host.slot;</div>
+<div class="line"><span class="lineno">  152</span> </div>
+<div class="line"><span class="lineno">  153</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  154</span><span class="comment">    * Montaje del sistema de archivos FAT sobre la tarjeta SD.</span></div>
+<div class="line"><span class="lineno">  155</span><span class="comment">    */</span></div>
+<div class="line"><span class="lineno">  156</span>    esp_vfs_fat_sdmmc_mount_config_t mount_config = {</div>
+<div class="line"><span class="lineno">  157</span>        .format_if_mount_failed = <span class="keyword">false</span>,</div>
+<div class="line"><span class="lineno">  158</span>        .max_files = 5,</div>
+<div class="line"><span class="lineno">  159</span>        .allocation_unit_size = 16 * 1024</div>
+<div class="line"><span class="lineno">  160</span>    };</div>
+<div class="line"><span class="lineno">  161</span> </div>
+<div class="line"><span class="lineno">  162</span>    sdmmc_card_t *card;</div>
+<div class="line"><span class="lineno">  163</span> </div>
+<div class="line"><span class="lineno">  164</span>    ret = esp_vfs_fat_sdspi_mount(<a class="code hl_variable" href="#a265dbe8dd1c8bf0f771a15e941c13fae">mount_point</a>, &amp;host, &amp;slot_config, &amp;mount_config, &amp;card);</div>
+<div class="line"><span class="lineno">  165</span> </div>
+<div class="line"><span class="lineno">  166</span>    <span class="keywordflow">if</span> (ret != ESP_OK) {</div>
+<div class="line"><span class="lineno">  167</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error montando SD (%s)&quot;</span>, esp_err_to_name(ret));</div>
+<div class="line"><span class="lineno">  168</span>        <span class="keywordflow">return</span> ret;</div>
+<div class="line"><span class="lineno">  169</span>    }</div>
+<div class="line"><span class="lineno">  170</span> </div>
+<div class="line"><span class="lineno">  171</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;SD montada correctamente&quot;</span>);</div>
+<div class="line"><span class="lineno">  172</span> </div>
+<div class="line"><span class="lineno">  173</span>    <a class="code hl_variable" href="#a619b844a05cfbbdf6c779af42c0bc335">sd_mounted</a> = <span class="keyword">true</span>;</div>
+<div class="line"><span class="lineno">  174</span> </div>
+<div class="line"><span class="lineno">  175</span>    <span class="keywordflow">return</span> ESP_OK;</div>
+<div class="line"><span class="lineno">  176</span>}</div>
+<div class="ttc" id="asd__card_8c_html_a265dbe8dd1c8bf0f771a15e941c13fae"><div class="ttname"><a href="#a265dbe8dd1c8bf0f771a15e941c13fae">mount_point</a></div><div class="ttdeci">static const char mount_point[]</div><div class="ttdoc">Punto de montaje del sistema de archivos FAT.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00077">sd_card.c:77</a></div></div>
+<div class="ttc" id="asd__card_8c_html_a29e4cd8304fdcdd2e715189dfaaf31c2"><div class="ttname"><a href="#a29e4cd8304fdcdd2e715189dfaaf31c2">PIN_CLK</a></div><div class="ttdeci">#define PIN_CLK</div><div class="ttdoc">GPIO utilizado como reloj SPI.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00063">sd_card.c:63</a></div></div>
+<div class="ttc" id="asd__card_8c_html_a46bdd417480dec5cb9cf196af3c7489c"><div class="ttname"><a href="#a46bdd417480dec5cb9cf196af3c7489c">PIN_MISO</a></div><div class="ttdeci">#define PIN_MISO</div><div class="ttdoc">GPIO utilizado como línea MISO.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00053">sd_card.c:53</a></div></div>
+<div class="ttc" id="asd__card_8c_html_a619b844a05cfbbdf6c779af42c0bc335"><div class="ttname"><a href="#a619b844a05cfbbdf6c779af42c0bc335">sd_mounted</a></div><div class="ttdeci">static bool sd_mounted</div><div class="ttdoc">Indica si la tarjeta SD fue montada correctamente.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00099">sd_card.c:99</a></div></div>
+<div class="ttc" id="asd__card_8c_html_abaeddda4b992af7165ed898ab8b2b4ac"><div class="ttname"><a href="#abaeddda4b992af7165ed898ab8b2b4ac">PIN_MOSI</a></div><div class="ttdeci">#define PIN_MOSI</div><div class="ttdoc">GPIO utilizado como línea MOSI.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00058">sd_card.c:58</a></div></div>
+<div class="ttc" id="asd__card_8c_html_afa592f8fcb7a301edfe97aa121fd28ce"><div class="ttname"><a href="#afa592f8fcb7a301edfe97aa121fd28ce">PIN_CS</a></div><div class="ttdeci">#define PIN_CS</div><div class="ttdoc">GPIO utilizado como Chip Select.</div><div class="ttdef"><b>Definition</b> <a href="sd__card_8c_source.html#l00068">sd_card.c:68</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ac9ae86642649b9c94602adb5b313104e" name="ac9ae86642649b9c94602adb5b313104e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9ae86642649b9c94602adb5b313104e">&#9670;&#160;</a></span>sd_card_is_mounted()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sd_card_is_mounted </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Verifica si la tarjeta SD se encuentra montada. </p>
+<p>Permite a otras tareas validar la disponibilidad del sistema de almacenamiento antes de realizar operaciones de lectura o escritura.</p>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>true: Tarjeta montada correctamente.</li>
+<li>false: Tarjeta no disponible. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00347">347</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  348</span>{</div>
+<div class="line"><span class="lineno">  349</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="#a619b844a05cfbbdf6c779af42c0bc335">sd_mounted</a>;</div>
+<div class="line"><span class="lineno">  350</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a07d076d37d4d84bb737fb156fb4e01fd" name="a07d076d37d4d84bb737fb156fb4e01fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07d076d37d4d84bb737fb156fb4e01fd">&#9670;&#160;</a></span>sd_card_open_pending_mqtt_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FILE * sd_card_open_pending_mqtt_read </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Abre el archivo de mensajes MQTT pendientes. </p>
+<p>El archivo es abierto en modo lectura para permitir la recuperación de mensajes almacenados previamente.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>Puntero al archivo abierto o NULL si ocurre un error. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00280">280</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  281</span>{</div>
+<div class="line"><span class="lineno">  282</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="#ad78a50dfc8be1e28effacc58f9a18aa1">sd_card_init</a>() != ESP_OK) {</div>
+<div class="line"><span class="lineno">  283</span>        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><span class="lineno">  284</span>    }</div>
+<div class="line"><span class="lineno">  285</span> </div>
+<div class="line"><span class="lineno">  286</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  287</span>        xSemaphoreTake(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>, portMAX_DELAY);</div>
+<div class="line"><span class="lineno">  288</span>    }</div>
+<div class="line"><span class="lineno">  289</span> </div>
+<div class="line"><span class="lineno">  290</span>    FILE *f = fopen(<a class="code hl_variable" href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a>, <span class="stringliteral">&quot;r&quot;</span>);</div>
+<div class="line"><span class="lineno">  291</span> </div>
+<div class="line"><span class="lineno">  292</span>    <span class="keywordflow">if</span> (f == NULL) {</div>
+<div class="line"><span class="lineno">  293</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error abriendo pendientes MQTT (%s), errno=%d&quot;</span>, <a class="code hl_variable" href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a>, errno);</div>
+<div class="line"><span class="lineno">  294</span> </div>
+<div class="line"><span class="lineno">  295</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  296</span>            xSemaphoreGive(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>);</div>
+<div class="line"><span class="lineno">  297</span>        }</div>
+<div class="line"><span class="lineno">  298</span>    }</div>
+<div class="line"><span class="lineno">  299</span> </div>
+<div class="line"><span class="lineno">  300</span>    <span class="keywordflow">return</span> f;</div>
+<div class="line"><span class="lineno">  301</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a4b7f64560c914a0223302fbd144c8f26" name="a4b7f64560c914a0223302fbd144c8f26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b7f64560c914a0223302fbd144c8f26">&#9670;&#160;</a></span>sd_card_pending_mqtt_exists()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sd_card_pending_mqtt_exists </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Verifica la existencia de mensajes MQTT pendientes. </p>
+<p>Comprueba si existe el archivo de almacenamiento temporal utilizado para guardar mensajes no publicados.</p>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>true: Existen mensajes pendientes.</li>
+<li>false: No existen mensajes pendientes. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00269">269</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  270</span>{</div>
+<div class="line"><span class="lineno">  271</span>    <span class="keyword">struct </span>stat file_stat;</div>
+<div class="line"><span class="lineno">  272</span> </div>
+<div class="line"><span class="lineno">  273</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="#ad78a50dfc8be1e28effacc58f9a18aa1">sd_card_init</a>() != ESP_OK) {</div>
+<div class="line"><span class="lineno">  274</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">  275</span>    }</div>
+<div class="line"><span class="lineno">  276</span> </div>
+<div class="line"><span class="lineno">  277</span>    <span class="keywordflow">return</span> stat(<a class="code hl_variable" href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">pending_mqtt_path</a>, &amp;file_stat) == 0;</div>
+<div class="line"><span class="lineno">  278</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a35ae42e918762a7bc304f39cec1d330c" name="a35ae42e918762a7bc304f39cec1d330c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35ae42e918762a7bc304f39cec1d330c">&#9670;&#160;</a></span>sd_card_read_pending_mqtt_line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * sd_card_read_pending_mqtt_line </td>
+          <td>(</td>
+          <td class="paramtype">FILE *</td>          <td class="paramname"><span class="paramname"><em>file</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *</td>          <td class="paramname"><span class="paramname"><em>buffer</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Lee una línea del archivo de mensajes MQTT pendientes. </p>
+<p>Obtiene el siguiente registro almacenado dentro del archivo.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>Puntero al archivo abierto. </td></tr>
+    <tr><td class="paramname">buffer</td><td>Buffer donde se almacenará la línea leída. </td></tr>
+    <tr><td class="paramname">size</td><td>Tamaño del buffer.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>Puntero al buffer si la lectura fue exitosa.</li>
+<li>NULL si se alcanza el final del archivo o ocurre un error. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00303">303</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  304</span>{</div>
+<div class="line"><span class="lineno">  305</span>    <span class="keywordflow">if</span> (file == NULL || buffer == NULL || size == 0) {</div>
+<div class="line"><span class="lineno">  306</span>        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><span class="lineno">  307</span>    }</div>
+<div class="line"><span class="lineno">  308</span> </div>
+<div class="line"><span class="lineno">  309</span>    <span class="keywordflow">return</span> fgets(buffer, size, file);</div>
+<div class="line"><span class="lineno">  310</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a44ca2b4d5f9ee8fdb3a5cedd19f2b334" name="a44ca2b4d5f9ee8fdb3a5cedd19f2b334"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44ca2b4d5f9ee8fdb3a5cedd19f2b334">&#9670;&#160;</a></span>sd_card_write_line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t sd_card_write_line </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>line</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Escribe una línea en el archivo log.csv de la SD. </p>
+<p>Escribe una línea en el archivo de registro.</p>
+<p>La operación es protegida con mutex para evitar accesos concurrentes.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Texto a escribir. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>ESP_OK si la escritura fue exitosa.</dd></dl>
+<p>Escribe una línea en el archivo log.csv de la SD.</p>
+<p>Añade una nueva línea al archivo CSV utilizado para almacenar las variables del proceso de fermentación.</p>
+<p>El acceso al archivo se encuentra protegido para evitar conflictos entre tareas concurrentes.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Cadena de texto a almacenar.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Escritura exitosa.</li>
+<li>Código de error en caso contrario. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00190">190</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  191</span>{</div>
+<div class="line"><span class="lineno">  192</span>    <span class="keywordflow">if</span> (line == NULL) {</div>
+<div class="line"><span class="lineno">  193</span>        <span class="keywordflow">return</span> ESP_FAIL;</div>
+<div class="line"><span class="lineno">  194</span>    }</div>
+<div class="line"><span class="lineno">  195</span> </div>
+<div class="line"><span class="lineno">  196</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  197</span>        xSemaphoreTake(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>, portMAX_DELAY);</div>
+<div class="line"><span class="lineno">  198</span>    }</div>
+<div class="line"><span class="lineno">  199</span> </div>
+<div class="line"><span class="lineno">  200</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  201</span><span class="comment">    * Apertura del archivo en modo append para preservar</span></div>
+<div class="line"><span class="lineno">  202</span><span class="comment">    * los registros históricos previamente almacenados.</span></div>
+<div class="line"><span class="lineno">  203</span><span class="comment">    */</span></div>
+<div class="line"><span class="lineno">  204</span>    FILE *f = fopen(<span class="stringliteral">&quot;/sdcard/log.csv&quot;</span>, <span class="stringliteral">&quot;a&quot;</span>);</div>
+<div class="line"><span class="lineno">  205</span> </div>
+<div class="line"><span class="lineno">  206</span>    <span class="keywordflow">if</span> (f == NULL) {</div>
+<div class="line"><span class="lineno">  207</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error abriendo archivo&quot;</span>);</div>
+<div class="line"><span class="lineno">  208</span>        </div>
+<div class="line"><span class="lineno">  209</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  210</span>            xSemaphoreGive(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>);</div>
+<div class="line"><span class="lineno">  211</span>        }</div>
+<div class="line"><span class="lineno">  212</span> </div>
+<div class="line"><span class="lineno">  213</span>        <span class="keywordflow">return</span> ESP_FAIL;</div>
+<div class="line"><span class="lineno">  214</span>    }</div>
+<div class="line"><span class="lineno">  215</span> </div>
+<div class="line"><span class="lineno">  216</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  217</span><span class="comment">    * Cada registro corresponde a una muestra del sistema</span></div>
+<div class="line"><span class="lineno">  218</span><span class="comment">    * de fermentación almacenada en formato CSV.</span></div>
+<div class="line"><span class="lineno">  219</span><span class="comment">    */</span></div>
+<div class="line"><span class="lineno">  220</span>    fprintf(f, <span class="stringliteral">&quot;%s\n&quot;</span>, line);</div>
+<div class="line"><span class="lineno">  221</span> </div>
+<div class="line"><span class="lineno">  222</span>    fflush(f);</div>
+<div class="line"><span class="lineno">  223</span>    fclose(f);</div>
+<div class="line"><span class="lineno">  224</span> </div>
+<div class="line"><span class="lineno">  225</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a> != NULL) {</div>
+<div class="line"><span class="lineno">  226</span>        xSemaphoreGive(<a class="code hl_variable" href="#a76c0525d646735793add25b18043e600">spi_mutex</a>);</div>
+<div class="line"><span class="lineno">  227</span>    }</div>
+<div class="line"><span class="lineno">  228</span> </div>
+<div class="line"><span class="lineno">  229</span>    <span class="keywordflow">return</span> ESP_OK;</div>
+<div class="line"><span class="lineno">  230</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Documentación de variables</h2>
+<a id="a265dbe8dd1c8bf0f771a15e941c13fae" name="a265dbe8dd1c8bf0f771a15e941c13fae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a265dbe8dd1c8bf0f771a15e941c13fae">&#9670;&#160;</a></span>mount_point</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char mount_point[] = &quot;/sdcard&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Punto de montaje del sistema de archivos FAT. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00077">77</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+<a id="a2e30b1b8f3af73b81aceb3e1b63fff2b" name="a2e30b1b8f3af73b81aceb3e1b63fff2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e30b1b8f3af73b81aceb3e1b63fff2b">&#9670;&#160;</a></span>pending_mqtt_path</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char pending_mqtt_path[] = &quot;/sdcard/mqtt_pending.txt&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Archivo utilizado para almacenar mensajes MQTT pendientes. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00082">82</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+<a id="a619b844a05cfbbdf6c779af42c0bc335" name="a619b844a05cfbbdf6c779af42c0bc335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a619b844a05cfbbdf6c779af42c0bc335">&#9670;&#160;</a></span>sd_mounted</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sd_mounted = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indica si la tarjeta SD fue montada correctamente. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00099">99</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+<a id="a76c0525d646735793add25b18043e600" name="a76c0525d646735793add25b18043e600"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76c0525d646735793add25b18043e600">&#9670;&#160;</a></span>spi_mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SemaphoreHandle_t spi_mutex = NULL</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Mutex para acceso exclusivo al bus SPI. </p>
+<p>Evita accesos concurrentes desde múltiples tareas durante operaciones de lectura o escritura. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00094">94</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+<a id="a5a85b9c772bbeb480b209a3e6ea92b4c" name="a5a85b9c772bbeb480b209a3e6ea92b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a85b9c772bbeb480b209a3e6ea92b4c">&#9670;&#160;</a></span>TAG</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* TAG = &quot;SD&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Etiqueta utilizada por el sistema de logging. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="sd__card_8c_source.html#l00044">44</a> del archivo <a class="el" href="sd__card_8c_source.html">sd_card.c</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_ce9acbebd20a964a9fb527ea0a00b86e.html">drivers</a></li><li class="navelem"><a href="sd__card_8c.html">sd_card.c</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

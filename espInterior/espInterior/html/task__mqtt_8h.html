@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/tasks/task_mqtt.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('task__mqtt_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo task_mqtt.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Declaración de la tarea de comunicación MQTT.  
+<a href="#details">Más...</a></p>
+
+<p><a href="task__mqtt_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a376c1e55c392503ef2bd96eedae58a21" id="r_a376c1e55c392503ef2bd96eedae58a21"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a376c1e55c392503ef2bd96eedae58a21">task_mqtt</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:a376c1e55c392503ef2bd96eedae58a21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tarea principal de publicación MQTT.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Declaración de la tarea de comunicación MQTT. </p>
+<p>Este módulo define la tarea responsable de publicar los datos del sistema en un broker MQTT para monitoreo remoto.</p>
+<p>La tarea recibe mediciones provenientes de los sensores mediante una cola FreeRTOS y realiza su envío utilizando el módulo mqtt_manager.</p>
+<p>Funciones principales:</p><ul>
+<li>Recepción de datos de sensores.</li>
+<li>Formateo de mensajes MQTT.</li>
+<li>Publicación en tópicos MQTT.</li>
+<li>Monitoreo del estado de conexión.</li>
+</ul>
+<p>Arquitectura:</p>
+<p>queue_mqtt | v task_mqtt | v Broker MQTT</p>
+<p>Esta tarea desacopla las comunicaciones de red de las tareas de adquisición y control del sistema.</p>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="task__mqtt_8h_source.html">task_mqtt.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a376c1e55c392503ef2bd96eedae58a21" name="a376c1e55c392503ef2bd96eedae58a21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a376c1e55c392503ef2bd96eedae58a21">&#9670;&#160;</a></span>task_mqtt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void task_mqtt </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>pvParameters</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tarea principal de publicación MQTT. </p>
+<p>Tarea principal de comunicación MQTT.</p>
+<p>Espera datos provenientes de queue_mqtt, genera los mensajes correspondientes y los publica en el broker MQTT.</p>
+<p>La tarea opera de forma independiente para evitar que las latencias de red afecten la adquisición de sensores o la ejecución de la lógica de control.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td>Parámetros de la tarea (no utilizados).</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Tarea principal de publicación MQTT.</p>
+<p>Espera nuevas mediciones desde queue_mqtt, genera el payload JSON correspondiente y realiza la publicación en el broker MQTT.</p>
+<p>En caso de fallo:</p><ul>
+<li>El dato se almacena en SD.</li>
+<li>Se reintentará posteriormente.</li>
+</ul>
+<p>Una vez finalizado el proceso, se notifica a task_energia para continuar el ciclo operativo.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td>Parámetros de la tarea (no utilizados). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="task__mqtt_8c_source.html#l00231">231</a> del archivo <a class="el" href="task__mqtt_8c_source.html">task_mqtt.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  232</span>{</div>
+<div class="line"><span class="lineno">  233</span>    <a class="code hl_struct" href="structsensor__data__t.html">sensor_data_t</a> data;</div>
+<div class="line"><span class="lineno">  234</span>    <span class="keywordtype">char</span> payload[<a class="code hl_define" href="task__mqtt_8c.html#a2fdbe826e17a13bf27012646c9b74635">MQTT_PENDING_PAYLOAD_SIZE</a>];</div>
+<div class="line"><span class="lineno">  235</span> </div>
+<div class="line"><span class="lineno">  236</span>    <span class="keywordflow">while</span> (1)</div>
+<div class="line"><span class="lineno">  237</span>    {</div>
+<div class="line"><span class="lineno">  238</span>        <span class="keywordflow">if</span> (xQueueReceive(</div>
+<div class="line"><span class="lineno">  239</span>                <a class="code hl_variable" href="queues_8c.html#a526da114a431a9b62400f5080beb70da">queue_mqtt</a>,</div>
+<div class="line"><span class="lineno">  240</span>                &amp;data,</div>
+<div class="line"><span class="lineno">  241</span>                portMAX_DELAY))</div>
+<div class="line"><span class="lineno">  242</span>        {</div>
+<div class="line"><span class="lineno">  243</span>            <a class="code hl_function" href="task__mqtt_8c.html#a666538dbb24b20eaa9b931665337dda1">build_payload</a>(</div>
+<div class="line"><span class="lineno">  244</span>                &amp;data,</div>
+<div class="line"><span class="lineno">  245</span>                payload,</div>
+<div class="line"><span class="lineno">  246</span>                <span class="keyword">sizeof</span>(payload));</div>
+<div class="line"><span class="lineno">  247</span> </div>
+<div class="line"><span class="lineno">  248</span>            printf(</div>
+<div class="line"><span class="lineno">  249</span>                <span class="stringliteral">&quot;MQTT payload -&gt; %s\n&quot;</span>,</div>
+<div class="line"><span class="lineno">  250</span>                payload);</div>
+<div class="line"><span class="lineno">  251</span> </div>
+<div class="line"><span class="lineno">  252</span>            <a class="code hl_function" href="mqtt__manager_8c.html#aade8d25902d34a7a7ae601ba023bff4f">mqtt_manager_start</a>();</div>
+<div class="line"><span class="lineno">  253</span> </div>
+<div class="line"><span class="lineno">  254</span>            <span class="keywordflow">if</span> (!<a class="code hl_function" href="mqtt__manager_8c.html#abc2b7e54cf9f610d6ce01fcc17a56aa9">mqtt_wait_connected</a>(</div>
+<div class="line"><span class="lineno">  255</span>                    <a class="code hl_define" href="task__mqtt_8c.html#a26528eb0ea53fcc2f08b0a31e0d918e5">MQTT_CONNECT_TIMEOUT_MS</a>))</div>
+<div class="line"><span class="lineno">  256</span>            {</div>
+<div class="line"><span class="lineno">  257</span>                printf(<span class="stringliteral">&quot;MQTT no conectado\n&quot;</span>);</div>
+<div class="line"><span class="lineno">  258</span> </div>
+<div class="line"><span class="lineno">  259</span>                <a class="code hl_function" href="task__mqtt_8c.html#ad319f078b1f8cc29d7ef190e6634d758">save_pending_payload</a>(payload);</div>
+<div class="line"><span class="lineno">  260</span> </div>
+<div class="line"><span class="lineno">  261</span>                <a class="code hl_function" href="mqtt__manager_8c.html#a9d085201987e683cf0725e1cdc249d5f">mqtt_manager_stop</a>();</div>
+<div class="line"><span class="lineno">  262</span> </div>
+<div class="line"><span class="lineno">  263</span>                xTaskNotifyGive(</div>
+<div class="line"><span class="lineno">  264</span>                    <a class="code hl_variable" href="main_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71">task_energia_handle</a>);</div>
+<div class="line"><span class="lineno">  265</span> </div>
+<div class="line"><span class="lineno">  266</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><span class="lineno">  267</span>            }</div>
+<div class="line"><span class="lineno">  268</span> </div>
+<div class="line"><span class="lineno">  269</span>            <span class="keywordflow">if</span> (!<a class="code hl_function" href="task__mqtt_8c.html#a0aa1439b5051346af3120c189cf56f16">resend_pending_mqtt_messages</a>())</div>
+<div class="line"><span class="lineno">  270</span>            {</div>
+<div class="line"><span class="lineno">  271</span>                printf(<span class="stringliteral">&quot;No se pudieron reenviar todos los pendientes MQTT\n&quot;</span>);</div>
+<div class="line"><span class="lineno">  272</span> </div>
+<div class="line"><span class="lineno">  273</span>                <a class="code hl_function" href="task__mqtt_8c.html#ad319f078b1f8cc29d7ef190e6634d758">save_pending_payload</a>(payload);</div>
+<div class="line"><span class="lineno">  274</span> </div>
+<div class="line"><span class="lineno">  275</span>                <a class="code hl_function" href="mqtt__manager_8c.html#a9d085201987e683cf0725e1cdc249d5f">mqtt_manager_stop</a>();</div>
+<div class="line"><span class="lineno">  276</span> </div>
+<div class="line"><span class="lineno">  277</span>                xTaskNotifyGive(</div>
+<div class="line"><span class="lineno">  278</span>                    <a class="code hl_variable" href="main_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71">task_energia_handle</a>);</div>
+<div class="line"><span class="lineno">  279</span> </div>
+<div class="line"><span class="lineno">  280</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><span class="lineno">  281</span>            }</div>
+<div class="line"><span class="lineno">  282</span> </div>
+<div class="line"><span class="lineno">  283</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="mqtt__manager_8c.html#a0aa78fdc87dda9713ff09eefc5d1bfb8">mqtt_publish</a>(</div>
+<div class="line"><span class="lineno">  284</span>                    <a class="code hl_define" href="task__mqtt_8c.html#a400d28e1af2bcd57bf651dc23290a6d3">MQTT_TOPIC</a>,</div>
+<div class="line"><span class="lineno">  285</span>                    payload,</div>
+<div class="line"><span class="lineno">  286</span>                    1,</div>
+<div class="line"><span class="lineno">  287</span>                    <a class="code hl_define" href="task__mqtt_8c.html#a171ce00cd4c77b8836211f14d77df95e">MQTT_PUBLISH_TIMEOUT_MS</a>))</div>
+<div class="line"><span class="lineno">  288</span>            {</div>
+<div class="line"><span class="lineno">  289</span>                printf(<span class="stringliteral">&quot;Dato publicado por MQTT\n&quot;</span>);</div>
+<div class="line"><span class="lineno">  290</span>            }</div>
+<div class="line"><span class="lineno">  291</span>            <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  292</span>            {</div>
+<div class="line"><span class="lineno">  293</span>                printf(<span class="stringliteral">&quot;Error publicando por MQTT&quot;</span>);</div>
+<div class="line"><span class="lineno">  294</span> </div>
+<div class="line"><span class="lineno">  295</span>                <a class="code hl_function" href="task__mqtt_8c.html#ad319f078b1f8cc29d7ef190e6634d758">save_pending_payload</a>(payload);</div>
+<div class="line"><span class="lineno">  296</span>            }</div>
+<div class="line"><span class="lineno">  297</span> </div>
+<div class="line"><span class="lineno">  298</span>            <a class="code hl_function" href="mqtt__manager_8c.html#a9d085201987e683cf0725e1cdc249d5f">mqtt_manager_stop</a>();</div>
+<div class="line"><span class="lineno">  299</span> </div>
+<div class="line"><span class="lineno">  300</span>            xTaskNotifyGive(</div>
+<div class="line"><span class="lineno">  301</span>                <a class="code hl_variable" href="main_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71">task_energia_handle</a>);</div>
+<div class="line"><span class="lineno">  302</span>        }</div>
+<div class="line"><span class="lineno">  303</span>    }</div>
+<div class="line"><span class="lineno">  304</span>}</div>
+<div class="ttc" id="amain_8c_html_ac9bf4127b0b50168ecd12b71b89c2f71"><div class="ttname"><a href="main_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71">task_energia_handle</a></div><div class="ttdeci">TaskHandle_t task_energia_handle</div><div class="ttdoc">Handle de la tarea de energía.</div><div class="ttdef"><b>Definition</b> <a href="main_8c_source.html#l00109">main.c:109</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_a0aa78fdc87dda9713ff09eefc5d1bfb8"><div class="ttname"><a href="mqtt__manager_8c.html#a0aa78fdc87dda9713ff09eefc5d1bfb8">mqtt_publish</a></div><div class="ttdeci">bool mqtt_publish(const char *topic, const char *payload, int qos, uint32_t timeout_ms)</div><div class="ttdoc">Publica un mensaje en un tópico MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00232">mqtt_manager.c:232</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_a9d085201987e683cf0725e1cdc249d5f"><div class="ttname"><a href="mqtt__manager_8c.html#a9d085201987e683cf0725e1cdc249d5f">mqtt_manager_stop</a></div><div class="ttdeci">void mqtt_manager_stop(void)</div><div class="ttdoc">Detiene el servicio MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00276">mqtt_manager.c:276</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_aade8d25902d34a7a7ae601ba023bff4f"><div class="ttname"><a href="mqtt__manager_8c.html#aade8d25902d34a7a7ae601ba023bff4f">mqtt_manager_start</a></div><div class="ttdeci">void mqtt_manager_start(void)</div><div class="ttdoc">Inicializa y arranca el cliente MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00145">mqtt_manager.c:145</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_abc2b7e54cf9f610d6ce01fcc17a56aa9"><div class="ttname"><a href="mqtt__manager_8c.html#abc2b7e54cf9f610d6ce01fcc17a56aa9">mqtt_wait_connected</a></div><div class="ttdeci">bool mqtt_wait_connected(uint32_t timeout_ms)</div><div class="ttdoc">Espera la conexión con el broker MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00198">mqtt_manager.c:198</a></div></div>
+<div class="ttc" id="aqueues_8c_html_a526da114a431a9b62400f5080beb70da"><div class="ttname"><a href="queues_8c.html#a526da114a431a9b62400f5080beb70da">queue_mqtt</a></div><div class="ttdeci">QueueHandle_t queue_mqtt</div><div class="ttdoc">Cola para publicación MQTT.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00067">queues.c:67</a></div></div>
+<div class="ttc" id="astructsensor__data__t_html"><div class="ttname"><a href="structsensor__data__t.html">sensor_data_t</a></div><div class="ttdoc">Datos adquiridos por los sensores del sistema.</div><div class="ttdef"><b>Definition</b> <a href="data__types_8h_source.html#l00063">data_types.h:64</a></div></div>
+<div class="ttc" id="atask__mqtt_8c_html_a0aa1439b5051346af3120c189cf56f16"><div class="ttname"><a href="task__mqtt_8c.html#a0aa1439b5051346af3120c189cf56f16">resend_pending_mqtt_messages</a></div><div class="ttdeci">static bool resend_pending_mqtt_messages(void)</div><div class="ttdoc">Reenvía mensajes MQTT almacenados en la SD.</div><div class="ttdef"><b>Definition</b> <a href="task__mqtt_8c_source.html#l00115">task_mqtt.c:115</a></div></div>
+<div class="ttc" id="atask__mqtt_8c_html_a171ce00cd4c77b8836211f14d77df95e"><div class="ttname"><a href="task__mqtt_8c.html#a171ce00cd4c77b8836211f14d77df95e">MQTT_PUBLISH_TIMEOUT_MS</a></div><div class="ttdeci">#define MQTT_PUBLISH_TIMEOUT_MS</div><div class="ttdoc">Tiempo máximo de espera para publicación MQTT.</div><div class="ttdef"><b>Definition</b> <a href="task__mqtt_8c_source.html#l00068">task_mqtt.c:68</a></div></div>
+<div class="ttc" id="atask__mqtt_8c_html_a26528eb0ea53fcc2f08b0a31e0d918e5"><div class="ttname"><a href="task__mqtt_8c.html#a26528eb0ea53fcc2f08b0a31e0d918e5">MQTT_CONNECT_TIMEOUT_MS</a></div><div class="ttdeci">#define MQTT_CONNECT_TIMEOUT_MS</div><div class="ttdoc">Tiempo máximo de espera para conexión MQTT.</div><div class="ttdef"><b>Definition</b> <a href="task__mqtt_8c_source.html#l00063">task_mqtt.c:63</a></div></div>
+<div class="ttc" id="atask__mqtt_8c_html_a2fdbe826e17a13bf27012646c9b74635"><div class="ttname"><a href="task__mqtt_8c.html#a2fdbe826e17a13bf27012646c9b74635">MQTT_PENDING_PAYLOAD_SIZE</a></div><div class="ttdeci">#define MQTT_PENDING_PAYLOAD_SIZE</div><div class="ttdoc">Tamaño máximo permitido para payloads MQTT.</div><div class="ttdef"><b>Definition</b> <a href="task__mqtt_8c_source.html#l00073">task_mqtt.c:73</a></div></div>
+<div class="ttc" id="atask__mqtt_8c_html_a400d28e1af2bcd57bf651dc23290a6d3"><div class="ttname"><a href="task__mqtt_8c.html#a400d28e1af2bcd57bf651dc23290a6d3">MQTT_TOPIC</a></div><div class="ttdeci">#define MQTT_TOPIC</div><div class="ttdoc">Tópico MQTT utilizado para publicar mediciones.</div><div class="ttdef"><b>Definition</b> <a href="task__mqtt_8c_source.html#l00058">task_mqtt.c:58</a></div></div>
+<div class="ttc" id="atask__mqtt_8c_html_a666538dbb24b20eaa9b931665337dda1"><div class="ttname"><a href="task__mqtt_8c.html#a666538dbb24b20eaa9b931665337dda1">build_payload</a></div><div class="ttdeci">static void build_payload(const sensor_data_t *data, char *payload, size_t payload_size)</div><div class="ttdoc">Construye un payload JSON a partir de una medición.</div><div class="ttdef"><b>Definition</b> <a href="task__mqtt_8c_source.html#l00190">task_mqtt.c:190</a></div></div>
+<div class="ttc" id="atask__mqtt_8c_html_ad319f078b1f8cc29d7ef190e6634d758"><div class="ttname"><a href="task__mqtt_8c.html#ad319f078b1f8cc29d7ef190e6634d758">save_pending_payload</a></div><div class="ttdeci">static void save_pending_payload(const char *payload)</div><div class="ttdoc">Guarda un payload MQTT pendiente en la SD.</div><div class="ttdef"><b>Definition</b> <a href="task__mqtt_8c_source.html#l00091">task_mqtt.c:91</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_76dd8867a16d204aa2db31affc56d971.html">tasks</a></li><li class="navelem"><a href="task__mqtt_8h.html">task_mqtt.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

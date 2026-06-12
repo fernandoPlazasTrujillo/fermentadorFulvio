@@ -1,0 +1,477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/mqtt/mqtt_manager.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('mqtt__manager_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo mqtt_manager.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Interfaz para la gestión de comunicación MQTT.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
+</div>
+<p><a href="mqtt__manager_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:aade8d25902d34a7a7ae601ba023bff4f" id="r_aade8d25902d34a7a7ae601ba023bff4f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aade8d25902d34a7a7ae601ba023bff4f">mqtt_manager_start</a> (void)</td></tr>
+<tr class="memdesc:aade8d25902d34a7a7ae601ba023bff4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa y pone en marcha el cliente MQTT.  <br /></td></tr>
+<tr class="memitem:abc2b7e54cf9f610d6ce01fcc17a56aa9" id="r_abc2b7e54cf9f610d6ce01fcc17a56aa9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#abc2b7e54cf9f610d6ce01fcc17a56aa9">mqtt_wait_connected</a> (uint32_t timeout_ms)</td></tr>
+<tr class="memdesc:abc2b7e54cf9f610d6ce01fcc17a56aa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Espera hasta que se establezca la conexión MQTT.  <br /></td></tr>
+<tr class="memitem:a0aa78fdc87dda9713ff09eefc5d1bfb8" id="r_a0aa78fdc87dda9713ff09eefc5d1bfb8"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a0aa78fdc87dda9713ff09eefc5d1bfb8">mqtt_publish</a> (const char *topic, const char *payload, int qos, uint32_t timeout_ms)</td></tr>
+<tr class="memdesc:a0aa78fdc87dda9713ff09eefc5d1bfb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publica un mensaje en un tópico MQTT.  <br /></td></tr>
+<tr class="memitem:a9d085201987e683cf0725e1cdc249d5f" id="r_a9d085201987e683cf0725e1cdc249d5f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9d085201987e683cf0725e1cdc249d5f">mqtt_manager_stop</a> (void)</td></tr>
+<tr class="memdesc:a9d085201987e683cf0725e1cdc249d5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detiene el cliente MQTT.  <br /></td></tr>
+<tr class="memitem:a14a4eb1d82363ee8fb9bf053b48fc4a2" id="r_a14a4eb1d82363ee8fb9bf053b48fc4a2"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a14a4eb1d82363ee8fb9bf053b48fc4a2">mqtt_is_connected</a> (void)</td></tr>
+<tr class="memdesc:a14a4eb1d82363ee8fb9bf053b48fc4a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Consulta el estado actual de la conexión MQTT.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Interfaz para la gestión de comunicación MQTT. </p>
+<p>Este módulo encapsula la configuración y operación del cliente MQTT utilizado por el sistema de monitoreo ambiental basado en ESP32.</p>
+<p>Permite:</p><ul>
+<li>Inicializar la conexión MQTT.</li>
+<li>Verificar el estado de conexión con el broker.</li>
+<li>Publicar mensajes en tópicos específicos.</li>
+<li>Detener el servicio MQTT.</li>
+<li>Consultar el estado actual de conectividad.</li>
+</ul>
+<p>El módulo abstrae los detalles de la biblioteca MQTT utilizada, proporcionando una interfaz sencilla para las tareas de aplicación.</p>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="mqtt__manager_8h_source.html">mqtt_manager.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a14a4eb1d82363ee8fb9bf053b48fc4a2" name="a14a4eb1d82363ee8fb9bf053b48fc4a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14a4eb1d82363ee8fb9bf053b48fc4a2">&#9670;&#160;</a></span>mqtt_is_connected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mqtt_is_connected </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Consulta el estado actual de la conexión MQTT. </p>
+<p>Consulta el estado de conexión MQTT.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>true si el cliente está conectado al broker. </dd>
+<dd>
+false si no existe conexión activa.</dd></dl>
+<p>Consulta el estado actual de la conexión MQTT.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>true si existe conexión activa con el broker. </dd>
+<dd>
+false en caso contrario. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="mqtt__manager_8c_source.html#l00297">297</a> del archivo <a class="el" href="mqtt__manager_8c_source.html">mqtt_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  298</span>{</div>
+<div class="line"><span class="lineno">  299</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="mqtt__manager_8c.html#a6a99fbef218ac40fc0b77e18f0e9a708">mqtt_connected</a>;</div>
+<div class="line"><span class="lineno">  300</span>}</div>
+<div class="ttc" id="amqtt__manager_8c_html_a6a99fbef218ac40fc0b77e18f0e9a708"><div class="ttname"><a href="mqtt__manager_8c.html#a6a99fbef218ac40fc0b77e18f0e9a708">mqtt_connected</a></div><div class="ttdeci">static bool mqtt_connected</div><div class="ttdoc">Indica si el cliente MQTT se encuentra conectado.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00061">mqtt_manager.c:61</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aade8d25902d34a7a7ae601ba023bff4f" name="aade8d25902d34a7a7ae601ba023bff4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aade8d25902d34a7a7ae601ba023bff4f">&#9670;&#160;</a></span>mqtt_manager_start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mqtt_manager_start </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa y pone en marcha el cliente MQTT. </p>
+<p>Inicializa y arranca el cliente MQTT.</p>
+<p>Configura el cliente MQTT, registra los eventos asociados y establece la conexión con el broker configurado.</p>
+<p>Inicializa y pone en marcha el cliente MQTT.</p>
+<p>Crea el grupo de eventos utilizado para sincronización, configura el cliente MQTT, registra el manejador de eventos y establece la conexión con el broker configurado. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqtt__manager_8c_source.html#l00145">145</a> del archivo <a class="el" href="mqtt__manager_8c_source.html">mqtt_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  146</span>{</div>
+<div class="line"><span class="lineno">  147</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a> == NULL)</div>
+<div class="line"><span class="lineno">  148</span>    {</div>
+<div class="line"><span class="lineno">  149</span>        <a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a> = xEventGroupCreate();</div>
+<div class="line"><span class="lineno">  150</span>    }</div>
+<div class="line"><span class="lineno">  151</span> </div>
+<div class="line"><span class="lineno">  152</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a> == NULL)</div>
+<div class="line"><span class="lineno">  153</span>    {</div>
+<div class="line"><span class="lineno">  154</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;No se pudo crear grupo de eventos MQTT&quot;</span>);</div>
+<div class="line"><span class="lineno">  155</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><span class="lineno">  156</span>    }</div>
+<div class="line"><span class="lineno">  157</span> </div>
+<div class="line"><span class="lineno">  158</span>    xEventGroupClearBits(<a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a>,</div>
+<div class="line"><span class="lineno">  159</span>                         <a class="code hl_define" href="mqtt__manager_8c.html#a1e80d8829bc152cc952c4a118fcde270">MQTT_CONNECTED_BIT</a> | <a class="code hl_define" href="mqtt__manager_8c.html#a1af8627745313cfd7ec63711203fd2c1">MQTT_PUBLISHED_BIT</a> | <a class="code hl_define" href="mqtt__manager_8c.html#a78f2cbc86cf701e5327a3d22120f4b7c">MQTT_ERROR_BIT</a>);</div>
+<div class="line"><span class="lineno">  160</span> </div>
+<div class="line"><span class="lineno">  161</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a> != NULL)</div>
+<div class="line"><span class="lineno">  162</span>    {</div>
+<div class="line"><span class="lineno">  163</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><span class="lineno">  164</span>    }</div>
+<div class="line"><span class="lineno">  165</span> </div>
+<div class="line"><span class="lineno">  166</span>    esp_mqtt_client_config_t mqtt_cfg = {</div>
+<div class="line"><span class="lineno">  167</span>        .broker.address.uri = <a class="code hl_define" href="mqtt__manager_8c.html#a547a77358f516584c3c31c6c69983b4e">MQTT_BROKER_URI</a>,</div>
+<div class="line"><span class="lineno">  168</span>    };</div>
+<div class="line"><span class="lineno">  169</span> </div>
+<div class="line"><span class="lineno">  170</span>    <a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a> = esp_mqtt_client_init(&amp;mqtt_cfg);</div>
+<div class="line"><span class="lineno">  171</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a> == NULL)</div>
+<div class="line"><span class="lineno">  172</span>    {</div>
+<div class="line"><span class="lineno">  173</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;No se pudo crear cliente MQTT&quot;</span>);</div>
+<div class="line"><span class="lineno">  174</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><span class="lineno">  175</span>    }</div>
+<div class="line"><span class="lineno">  176</span> </div>
+<div class="line"><span class="lineno">  177</span>    esp_mqtt_client_register_event(</div>
+<div class="line"><span class="lineno">  178</span>        <a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a>,</div>
+<div class="line"><span class="lineno">  179</span>        ESP_EVENT_ANY_ID,</div>
+<div class="line"><span class="lineno">  180</span>        <a class="code hl_function" href="mqtt__manager_8c.html#aa52dab722f8622a7067617397f9c7d88">mqtt_event_handler</a>,</div>
+<div class="line"><span class="lineno">  181</span>        NULL);</div>
+<div class="line"><span class="lineno">  182</span> </div>
+<div class="line"><span class="lineno">  183</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Conectando a broker MQTT: %s&quot;</span>, <a class="code hl_define" href="mqtt__manager_8c.html#a547a77358f516584c3c31c6c69983b4e">MQTT_BROKER_URI</a>);</div>
+<div class="line"><span class="lineno">  184</span>    esp_mqtt_client_start(<a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a>);</div>
+<div class="line"><span class="lineno">  185</span>}</div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_a1af8627745313cfd7ec63711203fd2c1"><div class="ttname"><a href="mqtt__manager_8c.html#a1af8627745313cfd7ec63711203fd2c1">MQTT_PUBLISHED_BIT</a></div><div class="ttdeci">#define MQTT_PUBLISHED_BIT</div><div class="ttdoc">Bit que indica publicación confirmada.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00071">mqtt_manager.c:71</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_a1e80d8829bc152cc952c4a118fcde270"><div class="ttname"><a href="mqtt__manager_8c.html#a1e80d8829bc152cc952c4a118fcde270">MQTT_CONNECTED_BIT</a></div><div class="ttdeci">#define MQTT_CONNECTED_BIT</div><div class="ttdoc">Bit que indica conexión exitosa al broker MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00066">mqtt_manager.c:66</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_a547a77358f516584c3c31c6c69983b4e"><div class="ttname"><a href="mqtt__manager_8c.html#a547a77358f516584c3c31c6c69983b4e">MQTT_BROKER_URI</a></div><div class="ttdeci">#define MQTT_BROKER_URI</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00041">mqtt_manager.c:41</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_a78f2cbc86cf701e5327a3d22120f4b7c"><div class="ttname"><a href="mqtt__manager_8c.html#a78f2cbc86cf701e5327a3d22120f4b7c">MQTT_ERROR_BIT</a></div><div class="ttdeci">#define MQTT_ERROR_BIT</div><div class="ttdoc">Bit que indica error durante la operación MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00076">mqtt_manager.c:76</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_aa52dab722f8622a7067617397f9c7d88"><div class="ttname"><a href="mqtt__manager_8c.html#aa52dab722f8622a7067617397f9c7d88">mqtt_event_handler</a></div><div class="ttdeci">static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)</div><div class="ttdoc">Manejador de eventos MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00098">mqtt_manager.c:98</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_ad9332f302ae79b5195a71d791a9ccecd"><div class="ttname"><a href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a></div><div class="ttdeci">static esp_mqtt_client_handle_t mqtt_client</div><div class="ttdoc">Manejador del cliente MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00051">mqtt_manager.c:51</a></div></div>
+<div class="ttc" id="amqtt__manager_8c_html_aec2c91b2eaca6d01b9cf0927d903ed3f"><div class="ttname"><a href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a></div><div class="ttdeci">static EventGroupHandle_t mqtt_event_group</div><div class="ttdoc">Grupo de eventos utilizado para sincronización MQTT.</div><div class="ttdef"><b>Definition</b> <a href="mqtt__manager_8c_source.html#l00056">mqtt_manager.c:56</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a9d085201987e683cf0725e1cdc249d5f" name="a9d085201987e683cf0725e1cdc249d5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d085201987e683cf0725e1cdc249d5f">&#9670;&#160;</a></span>mqtt_manager_stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mqtt_manager_stop </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Detiene el cliente MQTT. </p>
+<p>Detiene el servicio MQTT.</p>
+<p>Finaliza la conexión con el broker y libera los recursos utilizados por el módulo.</p>
+<p>Detiene el cliente MQTT.</p>
+<p>Finaliza la conexión con el broker, destruye el cliente MQTT y limpia los bits de sincronización utilizados por el sistema. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="mqtt__manager_8c_source.html#l00276">276</a> del archivo <a class="el" href="mqtt__manager_8c_source.html">mqtt_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  277</span>{</div>
+<div class="line"><span class="lineno">  278</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a> != NULL)</div>
+<div class="line"><span class="lineno">  279</span>    {</div>
+<div class="line"><span class="lineno">  280</span>        esp_mqtt_client_stop(<a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a>);</div>
+<div class="line"><span class="lineno">  281</span>        esp_mqtt_client_destroy(<a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a>);</div>
+<div class="line"><span class="lineno">  282</span>        <a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a> = NULL;</div>
+<div class="line"><span class="lineno">  283</span>    }</div>
+<div class="line"><span class="lineno">  284</span> </div>
+<div class="line"><span class="lineno">  285</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a> != NULL)</div>
+<div class="line"><span class="lineno">  286</span>    {</div>
+<div class="line"><span class="lineno">  287</span>        xEventGroupClearBits(<a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a>,</div>
+<div class="line"><span class="lineno">  288</span>                             <a class="code hl_define" href="mqtt__manager_8c.html#a1e80d8829bc152cc952c4a118fcde270">MQTT_CONNECTED_BIT</a> | <a class="code hl_define" href="mqtt__manager_8c.html#a1af8627745313cfd7ec63711203fd2c1">MQTT_PUBLISHED_BIT</a> | <a class="code hl_define" href="mqtt__manager_8c.html#a78f2cbc86cf701e5327a3d22120f4b7c">MQTT_ERROR_BIT</a>);</div>
+<div class="line"><span class="lineno">  289</span>    }</div>
+<div class="line"><span class="lineno">  290</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a0aa78fdc87dda9713ff09eefc5d1bfb8" name="a0aa78fdc87dda9713ff09eefc5d1bfb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0aa78fdc87dda9713ff09eefc5d1bfb8">&#9670;&#160;</a></span>mqtt_publish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mqtt_publish </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>topic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>payload</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>qos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>timeout_ms</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Publica un mensaje en un tópico MQTT. </p>
+<p>Envía una cadena de texto a un tópico específico utilizando el nivel de calidad de servicio (QoS) indicado.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>Tópico MQTT de destino. </td></tr>
+    <tr><td class="paramname">payload</td><td>Mensaje a publicar. </td></tr>
+    <tr><td class="paramname">qos</td><td>Nivel de QoS utilizado en la publicación. </td></tr>
+    <tr><td class="paramname">timeout_ms</td><td>Tiempo máximo de espera para completar la operación.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>true si la publicación fue exitosa. </dd>
+<dd>
+false si ocurrió un error o timeout.</dd></dl>
+<p>Envía un mensaje al broker MQTT utilizando el nivel de QoS especificado.</p>
+<p>Para QoS mayores a cero, la función espera la confirmación de publicación mediante Event Groups.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">topic</td><td>Tópico MQTT de destino. </td></tr>
+    <tr><td class="paramname">payload</td><td>Mensaje a publicar. </td></tr>
+    <tr><td class="paramname">qos</td><td>Nivel de calidad de servicio. </td></tr>
+    <tr><td class="paramname">timeout_ms</td><td>Tiempo máximo de espera para la confirmación.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>true si la publicación fue exitosa. </dd>
+<dd>
+false si ocurrió un error o timeout. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="mqtt__manager_8c_source.html#l00232">232</a> del archivo <a class="el" href="mqtt__manager_8c_source.html">mqtt_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  233</span>{</div>
+<div class="line"><span class="lineno">  234</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a> == NULL || <a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a> == NULL)</div>
+<div class="line"><span class="lineno">  235</span>    {</div>
+<div class="line"><span class="lineno">  236</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">  237</span>    }</div>
+<div class="line"><span class="lineno">  238</span> </div>
+<div class="line"><span class="lineno">  239</span>    xEventGroupClearBits(<a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a>, <a class="code hl_define" href="mqtt__manager_8c.html#a1af8627745313cfd7ec63711203fd2c1">MQTT_PUBLISHED_BIT</a> | <a class="code hl_define" href="mqtt__manager_8c.html#a78f2cbc86cf701e5327a3d22120f4b7c">MQTT_ERROR_BIT</a>);</div>
+<div class="line"><span class="lineno">  240</span> </div>
+<div class="line"><span class="lineno">  241</span>    <span class="keywordtype">int</span> msg_id = esp_mqtt_client_publish(</div>
+<div class="line"><span class="lineno">  242</span>        <a class="code hl_variable" href="mqtt__manager_8c.html#ad9332f302ae79b5195a71d791a9ccecd">mqtt_client</a>,</div>
+<div class="line"><span class="lineno">  243</span>        topic,</div>
+<div class="line"><span class="lineno">  244</span>        payload,</div>
+<div class="line"><span class="lineno">  245</span>        0,</div>
+<div class="line"><span class="lineno">  246</span>        qos,</div>
+<div class="line"><span class="lineno">  247</span>        0);</div>
+<div class="line"><span class="lineno">  248</span> </div>
+<div class="line"><span class="lineno">  249</span>    <span class="keywordflow">if</span> (msg_id &lt; 0)</div>
+<div class="line"><span class="lineno">  250</span>    {</div>
+<div class="line"><span class="lineno">  251</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;No se pudo publicar en MQTT&quot;</span>);</div>
+<div class="line"><span class="lineno">  252</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">  253</span>    }</div>
+<div class="line"><span class="lineno">  254</span> </div>
+<div class="line"><span class="lineno">  255</span>    <span class="keywordflow">if</span> (qos == 0)</div>
+<div class="line"><span class="lineno">  256</span>    {</div>
+<div class="line"><span class="lineno">  257</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><span class="lineno">  258</span>    }</div>
+<div class="line"><span class="lineno">  259</span> </div>
+<div class="line"><span class="lineno">  260</span>    EventBits_t bits = xEventGroupWaitBits(</div>
+<div class="line"><span class="lineno">  261</span>        <a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a>,</div>
+<div class="line"><span class="lineno">  262</span>        <a class="code hl_define" href="mqtt__manager_8c.html#a1af8627745313cfd7ec63711203fd2c1">MQTT_PUBLISHED_BIT</a> | <a class="code hl_define" href="mqtt__manager_8c.html#a78f2cbc86cf701e5327a3d22120f4b7c">MQTT_ERROR_BIT</a>,</div>
+<div class="line"><span class="lineno">  263</span>        pdFALSE,</div>
+<div class="line"><span class="lineno">  264</span>        pdFALSE,</div>
+<div class="line"><span class="lineno">  265</span>        pdMS_TO_TICKS(timeout_ms));</div>
+<div class="line"><span class="lineno">  266</span> </div>
+<div class="line"><span class="lineno">  267</span>    <span class="keywordflow">return</span> (bits &amp; <a class="code hl_define" href="mqtt__manager_8c.html#a1af8627745313cfd7ec63711203fd2c1">MQTT_PUBLISHED_BIT</a>) != 0;</div>
+<div class="line"><span class="lineno">  268</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="abc2b7e54cf9f610d6ce01fcc17a56aa9" name="abc2b7e54cf9f610d6ce01fcc17a56aa9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc2b7e54cf9f610d6ce01fcc17a56aa9">&#9670;&#160;</a></span>mqtt_wait_connected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mqtt_wait_connected </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>timeout_ms</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Espera hasta que se establezca la conexión MQTT. </p>
+<p>Espera la conexión con el broker MQTT.</p>
+<p>Bloquea la ejecución hasta que el cliente MQTT se conecte al broker o hasta que expire el tiempo de espera.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeout_ms</td><td>Tiempo máximo de espera en milisegundos.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>true si la conexión se estableció correctamente. </dd>
+<dd>
+false si ocurrió un timeout o error de conexión.</dd></dl>
+<p>Espera hasta que se establezca la conexión MQTT.</p>
+<p>La función bloquea la ejecución hasta que se reciba el evento de conexión o se alcance el tiempo máximo especificado.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeout_ms</td><td>Tiempo máximo de espera en milisegundos.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>true si se estableció la conexión. </dd>
+<dd>
+false si ocurrió timeout o error. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="mqtt__manager_8c_source.html#l00198">198</a> del archivo <a class="el" href="mqtt__manager_8c_source.html">mqtt_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  199</span>{</div>
+<div class="line"><span class="lineno">  200</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a> == NULL)</div>
+<div class="line"><span class="lineno">  201</span>    {</div>
+<div class="line"><span class="lineno">  202</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">  203</span>    }</div>
+<div class="line"><span class="lineno">  204</span> </div>
+<div class="line"><span class="lineno">  205</span>    EventBits_t bits = xEventGroupWaitBits(</div>
+<div class="line"><span class="lineno">  206</span>        <a class="code hl_variable" href="mqtt__manager_8c.html#aec2c91b2eaca6d01b9cf0927d903ed3f">mqtt_event_group</a>,</div>
+<div class="line"><span class="lineno">  207</span>        <a class="code hl_define" href="mqtt__manager_8c.html#a1e80d8829bc152cc952c4a118fcde270">MQTT_CONNECTED_BIT</a> | <a class="code hl_define" href="mqtt__manager_8c.html#a78f2cbc86cf701e5327a3d22120f4b7c">MQTT_ERROR_BIT</a>,</div>
+<div class="line"><span class="lineno">  208</span>        pdFALSE,</div>
+<div class="line"><span class="lineno">  209</span>        pdFALSE,</div>
+<div class="line"><span class="lineno">  210</span>        pdMS_TO_TICKS(timeout_ms));</div>
+<div class="line"><span class="lineno">  211</span> </div>
+<div class="line"><span class="lineno">  212</span>    <span class="keywordflow">return</span> (bits &amp; <a class="code hl_define" href="mqtt__manager_8c.html#a1e80d8829bc152cc952c4a118fcde270">MQTT_CONNECTED_BIT</a>) != 0;</div>
+<div class="line"><span class="lineno">  213</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_c7dbbf444002e20cf9fc37bab89de1dc.html">mqtt</a></li><li class="navelem"><a href="mqtt__manager_8h.html">mqtt_manager.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

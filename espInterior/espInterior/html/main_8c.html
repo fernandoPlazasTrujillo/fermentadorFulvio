@@ -1,0 +1,555 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/main.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('main_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo main.c</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Punto de entrada del sistema de fermentación basado en ESP32.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/task.h&quot;</code><br />
+<code>#include &quot;esp_log.h&quot;</code><br />
+<code>#include &quot;esp_sleep.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="i2c__manager_8h_source.html">hal/i2c_manager.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="adc__manager_8h_source.html">hal/adc_manager.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="rtc__ds3231_8h_source.html">drivers/rtc_ds3231.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="task__sensores_8h_source.html">tasks/task_sensores.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="task__control_8h_source.html">tasks/task_control.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="task__actuadores_8h_source.html">tasks/task_actuadores.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="task__logger_8h_source.html">tasks/task_logger.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="task__energia_8h_source.html">tasks/task_energia.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="task__mqtt_8h_source.html">tasks/task_mqtt.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="task__display_8h_source.html">tasks/task_display.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="wifi__manager_8h_source.html">wifi/wifi_manager.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="queues_8h_source.html">queues.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="oled__display_8h_source.html">drivers/oled_display.h</a>&quot;</code><br />
+</div>
+<p><a href="main_8c_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+defines</h2></td></tr>
+<tr class="memitem:a269a6cfad0972318bcd4766eb6a1d7f2" id="r_a269a6cfad0972318bcd4766eb6a1d7f2"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a269a6cfad0972318bcd4766eb6a1d7f2">WIFI_CONNECT_TIMEOUT_MS</a>&#160;&#160;&#160;10000</td></tr>
+<tr class="memdesc:a269a6cfad0972318bcd4766eb6a1d7f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiempo máximo de espera para conexión WiFi.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a630544a7f0a2cc40d8a7fefab7e2fe70" id="r_a630544a7f0a2cc40d8a7fefab7e2fe70"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a630544a7f0a2cc40d8a7fefab7e2fe70">app_main</a> (void)</td></tr>
+<tr class="memdesc:a630544a7f0a2cc40d8a7fefab7e2fe70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Función principal del sistema.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a545de6958783ff726c116adffaebbcfb" id="r_a545de6958783ff726c116adffaebbcfb"><td class="memItemLeft">TaskHandle_t&#160;</td><td class="memItemRight"><a class="el" href="#a545de6958783ff726c116adffaebbcfb">task_sensores_handle</a> = NULL</td></tr>
+<tr class="memdesc:a545de6958783ff726c116adffaebbcfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle de la tarea de sensores.  <br /></td></tr>
+<tr class="memitem:ac9bf4127b0b50168ecd12b71b89c2f71" id="r_ac9bf4127b0b50168ecd12b71b89c2f71"><td class="memItemLeft">TaskHandle_t&#160;</td><td class="memItemRight"><a class="el" href="#ac9bf4127b0b50168ecd12b71b89c2f71">task_energia_handle</a> = NULL</td></tr>
+<tr class="memdesc:ac9bf4127b0b50168ecd12b71b89c2f71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle de la tarea de energía.  <br /></td></tr>
+<tr class="memitem:a5a85b9c772bbeb480b209a3e6ea92b4c" id="r_a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="memItemLeft">static const char *&#160;</td><td class="memItemRight"><a class="el" href="#a5a85b9c772bbeb480b209a3e6ea92b4c">TAG</a> = &quot;MAIN&quot;</td></tr>
+<tr class="memdesc:a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Etiqueta utilizada para mensajes de depuración.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Punto de entrada del sistema de fermentación basado en ESP32. </p>
+<p>Este módulo realiza la inicialización completa del sistema, configura los periféricos necesarios, crea las tareas FreeRTOS y pone en marcha el ciclo operativo de adquisición, control, almacenamiento y comunicación.</p>
+<p>Funciones principales:</p><ul>
+<li>Inicialización de hardware.</li>
+<li>Inicialización de red WiFi.</li>
+<li>Configuración del RTC DS3231.</li>
+<li>Configuración de wakeup para Deep Sleep.</li>
+<li>Creación de colas FreeRTOS.</li>
+<li>Creación de tareas del sistema.</li>
+<li>Inicio del ciclo operativo.</li>
+</ul>
+<p>Arquitectura general: </p><pre class="fragment">         task_energia
+               |
+               v
+        task_sensores
+               |
+   +-----------+-----------+
+   |           |           |
+   v           v           v
+</pre><p> task_control task_logger task_mqtt | | v v task_actuadores Broker MQTT | v Actuadores </p><pre class="fragment">          |
+          v
+   task_display
+</pre><p>Mecanismos FreeRTOS utilizados:</p><ul>
+<li>Tareas.</li>
+<li>Colas.</li>
+<li>Notificaciones.</li>
+</ul>
+<p>Gestión energética:</p><ul>
+<li>Deep Sleep.</li>
+<li>Wakeup mediante RTC DS3231.</li>
+</ul>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="main_8c_source.html">main.c</a>.</p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Documentación de «define»</h2>
+<a id="a269a6cfad0972318bcd4766eb6a1d7f2" name="a269a6cfad0972318bcd4766eb6a1d7f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a269a6cfad0972318bcd4766eb6a1d7f2">&#9670;&#160;</a></span>WIFI_CONNECT_TIMEOUT_MS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WIFI_CONNECT_TIMEOUT_MS&#160;&#160;&#160;10000</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tiempo máximo de espera para conexión WiFi. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="main_8c_source.html#l00119">119</a> del archivo <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a630544a7f0a2cc40d8a7fefab7e2fe70" name="a630544a7f0a2cc40d8a7fefab7e2fe70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a630544a7f0a2cc40d8a7fefab7e2fe70">&#9670;&#160;</a></span>app_main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_main </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Función principal del sistema. </p>
+<p>Realiza toda la secuencia de inicialización:</p>
+<ol type="1">
+<li>Conexión WiFi.</li>
+<li>Inicialización de hardware.</li>
+<li>Configuración del RTC.</li>
+<li>Configuración de Deep Sleep.</li>
+<li>Creación de colas.</li>
+<li>Creación de tareas.</li>
+<li>Inicio del ciclo operativo. </li>
+</ol>
+<p>Variable persistente utilizada para alternar entre los instantes de despertar.</p>
+
+<p class="definition">Definición en la línea <a class="el" href="main_8c_source.html#l00134">134</a> del archivo <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  135</span>{</div>
+<div class="line"><span class="lineno">  136</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Iniciando sistema...&quot;</span>);</div>
+<div class="line"><span class="lineno">  137</span> </div>
+<div class="line"><span class="lineno">  138</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  139</span>    <span class="comment">// INICIALIZACIÓN WIFI</span></div>
+<div class="line"><span class="lineno">  140</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  141</span> </div>
+<div class="line"><span class="lineno">  142</span>    <a class="code hl_function" href="wifi__manager_8c.html#a7267cf9f0ba503d904709977c18a07ea">wifi_init</a>();</div>
+<div class="line"><span class="lineno">  143</span> </div>
+<div class="line"><span class="lineno">  144</span>    <span class="keywordtype">bool</span> wifi_connected =</div>
+<div class="line"><span class="lineno">  145</span>        <a class="code hl_function" href="wifi__manager_8c.html#a74ffcbcc6723fdd1f6a44c7dfa813079">wifi_wait_connected</a>(</div>
+<div class="line"><span class="lineno">  146</span>            <a class="code hl_define" href="#a269a6cfad0972318bcd4766eb6a1d7f2">WIFI_CONNECT_TIMEOUT_MS</a>);</div>
+<div class="line"><span class="lineno">  147</span> </div>
+<div class="line"><span class="lineno">  148</span>    <span class="keywordflow">if</span> (wifi_connected)</div>
+<div class="line"><span class="lineno">  149</span>    {</div>
+<div class="line"><span class="lineno">  150</span>        ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;WiFi listo&quot;</span>);</div>
+<div class="line"><span class="lineno">  151</span>    }</div>
+<div class="line"><span class="lineno">  152</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  153</span>    {</div>
+<div class="line"><span class="lineno">  154</span>        ESP_LOGW(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  155</span>                 <span class="stringliteral">&quot;WiFi no conectado, se continua sin red&quot;</span>);</div>
+<div class="line"><span class="lineno">  156</span> </div>
+<div class="line"><span class="lineno">  157</span>        <a class="code hl_function" href="wifi__manager_8c.html#a5b3e7a6e474fda19d447711c86399104">wifi_scan_print</a>();</div>
+<div class="line"><span class="lineno">  158</span>    }</div>
+<div class="line"><span class="lineno">  159</span> </div>
+<div class="line"><span class="lineno">  160</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  161</span>    <span class="comment">// INICIALIZACIÓN DE HARDWARE</span></div>
+<div class="line"><span class="lineno">  162</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  163</span> </div>
+<div class="line"><span class="lineno">  164</span>    <a class="code hl_function" href="i2c__manager_8c.html#a87d680c63f56a29ae4e40228349c0e9a">i2c_manager_init</a>();</div>
+<div class="line"><span class="lineno">  165</span> </div>
+<div class="line"><span class="lineno">  166</span>    <a class="code hl_function" href="adc__manager_8c.html#a680e6c7fca574971070af6b808ef98d1">adc_manager_init</a>();</div>
+<div class="line"><span class="lineno">  167</span> </div>
+<div class="line"><span class="lineno">  168</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  169</span>    <span class="comment">// CAUSA DE DESPERTAR</span></div>
+<div class="line"><span class="lineno">  170</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  171</span> </div>
+<div class="line"><span class="lineno">  172</span>    esp_sleep_wakeup_cause_t cause =</div>
+<div class="line"><span class="lineno">  173</span>        esp_sleep_get_wakeup_cause();</div>
+<div class="line"><span class="lineno">  174</span> </div>
+<div class="line"><span class="lineno">  175</span>    ESP_LOGI(</div>
+<div class="line"><span class="lineno">  176</span>        <a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  177</span>        <span class="stringliteral">&quot;Wakeup cause: %d&quot;</span>,</div>
+<div class="line"><span class="lineno">  178</span>        cause);</div>
+<div class="line"><span class="lineno">  179</span> </div>
+<div class="line"><span class="lineno">  180</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  181</span>    <span class="comment">// CONFIGURACIÓN DE WAKEUP</span></div>
+<div class="line"><span class="lineno">  182</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  183</span> </div>
+<div class="line"><span class="lineno">  184</span>    esp_sleep_enable_ext0_wakeup(</div>
+<div class="line"><span class="lineno">  185</span>        GPIO_NUM_33,</div>
+<div class="line"><span class="lineno">  186</span>        0);</div>
+<div class="line"><span class="lineno">  187</span> </div>
+<div class="line"><span class="lineno">  188</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  189</span>    <span class="comment">// INICIALIZACIÓN RTC</span></div>
+<div class="line"><span class="lineno">  190</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  191</span> </div>
+<div class="line"><span class="lineno">  192</span>    <a class="code hl_function" href="rtc__ds3231_8c.html#a2a1750bb44d1a047f327cf54a3146ccd">ds3231_init</a>();</div>
+<div class="line"><span class="lineno">  193</span> </div>
+<div class="line"><span class="lineno">  194</span>    <a class="code hl_function" href="rtc__ds3231_8c.html#a85015e3ba9b8a4e2e6e8043d78431e50">ds3231_clear_alarm_flag</a>();</div>
+<div class="line"><span class="lineno">  195</span> </div>
+<div class="line"><span class="lineno">  196</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  197</span>    <span class="comment">// CONFIGURACIÓN DE ALARMA RTC</span></div>
+<div class="line"><span class="lineno">  198</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  199</span></div>
+<div class="line"><span class="lineno">  204</span>    <span class="keyword">static</span> RTC_DATA_ATTR <span class="keywordtype">int</span> toggle = 0;</div>
+<div class="line"><span class="lineno">  205</span> </div>
+<div class="line"><span class="lineno">  206</span>    <span class="keywordflow">if</span> (toggle == 0)</div>
+<div class="line"><span class="lineno">  207</span>    {</div>
+<div class="line"><span class="lineno">  208</span>        <a class="code hl_function" href="rtc__ds3231_8c.html#ac86af95cd378d3044d6ebecd116410b1">ds3231_set_alarm_seconds</a>(30);</div>
+<div class="line"><span class="lineno">  209</span>        toggle = 1;</div>
+<div class="line"><span class="lineno">  210</span>    }</div>
+<div class="line"><span class="lineno">  211</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  212</span>    {</div>
+<div class="line"><span class="lineno">  213</span>        <a class="code hl_function" href="rtc__ds3231_8c.html#ac86af95cd378d3044d6ebecd116410b1">ds3231_set_alarm_seconds</a>(0);</div>
+<div class="line"><span class="lineno">  214</span>        toggle = 0;</div>
+<div class="line"><span class="lineno">  215</span>    }</div>
+<div class="line"><span class="lineno">  216</span> </div>
+<div class="line"><span class="lineno">  217</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  218</span>    <span class="comment">// CREACIÓN DE COLAS</span></div>
+<div class="line"><span class="lineno">  219</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  220</span> </div>
+<div class="line"><span class="lineno">  221</span>    <a class="code hl_function" href="queues_8c.html#a28e124a6b8d5d663be75b1649f51e44a">queues_init</a>();</div>
+<div class="line"><span class="lineno">  222</span> </div>
+<div class="line"><span class="lineno">  223</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  224</span>    <span class="comment">// CREACIÓN DE TAREAS</span></div>
+<div class="line"><span class="lineno">  225</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  226</span> </div>
+<div class="line"><span class="lineno">  227</span>    BaseType_t res;</div>
+<div class="line"><span class="lineno">  228</span> </div>
+<div class="line"><span class="lineno">  229</span>    res = xTaskCreate(</div>
+<div class="line"><span class="lineno">  230</span>        <a class="code hl_function" href="task__sensores_8c.html#a5b2930d6b5c8d2540af7d0b8e60ec19c">task_sensores</a>,</div>
+<div class="line"><span class="lineno">  231</span>        <span class="stringliteral">&quot;task_sensores&quot;</span>,</div>
+<div class="line"><span class="lineno">  232</span>        4096,</div>
+<div class="line"><span class="lineno">  233</span>        NULL,</div>
+<div class="line"><span class="lineno">  234</span>        5,</div>
+<div class="line"><span class="lineno">  235</span>        &amp;<a class="code hl_variable" href="#a545de6958783ff726c116adffaebbcfb">task_sensores_handle</a>);</div>
+<div class="line"><span class="lineno">  236</span> </div>
+<div class="line"><span class="lineno">  237</span>    <span class="keywordflow">if</span> (res != pdPASS)</div>
+<div class="line"><span class="lineno">  238</span>    {</div>
+<div class="line"><span class="lineno">  239</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  240</span>                 <span class="stringliteral">&quot;Error creando task_sensores&quot;</span>);</div>
+<div class="line"><span class="lineno">  241</span>    }</div>
+<div class="line"><span class="lineno">  242</span> </div>
+<div class="line"><span class="lineno">  243</span>    res = xTaskCreate(</div>
+<div class="line"><span class="lineno">  244</span>        <a class="code hl_function" href="task__control_8c.html#af9e54aa0648e5d424ebc75ad59db14c6">task_control</a>,</div>
+<div class="line"><span class="lineno">  245</span>        <span class="stringliteral">&quot;task_control&quot;</span>,</div>
+<div class="line"><span class="lineno">  246</span>        4096,</div>
+<div class="line"><span class="lineno">  247</span>        NULL,</div>
+<div class="line"><span class="lineno">  248</span>        5,</div>
+<div class="line"><span class="lineno">  249</span>        NULL);</div>
+<div class="line"><span class="lineno">  250</span> </div>
+<div class="line"><span class="lineno">  251</span>    <span class="keywordflow">if</span> (res != pdPASS)</div>
+<div class="line"><span class="lineno">  252</span>    {</div>
+<div class="line"><span class="lineno">  253</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  254</span>                 <span class="stringliteral">&quot;Error creando task_control&quot;</span>);</div>
+<div class="line"><span class="lineno">  255</span>    }</div>
+<div class="line"><span class="lineno">  256</span> </div>
+<div class="line"><span class="lineno">  257</span>    res = xTaskCreate(</div>
+<div class="line"><span class="lineno">  258</span>        <a class="code hl_function" href="task__actuadores_8c.html#a500d896ff89010d54c413e2bec4ee20d">task_actuadores</a>,</div>
+<div class="line"><span class="lineno">  259</span>        <span class="stringliteral">&quot;task_actuadores&quot;</span>,</div>
+<div class="line"><span class="lineno">  260</span>        4096,</div>
+<div class="line"><span class="lineno">  261</span>        NULL,</div>
+<div class="line"><span class="lineno">  262</span>        5,</div>
+<div class="line"><span class="lineno">  263</span>        NULL);</div>
+<div class="line"><span class="lineno">  264</span> </div>
+<div class="line"><span class="lineno">  265</span>    <span class="keywordflow">if</span> (res != pdPASS)</div>
+<div class="line"><span class="lineno">  266</span>    {</div>
+<div class="line"><span class="lineno">  267</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  268</span>                 <span class="stringliteral">&quot;Error creando task_actuadores&quot;</span>);</div>
+<div class="line"><span class="lineno">  269</span>    }</div>
+<div class="line"><span class="lineno">  270</span> </div>
+<div class="line"><span class="lineno">  271</span>    res = xTaskCreate(</div>
+<div class="line"><span class="lineno">  272</span>        <a class="code hl_function" href="task__logger_8c.html#af38783d3b22fb6c2783f14a88308c330">task_logger</a>,</div>
+<div class="line"><span class="lineno">  273</span>        <span class="stringliteral">&quot;task_logger&quot;</span>,</div>
+<div class="line"><span class="lineno">  274</span>        4096,</div>
+<div class="line"><span class="lineno">  275</span>        NULL,</div>
+<div class="line"><span class="lineno">  276</span>        5,</div>
+<div class="line"><span class="lineno">  277</span>        NULL);</div>
+<div class="line"><span class="lineno">  278</span> </div>
+<div class="line"><span class="lineno">  279</span>    <span class="keywordflow">if</span> (res != pdPASS)</div>
+<div class="line"><span class="lineno">  280</span>    {</div>
+<div class="line"><span class="lineno">  281</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  282</span>                 <span class="stringliteral">&quot;Error creando task_logger&quot;</span>);</div>
+<div class="line"><span class="lineno">  283</span>    }</div>
+<div class="line"><span class="lineno">  284</span> </div>
+<div class="line"><span class="lineno">  285</span>    res = xTaskCreate(</div>
+<div class="line"><span class="lineno">  286</span>        <a class="code hl_function" href="task__mqtt_8c.html#a376c1e55c392503ef2bd96eedae58a21">task_mqtt</a>,</div>
+<div class="line"><span class="lineno">  287</span>        <span class="stringliteral">&quot;task_mqtt&quot;</span>,</div>
+<div class="line"><span class="lineno">  288</span>        6144,</div>
+<div class="line"><span class="lineno">  289</span>        NULL,</div>
+<div class="line"><span class="lineno">  290</span>        5,</div>
+<div class="line"><span class="lineno">  291</span>        NULL);</div>
+<div class="line"><span class="lineno">  292</span> </div>
+<div class="line"><span class="lineno">  293</span>    <span class="keywordflow">if</span> (res != pdPASS)</div>
+<div class="line"><span class="lineno">  294</span>    {</div>
+<div class="line"><span class="lineno">  295</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  296</span>                 <span class="stringliteral">&quot;Error creando task_mqtt&quot;</span>);</div>
+<div class="line"><span class="lineno">  297</span>    }</div>
+<div class="line"><span class="lineno">  298</span> </div>
+<div class="line"><span class="lineno">  299</span>    res = xTaskCreate(</div>
+<div class="line"><span class="lineno">  300</span>        <a class="code hl_function" href="task__display_8c.html#a0c23017a47c450de05f8c7af642c7461">task_display</a>,</div>
+<div class="line"><span class="lineno">  301</span>        <span class="stringliteral">&quot;task_display&quot;</span>,</div>
+<div class="line"><span class="lineno">  302</span>        4096,</div>
+<div class="line"><span class="lineno">  303</span>        NULL,</div>
+<div class="line"><span class="lineno">  304</span>        4,</div>
+<div class="line"><span class="lineno">  305</span>        NULL);</div>
+<div class="line"><span class="lineno">  306</span> </div>
+<div class="line"><span class="lineno">  307</span>    <span class="keywordflow">if</span> (res != pdPASS)</div>
+<div class="line"><span class="lineno">  308</span>    {</div>
+<div class="line"><span class="lineno">  309</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  310</span>                 <span class="stringliteral">&quot;Error creando task_display&quot;</span>);</div>
+<div class="line"><span class="lineno">  311</span>    }</div>
+<div class="line"><span class="lineno">  312</span> </div>
+<div class="line"><span class="lineno">  313</span>    res = xTaskCreate(</div>
+<div class="line"><span class="lineno">  314</span>        <a class="code hl_function" href="task__energia_8c.html#ac7b7fee9849a033c0657c650e2dbfc9b">task_energia</a>,</div>
+<div class="line"><span class="lineno">  315</span>        <span class="stringliteral">&quot;task_energia&quot;</span>,</div>
+<div class="line"><span class="lineno">  316</span>        4096,</div>
+<div class="line"><span class="lineno">  317</span>        NULL,</div>
+<div class="line"><span class="lineno">  318</span>        5,</div>
+<div class="line"><span class="lineno">  319</span>        &amp;<a class="code hl_variable" href="#ac9bf4127b0b50168ecd12b71b89c2f71">task_energia_handle</a>);</div>
+<div class="line"><span class="lineno">  320</span> </div>
+<div class="line"><span class="lineno">  321</span>    <span class="keywordflow">if</span> (res != pdPASS)</div>
+<div class="line"><span class="lineno">  322</span>    {</div>
+<div class="line"><span class="lineno">  323</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  324</span>                 <span class="stringliteral">&quot;Error creando task_energia&quot;</span>);</div>
+<div class="line"><span class="lineno">  325</span>    }</div>
+<div class="line"><span class="lineno">  326</span> </div>
+<div class="line"><span class="lineno">  327</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Sistema listo&quot;</span>);</div>
+<div class="line"><span class="lineno">  328</span> </div>
+<div class="line"><span class="lineno">  329</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  330</span>    <span class="comment">// INICIO DEL CICLO OPERATIVO</span></div>
+<div class="line"><span class="lineno">  331</span>    <span class="comment">// =====================================================</span></div>
+<div class="line"><span class="lineno">  332</span> </div>
+<div class="line"><span class="lineno">  333</span>    xTaskNotifyGive(</div>
+<div class="line"><span class="lineno">  334</span>        <a class="code hl_variable" href="#ac9bf4127b0b50168ecd12b71b89c2f71">task_energia_handle</a>);</div>
+<div class="line"><span class="lineno">  335</span>}</div>
+<div class="ttc" id="aadc__manager_8c_html_a680e6c7fca574971070af6b808ef98d1"><div class="ttname"><a href="adc__manager_8c.html#a680e6c7fca574971070af6b808ef98d1">adc_manager_init</a></div><div class="ttdeci">void adc_manager_init(void)</div><div class="ttdoc">Inicializa el ADC y el sistema de calibración.</div><div class="ttdef"><b>Definition</b> <a href="adc__manager_8c_source.html#l00073">adc_manager.c:73</a></div></div>
+<div class="ttc" id="ai2c__manager_8c_html_a87d680c63f56a29ae4e40228349c0e9a"><div class="ttname"><a href="i2c__manager_8c.html#a87d680c63f56a29ae4e40228349c0e9a">i2c_manager_init</a></div><div class="ttdeci">void i2c_manager_init(void)</div><div class="ttdoc">Inicializa el bus I2C en modo maestro.</div><div class="ttdef"><b>Definition</b> <a href="i2c__manager_8c_source.html#l00084">i2c_manager.c:84</a></div></div>
+<div class="ttc" id="amain_8c_html_a269a6cfad0972318bcd4766eb6a1d7f2"><div class="ttname"><a href="#a269a6cfad0972318bcd4766eb6a1d7f2">WIFI_CONNECT_TIMEOUT_MS</a></div><div class="ttdeci">#define WIFI_CONNECT_TIMEOUT_MS</div><div class="ttdoc">Tiempo máximo de espera para conexión WiFi.</div><div class="ttdef"><b>Definition</b> <a href="main_8c_source.html#l00119">main.c:119</a></div></div>
+<div class="ttc" id="amain_8c_html_a545de6958783ff726c116adffaebbcfb"><div class="ttname"><a href="#a545de6958783ff726c116adffaebbcfb">task_sensores_handle</a></div><div class="ttdeci">TaskHandle_t task_sensores_handle</div><div class="ttdoc">Handle de la tarea de sensores.</div><div class="ttdef"><b>Definition</b> <a href="main_8c_source.html#l00101">main.c:101</a></div></div>
+<div class="ttc" id="amain_8c_html_ac9bf4127b0b50168ecd12b71b89c2f71"><div class="ttname"><a href="#ac9bf4127b0b50168ecd12b71b89c2f71">task_energia_handle</a></div><div class="ttdeci">TaskHandle_t task_energia_handle</div><div class="ttdoc">Handle de la tarea de energía.</div><div class="ttdef"><b>Definition</b> <a href="main_8c_source.html#l00109">main.c:109</a></div></div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+<div class="ttc" id="aqueues_8c_html_a28e124a6b8d5d663be75b1649f51e44a"><div class="ttname"><a href="queues_8c.html#a28e124a6b8d5d663be75b1649f51e44a">queues_init</a></div><div class="ttdeci">void queues_init(void)</div><div class="ttdoc">Inicializa todas las colas del sistema.</div><div class="ttdef"><b>Definition</b> <a href="queues_8c_source.html#l00090">queues.c:90</a></div></div>
+<div class="ttc" id="artc__ds3231_8c_html_a2a1750bb44d1a047f327cf54a3146ccd"><div class="ttname"><a href="rtc__ds3231_8c.html#a2a1750bb44d1a047f327cf54a3146ccd">ds3231_init</a></div><div class="ttdeci">esp_err_t ds3231_init(void)</div><div class="ttdoc">Inicializa el módulo RTC DS3231.</div><div class="ttdef"><b>Definition</b> <a href="rtc__ds3231_8c_source.html#l00071">rtc_ds3231.c:71</a></div></div>
+<div class="ttc" id="artc__ds3231_8c_html_a85015e3ba9b8a4e2e6e8043d78431e50"><div class="ttname"><a href="rtc__ds3231_8c.html#a85015e3ba9b8a4e2e6e8043d78431e50">ds3231_clear_alarm_flag</a></div><div class="ttdeci">esp_err_t ds3231_clear_alarm_flag(void)</div><div class="ttdoc">Limpia el flag de alarma del DS3231.</div><div class="ttdef"><b>Definition</b> <a href="rtc__ds3231_8c_source.html#l00169">rtc_ds3231.c:169</a></div></div>
+<div class="ttc" id="artc__ds3231_8c_html_ac86af95cd378d3044d6ebecd116410b1"><div class="ttname"><a href="rtc__ds3231_8c.html#ac86af95cd378d3044d6ebecd116410b1">ds3231_set_alarm_seconds</a></div><div class="ttdeci">esp_err_t ds3231_set_alarm_seconds(uint8_t seconds)</div><div class="ttdoc">Configura una alarma basada en coincidencia de segundos.</div><div class="ttdef"><b>Definition</b> <a href="rtc__ds3231_8c_source.html#l00204">rtc_ds3231.c:204</a></div></div>
+<div class="ttc" id="atask__actuadores_8c_html_a500d896ff89010d54c413e2bec4ee20d"><div class="ttname"><a href="task__actuadores_8c.html#a500d896ff89010d54c413e2bec4ee20d">task_actuadores</a></div><div class="ttdeci">void task_actuadores(void *pvParameters)</div><div class="ttdoc">Tarea encargada de ejecutar acciones físicas.</div><div class="ttdef"><b>Definition</b> <a href="task__actuadores_8c_source.html#l00125">task_actuadores.c:125</a></div></div>
+<div class="ttc" id="atask__control_8c_html_af9e54aa0648e5d424ebc75ad59db14c6"><div class="ttname"><a href="task__control_8c.html#af9e54aa0648e5d424ebc75ad59db14c6">task_control</a></div><div class="ttdeci">void task_control(void *pvParameters)</div><div class="ttdoc">Tarea principal de control.</div><div class="ttdef"><b>Definition</b> <a href="task__control_8c_source.html#l00086">task_control.c:86</a></div></div>
+<div class="ttc" id="atask__display_8c_html_a0c23017a47c450de05f8c7af642c7461"><div class="ttname"><a href="task__display_8c.html#a0c23017a47c450de05f8c7af642c7461">task_display</a></div><div class="ttdeci">void task_display(void *pvParameters)</div><div class="ttdoc">Tarea encargada de actualizar la pantalla OLED.</div><div class="ttdef"><b>Definition</b> <a href="task__display_8c_source.html#l00074">task_display.c:74</a></div></div>
+<div class="ttc" id="atask__energia_8c_html_ac7b7fee9849a033c0657c650e2dbfc9b"><div class="ttname"><a href="task__energia_8c.html#ac7b7fee9849a033c0657c650e2dbfc9b">task_energia</a></div><div class="ttdeci">void task_energia(void *pvParameters)</div><div class="ttdoc">Tarea principal de gestión energética.</div><div class="ttdef"><b>Definition</b> <a href="task__energia_8c_source.html#l00079">task_energia.c:79</a></div></div>
+<div class="ttc" id="atask__logger_8c_html_af38783d3b22fb6c2783f14a88308c330"><div class="ttname"><a href="task__logger_8c.html#af38783d3b22fb6c2783f14a88308c330">task_logger</a></div><div class="ttdeci">void task_logger(void *pvParameters)</div><div class="ttdoc">Tarea principal de registro de datos.</div><div class="ttdef"><b>Definition</b> <a href="task__logger_8c_source.html#l00077">task_logger.c:77</a></div></div>
+<div class="ttc" id="atask__mqtt_8c_html_a376c1e55c392503ef2bd96eedae58a21"><div class="ttname"><a href="task__mqtt_8c.html#a376c1e55c392503ef2bd96eedae58a21">task_mqtt</a></div><div class="ttdeci">void task_mqtt(void *pvParameters)</div><div class="ttdoc">Tarea principal de comunicación MQTT.</div><div class="ttdef"><b>Definition</b> <a href="task__mqtt_8c_source.html#l00231">task_mqtt.c:231</a></div></div>
+<div class="ttc" id="atask__sensores_8c_html_a5b2930d6b5c8d2540af7d0b8e60ec19c"><div class="ttname"><a href="task__sensores_8c.html#a5b2930d6b5c8d2540af7d0b8e60ec19c">task_sensores</a></div><div class="ttdeci">void task_sensores(void *pvParameters)</div><div class="ttdoc">Tarea principal de adquisición de sensores.</div><div class="ttdef"><b>Definition</b> <a href="task__sensores_8c_source.html#l00116">task_sensores.c:116</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_a5b3e7a6e474fda19d447711c86399104"><div class="ttname"><a href="wifi__manager_8c.html#a5b3e7a6e474fda19d447711c86399104">wifi_scan_print</a></div><div class="ttdeci">void wifi_scan_print(void)</div><div class="ttdoc">Realiza un escaneo de redes WiFi disponibles.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00374">wifi_manager.c:374</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_a7267cf9f0ba503d904709977c18a07ea"><div class="ttname"><a href="wifi__manager_8c.html#a7267cf9f0ba503d904709977c18a07ea">wifi_init</a></div><div class="ttdeci">void wifi_init(void)</div><div class="ttdoc">Inicializa y conecta el ESP32 a una red WiFi.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00199">wifi_manager.c:199</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_a74ffcbcc6723fdd1f6a44c7dfa813079"><div class="ttname"><a href="wifi__manager_8c.html#a74ffcbcc6723fdd1f6a44c7dfa813079">wifi_wait_connected</a></div><div class="ttdeci">bool wifi_wait_connected(uint32_t timeout_ms)</div><div class="ttdoc">Espera hasta que el ESP32 se conecte a la red WiFi.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00307">wifi_manager.c:307</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Documentación de variables</h2>
+<a id="a5a85b9c772bbeb480b209a3e6ea92b4c" name="a5a85b9c772bbeb480b209a3e6ea92b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a85b9c772bbeb480b209a3e6ea92b4c">&#9670;&#160;</a></span>TAG</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* TAG = &quot;MAIN&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Etiqueta utilizada para mensajes de depuración. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="main_8c_source.html#l00114">114</a> del archivo <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+</div>
+</div>
+<a id="ac9bf4127b0b50168ecd12b71b89c2f71" name="ac9bf4127b0b50168ecd12b71b89c2f71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9bf4127b0b50168ecd12b71b89c2f71">&#9670;&#160;</a></span>task_energia_handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskHandle_t task_energia_handle = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle de la tarea de energía. </p>
+<p>Utilizado para coordinar el ciclo general del sistema.</p>
+<p>Utilizado para enviar notificaciones cuando finaliza un ciclo de mezcla. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="main_8c_source.html#l00109">109</a> del archivo <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+</div>
+</div>
+<a id="a545de6958783ff726c116adffaebbcfb" name="a545de6958783ff726c116adffaebbcfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a545de6958783ff726c116adffaebbcfb">&#9670;&#160;</a></span>task_sensores_handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskHandle_t task_sensores_handle = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle de la tarea de sensores. </p>
+<p>Utilizado por task_energia para iniciar nuevos ciclos de adquisición.</p>
+<p>Utilizado para iniciar un nuevo ciclo de adquisición. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="main_8c_source.html#l00101">101</a> del archivo <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="main_8c.html">main.c</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

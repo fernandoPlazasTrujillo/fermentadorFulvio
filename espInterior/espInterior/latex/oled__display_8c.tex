@@ -1,0 +1,606 @@
+\doxysection{Referencia del archivo main/\+drivers/\+oled\+\_\+display.c}
+\hypertarget{oled__display_8c}{}\label{oled__display_8c}\index{main/drivers/oled\_display.c@{main/drivers/oled\_display.c}}
+
+
+Implementación del controlador OLED SSD1306 mediante interfaz I2C.  
+
+
+{\ttfamily \+\#include "{}drivers/\+oled\+\_\+display.\+h"{}}\newline
+{\ttfamily \+\#include $<$string.\+h$>$}\newline
+{\ttfamily \+\#include "{}hal/\+i2c\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+semphr.\+h"{}}\newline
+{\ttfamily \+\#include "{}font5x7.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{oled__display_8c_a7dfa2c4cfbfcba36416046052e7943e8}{OLED\+\_\+\+ADDR}}~0x3C
+\begin{DoxyCompactList}\small\item\em Dirección I2C del controlador SSD1306. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\+\_\+\+WIDTH}}~128
+\begin{DoxyCompactList}\small\item\em Ancho de la pantalla OLED en píxeles. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{oled__display_8c_a149f081665424602c8c0f90a6e935f3b}{OLED\+\_\+\+HEIGHT}}~64
+\begin{DoxyCompactList}\small\item\em Alto de la pantalla OLED en píxeles. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{oled__display_8c_ade7dfe72f52e8da2aeefe0ff95ff255d}{OLED\+\_\+\+PAGES}}~8
+\begin{DoxyCompactList}\small\item\em Número de páginas de memoria del SSD1306. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+static esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\+\_\+send\+\_\+command}} (uint8\+\_\+t cmd)
+\begin{DoxyCompactList}\small\item\em Envía un comando al controlador SSD1306. \end{DoxyCompactList}\item 
+static esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{oled__display_8c_a4101f16729b618e9578f0e3bac396652}{oled\+\_\+send\+\_\+data}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}data, size\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Envía datos gráficos al SSD1306. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{oled__display_8c_a01ea0460f8fb106225254724debf0bcb}{oled\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa la pantalla OLED. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{oled__display_8c_adbdd2a6d942046ccfc756959d2de0dff}{oled\+\_\+clear}} (void)
+\begin{DoxyCompactList}\small\item\em Borra el contenido del framebuffer. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{oled__display_8c_a42dc3f54c57e26640355f34a09bd08b2}{oled\+\_\+draw\+\_\+pixel}} (uint8\+\_\+t x, uint8\+\_\+t y)
+\begin{DoxyCompactList}\small\item\em Dibuja un píxel en el framebuffer. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{oled__display_8c_acafddaff66f9ec50e47246360ecf6d3b}{oled\+\_\+draw\+\_\+char}} (uint8\+\_\+t x, uint8\+\_\+t y, char c)
+\begin{DoxyCompactList}\small\item\em Dibuja un carácter ASCII en el framebuffer. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{oled__display_8c_a203632989f59de816bebefef8593147d}{oled\+\_\+draw\+\_\+string}} (uint8\+\_\+t x, uint8\+\_\+t y, const char \texorpdfstring{$\ast$}{*}str)
+\begin{DoxyCompactList}\small\item\em Dibuja una cadena de texto en el framebuffer. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2}{oled\+\_\+update}} (void)
+\begin{DoxyCompactList}\small\item\em Actualiza la pantalla OLED. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Semaphore\+Handle\+\_\+t \doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\+\_\+i2c}}
+\begin{DoxyCompactList}\small\item\em Mutex compartido para acceso exclusivo al bus I2C. \end{DoxyCompactList}\item 
+static uint8\+\_\+t \doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}} \+[1024]\+
+\begin{DoxyCompactList}\small\item\em Framebuffer local de la pantalla OLED. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del controlador OLED SSD1306 mediante interfaz I2C. 
+
+Este módulo implementa las funciones necesarias para controlar una pantalla OLED basada en el controlador SSD1306.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Inicialización del controlador.
+\item Gestión de framebuffer local.
+\item Dibujo de píxeles.
+\item Renderizado de caracteres.
+\item Renderizado de cadenas de texto.
+\item Actualización de pantalla mediante I2C.
+\end{DoxyItemize}
+
+El acceso al bus I2C es protegido mediante un mutex compartido para garantizar la exclusión mutua entre tareas Free\+RTOS.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+
+\label{oled__display_8c_doc-define-members}
+\Hypertarget{oled__display_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{oled__display_8c_a7dfa2c4cfbfcba36416046052e7943e8}\index{oled\_display.c@{oled\_display.c}!OLED\_ADDR@{OLED\_ADDR}}
+\index{OLED\_ADDR@{OLED\_ADDR}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{OLED\_ADDR}{OLED\_ADDR}}
+{\footnotesize\ttfamily \label{oled__display_8c_a7dfa2c4cfbfcba36416046052e7943e8} 
+\+\#define OLED\+\_\+\+ADDR~0x3C}
+
+
+
+Dirección I2C del controlador SSD1306. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00036}{36}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+\Hypertarget{oled__display_8c_a149f081665424602c8c0f90a6e935f3b}\index{oled\_display.c@{oled\_display.c}!OLED\_HEIGHT@{OLED\_HEIGHT}}
+\index{OLED\_HEIGHT@{OLED\_HEIGHT}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{OLED\_HEIGHT}{OLED\_HEIGHT}}
+{\footnotesize\ttfamily \label{oled__display_8c_a149f081665424602c8c0f90a6e935f3b} 
+\+\#define OLED\+\_\+\+HEIGHT~64}
+
+
+
+Alto de la pantalla OLED en píxeles. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00046}{46}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+\Hypertarget{oled__display_8c_ade7dfe72f52e8da2aeefe0ff95ff255d}\index{oled\_display.c@{oled\_display.c}!OLED\_PAGES@{OLED\_PAGES}}
+\index{OLED\_PAGES@{OLED\_PAGES}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{OLED\_PAGES}{OLED\_PAGES}}
+{\footnotesize\ttfamily \label{oled__display_8c_ade7dfe72f52e8da2aeefe0ff95ff255d} 
+\+\#define OLED\+\_\+\+PAGES~8}
+
+
+
+Número de páginas de memoria del SSD1306. 
+
+Cada página contiene 8 filas de píxeles. 
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00053}{53}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+\Hypertarget{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}\index{oled\_display.c@{oled\_display.c}!OLED\_WIDTH@{OLED\_WIDTH}}
+\index{OLED\_WIDTH@{OLED\_WIDTH}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{OLED\_WIDTH}{OLED\_WIDTH}}
+{\footnotesize\ttfamily \label{oled__display_8c_a9885a007def27c91dd1720fb65d55f87} 
+\+\#define OLED\+\_\+\+WIDTH~128}
+
+
+
+Ancho de la pantalla OLED en píxeles. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00041}{41}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+
+\label{oled__display_8c_doc-func-members}
+\Hypertarget{oled__display_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{oled__display_8c_adbdd2a6d942046ccfc756959d2de0dff}\index{oled\_display.c@{oled\_display.c}!oled\_clear@{oled\_clear}}
+\index{oled\_clear@{oled\_clear}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{oled\_clear()}{oled\_clear()}}
+{\footnotesize\ttfamily \label{oled__display_8c_adbdd2a6d942046ccfc756959d2de0dff} 
+esp\+\_\+err\+\_\+t oled\+\_\+clear (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Borra el contenido del framebuffer. 
+
+Establece todos los píxeles en estado apagado.
+
+Es necesario llamar posteriormente a \doxylink{oled__display_8h_a3b0040faa9dd7f994e4dc474d9d820a2}{oled\+\_\+update()} para reflejar los cambios en la pantalla física.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK si la operación fue exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00200}{200}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00201\ \{}
+\DoxyCodeLine{00202\ \ \ \ \ memset(}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}},}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}}));}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2}{oled\_update}}();}
+\DoxyCodeLine{00208\ \}}
+
+\end{DoxyCode}
+\Hypertarget{oled__display_8c_acafddaff66f9ec50e47246360ecf6d3b}\index{oled\_display.c@{oled\_display.c}!oled\_draw\_char@{oled\_draw\_char}}
+\index{oled\_draw\_char@{oled\_draw\_char}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{oled\_draw\_char()}{oled\_draw\_char()}}
+{\footnotesize\ttfamily \label{oled__display_8c_acafddaff66f9ec50e47246360ecf6d3b} 
+esp\+\_\+err\+\_\+t oled\+\_\+draw\+\_\+char (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{x}{, }\item[{uint8\+\_\+t}]{y}{, }\item[{char}]{c}{}\end{DoxyParamCaption})}
+
+
+
+Dibuja un carácter ASCII en el framebuffer. 
+
+Utiliza la fuente bitmap definida en \doxylink{font5x7_8h}{font5x7.\+h} para representar el carácter solicitado.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & Coordenada horizontal inicial. \\
+\hline
+{\em y} & Coordenada vertical inicial. \\
+\hline
+{\em c} & Carácter ASCII a representar.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK si la operación fue exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00230}{230}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00231\ \{}
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keywordflow}{if}\ ((uint8\_t)c\ >=\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{font5x7_8h_a5a4a37b630489fec087a365d2ca3fc9c}{font5x7}})/5)}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ col\ =\ 0;\ col\ <\ 5;\ col++)}
+\DoxyCodeLine{00236\ \ \ \ \ \{}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ uint8\_t\ line\ =\ \doxymbox{\hyperlink{font5x7_8h_a5a4a37b630489fec087a365d2ca3fc9c}{font5x7}}[(uint8\_t)c][col];}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ row\ =\ 0;\ row\ <\ 7;\ row++)}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (line\ \&\ (1\ <<\ row))}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a42dc3f54c57e26640355f34a09bd08b2}{oled\_draw\_pixel}}(}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ x\ +\ col,}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ y\ +\ row);}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00248\ \ \ \ \ \}}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00251\ \}}
+
+\end{DoxyCode}
+\Hypertarget{oled__display_8c_a42dc3f54c57e26640355f34a09bd08b2}\index{oled\_display.c@{oled\_display.c}!oled\_draw\_pixel@{oled\_draw\_pixel}}
+\index{oled\_draw\_pixel@{oled\_draw\_pixel}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{oled\_draw\_pixel()}{oled\_draw\_pixel()}}
+{\footnotesize\ttfamily \label{oled__display_8c_a42dc3f54c57e26640355f34a09bd08b2} 
+esp\+\_\+err\+\_\+t oled\+\_\+draw\+\_\+pixel (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{x}{, }\item[{uint8\+\_\+t}]{y}{}\end{DoxyParamCaption})}
+
+
+
+Dibuja un píxel en el framebuffer. 
+
+Activa el píxel correspondiente a las coordenadas especificadas.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & Coordenada horizontal. \\
+\hline
+{\em y} & Coordenada vertical.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK si el píxel fue dibujado correctamente.
+\item ESP\+\_\+\+ERR\+\_\+\+INVALID\+\_\+\+ARG si las coordenadas están fuera de rango. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00214}{214}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00215\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ >=\ \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\_WIDTH}})}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keywordflow}{if}\ (y\ >=\ \doxymbox{\hyperlink{oled__display_8c_a149f081665424602c8c0f90a6e935f3b}{OLED\_HEIGHT}})}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}}[}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ x\ +\ (y\ /\ 8)\ *\ \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\_WIDTH}}}
+\DoxyCodeLine{00224\ \ \ \ \ ]\ |=\ (1\ <<\ (y\ \%\ 8));}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00227\ \}}
+
+\end{DoxyCode}
+\Hypertarget{oled__display_8c_a203632989f59de816bebefef8593147d}\index{oled\_display.c@{oled\_display.c}!oled\_draw\_string@{oled\_draw\_string}}
+\index{oled\_draw\_string@{oled\_draw\_string}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{oled\_draw\_string()}{oled\_draw\_string()}}
+{\footnotesize\ttfamily \label{oled__display_8c_a203632989f59de816bebefef8593147d} 
+esp\+\_\+err\+\_\+t oled\+\_\+draw\+\_\+string (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{x}{, }\item[{uint8\+\_\+t}]{y}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{str}{}\end{DoxyParamCaption})}
+
+
+
+Dibuja una cadena de texto en el framebuffer. 
+
+Renderiza secuencialmente cada carácter utilizando la fuente configurada por el controlador.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em x} & Coordenada horizontal inicial. \\
+\hline
+{\em y} & Coordenada vertical inicial. \\
+\hline
+{\em str} & Cadena de caracteres terminada en NULL.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK si la operación fue exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00253}{253}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00257\ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordflow}{while}\ (*str)}
+\DoxyCodeLine{00259\ \ \ \ \ \{}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_acafddaff66f9ec50e47246360ecf6d3b}{oled\_draw\_char}}(}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ x,}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ y,}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ *str);}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ x\ +=\ 6;}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ str++;}
+\DoxyCodeLine{00267\ \ \ \ \ \}}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00270\ \}}
+
+\end{DoxyCode}
+\Hypertarget{oled__display_8c_a01ea0460f8fb106225254724debf0bcb}\index{oled\_display.c@{oled\_display.c}!oled\_init@{oled\_init}}
+\index{oled\_init@{oled\_init}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{oled\_init()}{oled\_init()}}
+{\footnotesize\ttfamily \label{oled__display_8c_a01ea0460f8fb106225254724debf0bcb} 
+esp\+\_\+err\+\_\+t oled\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa la pantalla OLED. 
+
+Configura el controlador SSD1306 y prepara el framebuffer para operaciones de dibujo.
+
+Esta función debe ejecutarse una única vez durante el arranque del sistema.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK si la inicialización fue exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00148}{148}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00149\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xAE);}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x20);}
+\DoxyCodeLine{00153\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x00);}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xB0);}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xC8);}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x00);}
+\DoxyCodeLine{00160\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x10);}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x40);}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x81);}
+\DoxyCodeLine{00165\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xFF);}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xA1);}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xA6);}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xA8);}
+\DoxyCodeLine{00172\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x3F);}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xA4);}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xD3);}
+\DoxyCodeLine{00177\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x00);}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xD5);}
+\DoxyCodeLine{00180\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xF0);}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xD9);}
+\DoxyCodeLine{00183\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x22);}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xDA);}
+\DoxyCodeLine{00186\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x12);}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xDB);}
+\DoxyCodeLine{00189\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x20);}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x8D);}
+\DoxyCodeLine{00192\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x14);}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0xAF);}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00197\ \}}
+
+\end{DoxyCode}
+\Hypertarget{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}\index{oled\_display.c@{oled\_display.c}!oled\_send\_command@{oled\_send\_command}}
+\index{oled\_send\_command@{oled\_send\_command}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{oled\_send\_command()}{oled\_send\_command()}}
+{\footnotesize\ttfamily \label{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5} 
+esp\+\_\+err\+\_\+t oled\+\_\+send\+\_\+command (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{cmd}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Envía un comando al controlador SSD1306. 
+
+La transmisión se realiza mediante I2C utilizando exclusión mutua sobre el bus compartido.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em cmd} & Comando a transmitir.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK si la transmisión fue exitosa.
+\item ESP\+\_\+\+FAIL si no fue posible acceder al bus. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00084}{84}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00085\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ uint8\_t\ buffer[2];}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ buffer[0]\ =\ 0x00;}
+\DoxyCodeLine{00089\ \ \ \ \ buffer[1]\ =\ cmd;}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100)))}
+\DoxyCodeLine{00092\ \ \ \ \ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ esp\_err\_t\ ret\ =}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a08d3014e9596e0c13d21fb4473754f31}{i2c\_manager\_write\_raw}}(}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a7dfa2c4cfbfcba36416046052e7943e8}{OLED\_ADDR}},}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer,}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(buffer));}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00102\ \ \ \ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00105\ \}}
+
+\end{DoxyCode}
+\Hypertarget{oled__display_8c_a4101f16729b618e9578f0e3bac396652}\index{oled\_display.c@{oled\_display.c}!oled\_send\_data@{oled\_send\_data}}
+\index{oled\_send\_data@{oled\_send\_data}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{oled\_send\_data()}{oled\_send\_data()}}
+{\footnotesize\ttfamily \label{oled__display_8c_a4101f16729b618e9578f0e3bac396652} 
+esp\+\_\+err\+\_\+t oled\+\_\+send\+\_\+data (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{size\+\_\+t}]{len}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Envía datos gráficos al SSD1306. 
+
+Copia los datos al buffer de transmisión I2C y posteriormente los envía al controlador OLED.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em data} & Puntero al bloque de datos. \\
+\hline
+{\em len} & Cantidad de bytes a transmitir.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK si la transmisión fue exitosa.
+\item ESP\+\_\+\+FAIL en caso de error. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00120}{120}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00121\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ uint8\_t\ buffer[129];}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ buffer[0]\ =\ 0x40;}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ memcpy(\&buffer[1],\ data,\ len);}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100)))}
+\DoxyCodeLine{00129\ \ \ \ \ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ esp\_err\_t\ ret\ =}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a08d3014e9596e0c13d21fb4473754f31}{i2c\_manager\_write\_raw}}(}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a7dfa2c4cfbfcba36416046052e7943e8}{OLED\_ADDR}},}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ len\ +\ 1);}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{00142\ \}}
+
+\end{DoxyCode}
+\Hypertarget{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2}\index{oled\_display.c@{oled\_display.c}!oled\_update@{oled\_update}}
+\index{oled\_update@{oled\_update}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{oled\_update()}{oled\_update()}}
+{\footnotesize\ttfamily \label{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2} 
+esp\+\_\+err\+\_\+t oled\+\_\+update (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Actualiza la pantalla OLED. 
+
+Transfiere el contenido actual del framebuffer hacia la pantalla mediante el bus I2C.
+
+Debe ejecutarse después de realizar operaciones de dibujo para que los cambios sean visibles.
+
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK si la actualización fue exitosa.
+\item Código de error en caso contrario. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00272}{272}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00273\ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ page\ =\ 0;}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ page\ <\ \doxymbox{\hyperlink{oled__display_8c_ade7dfe72f52e8da2aeefe0ff95ff255d}{OLED\_PAGES}};}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ page++)}
+\DoxyCodeLine{00277\ \ \ \ \ \{}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ 0xB0\ +\ page);}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x00);}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a1a64e01be6e711e2b9c55809efe42ac5}{oled\_send\_command}}(0x10);}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a4101f16729b618e9578f0e3bac396652}{oled\_send\_data}}(}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \&\doxymbox{\hyperlink{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}{framebuffer}}[}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ page\ *\ \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\_WIDTH}}],}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a9885a007def27c91dd1720fb65d55f87}{OLED\_WIDTH}});}
+\DoxyCodeLine{00288\ \ \ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00291\ \}}
+
+\end{DoxyCode}
+
+
+\label{oled__display_8c_doc-var-members}
+\Hypertarget{oled__display_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c}\index{oled\_display.c@{oled\_display.c}!framebuffer@{framebuffer}}
+\index{framebuffer@{framebuffer}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{framebuffer}{framebuffer}}
+{\footnotesize\ttfamily \label{oled__display_8c_adfc751af60cacbb1fc419c85cf3d239c} 
+uint8\+\_\+t framebuffer\+[1024]\+\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Framebuffer local de la pantalla OLED. 
+
+Almacena una copia completa de la memoria gráfica del SSD1306. Los cambios gráficos se realizan sobre este buffer y posteriormente se transfieren al dispositivo mediante \doxylink{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2}{oled\+\_\+update()}. 
+
+Definición en la línea \doxymbox{\hyperlink{oled__display_8c_source_l00070}{70}} del archivo \doxymbox{\hyperlink{oled__display_8c_source}{oled\+\_\+display.\+c}}.
+
+\Hypertarget{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}\index{oled\_display.c@{oled\_display.c}!mutex\_i2c@{mutex\_i2c}}
+\index{mutex\_i2c@{mutex\_i2c}!oled\_display.c@{oled\_display.c}}
+\doxysubsubsection{\texorpdfstring{mutex\_i2c}{mutex\_i2c}}
+{\footnotesize\ttfamily \label{oled__display_8c_a60bdaef4d905b9f3d244350633a80080} 
+Semaphore\+Handle\+\_\+t mutex\+\_\+i2c\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Mutex compartido para acceso exclusivo al bus I2C. 
+
+Mutex global para acceso seguro al bus I2C.
+
+Utilizado por todos los periféricos que comparten el mismo bus, evitando condiciones de carrera entre tareas concurrentes.
+
+Mutex compartido para acceso exclusivo al bus I2C.
+
+Garantiza exclusión mutua cuando múltiples tareas intentan acceder simultáneamente a dispositivos conectados al mismo bus. 
+
+Definición en la línea \doxymbox{\hyperlink{i2c__manager_8c_source_l00066}{66}} del archivo \doxymbox{\hyperlink{i2c__manager_8c_source}{i2c\+\_\+manager.\+c}}.
+

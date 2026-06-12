@@ -1,0 +1,347 @@
+\doxysection{Referencia del archivo main/\+wifi/\+wifi\+\_\+manager.h}
+\hypertarget{wifi__manager_8h}{}\label{wifi__manager_8h}\index{main/wifi/wifi\_manager.h@{main/wifi/wifi\_manager.h}}
+
+
+Interfaz para la gestión de conectividad Wi\+Fi.  
+
+
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{wifi__manager_8h_a7267cf9f0ba503d904709977c18a07ea}{wifi\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa la interfaz Wi\+Fi y establece la conexión. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{wifi__manager_8h_a74ffcbcc6723fdd1f6a44c7dfa813079}{wifi\+\_\+wait\+\_\+connected}} (uint32\+\_\+t timeout\+\_\+ms)
+\begin{DoxyCompactList}\small\item\em Espera hasta que se establezca una conexión Wi\+Fi. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{wifi__manager_8h_a5b3e7a6e474fda19d447711c86399104}{wifi\+\_\+scan\+\_\+print}} (void)
+\begin{DoxyCompactList}\small\item\em Escanea las redes Wi\+Fi disponibles. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{wifi__manager_8h_ac2e99f68c3fb924e301871f4388ccc51}{wifi\+\_\+is\+\_\+connected}} (void)
+\begin{DoxyCompactList}\small\item\em Consulta el estado actual de la conexión Wi\+Fi. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Interfaz para la gestión de conectividad Wi\+Fi. 
+
+Este módulo proporciona las funciones necesarias para inicializar la interfaz Wi\+Fi del ESP32, establecer conexión con una red inalámbrica y consultar el estado de conectividad.
+
+Funcionalidades:\+
+\begin{DoxyItemize}
+\item Inicialización del subsistema Wi\+Fi.
+\item Conexión automática a una red configurada.
+\item Espera sincronizada de conexión.
+\item Escaneo de redes disponibles.
+\item Consulta del estado de conexión.
+\end{DoxyItemize}
+
+El módulo abstrae la complejidad de la configuración Wi\+Fi del ESP-\/\+IDF y ofrece una interfaz simplificada para las tareas de aplicación.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{wifi__manager_8h_source}{wifi\+\_\+manager.\+h}}.
+
+
+
+\label{wifi__manager_8h_doc-func-members}
+\Hypertarget{wifi__manager_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{wifi__manager_8h_a7267cf9f0ba503d904709977c18a07ea}\index{wifi\_manager.h@{wifi\_manager.h}!wifi\_init@{wifi\_init}}
+\index{wifi\_init@{wifi\_init}!wifi\_manager.h@{wifi\_manager.h}}
+\doxysubsubsection{\texorpdfstring{wifi\_init()}{wifi\_init()}}
+{\footnotesize\ttfamily \label{wifi__manager_8h_a7267cf9f0ba503d904709977c18a07ea} 
+void wifi\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa la interfaz Wi\+Fi y establece la conexión. 
+
+Inicializa y conecta el ESP32 a una red Wi\+Fi.
+
+Configura el subsistema Wi\+Fi del ESP32, registra los eventos necesarios y comienza el proceso de conexión a la red previamente configurada.
+
+Inicializa la interfaz Wi\+Fi y establece la conexión.
+
+Realiza la inicialización de:\+
+\begin{DoxyItemize}
+\item NVS Flash.
+\item Pila TCP/\+\+IP.
+\item Event Loop del sistema.
+\item Interfaz Wi\+Fi en modo estación.
+\end{DoxyItemize}
+
+Posteriormente configura las credenciales de acceso, registra los manejadores de eventos y comienza el proceso de conexión a la red inalámbrica. Crear event group.
+
+Inicializar NVS.
+
+Inicializar TCP/\+\+IP stack.
+
+Crear event loop.
+
+Crear interfaz Wi\+Fi station.
+
+Configuración Wi\+Fi por defecto.
+
+Registrar handlers de eventos.
+
+Configuración de credenciales Wi\+Fi.
+
+Configurar modo station.
+
+Aplicar configuración Wi\+Fi.
+
+Iniciar Wi\+Fi.
+
+Definición en la línea \doxymbox{\hyperlink{wifi__manager_8c_source_l00199}{199}} del archivo \doxymbox{\hyperlink{wifi__manager_8c_source}{wifi\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00200\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \doxymbox{\hyperlink{wifi__manager_8c_a20c6ba80259caf6916ca631b853d82af}{wifi\_event\_group}}\ =\ xEventGroupCreate();}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00209\ \ \ \ \ esp\_err\_t\ ret\ =\ nvs\_flash\_init();}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ ==\ ESP\_ERR\_NVS\_NO\_FREE\_PAGES\ ||}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ ret\ ==\ ESP\_ERR\_NVS\_NEW\_VERSION\_FOUND)}
+\DoxyCodeLine{00213\ \ \ \ \ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ ESP\_ERROR\_CHECK(nvs\_flash\_erase());}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ ret\ =\ nvs\_flash\_init();}
+\DoxyCodeLine{00217\ \ \ \ \ \}}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ ESP\_ERROR\_CHECK(ret);}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00224\ \ \ \ \ ESP\_ERROR\_CHECK(esp\_netif\_init());}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00229\ \ \ \ \ ESP\_ERROR\_CHECK(}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ esp\_event\_loop\_create\_default());}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00235\ \ \ \ \ esp\_netif\_create\_default\_wifi\_sta();}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00240\ \ \ \ \ wifi\_init\_config\_t\ cfg\ =}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ WIFI\_INIT\_CONFIG\_DEFAULT();}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ ESP\_ERROR\_CHECK(esp\_wifi\_init(\&cfg));}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00248\ \ \ \ \ ESP\_ERROR\_CHECK(}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ esp\_event\_handler\_instance\_register(}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ WIFI\_EVENT,}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_EVENT\_ANY\_ID,}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \&\doxymbox{\hyperlink{wifi__manager_8c_ac31e38637f7a5e5c8ce4d033b0955fec}{wifi\_event\_handler}},}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ NULL));}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ ESP\_ERROR\_CHECK(}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ esp\_event\_handler\_instance\_register(}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ IP\_EVENT,}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ IP\_EVENT\_STA\_GOT\_IP,}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \&\doxymbox{\hyperlink{wifi__manager_8c_ac31e38637f7a5e5c8ce4d033b0955fec}{wifi\_event\_handler}},}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ NULL));}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00267\ \ \ \ \ wifi\_config\_t\ wifi\_config\ =\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ .sta\ =\ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ .ssid\ =\ \doxymbox{\hyperlink{wifi__manager_8c_a586542b79d00e4db7e1d5a667ae83a2b}{WIFI\_SSID}},}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ .password\ =\ \doxymbox{\hyperlink{wifi__manager_8c_a3c95561b03d0fcf9048b231ae2ba90fb}{WIFI\_PASS}},}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00272\ \ \ \ \ \};}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00277\ \ \ \ \ ESP\_ERROR\_CHECK(}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ esp\_wifi\_set\_mode(WIFI\_MODE\_STA));}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00283\ \ \ \ \ ESP\_ERROR\_CHECK(}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ esp\_wifi\_set\_config(}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ WIFI\_IF\_STA,}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \&wifi\_config));}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00291\ \ \ \ \ ESP\_ERROR\_CHECK(esp\_wifi\_start());}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Inicialización\ WiFi\ completada"{}});}
+\DoxyCodeLine{00295\ \}}
+
+\end{DoxyCode}
+\Hypertarget{wifi__manager_8h_ac2e99f68c3fb924e301871f4388ccc51}\index{wifi\_manager.h@{wifi\_manager.h}!wifi\_is\_connected@{wifi\_is\_connected}}
+\index{wifi\_is\_connected@{wifi\_is\_connected}!wifi\_manager.h@{wifi\_manager.h}}
+\doxysubsubsection{\texorpdfstring{wifi\_is\_connected()}{wifi\_is\_connected()}}
+{\footnotesize\ttfamily \label{wifi__manager_8h_ac2e99f68c3fb924e301871f4388ccc51} 
+bool wifi\+\_\+is\+\_\+connected (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Consulta el estado actual de la conexión Wi\+Fi. 
+
+Verifica si existe una conexión Wi\+Fi activa.
+
+\begin{DoxyReturn}{Devuelve}
+true si el ESP32 está conectado a una red Wi\+Fi. 
+
+false si no existe conexión activa.
+\end{DoxyReturn}
+Consulta el estado actual de la conexión Wi\+Fi.
+
+Consulta el estado actual almacenado en el Event Group del módulo Wi\+Fi.
+
+\begin{DoxyReturn}{Devuelve}
+true si el ESP32 está conectado a una red. 
+
+false si no existe conexión activa. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{wifi__manager_8c_source_l00428}{428}} del archivo \doxymbox{\hyperlink{wifi__manager_8c_source}{wifi\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00429\ \{}
+\DoxyCodeLine{00430\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{wifi__manager_8c_a20c6ba80259caf6916ca631b853d82af}{wifi\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{00431\ \ \ \ \ \{}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00433\ \ \ \ \ \}}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00435\ \ \ \ \ EventBits\_t\ bits\ =\ xEventGroupGetBits(\doxymbox{\hyperlink{wifi__manager_8c_a20c6ba80259caf6916ca631b853d82af}{wifi\_event\_group}});}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ \textcolor{keywordflow}{return}\ (bits\ \&\ \doxymbox{\hyperlink{wifi__manager_8c_ad552e7688532cbbecd3967538ced06ac}{WIFI\_CONNECTED\_BIT}})\ !=\ 0;}
+\DoxyCodeLine{00438\ \}}
+
+\end{DoxyCode}
+\Hypertarget{wifi__manager_8h_a5b3e7a6e474fda19d447711c86399104}\index{wifi\_manager.h@{wifi\_manager.h}!wifi\_scan\_print@{wifi\_scan\_print}}
+\index{wifi\_scan\_print@{wifi\_scan\_print}!wifi\_manager.h@{wifi\_manager.h}}
+\doxysubsubsection{\texorpdfstring{wifi\_scan\_print()}{wifi\_scan\_print()}}
+{\footnotesize\ttfamily \label{wifi__manager_8h_a5b3e7a6e474fda19d447711c86399104} 
+void wifi\+\_\+scan\+\_\+print (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Escanea las redes Wi\+Fi disponibles. 
+
+Realiza un escaneo de redes Wi\+Fi disponibles.
+
+Realiza un escaneo activo del entorno inalámbrico e imprime los resultados mediante la consola de depuración.
+
+Escanea las redes Wi\+Fi disponibles.
+
+Ejecuta un escaneo activo del entorno inalámbrico, obtiene la lista de puntos de acceso detectados y muestra por consola información relevante:\+
+
+
+\begin{DoxyItemize}
+\item SSID
+\item Intensidad de señal (RSSI)
+\item Canal
+\item Tipo de autenticación
+\end{DoxyItemize}
+
+Los resultados son utilizados principalmente para diagnóstico y configuración del sistema. 
+
+Definición en la línea \doxymbox{\hyperlink{wifi__manager_8c_source_l00374}{374}} del archivo \doxymbox{\hyperlink{wifi__manager_8c_source}{wifi\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00375\ \{}
+\DoxyCodeLine{00376\ \ \ \ \ wifi\_ap\_record\_t\ ap\_records[\doxymbox{\hyperlink{wifi__manager_8c_a23f56fbbc8b0a0b5ece3529c7bcbb4ba}{WIFI\_SCAN\_MAX\_AP}}];}
+\DoxyCodeLine{00377\ \ \ \ \ uint16\_t\ ap\_count\ =\ \doxymbox{\hyperlink{wifi__manager_8c_a23f56fbbc8b0a0b5ece3529c7bcbb4ba}{WIFI\_SCAN\_MAX\_AP}};}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ wifi\_scan\_config\_t\ scan\_config\ =\ \{}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ .ssid\ =\ NULL,}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ .bssid\ =\ NULL,}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ .channel\ =\ 0,}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ .show\_hidden\ =\ \textcolor{keyword}{true}}
+\DoxyCodeLine{00384\ \ \ \ \ \};}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Escaneando\ redes\ WiFi\ visibles..."{}});}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ \ \ \ \ esp\_wifi\_disconnect();}
+\DoxyCodeLine{00389\ \ \ \ \ vTaskDelay(pdMS\_TO\_TICKS(500));}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ \ \ \ \ esp\_err\_t\ ret\ =\ esp\_wifi\_scan\_start(\&scan\_config,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00392\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ ESP\_OK)}
+\DoxyCodeLine{00393\ \ \ \ \ \{}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ iniciando\ escaneo\ WiFi:\ \%s"{}},\ esp\_err\_to\_name(ret));}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00396\ \ \ \ \ \}}
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \ \ \ \ ret\ =\ esp\_wifi\_scan\_get\_ap\_records(\&ap\_count,\ ap\_records);}
+\DoxyCodeLine{00399\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ ESP\_OK)}
+\DoxyCodeLine{00400\ \ \ \ \ \{}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ leyendo\ escaneo\ WiFi:\ \%s"{}},\ esp\_err\_to\_name(ret));}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00403\ \ \ \ \ \}}
+\DoxyCodeLine{00404\ }
+\DoxyCodeLine{00405\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Redes\ encontradas:\ \%d"{}},\ ap\_count);}
+\DoxyCodeLine{00406\ }
+\DoxyCodeLine{00407\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ ap\_count;\ i++)}
+\DoxyCodeLine{00408\ \ \ \ \ \{}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\%02d\ SSID='\%s'\ RSSI=\%d\ canal=\%d\ auth=\%s"{}},}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\ +\ 1,}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{char}\ *)\ ap\_records[i].ssid,}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ap\_records[i].rssi,}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ap\_records[i].primary,}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{wifi__manager_8c_a9dcf78476c0528f382454066e5af1130}{auth\_mode\_name}}(ap\_records[i].authmode));}
+\DoxyCodeLine{00416\ \ \ \ \ \}}
+\DoxyCodeLine{00417\ \}}
+
+\end{DoxyCode}
+\Hypertarget{wifi__manager_8h_a74ffcbcc6723fdd1f6a44c7dfa813079}\index{wifi\_manager.h@{wifi\_manager.h}!wifi\_wait\_connected@{wifi\_wait\_connected}}
+\index{wifi\_wait\_connected@{wifi\_wait\_connected}!wifi\_manager.h@{wifi\_manager.h}}
+\doxysubsubsection{\texorpdfstring{wifi\_wait\_connected()}{wifi\_wait\_connected()}}
+{\footnotesize\ttfamily \label{wifi__manager_8h_a74ffcbcc6723fdd1f6a44c7dfa813079} 
+bool wifi\+\_\+wait\+\_\+connected (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{timeout\+\_\+ms}{}\end{DoxyParamCaption})}
+
+
+
+Espera hasta que se establezca una conexión Wi\+Fi. 
+
+Espera hasta que el ESP32 se conecte a la red Wi\+Fi.
+
+La función bloquea la ejecución hasta que el dispositivo obtenga una dirección IP válida o hasta que expire el tiempo máximo de espera especificado.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em timeout\+\_\+ms} & Tiempo máximo de espera en milisegundos.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si la conexión fue exitosa. 
+
+false si ocurrió timeout o error.
+\end{DoxyReturn}
+Espera hasta que se establezca una conexión Wi\+Fi.
+
+La función bloquea la ejecución hasta recibir un evento de conexión exitosa o hasta que se detecte un fallo de conexión.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em timeout\+\_\+ms} & Tiempo máximo de espera en milisegundos.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+true si la conexión fue exitosa. 
+
+false si ocurrió timeout o fallo de conexión. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{wifi__manager_8c_source_l00307}{307}} del archivo \doxymbox{\hyperlink{wifi__manager_8c_source}{wifi\+\_\+manager.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00308\ \{}
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{wifi__manager_8c_a20c6ba80259caf6916ca631b853d82af}{wifi\_event\_group}}\ ==\ NULL)}
+\DoxyCodeLine{00310\ \ \ \ \ \{}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00312\ \ \ \ \ \}}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \ \ \ \ EventBits\_t\ bits\ =\ xEventGroupWaitBits(}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{wifi__manager_8c_a20c6ba80259caf6916ca631b853d82af}{wifi\_event\_group}},}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{wifi__manager_8c_ad552e7688532cbbecd3967538ced06ac}{WIFI\_CONNECTED\_BIT}}\ |\ \doxymbox{\hyperlink{wifi__manager_8c_a7d013b55e50dfbda0904f5f933b63ec4}{WIFI\_FAIL\_BIT}},}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ pdFALSE,}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(timeout\_ms));}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{keywordflow}{return}\ (bits\ \&\ \doxymbox{\hyperlink{wifi__manager_8c_ad552e7688532cbbecd3967538ced06ac}{WIFI\_CONNECTED\_BIT}})\ !=\ 0;}
+\DoxyCodeLine{00322\ \}}
+
+\end{DoxyCode}

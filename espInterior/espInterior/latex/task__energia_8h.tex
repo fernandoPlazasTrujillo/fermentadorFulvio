@@ -1,0 +1,129 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+energia.h}
+\hypertarget{task__energia_8h}{}\label{task__energia_8h}\index{main/tasks/task\_energia.h@{main/tasks/task\_energia.h}}
+
+
+Declaración de la tarea de gestión energética del sistema.  
+
+
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__energia_8h_ac7b7fee9849a033c0657c650e2dbfc9b}{task\+\_\+energia}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea principal de gestión energética. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Declaración de la tarea de gestión energética del sistema. 
+
+Este módulo define la tarea responsable de coordinar el ciclo operativo del sistema y gestionar los modos de bajo consumo.
+
+La tarea supervisa la finalización de actividades críticas del proceso de fermentación y determina cuándo el sistema puede entrar en estados de ahorro energético.
+
+Funciones principales:\+
+\begin{DoxyItemize}
+\item Coordinación del ciclo de operación.
+\item Sincronización con otras tareas.
+\item Gestión de modos de bajo consumo.
+\item Preparación para entrada en Deep Sleep.
+\item Optimización del consumo energético.
+\end{DoxyItemize}
+
+Arquitectura:\+
+
+task\+\_\+actuadores \texorpdfstring{$\vert$}{|} v Notificación Free\+RTOS \texorpdfstring{$\vert$}{|} v task\+\_\+energia \texorpdfstring{$\vert$}{|} v Deep Sleep
+
+Esta tarea forma parte de la estrategia de eficiencia energética del sistema embebido.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{task__energia_8h_source}{task\+\_\+energia.\+h}}.
+
+
+
+\label{task__energia_8h_doc-func-members}
+\Hypertarget{task__energia_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__energia_8h_ac7b7fee9849a033c0657c650e2dbfc9b}\index{task\_energia.h@{task\_energia.h}!task\_energia@{task\_energia}}
+\index{task\_energia@{task\_energia}!task\_energia.h@{task\_energia.h}}
+\doxysubsubsection{\texorpdfstring{task\_energia()}{task\_energia()}}
+{\footnotesize\ttfamily \label{task__energia_8h_ac7b7fee9849a033c0657c650e2dbfc9b} 
+void task\+\_\+energia (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea principal de gestión energética. 
+
+Coordina el ciclo de ejecución del sistema y supervisa la finalización de las tareas necesarias antes de activar mecanismos de ahorro energético.
+
+Dependiendo del estado del sistema, puede preparar la transición hacia modos de bajo consumo como Deep Sleep.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados).\\
+\hline
+\end{DoxyParams}
+La tarea permanece bloqueada esperando una notificación que indique el inicio de un nuevo ciclo operativo.
+
+Flujo de ejecución:\+
+\begin{DoxyItemize}
+\item Esperar activación.
+\item Iniciar adquisición de sensores.
+\item Esperar finalización de procesos.
+\item Entrar en modo Deep Sleep.
+\end{DoxyItemize}
+
+La coordinación se realiza mediante notificaciones directas de Free\+RTOS para minimizar el uso de memoria y CPU.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+Esperar inicio de ciclo.
+
+Activar adquisición de sensores.
+
+Esperar finalización de procesamiento y actuación.
+
+Actualmente se utiliza un tiempo máximo de espera como mecanismo de sincronización.
+
+Esperar finalización de tareas pendientes como almacenamiento o comunicaciones.
+
+Transición al modo Deep Sleep.
+
+El sistema permanecerá suspendido hasta que ocurra el evento de despertar configurado.
+
+Definición en la línea \doxymbox{\hyperlink{task__energia_8c_source_l00079}{79}} del archivo \doxymbox{\hyperlink{task__energia_8c_source}{task\+\_\+energia.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00080\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)}
+\DoxyCodeLine{00082\ \ \ \ \ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Ciclo\ iniciado"{}});}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ xTaskNotifyGive(}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{main_8c_a545de6958783ff726c116adffaebbcfb}{task\_sensores\_handle}});}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(25000));}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ ulTaskNotifyTake(}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ pdTRUE,}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ pdMS\_TO\_TICKS(5000));}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Entrando\ en\ deep\ sleep"{}});}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ esp\_deep\_sleep\_start();}
+\DoxyCodeLine{00126\ \ \ \ \ \}}
+\DoxyCodeLine{00127\ \}}
+
+\end{DoxyCode}

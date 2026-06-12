@@ -1,0 +1,463 @@
+\doxysection{Referencia del archivo main/\+drivers/\+ds18b20.c}
+\hypertarget{ds18b20_8c}{}\label{ds18b20_8c}\index{main/drivers/ds18b20.c@{main/drivers/ds18b20.c}}
+
+
+Implementación del driver para el sensor DS18\+B20 mediante protocolo One\+Wire.  
+
+
+{\ttfamily \+\#include "{}drivers/\+ds18b20.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+rom\+\_\+sys.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+static void \doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{ow\+\_\+low}} ()
+\begin{DoxyCompactList}\small\item\em Fuerza la línea One\+Wire a nivel bajo. \end{DoxyCompactList}\item 
+static void \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\+\_\+release}} ()
+\begin{DoxyCompactList}\small\item\em Libera la línea One\+Wire. \end{DoxyCompactList}\item 
+static int \doxymbox{\hyperlink{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae}{ow\+\_\+read}} ()
+\begin{DoxyCompactList}\small\item\em Lee el estado actual del bus One\+Wire. \end{DoxyCompactList}\item 
+static int \doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{ow\+\_\+reset}} ()
+\begin{DoxyCompactList}\small\item\em Realiza el reset del bus One\+Wire. \end{DoxyCompactList}\item 
+static void \doxymbox{\hyperlink{ds18b20_8c_a27ea41a1651c0181c573ad118bd9057a}{ow\+\_\+write\+\_\+bit}} (int bit)
+\begin{DoxyCompactList}\small\item\em Escribe un bit en el bus One\+Wire. \end{DoxyCompactList}\item 
+static int \doxymbox{\hyperlink{ds18b20_8c_a48ba918873b54e04ddcd4dc4482f333a}{ow\+\_\+read\+\_\+bit}} ()
+\begin{DoxyCompactList}\small\item\em Lee un bit desde el bus One\+Wire. \end{DoxyCompactList}\item 
+static void \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\+\_\+write\+\_\+byte}} (uint8\+\_\+t byte)
+\begin{DoxyCompactList}\small\item\em Escribe un byte completo en el bus One\+Wire. \end{DoxyCompactList}\item 
+static uint8\+\_\+t \doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{ow\+\_\+read\+\_\+byte}} ()
+\begin{DoxyCompactList}\small\item\em Lee un byte completo desde el bus One\+Wire. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{ds18b20_8c_afb1d889451edc3f30db74315af96b963}{ds18b20\+\_\+init}} (gpio\+\_\+num\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Inicializa el sensor DS18\+B20. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{ds18b20_8c_a5aac389dc38e235043998b969fe9898e}{ds18b20\+\_\+read\+\_\+temperature}} (void)
+\begin{DoxyCompactList}\small\item\em Obtiene la temperatura del sensor DS18\+B20. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{ds18b20_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}DS18\+B20"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada por el sistema de logging ESP-\/\+IDF. \end{DoxyCompactList}\item 
+static gpio\+\_\+num\+\_\+t \doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\+\_\+pin}}
+\begin{DoxyCompactList}\small\item\em GPIO utilizado para la comunicación One\+Wire. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación del driver para el sensor DS18\+B20 mediante protocolo One\+Wire. 
+
+Este módulo implementa las funciones necesarias para la comunicación con un sensor DS18\+B20 utilizando el protocolo One\+Wire por software.
+
+Incluye:\+
+\begin{DoxyItemize}
+\item Inicialización del bus One\+Wire.
+\item Transmisión y recepción de bits y bytes.
+\item Detección de presencia del dispositivo.
+\item Conversión y lectura de temperatura.
+\end{DoxyItemize}
+
+El sensor se utiliza para monitorear la temperatura interna del sistema de fermentación de café.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+
+\label{ds18b20_8c_doc-func-members}
+\Hypertarget{ds18b20_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{ds18b20_8c_afb1d889451edc3f30db74315af96b963}\index{ds18b20.c@{ds18b20.c}!ds18b20\_init@{ds18b20\_init}}
+\index{ds18b20\_init@{ds18b20\_init}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ds18b20\_init()}{ds18b20\_init()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_afb1d889451edc3f30db74315af96b963} 
+esp\+\_\+err\+\_\+t ds18b20\+\_\+init (\begin{DoxyParamCaption}\item[{gpio\+\_\+num\+\_\+t}]{pin}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el sensor DS18\+B20. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pin} & GPIO de conexión. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+ESP\+\_\+\+OK si se configura correctamente.
+\end{DoxyReturn}
+Configura el GPIO utilizado para la comunicación One\+Wire y habilita la resistencia pull-\/up requerida por el protocolo.
+
+Esta función debe ejecutarse una única vez durante la inicialización del sistema.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pin} & GPIO al que se encuentra conectado el sensor.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Devuelve}
+
+\begin{DoxyItemize}
+\item ESP\+\_\+\+OK:\+ Inicialización exitosa.
+\item ESP\+\_\+\+FAIL:\+ Error durante la configuración del dispositivo. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00198}{198}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00199\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}}\ =\ pin;}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ gpio\_set\_pull\_mode(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ GPIO\_PULLUP\_ONLY);}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}DS18B20\ init\ en\ GPIO\ \%d"{}},\ pin);}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{00207\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_a5aac389dc38e235043998b969fe9898e}\index{ds18b20.c@{ds18b20.c}!ds18b20\_read\_temperature@{ds18b20\_read\_temperature}}
+\index{ds18b20\_read\_temperature@{ds18b20\_read\_temperature}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ds18b20\_read\_temperature()}{ds18b20\_read\_temperature()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_a5aac389dc38e235043998b969fe9898e} 
+float ds18b20\+\_\+read\+\_\+temperature (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene la temperatura del sensor DS18\+B20. 
+
+Obtiene una medición de temperatura desde el DS18\+B20.
+
+\begin{DoxyReturn}{Devuelve}
+Temperatura en °C. 
+
+-\/127.\+0 si el sensor no responde.
+\end{DoxyReturn}
+Obtiene la temperatura del sensor DS18\+B20.
+
+Ejecuta la secuencia completa de comunicación One\+Wire:\+
+\begin{DoxyItemize}
+\item Reset del bus.
+\item Inicio de conversión de temperatura.
+\item Lectura de memoria Scratchpad.
+\item Conversión del dato a grados Celsius.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Devuelve}
+Temperatura medida en grados Celsius. 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Valores devueltos}
+{\em -\/127.\+0} & Error de comunicación o ausencia del sensor. \\
+\hline
+\end{DoxyRetVals}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00219}{219}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00220\ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{ow\_reset}}())\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Sensor\ no\ detectado"{}});}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/127.0;}
+\DoxyCodeLine{00224\ \ \ \ \ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xCC);}
+\DoxyCodeLine{00227\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0x44);}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ *\ Tiempo\ máximo\ de\ conversión\ para\ resolución\ de\ 12\ bits }}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ *\ según\ la\ hoja\ de\ datos\ del\ DS18B20. }}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00233\ \ \ \ \ vTaskDelay(pdMS\_TO\_TICKS(750));}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}{ow\_reset}}())\ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/127.0;}
+\DoxyCodeLine{00237\ \ \ \ \ \}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xCC);}
+\DoxyCodeLine{00240\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}{ow\_write\_byte}}(0xBE);}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ uint8\_t\ temp\_lsb\ =\ \doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{ow\_read\_byte}}();}
+\DoxyCodeLine{00243\ \ \ \ \ uint8\_t\ temp\_msb\ =\ \doxymbox{\hyperlink{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}{ow\_read\_byte}}();}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ int16\_t\ raw\ =\ (temp\_msb\ <<\ 8)\ |\ temp\_lsb;}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{float}\ temp\ =\ raw\ /\ 16.0;}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordflow}{return}\ temp;}
+\DoxyCodeLine{00250\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_a220acc6089f507beb8473061aed9e810}\index{ds18b20.c@{ds18b20.c}!ow\_low@{ow\_low}}
+\index{ow\_low@{ow\_low}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ow\_low()}{ow\_low()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_a220acc6089f507beb8473061aed9e810} 
+void ow\+\_\+low (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Fuerza la línea One\+Wire a nivel bajo. 
+
+Configura temporalmente el GPIO como salida y escribe un nivel lógico bajo. 
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00053}{53}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00054\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ gpio\_set\_direction(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ GPIO\_MODE\_OUTPUT);}
+\DoxyCodeLine{00056\ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ 0);}
+\DoxyCodeLine{00057\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae}\index{ds18b20.c@{ds18b20.c}!ow\_read@{ow\_read}}
+\index{ow\_read@{ow\_read}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ow\_read()}{ow\_read()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae} 
+int ow\+\_\+read (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Lee el estado actual del bus One\+Wire. 
+
+\begin{DoxyReturn}{Devuelve}
+0 o 1 según el nivel lógico. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00075}{75}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00076\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordflow}{return}\ gpio\_get\_level(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}});}
+\DoxyCodeLine{00078\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_a48ba918873b54e04ddcd4dc4482f333a}\index{ds18b20.c@{ds18b20.c}!ow\_read\_bit@{ow\_read\_bit}}
+\index{ow\_read\_bit@{ow\_read\_bit}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ow\_read\_bit()}{ow\_read\_bit()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_a48ba918873b54e04ddcd4dc4482f333a} 
+int ow\+\_\+read\+\_\+bit (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Lee un bit desde el bus One\+Wire. 
+
+\begin{DoxyReturn}{Devuelve}
+Bit leído (0 o 1). 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00139}{139}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00140\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{int}\ bit;}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{ow\_low}}();}
+\DoxyCodeLine{00144\ \ \ \ \ esp\_rom\_delay\_us(3);}
+\DoxyCodeLine{00145\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}();}
+\DoxyCodeLine{00146\ \ \ \ \ esp\_rom\_delay\_us(10);}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ bit\ =\ \doxymbox{\hyperlink{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae}{ow\_read}}();}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ esp\_rom\_delay\_us(53);}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordflow}{return}\ bit;}
+\DoxyCodeLine{00153\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda}\index{ds18b20.c@{ds18b20.c}!ow\_read\_byte@{ow\_read\_byte}}
+\index{ow\_read\_byte@{ow\_read\_byte}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ow\_read\_byte()}{ow\_read\_byte()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_aa24a52307ce366a596c9e292e2b84bda} 
+uint8\+\_\+t ow\+\_\+read\+\_\+byte (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Lee un byte completo desde el bus One\+Wire. 
+
+\begin{DoxyReturn}{Devuelve}
+Byte leído. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00177}{177}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00178\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ uint8\_t\ \textcolor{keywordtype}{byte}\ =\ 0;}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 8;\ i++)\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{byte}\ |=\ (\doxymbox{\hyperlink{ds18b20_8c_a48ba918873b54e04ddcd4dc4482f333a}{ow\_read\_bit}}()\ <<\ i);}
+\DoxyCodeLine{00183\ \ \ \ \ \}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordflow}{return}\ byte;}
+\DoxyCodeLine{00186\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}\index{ds18b20.c@{ds18b20.c}!ow\_release@{ow\_release}}
+\index{ow\_release@{ow\_release}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ow\_release()}{ow\_release()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_a671a28f40d3319fe155661cc86903c78} 
+void ow\+\_\+release (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Libera la línea One\+Wire. 
+
+Configura el GPIO como entrada permitiendo que la resistencia pull-\/up mantenga el bus en nivel alto. 
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00065}{65}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00066\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ gpio\_set\_direction(\doxymbox{\hyperlink{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}{ds\_pin}},\ GPIO\_MODE\_INPUT);}
+\DoxyCodeLine{00068\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5}\index{ds18b20.c@{ds18b20.c}!ow\_reset@{ow\_reset}}
+\index{ow\_reset@{ow\_reset}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ow\_reset()}{ow\_reset()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_a5970faf6411a4a88594595f34d515bc5} 
+int ow\+\_\+reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Realiza el reset del bus One\+Wire. 
+
+Envía la señal de reset y detecta la presencia del sensor.
+
+\begin{DoxyReturn}{Devuelve}
+1 si el dispositivo responde, 0 en caso contrario. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00091}{91}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00092\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{ow\_low}}();}
+\DoxyCodeLine{00094\ \ \ \ \ esp\_rom\_delay\_us(480);}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}();}
+\DoxyCodeLine{00097\ \ \ \ \ esp\_rom\_delay\_us(70);}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{int}\ presence\ =\ !\doxymbox{\hyperlink{ds18b20_8c_a1606dc3f3feb90a3475e1f3e7fb4d1ae}{ow\_read}}();}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ esp\_rom\_delay\_us(410);}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordflow}{return}\ presence;}
+\DoxyCodeLine{00104\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_a27ea41a1651c0181c573ad118bd9057a}\index{ds18b20.c@{ds18b20.c}!ow\_write\_bit@{ow\_write\_bit}}
+\index{ow\_write\_bit@{ow\_write\_bit}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ow\_write\_bit()}{ow\_write\_bit()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_a27ea41a1651c0181c573ad118bd9057a} 
+void ow\+\_\+write\+\_\+bit (\begin{DoxyParamCaption}\item[{int}]{bit}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Escribe un bit en el bus One\+Wire. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em bit} & Valor del bit (0 o 1). \\
+\hline
+\end{DoxyParams}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00115}{115}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00116\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a220acc6089f507beb8473061aed9e810}{ow\_low}}();}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordflow}{if}\ (bit)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ esp\_rom\_delay\_us(10);}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}();}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ esp\_rom\_delay\_us(55);}
+\DoxyCodeLine{00123\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ esp\_rom\_delay\_us(65);}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a671a28f40d3319fe155661cc86903c78}{ow\_release}}();}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ esp\_rom\_delay\_us(5);}
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ \}}
+
+\end{DoxyCode}
+\Hypertarget{ds18b20_8c_ae142b820973800ab42c9093463abd8e7}\index{ds18b20.c@{ds18b20.c}!ow\_write\_byte@{ow\_write\_byte}}
+\index{ow\_write\_byte@{ow\_write\_byte}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ow\_write\_byte()}{ow\_write\_byte()}}
+{\footnotesize\ttfamily \label{ds18b20_8c_ae142b820973800ab42c9093463abd8e7} 
+void ow\+\_\+write\+\_\+byte (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{byte}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Escribe un byte completo en el bus One\+Wire. 
+
+
+\begin{DoxyParams}{Parámetros}
+{\em byte} & Byte a transmitir. \\
+\hline
+\end{DoxyParams}
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00164}{164}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00165\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 8;\ i++)\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{ds18b20_8c_a27ea41a1651c0181c573ad118bd9057a}{ow\_write\_bit}}(\textcolor{keywordtype}{byte}\ \&\ 0x01);}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{byte}\ >>=\ 1;}
+\DoxyCodeLine{00169\ \ \ \ \ \}}
+\DoxyCodeLine{00170\ \}}
+
+\end{DoxyCode}
+
+
+\label{ds18b20_8c_doc-var-members}
+\Hypertarget{ds18b20_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e}\index{ds18b20.c@{ds18b20.c}!ds\_pin@{ds\_pin}}
+\index{ds\_pin@{ds\_pin}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{ds\_pin}{ds\_pin}}
+{\footnotesize\ttfamily \label{ds18b20_8c_ae8e2126058e269f81fc42f25ab4c7b4e} 
+gpio\+\_\+num\+\_\+t ds\+\_\+pin\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+GPIO utilizado para la comunicación One\+Wire. 
+
+Se configura durante la inicialización del driver y es utilizado por todas las funciones de acceso al sensor. 
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00042}{42}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+
+\Hypertarget{ds18b20_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{ds18b20.c@{ds18b20.c}!TAG@{TAG}}
+\index{TAG@{TAG}!ds18b20.c@{ds18b20.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{ds18b20_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}DS18\+B20"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada por el sistema de logging ESP-\/\+IDF. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{ds18b20_8c_source_l00034}{34}} del archivo \doxymbox{\hyperlink{ds18b20_8c_source}{ds18b20.\+c}}.
+

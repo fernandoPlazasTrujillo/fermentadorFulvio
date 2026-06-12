@@ -1,0 +1,218 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+display.c}
+\hypertarget{task__display_8c}{}\label{task__display_8c}\index{main/tasks/task\_display.c@{main/tasks/task\_display.c}}
+
+
+Implementación de la tarea de visualización del sistema.  
+
+
+{\ttfamily \+\#include "{}tasks/\+task\+\_\+display.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+queue.\+h"{}}\newline
+{\ttfamily \+\#include "{}drivers/\+oled\+\_\+display.\+h"{}}\newline
+{\ttfamily \+\#include "{}queues.\+h"{}}\newline
+{\ttfamily \+\#include "{}utils/\+data\+\_\+types.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__display_8c_a0c23017a47c450de05f8c7af642c7461}{task\+\_\+display}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea encargada de actualizar la pantalla OLED. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación de la tarea de visualización del sistema. 
+
+Esta tarea recibe información mediante una cola Free\+RTOS y actualiza la pantalla OLED con el estado actual del proceso de fermentación.
+
+Información mostrada:\+
+\begin{DoxyItemize}
+\item Temperatura.
+\item pH.
+\item Concentración de CO2.
+\item Estado de Wi\+Fi.
+\item Estado de MQTT.
+\item Estado de la tarjeta SD.
+\item Hora del sistema.
+\end{DoxyItemize}
+
+La tarea se encarga exclusivamente de la presentación de datos, manteniendo desacoplada la interfaz de usuario de las tareas de adquisición, control y comunicación.
+
+Arquitectura:\+
+
+queue\+\_\+display \texorpdfstring{$\vert$}{|} v task\+\_\+display \texorpdfstring{$\vert$}{|} v OLED
+
+Mecanismos Free\+RTOS utilizados:\+
+\begin{DoxyItemize}
+\item Colas para recepción de datos.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{task__display_8c_source}{task\+\_\+display.\+c}}.
+
+
+
+\label{task__display_8c_doc-func-members}
+\Hypertarget{task__display_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__display_8c_a0c23017a47c450de05f8c7af642c7461}\index{task\_display.c@{task\_display.c}!task\_display@{task\_display}}
+\index{task\_display@{task\_display}!task\_display.c@{task\_display.c}}
+\doxysubsubsection{\texorpdfstring{task\_display()}{task\_display()}}
+{\footnotesize\ttfamily \label{task__display_8c_a0c23017a47c450de05f8c7af642c7461} 
+void task\+\_\+display (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea encargada de actualizar la pantalla OLED. 
+
+Espera datos provenientes de queue\+\_\+display y muestra información relevante del proceso de fermentación.
+
+La tarea permanece bloqueada hasta recibir nuevos datos, minimizando el consumo de CPU.
+
+Información visualizada:\+
+\begin{DoxyItemize}
+\item Temperatura.
+\item pH.
+\item CO2.
+\item Estado de Wi\+Fi.
+\item Estado de MQTT.
+\item Estado de la tarjeta SD.
+\item Hora actual.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados).\\
+\hline
+\end{DoxyParams}
+Espera información proveniente de queue\+\_\+display y actualiza la interfaz de usuario con el estado actual del proceso de fermentación.
+
+La tarea no realiza procesamiento de sensores ni toma decisiones de control; únicamente presenta información al usuario.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+Inicialización de la pantalla OLED.
+
+Limpiar pantalla antes de redibujar.
+
+Actualizar contenido físico de la pantalla.
+
+Definición en la línea \doxymbox{\hyperlink{task__display_8c_source_l00074}{74}} del archivo \doxymbox{\hyperlink{task__display_8c_source}{task\+\_\+display.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00075\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \doxymbox{\hyperlink{structdisplay__data__t}{display\_data\_t}}\ data;}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{char}\ line[32];}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00083\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a01ea0460f8fb106225254724debf0bcb}{oled\_init}}();}
+\DoxyCodeLine{00084\ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_adbdd2a6d942046ccfc756959d2de0dff}{oled\_clear}}();}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)}
+\DoxyCodeLine{00087\ \ \ \ \ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xQueueReceive(}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{queues_8c_ac32bf9d351fcc767fdcadd39574eb74c}{queue\_display}},}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&data,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY))}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_adbdd2a6d942046ccfc756959d2de0dff}{oled\_clear}}();}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TEMPERATURA}}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ snprintf(}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(line),}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}T:\ \%.1f\ C"{}},}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_ab1900e3dd4593f30a237cfeee005b094}{temperatura}});}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a203632989f59de816bebefef8593147d}{oled\_draw\_string}}(}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line);}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ PH}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ snprintf(}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line,}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(line),}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}PH:\ \%.2f"{}},}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a8229f3db2525a9976ecbc82fa7597a9a}{ph}});}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a203632989f59de816bebefef8593147d}{oled\_draw\_string}}(}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 12,}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line);}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CO2}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ snprintf(}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(line),}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}CO2:\ \%.2f"{}},}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a8c504ccc3452fbdeb168d9f139f77964}{co2}});}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a203632989f59de816bebefef8593147d}{oled\_draw\_string}}(}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 24,}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line);}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ESTADOS\ DEL\ SISTEMA}}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ snprintf(}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(line),}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}W:\%s\ M:\%s\ S:\%s"{}},}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a9dd62543a19fac3a6e46658d538e7b77}{wifi\_ok}}\ ?\ \textcolor{stringliteral}{"{}OK"{}}\ :\ \textcolor{stringliteral}{"{}OFF"{}},}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a74d7b87739fdfde90b47311f1ffd1542}{mqtt\_ok}}\ ?\ \textcolor{stringliteral}{"{}OK"{}}\ :\ \textcolor{stringliteral}{"{}OFF"{}},}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a559796b9a445833eff9a50927d01855b}{sd\_ok}}\ \ \ ?\ \textcolor{stringliteral}{"{}OK"{}}\ :\ \textcolor{stringliteral}{"{}OFF"{}});}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a203632989f59de816bebefef8593147d}{oled\_draw\_string}}(}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 36,}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line);}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ HORA}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ printf(}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}DISPLAY\ -\/>\ \%02d:\%02d:\%02d\(\backslash\)n"{}},}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_aff39f3c2079c7d3c0f465f9eb1e566b8}{hours}},}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_aa0c767273ddef75d440a6650691b7f8e}{minutes}},}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_a059ad89b95fd58b6e782970181f0ac64}{seconds}});}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ snprintf(}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(line),}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\%02d:\%02d:\%02d"{}},}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_aff39f3c2079c7d3c0f465f9eb1e566b8}{hours}},}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_aa0c767273ddef75d440a6650691b7f8e}{minutes}},}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_a059ad89b95fd58b6e782970181f0ac64}{seconds}});}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a203632989f59de816bebefef8593147d}{oled\_draw\_string}}(}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 48,}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line);}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{oled__display_8c_a3b0040faa9dd7f994e4dc474d9d820a2}{oled\_update}}();}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00188\ \ \ \ \ \}}
+\DoxyCodeLine{00189\ \}}
+
+\end{DoxyCode}

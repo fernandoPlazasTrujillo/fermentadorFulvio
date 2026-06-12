@@ -1,0 +1,117 @@
+\doxysection{Referencia de la estructura display\+\_\+data\+\_\+t}
+\hypertarget{structdisplay__data__t}{}\label{structdisplay__data__t}\index{display\_data\_t@{display\_data\_t}}
+
+
+Información destinada a la interfaz de usuario.  
+
+
+
+
+{\ttfamily \+\#include $<$data\+\_\+types.\+h$>$}
+
+\doxysubsubsection*{Atributos públicos}
+\begin{DoxyCompactItemize}
+\item 
+float \doxymbox{\hyperlink{structdisplay__data__t_ab1900e3dd4593f30a237cfeee005b094}{temperatura}}
+\item 
+float \doxymbox{\hyperlink{structdisplay__data__t_a8229f3db2525a9976ecbc82fa7597a9a}{ph}}
+\item 
+float \doxymbox{\hyperlink{structdisplay__data__t_a8c504ccc3452fbdeb168d9f139f77964}{co2}}
+\item 
+bool \doxymbox{\hyperlink{structdisplay__data__t_a9dd62543a19fac3a6e46658d538e7b77}{wifi\+\_\+ok}}
+\item 
+bool \doxymbox{\hyperlink{structdisplay__data__t_a74d7b87739fdfde90b47311f1ffd1542}{mqtt\+\_\+ok}}
+\item 
+bool \doxymbox{\hyperlink{structdisplay__data__t_a559796b9a445833eff9a50927d01855b}{sd\+\_\+ok}}
+\item 
+\doxymbox{\hyperlink{structdatetime__t}{datetime\+\_\+t}} \doxymbox{\hyperlink{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}{datetime}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Información destinada a la interfaz de usuario. 
+
+Contiene las variables mostradas en la pantalla OLED, incluyendo mediciones de sensores, estados de conexión y fecha/\+hora actual. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00104}{104}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+
+
+\label{structdisplay__data__t_doc-variable-members}
+\Hypertarget{structdisplay__data__t_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{structdisplay__data__t_a8c504ccc3452fbdeb168d9f139f77964}\index{display\_data\_t@{display\_data\_t}!co2@{co2}}
+\index{co2@{co2}!display\_data\_t@{display\_data\_t}}
+\doxysubsubsection{\texorpdfstring{co2}{co2}}
+{\footnotesize\ttfamily \label{structdisplay__data__t_a8c504ccc3452fbdeb168d9f139f77964} 
+float display\+\_\+data\+\_\+t::\+co2}
+
+Concentración de CO2 actual. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00108}{108}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a}\index{display\_data\_t@{display\_data\_t}!datetime@{datetime}}
+\index{datetime@{datetime}!display\_data\_t@{display\_data\_t}}
+\doxysubsubsection{\texorpdfstring{datetime}{datetime}}
+{\footnotesize\ttfamily \label{structdisplay__data__t_a4e9a8ada1ef962ab3381c4131b56b70a} 
+\doxymbox{\hyperlink{structdatetime__t}{datetime\+\_\+t}} display\+\_\+data\+\_\+t::\+datetime}
+
+Fecha y hora mostradas. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00114}{114}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structdisplay__data__t_a74d7b87739fdfde90b47311f1ffd1542}\index{display\_data\_t@{display\_data\_t}!mqtt\_ok@{mqtt\_ok}}
+\index{mqtt\_ok@{mqtt\_ok}!display\_data\_t@{display\_data\_t}}
+\doxysubsubsection{\texorpdfstring{mqtt\_ok}{mqtt\_ok}}
+{\footnotesize\ttfamily \label{structdisplay__data__t_a74d7b87739fdfde90b47311f1ffd1542} 
+bool display\+\_\+data\+\_\+t::\+mqtt\+\_\+ok}
+
+Estado de conexión MQTT. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00111}{111}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structdisplay__data__t_a8229f3db2525a9976ecbc82fa7597a9a}\index{display\_data\_t@{display\_data\_t}!ph@{ph}}
+\index{ph@{ph}!display\_data\_t@{display\_data\_t}}
+\doxysubsubsection{\texorpdfstring{ph}{ph}}
+{\footnotesize\ttfamily \label{structdisplay__data__t_a8229f3db2525a9976ecbc82fa7597a9a} 
+float display\+\_\+data\+\_\+t::\+ph}
+
+Valor de pH actual. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00107}{107}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structdisplay__data__t_a559796b9a445833eff9a50927d01855b}\index{display\_data\_t@{display\_data\_t}!sd\_ok@{sd\_ok}}
+\index{sd\_ok@{sd\_ok}!display\_data\_t@{display\_data\_t}}
+\doxysubsubsection{\texorpdfstring{sd\_ok}{sd\_ok}}
+{\footnotesize\ttfamily \label{structdisplay__data__t_a559796b9a445833eff9a50927d01855b} 
+bool display\+\_\+data\+\_\+t::\+sd\+\_\+ok}
+
+Estado de la tarjeta SD. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00112}{112}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structdisplay__data__t_ab1900e3dd4593f30a237cfeee005b094}\index{display\_data\_t@{display\_data\_t}!temperatura@{temperatura}}
+\index{temperatura@{temperatura}!display\_data\_t@{display\_data\_t}}
+\doxysubsubsection{\texorpdfstring{temperatura}{temperatura}}
+{\footnotesize\ttfamily \label{structdisplay__data__t_ab1900e3dd4593f30a237cfeee005b094} 
+float display\+\_\+data\+\_\+t::\+temperatura}
+
+Temperatura actual. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00106}{106}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structdisplay__data__t_a9dd62543a19fac3a6e46658d538e7b77}\index{display\_data\_t@{display\_data\_t}!wifi\_ok@{wifi\_ok}}
+\index{wifi\_ok@{wifi\_ok}!display\_data\_t@{display\_data\_t}}
+\doxysubsubsection{\texorpdfstring{wifi\_ok}{wifi\_ok}}
+{\footnotesize\ttfamily \label{structdisplay__data__t_a9dd62543a19fac3a6e46658d538e7b77} 
+bool display\+\_\+data\+\_\+t::\+wifi\+\_\+ok}
+
+Estado de conexión Wi\+Fi. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00110}{110}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+
+
+La documentación de esta estructura está generada del siguiente archivo:\+\begin{DoxyCompactItemize}
+\item 
+main/\+utils/\+\doxymbox{\hyperlink{data__types_8h}{data\+\_\+types.\+h}}\end{DoxyCompactItemize}

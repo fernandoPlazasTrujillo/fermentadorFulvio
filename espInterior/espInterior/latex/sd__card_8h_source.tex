@@ -1,0 +1,39 @@
+\doxysection{sd\+\_\+card.\+h}
+\hypertarget{sd__card_8h_source}{}\label{sd__card_8h_source}\index{main/drivers/sd\_card.h@{main/drivers/sd\_card.h}}
+\doxymbox{\hyperlink{sd__card_8h}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00026}00026\ \textcolor{preprocessor}{\#ifndef\ SD\_CARD\_H}}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00027}00027\ \textcolor{preprocessor}{\#define\ SD\_CARD\_H}}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00029}00029\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00030}00030\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00031}00031\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00033}00033\ \textcolor{preprocessor}{\#include\ "{}esp\_err.h"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00049}00049\ esp\_err\_t\ \doxymbox{\hyperlink{sd__card_8h_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00066}00066\ esp\_err\_t\ \doxymbox{\hyperlink{sd__card_8h_a44ca2b4d5f9ee8fdb3a5cedd19f2b334}{sd\_card\_write\_line}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *line);}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00081}00081\ esp\_err\_t\ \doxymbox{\hyperlink{sd__card_8h_a9709250696c3a23e2e05891c019b8e88}{sd\_card\_append\_pending\_mqtt}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *payload);}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00093}00093\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{sd__card_8h_a4b7f64560c914a0223302fbd144c8f26}{sd\_card\_pending\_mqtt\_exists}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00103}00103\ FILE\ *\doxymbox{\hyperlink{sd__card_8h_a07d076d37d4d84bb737fb156fb4e01fd}{sd\_card\_open\_pending\_mqtt\_read}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00118}00118\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{sd__card_8h_a35ae42e918762a7bc304f39cec1d330c}{sd\_card\_read\_pending\_mqtt\_line}}(}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00119}00119\ \ \ \ \ FILE\ *file,}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00120}00120\ \ \ \ \ \textcolor{keywordtype}{char}\ *buffer,}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00121}00121\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00130}00130\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{sd__card_8h_a07dd8178e8630f2cc8d381af7f6ec9d9}{sd\_card\_close\_pending\_mqtt}}(FILE\ *file);}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00142}00142\ esp\_err\_t\ \doxymbox{\hyperlink{sd__card_8h_a36756946bae9f06f242754f9af59d944}{sd\_card\_delete\_pending\_mqtt}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00155}00155\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{sd__card_8h_ac9ae86642649b9c94602adb5b313104e}{sd\_card\_is\_mounted}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8h_source_l00157}00157\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

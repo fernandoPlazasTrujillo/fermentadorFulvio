@@ -1,0 +1,185 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+logger.c}
+\hypertarget{task__logger_8c}{}\label{task__logger_8c}\index{main/tasks/task\_logger.c@{main/tasks/task\_logger.c}}
+
+
+Implementación de la tarea de registro de datos.  
+
+
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+queue.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}utils/\+data\+\_\+types.\+h"{}}\newline
+{\ttfamily \+\#include "{}drivers/\+sd\+\_\+card.\+h"{}}\newline
+{\ttfamily \+\#include "{}queues.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__logger_8c_af38783d3b22fb6c2783f14a88308c330}{task\+\_\+logger}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea principal de registro de datos. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{task__logger_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}LOGGER"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada para mensajes de depuración. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Implementación de la tarea de registro de datos. 
+
+Esta tarea recibe mediciones provenientes de los sensores, genera registros en formato CSV y los almacena de forma persistente en la tarjeta SD.
+
+Funciones principales:\+
+\begin{DoxyItemize}
+\item Recepción de datos mediante colas Free\+RTOS.
+\item Formateo de registros CSV.
+\item Escritura en memoria SD.
+\item Generación de historial de fermentación.
+\end{DoxyItemize}
+
+Arquitectura:\+
+
+queue\+\_\+logger \texorpdfstring{$\vert$}{|} v task\+\_\+logger \texorpdfstring{$\vert$}{|} v SD Card
+
+La tarea se ejecuta de forma independiente para evitar que las operaciones de almacenamiento bloqueen la adquisición de sensores o la lógica de control.
+
+Mecanismos Free\+RTOS utilizados:\+
+\begin{DoxyItemize}
+\item Colas para comunicación entre tareas.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{task__logger_8c_source}{task\+\_\+logger.\+c}}.
+
+
+
+\label{task__logger_8c_doc-func-members}
+\Hypertarget{task__logger_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__logger_8c_af38783d3b22fb6c2783f14a88308c330}\index{task\_logger.c@{task\_logger.c}!task\_logger@{task\_logger}}
+\index{task\_logger@{task\_logger}!task\_logger.c@{task\_logger.c}}
+\doxysubsubsection{\texorpdfstring{task\_logger()}{task\_logger()}}
+{\footnotesize\ttfamily \label{task__logger_8c_af38783d3b22fb6c2783f14a88308c330} 
+void task\+\_\+logger (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea principal de registro de datos. 
+
+Espera mediciones provenientes de queue\+\_\+logger, genera una línea en formato CSV y la almacena en la tarjeta SD.
+
+Cada registro contiene:\+
+\begin{DoxyItemize}
+\item Fecha.
+\item Hora.
+\item Temperatura.
+\item pH.
+\item CO2 procesado.
+\item CO2 crudo.
+\item Voltaje.
+\item Corriente.
+\end{DoxyItemize}
+
+La tarea permanece bloqueada mientras no existan nuevos datos disponibles, optimizando el uso de CPU.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados).\\
+\hline
+\end{DoxyParams}
+Espera información proveniente de queue\+\_\+logger, genera registros en formato CSV y los almacena en la tarjeta SD.
+
+La tarea se ejecuta de forma independiente para evitar que las operaciones de escritura afecten el tiempo de respuesta de las tareas críticas del sistema.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+Buffer utilizado para generar la línea CSV.
+
+Inicializar tarjeta SD.
+
+Esperar nuevos datos para registrar.
+
+Generar registro CSV.
+
+Almacenar registro en tarjeta SD.
+
+Definición en la línea \doxymbox{\hyperlink{task__logger_8c_source_l00077}{77}} del archivo \doxymbox{\hyperlink{task__logger_8c_source}{task\+\_\+logger.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00078\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}\ data;}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{char}\ line[160];}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)}
+\DoxyCodeLine{00090\ \ \ \ \ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}SD\ no\ inicializada"{}});}
+\DoxyCodeLine{00092\ \ \ \ \ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)}
+\DoxyCodeLine{00095\ \ \ \ \ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xQueueReceive(}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a84471e3465c562d8336b3c2366b605cb}{queue\_logger}},}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&data,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ portMAX\_DELAY))}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ snprintf(}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(line),}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\%02d-\/\%02d-\/\%04d,\ \%02d:\%02d:\%02d,\ \%.2f,\ \%.2f,\ \%.2f,\ \%.2f,\ \%.2f,\ \%.2f"{}},}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_afabded25c81cb29402963646e458e652}{day}},}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_a69a3491a78234c70fcd6dbdf7cd4c8c4}{month}},}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_ad8118505f760f56db69081b45943b9d4}{year}},}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_aff39f3c2079c7d3c0f465f9eb1e566b8}{hours}},}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_aa0c767273ddef75d440a6650691b7f8e}{minutes}},}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}.\doxymbox{\hyperlink{structdatetime__t_a059ad89b95fd58b6e782970181f0ac64}{seconds}},}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_ae9f44daaf071cadf9887239f0913af12}{temperatura}},}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_abddfa565d5cd714994d766dc490f1f45}{ph}},}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a1ac52f75cb0a613148535e9cbb60dc8f}{co2}},}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a826880ddf83c7c8a9ef2d7610659d288}{co2\_raw}},}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_a5826cdd684b224914026f072905a43b1}{voltaje}},}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data.\doxymbox{\hyperlink{structsensor__data__t_acb48cb4500b3a3a5174c92620c5a04f7}{corriente}});}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}LOG\ -\/>\ \%s"{}},\ line);}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a44ca2b4d5f9ee8fdb3a5cedd19f2b334}{sd\_card\_write\_line}}(line)\ !=\ ESP\_OK)}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ escribiendo\ en\ SD"{}});}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Dato\ guardado\ en\ SD"{}});}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00138\ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \}}
+
+\end{DoxyCode}
+
+
+\label{task__logger_8c_doc-var-members}
+\Hypertarget{task__logger_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{task__logger_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{task\_logger.c@{task\_logger.c}!TAG@{TAG}}
+\index{TAG@{TAG}!task\_logger.c@{task\_logger.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{task__logger_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}LOGGER"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada para mensajes de depuración. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{task__logger_8c_source_l00053}{53}} del archivo \doxymbox{\hyperlink{task__logger_8c_source}{task\+\_\+logger.\+c}}.
+

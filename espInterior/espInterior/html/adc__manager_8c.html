@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/hal/adc_manager.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('adc__manager_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo adc_manager.c</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Implementación de la capa de abstracción para el ADC del ESP32.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="adc__manager_8h_source.html">adc_manager.h</a>&quot;</code><br />
+<code>#include &quot;esp_adc/adc_oneshot.h&quot;</code><br />
+<code>#include &quot;esp_adc/adc_cali.h&quot;</code><br />
+<code>#include &quot;esp_adc/adc_cali_scheme.h&quot;</code><br />
+<code>#include &quot;esp_log.h&quot;</code><br />
+</div>
+<p><a href="adc__manager_8c_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a680e6c7fca574971070af6b808ef98d1" id="r_a680e6c7fca574971070af6b808ef98d1"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a680e6c7fca574971070af6b808ef98d1">adc_manager_init</a> (void)</td></tr>
+<tr class="memdesc:a680e6c7fca574971070af6b808ef98d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa el ADC y el sistema de calibración.  <br /></td></tr>
+<tr class="memitem:a228d08c460b3c57ca3f7efc00c5e3f0c" id="r_a228d08c460b3c57ca3f7efc00c5e3f0c"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a228d08c460b3c57ca3f7efc00c5e3f0c">adc_manager_read_voltage</a> (adc_channel_t channel)</td></tr>
+<tr class="memdesc:a228d08c460b3c57ca3f7efc00c5e3f0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtiene el voltaje asociado a un canal ADC.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a5a85b9c772bbeb480b209a3e6ea92b4c" id="r_a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="memItemLeft">static const char *&#160;</td><td class="memItemRight"><a class="el" href="#a5a85b9c772bbeb480b209a3e6ea92b4c">TAG</a> = &quot;ADC_MANAGER&quot;</td></tr>
+<tr class="memdesc:a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Etiqueta utilizada por el sistema de logging.  <br /></td></tr>
+<tr class="memitem:a0b95b5937de8bdf11f73c2636d897c49" id="r_a0b95b5937de8bdf11f73c2636d897c49"><td class="memItemLeft">static adc_oneshot_unit_handle_t&#160;</td><td class="memItemRight"><a class="el" href="#a0b95b5937de8bdf11f73c2636d897c49">adc1_handle</a></td></tr>
+<tr class="memdesc:a0b95b5937de8bdf11f73c2636d897c49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle de la unidad ADC1 en modo One-Shot.  <br /></td></tr>
+<tr class="memitem:a49ce44847deee2ea73bb6920a9e82a7c" id="r_a49ce44847deee2ea73bb6920a9e82a7c"><td class="memItemLeft">static adc_cali_handle_t&#160;</td><td class="memItemRight"><a class="el" href="#a49ce44847deee2ea73bb6920a9e82a7c">adc1_cali_handle</a></td></tr>
+<tr class="memdesc:a49ce44847deee2ea73bb6920a9e82a7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle de calibración ADC.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Implementación de la capa de abstracción para el ADC del ESP32. </p>
+<p>Este módulo implementa el acceso al convertidor analógico-digital utilizando el modo One-Shot proporcionado por ESP-IDF.</p>
+<p>Funcionalidades:</p><ul>
+<li>Inicialización del ADC1.</li>
+<li>Configuración de canales analógicos.</li>
+<li>Calibración mediante Line Fitting.</li>
+<li>Conversión de valores ADC a voltaje.</li>
+</ul>
+<p>Los sensores analógicos del sistema utilizan este módulo como interfaz única de acceso al ADC.</p>
+<p>Sensores asociados:</p><ul>
+<li>MQ135</li>
+<li>Sensor de pH</li>
+<li>Sensor de voltaje</li>
+</ul>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="adc__manager_8c_source.html">adc_manager.c</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a680e6c7fca574971070af6b808ef98d1" name="a680e6c7fca574971070af6b808ef98d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a680e6c7fca574971070af6b808ef98d1">&#9670;&#160;</a></span>adc_manager_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void adc_manager_init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa el ADC y el sistema de calibración. </p>
+<p>Inicializa el subsistema ADC.</p>
+<p>Configura:</p><ul>
+<li>ADC Unit 1.</li>
+<li>Resolución por defecto.</li>
+<li>Atenuación de 12 dB.</li>
+<li>Esquema de calibración Line Fitting.</li>
+</ul>
+<p>Además registra todos los canales utilizados por los sensores analógicos del sistema.</p>
+<p>Inicializa el ADC y el sistema de calibración.</p>
+<p>Configura la unidad ADC en modo One-Shot y prepara los mecanismos de calibración utilizados para mejorar la precisión de las conversiones.</p>
+<p>Esta función debe ejecutarse una única vez durante la inicialización del sistema. </p>
+<p>Configuración de la unidad ADC1.</p>
+<p>Configuración común para todos los canales.</p>
+<p>Atenuación de 12 dB para ampliar el rango de medida.</p>
+<p>Configuración de calibración ADC.</p>
+<p>El esquema Line Fitting mejora la precisión de las conversiones compensando errores internos.</p>
+
+<p class="definition">Definición en la línea <a class="el" href="adc__manager_8c_source.html#l00073">73</a> del archivo <a class="el" href="adc__manager_8c_source.html">adc_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   74</span>{</div>
+<div class="line"><span class="lineno">   78</span>    adc_oneshot_unit_init_cfg_t init_config = {</div>
+<div class="line"><span class="lineno">   79</span>        .unit_id = ADC_UNIT_1,</div>
+<div class="line"><span class="lineno">   80</span>    };</div>
+<div class="line"><span class="lineno">   81</span> </div>
+<div class="line"><span class="lineno">   82</span>    adc_oneshot_new_unit(</div>
+<div class="line"><span class="lineno">   83</span>        &amp;init_config,</div>
+<div class="line"><span class="lineno">   84</span>        &amp;<a class="code hl_variable" href="#a0b95b5937de8bdf11f73c2636d897c49">adc1_handle</a>);</div>
+<div class="line"><span class="lineno">   85</span></div>
+<div class="line"><span class="lineno">   91</span>    adc_oneshot_chan_cfg_t config = {</div>
+<div class="line"><span class="lineno">   92</span>        .bitwidth = ADC_BITWIDTH_DEFAULT,</div>
+<div class="line"><span class="lineno">   93</span>        .atten = ADC_ATTEN_DB_12,</div>
+<div class="line"><span class="lineno">   94</span>    };</div>
+<div class="line"><span class="lineno">   95</span> </div>
+<div class="line"><span class="lineno">   96</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">   97</span><span class="comment">     * ADC_CHANNEL_0 -&gt; MQ135</span></div>
+<div class="line"><span class="lineno">   98</span><span class="comment">     * ADC_CHANNEL_3 -&gt; Sensor pH</span></div>
+<div class="line"><span class="lineno">   99</span><span class="comment">     * ADC_CHANNEL_4 -&gt; Sensor voltaje</span></div>
+<div class="line"><span class="lineno">  100</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  101</span>    adc_oneshot_config_channel(</div>
+<div class="line"><span class="lineno">  102</span>        <a class="code hl_variable" href="#a0b95b5937de8bdf11f73c2636d897c49">adc1_handle</a>,</div>
+<div class="line"><span class="lineno">  103</span>        ADC_CHANNEL_0,</div>
+<div class="line"><span class="lineno">  104</span>        &amp;config);</div>
+<div class="line"><span class="lineno">  105</span> </div>
+<div class="line"><span class="lineno">  106</span>    adc_oneshot_config_channel(</div>
+<div class="line"><span class="lineno">  107</span>        <a class="code hl_variable" href="#a0b95b5937de8bdf11f73c2636d897c49">adc1_handle</a>,</div>
+<div class="line"><span class="lineno">  108</span>        ADC_CHANNEL_3,</div>
+<div class="line"><span class="lineno">  109</span>        &amp;config);</div>
+<div class="line"><span class="lineno">  110</span> </div>
+<div class="line"><span class="lineno">  111</span>    adc_oneshot_config_channel(</div>
+<div class="line"><span class="lineno">  112</span>        <a class="code hl_variable" href="#a0b95b5937de8bdf11f73c2636d897c49">adc1_handle</a>,</div>
+<div class="line"><span class="lineno">  113</span>        ADC_CHANNEL_4,</div>
+<div class="line"><span class="lineno">  114</span>        &amp;config);</div>
+<div class="line"><span class="lineno">  115</span></div>
+<div class="line"><span class="lineno">  122</span>    adc_cali_line_fitting_config_t cali_config = {</div>
+<div class="line"><span class="lineno">  123</span>        .unit_id = ADC_UNIT_1,</div>
+<div class="line"><span class="lineno">  124</span>        .atten = ADC_ATTEN_DB_12,</div>
+<div class="line"><span class="lineno">  125</span>        .bitwidth = ADC_BITWIDTH_DEFAULT,</div>
+<div class="line"><span class="lineno">  126</span>    };</div>
+<div class="line"><span class="lineno">  127</span> </div>
+<div class="line"><span class="lineno">  128</span>    adc_cali_create_scheme_line_fitting(</div>
+<div class="line"><span class="lineno">  129</span>        &amp;cali_config,</div>
+<div class="line"><span class="lineno">  130</span>        &amp;<a class="code hl_variable" href="#a49ce44847deee2ea73bb6920a9e82a7c">adc1_cali_handle</a>);</div>
+<div class="line"><span class="lineno">  131</span> </div>
+<div class="line"><span class="lineno">  132</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;ADC1 inicializado y calibrado&quot;</span>);</div>
+<div class="line"><span class="lineno">  133</span>}</div>
+<div class="ttc" id="aadc__manager_8c_html_a0b95b5937de8bdf11f73c2636d897c49"><div class="ttname"><a href="#a0b95b5937de8bdf11f73c2636d897c49">adc1_handle</a></div><div class="ttdeci">static adc_oneshot_unit_handle_t adc1_handle</div><div class="ttdoc">Handle de la unidad ADC1 en modo One-Shot.</div><div class="ttdef"><b>Definition</b> <a href="adc__manager_8c_source.html#l00047">adc_manager.c:47</a></div></div>
+<div class="ttc" id="aadc__manager_8c_html_a49ce44847deee2ea73bb6920a9e82a7c"><div class="ttname"><a href="#a49ce44847deee2ea73bb6920a9e82a7c">adc1_cali_handle</a></div><div class="ttdeci">static adc_cali_handle_t adc1_cali_handle</div><div class="ttdoc">Handle de calibración ADC.</div><div class="ttdef"><b>Definition</b> <a href="adc__manager_8c_source.html#l00055">adc_manager.c:55</a></div></div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a228d08c460b3c57ca3f7efc00c5e3f0c" name="a228d08c460b3c57ca3f7efc00c5e3f0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a228d08c460b3c57ca3f7efc00c5e3f0c">&#9670;&#160;</a></span>adc_manager_read_voltage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float adc_manager_read_voltage </td>
+          <td>(</td>
+          <td class="paramtype">adc_channel_t</td>          <td class="paramname"><span class="paramname"><em>channel</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Obtiene el voltaje asociado a un canal ADC. </p>
+<p>El procedimiento consiste en:</p><ul>
+<li>Leer el valor ADC crudo.</li>
+<li>Aplicar calibración.</li>
+<li>Convertir milivoltios a voltios.</li>
+</ul>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">channel</td><td>Canal ADC a convertir.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Voltaje medido en voltios.</dd></dl>
+<p>El procedimiento incluye:</p><ul>
+<li>Conversión analógica-digital.</li>
+<li>Calibración de la lectura.</li>
+<li>Conversión de milivoltios a voltios.</li>
+</ul>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">channel</td><td>Canal ADC a convertir.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Voltaje medido en voltios. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="adc__manager_8c_source.html#l00151">151</a> del archivo <a class="el" href="adc__manager_8c_source.html">adc_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  152</span>{</div>
+<div class="line"><span class="lineno">  153</span>    <span class="keywordtype">int</span> raw;</div>
+<div class="line"><span class="lineno">  154</span>    <span class="keywordtype">int</span> voltage_mv;</div>
+<div class="line"><span class="lineno">  155</span> </div>
+<div class="line"><span class="lineno">  156</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  157</span><span class="comment">     * Lectura ADC sin procesar.</span></div>
+<div class="line"><span class="lineno">  158</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  159</span>    adc_oneshot_read(</div>
+<div class="line"><span class="lineno">  160</span>        <a class="code hl_variable" href="#a0b95b5937de8bdf11f73c2636d897c49">adc1_handle</a>,</div>
+<div class="line"><span class="lineno">  161</span>        channel,</div>
+<div class="line"><span class="lineno">  162</span>        &amp;raw);</div>
+<div class="line"><span class="lineno">  163</span> </div>
+<div class="line"><span class="lineno">  164</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  165</span><span class="comment">     * Conversión de lectura cruda a milivoltios</span></div>
+<div class="line"><span class="lineno">  166</span><span class="comment">     * mediante calibración.</span></div>
+<div class="line"><span class="lineno">  167</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  168</span>    adc_cali_raw_to_voltage(</div>
+<div class="line"><span class="lineno">  169</span>        <a class="code hl_variable" href="#a49ce44847deee2ea73bb6920a9e82a7c">adc1_cali_handle</a>,</div>
+<div class="line"><span class="lineno">  170</span>        raw,</div>
+<div class="line"><span class="lineno">  171</span>        &amp;voltage_mv);</div>
+<div class="line"><span class="lineno">  172</span> </div>
+<div class="line"><span class="lineno">  173</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  174</span><span class="comment">     * Conversión de mV a V.</span></div>
+<div class="line"><span class="lineno">  175</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  176</span>    <span class="keywordflow">return</span> voltage_mv / 1000.0f;</div>
+<div class="line"><span class="lineno">  177</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Documentación de variables</h2>
+<a id="a49ce44847deee2ea73bb6920a9e82a7c" name="a49ce44847deee2ea73bb6920a9e82a7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49ce44847deee2ea73bb6920a9e82a7c">&#9670;&#160;</a></span>adc1_cali_handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">adc_cali_handle_t adc1_cali_handle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Handle de calibración ADC. </p>
+<p>Utilizado para convertir lecturas crudas a voltajes compensados mediante el esquema de calibración. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="adc__manager_8c_source.html#l00055">55</a> del archivo <a class="el" href="adc__manager_8c_source.html">adc_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a0b95b5937de8bdf11f73c2636d897c49" name="a0b95b5937de8bdf11f73c2636d897c49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b95b5937de8bdf11f73c2636d897c49">&#9670;&#160;</a></span>adc1_handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">adc_oneshot_unit_handle_t adc1_handle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Handle de la unidad ADC1 en modo One-Shot. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="adc__manager_8c_source.html#l00047">47</a> del archivo <a class="el" href="adc__manager_8c_source.html">adc_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a5a85b9c772bbeb480b209a3e6ea92b4c" name="a5a85b9c772bbeb480b209a3e6ea92b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a85b9c772bbeb480b209a3e6ea92b4c">&#9670;&#160;</a></span>TAG</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* TAG = &quot;ADC_MANAGER&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Etiqueta utilizada por el sistema de logging. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="adc__manager_8c_source.html#l00038">38</a> del archivo <a class="el" href="adc__manager_8c_source.html">adc_manager.c</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_2c1795b0295572423fca70fe6201093a.html">hal</a></li><li class="navelem"><a href="adc__manager_8c.html">adc_manager.c</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

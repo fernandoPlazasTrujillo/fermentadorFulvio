@@ -1,0 +1,474 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/drivers/ph_sensor.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('ph__sensor_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo ph_sensor.c</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Implementación del driver para sensor de pH basado en adquisición analógica.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="ph__sensor_8h_source.html">ph_sensor.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="adc__manager_8h_source.html">hal/adc_manager.h</a>&quot;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/task.h&quot;</code><br />
+<code>#include &quot;esp_log.h&quot;</code><br />
+</div>
+<p><a href="ph__sensor_8c_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+defines</h2></td></tr>
+<tr class="memitem:afe07d63548e90671ed265d67e7f0df8e" id="r_afe07d63548e90671ed265d67e7f0df8e"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#afe07d63548e90671ed265d67e7f0df8e">PH_ADC_CHANNEL</a>&#160;&#160;&#160;ADC_CHANNEL_3</td></tr>
+<tr class="memdesc:afe07d63548e90671ed265d67e7f0df8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Canal ADC asociado al sensor de pH.  <br /></td></tr>
+<tr class="memitem:af0b23eedf2352de4c1eff77e1401730c" id="r_af0b23eedf2352de4c1eff77e1401730c"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#af0b23eedf2352de4c1eff77e1401730c">NUM_SAMPLES</a>&#160;&#160;&#160;20</td></tr>
+<tr class="memdesc:af0b23eedf2352de4c1eff77e1401730c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cantidad de muestras utilizadas para el cálculo del promedio.  <br /></td></tr>
+<tr class="memitem:acb6161a3ffb103e0367458060062d929" id="r_acb6161a3ffb103e0367458060062d929"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#acb6161a3ffb103e0367458060062d929">PH_SLOPE</a>&#160;&#160;&#160;(-5.7f)</td></tr>
+<tr class="memdesc:acb6161a3ffb103e0367458060062d929"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pendiente de la ecuación de calibración.  <br /></td></tr>
+<tr class="memitem:ac1260df376cca2240c3820d7efd45334" id="r_ac1260df376cca2240c3820d7efd45334"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#ac1260df376cca2240c3820d7efd45334">PH_OFFSET</a>&#160;&#160;&#160;(21.34f)</td></tr>
+<tr class="memdesc:ac1260df376cca2240c3820d7efd45334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset de la ecuación de calibración.  <br /></td></tr>
+<tr class="memitem:a87abd31489e1cf7514ed303a5194c684" id="r_a87abd31489e1cf7514ed303a5194c684"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a87abd31489e1cf7514ed303a5194c684">PH_MIN_VOLTAGE</a>&#160;&#160;&#160;(0.1f)</td></tr>
+<tr class="memdesc:a87abd31489e1cf7514ed303a5194c684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Voltaje mínimo válido para el sensor.  <br /></td></tr>
+<tr class="memitem:a6bbdd19ffa0606b6ca36388f17b9d435" id="r_a6bbdd19ffa0606b6ca36388f17b9d435"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a6bbdd19ffa0606b6ca36388f17b9d435">PH_MAX_VOLTAGE</a>&#160;&#160;&#160;(3.2f)</td></tr>
+<tr class="memdesc:a6bbdd19ffa0606b6ca36388f17b9d435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Voltaje máximo válido para el sensor.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:ac7ceffc8562ed45df0636de74fc23eb5" id="r_ac7ceffc8562ed45df0636de74fc23eb5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac7ceffc8562ed45df0636de74fc23eb5">ph_init</a> (void)</td></tr>
+<tr class="memdesc:ac7ceffc8562ed45df0636de74fc23eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa el módulo de pH.  <br /></td></tr>
+<tr class="memitem:ad0fdfecb914c25c0826286634e9be584" id="r_ad0fdfecb914c25c0826286634e9be584"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#ad0fdfecb914c25c0826286634e9be584">ph_read_voltage</a> (void)</td></tr>
+<tr class="memdesc:ad0fdfecb914c25c0826286634e9be584"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtiene el voltaje promedio del sensor de pH.  <br /></td></tr>
+<tr class="memitem:a73824c716592fbbaadcf307213d31c77" id="r_a73824c716592fbbaadcf307213d31c77"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a73824c716592fbbaadcf307213d31c77">ph_read</a> (void)</td></tr>
+<tr class="memdesc:a73824c716592fbbaadcf307213d31c77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calcula el valor de pH a partir del voltaje medido.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a5a85b9c772bbeb480b209a3e6ea92b4c" id="r_a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="memItemLeft">static const char *&#160;</td><td class="memItemRight"><a class="el" href="#a5a85b9c772bbeb480b209a3e6ea92b4c">TAG</a> = &quot;PH&quot;</td></tr>
+<tr class="memdesc:a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Etiqueta utilizada por el sistema de logging.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Implementación del driver para sensor de pH basado en adquisición analógica. </p>
+<p>Este módulo obtiene mediciones analógicas desde un sensor de pH, calcula un voltaje promedio mediante múltiples muestras y convierte dicho voltaje a unidades de pH utilizando una ecuación de calibración lineal.</p>
+<p>Funcionalidades:</p><ul>
+<li>Lectura de voltaje.</li>
+<li>Filtrado mediante promediado.</li>
+<li>Conversión voltaje-pH.</li>
+<li>Validación básica de rango de operación.</li>
+</ul>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Documentación de «define»</h2>
+<a id="af0b23eedf2352de4c1eff77e1401730c" name="af0b23eedf2352de4c1eff77e1401730c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0b23eedf2352de4c1eff77e1401730c">&#9670;&#160;</a></span>NUM_SAMPLES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NUM_SAMPLES&#160;&#160;&#160;20</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cantidad de muestras utilizadas para el cálculo del promedio. </p>
+<p>El promediado reduce el ruido presente en la señal analógica. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00039">39</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+
+</div>
+</div>
+<a id="afe07d63548e90671ed265d67e7f0df8e" name="afe07d63548e90671ed265d67e7f0df8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe07d63548e90671ed265d67e7f0df8e">&#9670;&#160;</a></span>PH_ADC_CHANNEL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PH_ADC_CHANNEL&#160;&#160;&#160;ADC_CHANNEL_3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Canal ADC asociado al sensor de pH. </p>
+<p>Corresponde al GPIO39 del ESP32. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00032">32</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+
+</div>
+</div>
+<a id="a6bbdd19ffa0606b6ca36388f17b9d435" name="a6bbdd19ffa0606b6ca36388f17b9d435"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bbdd19ffa0606b6ca36388f17b9d435">&#9670;&#160;</a></span>PH_MAX_VOLTAGE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PH_MAX_VOLTAGE&#160;&#160;&#160;(3.2f)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Voltaje máximo válido para el sensor. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00064">64</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+
+</div>
+</div>
+<a id="a87abd31489e1cf7514ed303a5194c684" name="a87abd31489e1cf7514ed303a5194c684"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87abd31489e1cf7514ed303a5194c684">&#9670;&#160;</a></span>PH_MIN_VOLTAGE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PH_MIN_VOLTAGE&#160;&#160;&#160;(0.1f)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Voltaje mínimo válido para el sensor. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00059">59</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+
+</div>
+</div>
+<a id="ac1260df376cca2240c3820d7efd45334" name="ac1260df376cca2240c3820d7efd45334"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1260df376cca2240c3820d7efd45334">&#9670;&#160;</a></span>PH_OFFSET</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PH_OFFSET&#160;&#160;&#160;(21.34f)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Offset de la ecuación de calibración. </p>
+<p>Corresponde al término independiente obtenido durante el proceso de calibración experimental. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00054">54</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+
+</div>
+</div>
+<a id="acb6161a3ffb103e0367458060062d929" name="acb6161a3ffb103e0367458060062d929"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb6161a3ffb103e0367458060062d929">&#9670;&#160;</a></span>PH_SLOPE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PH_SLOPE&#160;&#160;&#160;(-5.7f)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pendiente de la ecuación de calibración. </p>
+<p>Relaciona el voltaje medido con el valor de pH. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00046">46</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="ac7ceffc8562ed45df0636de74fc23eb5" name="ac7ceffc8562ed45df0636de74fc23eb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7ceffc8562ed45df0636de74fc23eb5">&#9670;&#160;</a></span>ph_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ph_init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa el módulo de pH. </p>
+<p>Inicializa el módulo del sensor de pH.</p>
+<p>Actualmente no requiere configuración específica, ya que la adquisición ADC es gestionada por adc_manager.</p>
+<p>Inicializa el módulo de pH.</p>
+<p>Realiza la configuración necesaria para habilitar la adquisición de señales analógicas asociadas al sensor.</p>
+<p>Debe ejecutarse una única vez durante la inicialización del sistema. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00081">81</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   82</span>{</div>
+<div class="line"><span class="lineno">   83</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a73824c716592fbbaadcf307213d31c77" name="a73824c716592fbbaadcf307213d31c77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73824c716592fbbaadcf307213d31c77">&#9670;&#160;</a></span>ph_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ph_read </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calcula el valor de pH a partir del voltaje medido. </p>
+<p>Obtiene una medición de pH.</p>
+<p>Utiliza una ecuación de calibración lineal:</p>
+<p>pH = (PH_SLOPE * V) + PH_OFFSET</p>
+<p>donde:</p><ul>
+<li>V corresponde al voltaje medido.</li>
+<li>PH_SLOPE es la pendiente de calibración.</li>
+<li>PH_OFFSET es el offset de calibración.</li>
+</ul>
+<dl class="section return"><dt>Devuelve</dt><dd>Valor estimado de pH. </dd></dl>
+<dl class="retval"><dt>Valores devueltos</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">-1.0</td><td>Lectura inválida o fuera de rango.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Calcula el valor de pH a partir del voltaje medido.</p>
+<p>Convierte el voltaje medido por el sensor a una estimación de pH utilizando la ecuación de calibración definida para el sistema.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>Valor estimado de pH. </dd></dl>
+<dl class="retval"><dt>Valores devueltos</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">-1.0</td><td>Lectura inválida o fuera de rango. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00134">134</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  135</span>{</div>
+<div class="line"><span class="lineno">  136</span>    <span class="keywordtype">float</span> voltage = <a class="code hl_function" href="#ad0fdfecb914c25c0826286634e9be584">ph_read_voltage</a>();</div>
+<div class="line"><span class="lineno">  137</span> </div>
+<div class="line"><span class="lineno">  138</span>    <span class="keywordflow">if</span> (voltage &gt; <a class="code hl_define" href="#a6bbdd19ffa0606b6ca36388f17b9d435">PH_MAX_VOLTAGE</a> ||</div>
+<div class="line"><span class="lineno">  139</span>        voltage &lt; <a class="code hl_define" href="#a87abd31489e1cf7514ed303a5194c684">PH_MIN_VOLTAGE</a>)</div>
+<div class="line"><span class="lineno">  140</span>    {</div>
+<div class="line"><span class="lineno">  141</span>        ESP_LOGW(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Sensor pH fuera de rango&quot;</span>);</div>
+<div class="line"><span class="lineno">  142</span>        <span class="keywordflow">return</span> -1.0;</div>
+<div class="line"><span class="lineno">  143</span>    }</div>
+<div class="line"><span class="lineno">  144</span> </div>
+<div class="line"><span class="lineno">  145</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  146</span><span class="comment">     * Conversión lineal obtenida durante el proceso</span></div>
+<div class="line"><span class="lineno">  147</span><span class="comment">     * de calibración del sensor.</span></div>
+<div class="line"><span class="lineno">  148</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  149</span>    <span class="keywordflow">return</span> <a class="code hl_define" href="#acb6161a3ffb103e0367458060062d929">PH_SLOPE</a> * voltage + <a class="code hl_define" href="#ac1260df376cca2240c3820d7efd45334">PH_OFFSET</a>;</div>
+<div class="line"><span class="lineno">  150</span>}</div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+<div class="ttc" id="aph__sensor_8c_html_a6bbdd19ffa0606b6ca36388f17b9d435"><div class="ttname"><a href="#a6bbdd19ffa0606b6ca36388f17b9d435">PH_MAX_VOLTAGE</a></div><div class="ttdeci">#define PH_MAX_VOLTAGE</div><div class="ttdoc">Voltaje máximo válido para el sensor.</div><div class="ttdef"><b>Definition</b> <a href="ph__sensor_8c_source.html#l00064">ph_sensor.c:64</a></div></div>
+<div class="ttc" id="aph__sensor_8c_html_a87abd31489e1cf7514ed303a5194c684"><div class="ttname"><a href="#a87abd31489e1cf7514ed303a5194c684">PH_MIN_VOLTAGE</a></div><div class="ttdeci">#define PH_MIN_VOLTAGE</div><div class="ttdoc">Voltaje mínimo válido para el sensor.</div><div class="ttdef"><b>Definition</b> <a href="ph__sensor_8c_source.html#l00059">ph_sensor.c:59</a></div></div>
+<div class="ttc" id="aph__sensor_8c_html_ac1260df376cca2240c3820d7efd45334"><div class="ttname"><a href="#ac1260df376cca2240c3820d7efd45334">PH_OFFSET</a></div><div class="ttdeci">#define PH_OFFSET</div><div class="ttdoc">Offset de la ecuación de calibración.</div><div class="ttdef"><b>Definition</b> <a href="ph__sensor_8c_source.html#l00054">ph_sensor.c:54</a></div></div>
+<div class="ttc" id="aph__sensor_8c_html_acb6161a3ffb103e0367458060062d929"><div class="ttname"><a href="#acb6161a3ffb103e0367458060062d929">PH_SLOPE</a></div><div class="ttdeci">#define PH_SLOPE</div><div class="ttdoc">Pendiente de la ecuación de calibración.</div><div class="ttdef"><b>Definition</b> <a href="ph__sensor_8c_source.html#l00046">ph_sensor.c:46</a></div></div>
+<div class="ttc" id="aph__sensor_8c_html_ad0fdfecb914c25c0826286634e9be584"><div class="ttname"><a href="#ad0fdfecb914c25c0826286634e9be584">ph_read_voltage</a></div><div class="ttdeci">float ph_read_voltage(void)</div><div class="ttdoc">Obtiene el voltaje promedio del sensor de pH.</div><div class="ttdef"><b>Definition</b> <a href="ph__sensor_8c_source.html#l00097">ph_sensor.c:97</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ad0fdfecb914c25c0826286634e9be584" name="ad0fdfecb914c25c0826286634e9be584"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0fdfecb914c25c0826286634e9be584">&#9670;&#160;</a></span>ph_read_voltage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ph_read_voltage </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Obtiene el voltaje promedio del sensor de pH. </p>
+<p>Obtiene el voltaje de salida del sensor.</p>
+<p>Realiza múltiples lecturas ADC y calcula un promedio para reducir el efecto del ruido presente en la señal.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>Voltaje promedio en voltios.</dd></dl>
+<p>Obtiene el voltaje promedio del sensor de pH.</p>
+<p>Realiza múltiples conversiones ADC y calcula un valor promedio para reducir el efecto del ruido presente en la señal analógica.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>Voltaje promedio en voltios. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00097">97</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   98</span>{</div>
+<div class="line"><span class="lineno">   99</span>    <span class="keywordtype">float</span> sum = 0;</div>
+<div class="line"><span class="lineno">  100</span> </div>
+<div class="line"><span class="lineno">  101</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <a class="code hl_define" href="mq135_8c.html#af0b23eedf2352de4c1eff77e1401730c">NUM_SAMPLES</a>; i++) {</div>
+<div class="line"><span class="lineno">  102</span>        sum += <a class="code hl_function" href="adc__manager_8c.html#a228d08c460b3c57ca3f7efc00c5e3f0c">adc_manager_read_voltage</a>(<a class="code hl_define" href="#afe07d63548e90671ed265d67e7f0df8e">PH_ADC_CHANNEL</a>);</div>
+<div class="line"><span class="lineno">  103</span> </div>
+<div class="line"><span class="lineno">  104</span>        <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  105</span><span class="comment">         * Se introduce un pequeño retardo entre muestras</span></div>
+<div class="line"><span class="lineno">  106</span><span class="comment">         * para evitar lecturas consecutivas excesivamente</span></div>
+<div class="line"><span class="lineno">  107</span><span class="comment">         * correlacionadas y mejorar el promedio obtenido.</span></div>
+<div class="line"><span class="lineno">  108</span><span class="comment">         */</span></div>
+<div class="line"><span class="lineno">  109</span>        vTaskDelay(pdMS_TO_TICKS(10));</div>
+<div class="line"><span class="lineno">  110</span>    }</div>
+<div class="line"><span class="lineno">  111</span> </div>
+<div class="line"><span class="lineno">  112</span>    <span class="keywordflow">return</span> sum / <a class="code hl_define" href="mq135_8c.html#af0b23eedf2352de4c1eff77e1401730c">NUM_SAMPLES</a>;</div>
+<div class="line"><span class="lineno">  113</span>}</div>
+<div class="ttc" id="aadc__manager_8c_html_a228d08c460b3c57ca3f7efc00c5e3f0c"><div class="ttname"><a href="adc__manager_8c.html#a228d08c460b3c57ca3f7efc00c5e3f0c">adc_manager_read_voltage</a></div><div class="ttdeci">float adc_manager_read_voltage(adc_channel_t channel)</div><div class="ttdoc">Obtiene el voltaje asociado a un canal ADC.</div><div class="ttdef"><b>Definition</b> <a href="adc__manager_8c_source.html#l00151">adc_manager.c:151</a></div></div>
+<div class="ttc" id="amq135_8c_html_af0b23eedf2352de4c1eff77e1401730c"><div class="ttname"><a href="mq135_8c.html#af0b23eedf2352de4c1eff77e1401730c">NUM_SAMPLES</a></div><div class="ttdeci">#define NUM_SAMPLES</div><div class="ttdoc">Cantidad de muestras utilizadas para el cálculo del promedio.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00043">mq135.c:43</a></div></div>
+<div class="ttc" id="aph__sensor_8c_html_afe07d63548e90671ed265d67e7f0df8e"><div class="ttname"><a href="#afe07d63548e90671ed265d67e7f0df8e">PH_ADC_CHANNEL</a></div><div class="ttdeci">#define PH_ADC_CHANNEL</div><div class="ttdoc">Canal ADC asociado al sensor de pH.</div><div class="ttdef"><b>Definition</b> <a href="ph__sensor_8c_source.html#l00032">ph_sensor.c:32</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Documentación de variables</h2>
+<a id="a5a85b9c772bbeb480b209a3e6ea92b4c" name="a5a85b9c772bbeb480b209a3e6ea92b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a85b9c772bbeb480b209a3e6ea92b4c">&#9670;&#160;</a></span>TAG</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* TAG = &quot;PH&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Etiqueta utilizada por el sistema de logging. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ph__sensor_8c_source.html#l00069">69</a> del archivo <a class="el" href="ph__sensor_8c_source.html">ph_sensor.c</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_ce9acbebd20a964a9fb527ea0a00b86e.html">drivers</a></li><li class="navelem"><a href="ph__sensor_8c.html">ph_sensor.c</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

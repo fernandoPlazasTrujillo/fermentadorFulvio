@@ -1,0 +1,696 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/drivers/ds18b20.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('ds18b20_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo ds18b20.c</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Implementación del driver para el sensor DS18B20 mediante protocolo OneWire.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="ds18b20_8h_source.html">drivers/ds18b20.h</a>&quot;</code><br />
+<code>#include &quot;driver/gpio.h&quot;</code><br />
+<code>#include &quot;esp_rom_sys.h&quot;</code><br />
+<code>#include &quot;esp_log.h&quot;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/task.h&quot;</code><br />
+</div>
+<p><a href="ds18b20_8c_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a220acc6089f507beb8473061aed9e810" id="r_a220acc6089f507beb8473061aed9e810"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a220acc6089f507beb8473061aed9e810">ow_low</a> ()</td></tr>
+<tr class="memdesc:a220acc6089f507beb8473061aed9e810"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fuerza la línea OneWire a nivel bajo.  <br /></td></tr>
+<tr class="memitem:a671a28f40d3319fe155661cc86903c78" id="r_a671a28f40d3319fe155661cc86903c78"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a671a28f40d3319fe155661cc86903c78">ow_release</a> ()</td></tr>
+<tr class="memdesc:a671a28f40d3319fe155661cc86903c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Libera la línea OneWire.  <br /></td></tr>
+<tr class="memitem:a1606dc3f3feb90a3475e1f3e7fb4d1ae" id="r_a1606dc3f3feb90a3475e1f3e7fb4d1ae"><td class="memItemLeft">static int&#160;</td><td class="memItemRight"><a class="el" href="#a1606dc3f3feb90a3475e1f3e7fb4d1ae">ow_read</a> ()</td></tr>
+<tr class="memdesc:a1606dc3f3feb90a3475e1f3e7fb4d1ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lee el estado actual del bus OneWire.  <br /></td></tr>
+<tr class="memitem:a5970faf6411a4a88594595f34d515bc5" id="r_a5970faf6411a4a88594595f34d515bc5"><td class="memItemLeft">static int&#160;</td><td class="memItemRight"><a class="el" href="#a5970faf6411a4a88594595f34d515bc5">ow_reset</a> ()</td></tr>
+<tr class="memdesc:a5970faf6411a4a88594595f34d515bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Realiza el reset del bus OneWire.  <br /></td></tr>
+<tr class="memitem:a27ea41a1651c0181c573ad118bd9057a" id="r_a27ea41a1651c0181c573ad118bd9057a"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a27ea41a1651c0181c573ad118bd9057a">ow_write_bit</a> (int bit)</td></tr>
+<tr class="memdesc:a27ea41a1651c0181c573ad118bd9057a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Escribe un bit en el bus OneWire.  <br /></td></tr>
+<tr class="memitem:a48ba918873b54e04ddcd4dc4482f333a" id="r_a48ba918873b54e04ddcd4dc4482f333a"><td class="memItemLeft">static int&#160;</td><td class="memItemRight"><a class="el" href="#a48ba918873b54e04ddcd4dc4482f333a">ow_read_bit</a> ()</td></tr>
+<tr class="memdesc:a48ba918873b54e04ddcd4dc4482f333a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lee un bit desde el bus OneWire.  <br /></td></tr>
+<tr class="memitem:ae142b820973800ab42c9093463abd8e7" id="r_ae142b820973800ab42c9093463abd8e7"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#ae142b820973800ab42c9093463abd8e7">ow_write_byte</a> (uint8_t byte)</td></tr>
+<tr class="memdesc:ae142b820973800ab42c9093463abd8e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Escribe un byte completo en el bus OneWire.  <br /></td></tr>
+<tr class="memitem:aa24a52307ce366a596c9e292e2b84bda" id="r_aa24a52307ce366a596c9e292e2b84bda"><td class="memItemLeft">static uint8_t&#160;</td><td class="memItemRight"><a class="el" href="#aa24a52307ce366a596c9e292e2b84bda">ow_read_byte</a> ()</td></tr>
+<tr class="memdesc:aa24a52307ce366a596c9e292e2b84bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lee un byte completo desde el bus OneWire.  <br /></td></tr>
+<tr class="memitem:afb1d889451edc3f30db74315af96b963" id="r_afb1d889451edc3f30db74315af96b963"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#afb1d889451edc3f30db74315af96b963">ds18b20_init</a> (gpio_num_t pin)</td></tr>
+<tr class="memdesc:afb1d889451edc3f30db74315af96b963"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa el sensor DS18B20.  <br /></td></tr>
+<tr class="memitem:a5aac389dc38e235043998b969fe9898e" id="r_a5aac389dc38e235043998b969fe9898e"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a5aac389dc38e235043998b969fe9898e">ds18b20_read_temperature</a> (void)</td></tr>
+<tr class="memdesc:a5aac389dc38e235043998b969fe9898e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtiene la temperatura del sensor DS18B20.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a5a85b9c772bbeb480b209a3e6ea92b4c" id="r_a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="memItemLeft">static const char *&#160;</td><td class="memItemRight"><a class="el" href="#a5a85b9c772bbeb480b209a3e6ea92b4c">TAG</a> = &quot;DS18B20&quot;</td></tr>
+<tr class="memdesc:a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Etiqueta utilizada por el sistema de logging ESP-IDF.  <br /></td></tr>
+<tr class="memitem:ae8e2126058e269f81fc42f25ab4c7b4e" id="r_ae8e2126058e269f81fc42f25ab4c7b4e"><td class="memItemLeft">static gpio_num_t&#160;</td><td class="memItemRight"><a class="el" href="#ae8e2126058e269f81fc42f25ab4c7b4e">ds_pin</a></td></tr>
+<tr class="memdesc:ae8e2126058e269f81fc42f25ab4c7b4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO utilizado para la comunicación OneWire.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Implementación del driver para el sensor DS18B20 mediante protocolo OneWire. </p>
+<p>Este módulo implementa las funciones necesarias para la comunicación con un sensor DS18B20 utilizando el protocolo OneWire por software.</p>
+<p>Incluye:</p><ul>
+<li>Inicialización del bus OneWire.</li>
+<li>Transmisión y recepción de bits y bytes.</li>
+<li>Detección de presencia del dispositivo.</li>
+<li>Conversión y lectura de temperatura.</li>
+</ul>
+<p>El sensor se utiliza para monitorear la temperatura interna del sistema de fermentación de café.</p>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="afb1d889451edc3f30db74315af96b963" name="afb1d889451edc3f30db74315af96b963"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb1d889451edc3f30db74315af96b963">&#9670;&#160;</a></span>ds18b20_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t ds18b20_init </td>
+          <td>(</td>
+          <td class="paramtype">gpio_num_t</td>          <td class="paramname"><span class="paramname"><em>pin</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa el sensor DS18B20. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pin</td><td>GPIO de conexión. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>ESP_OK si se configura correctamente.</dd></dl>
+<p>Configura el GPIO utilizado para la comunicación OneWire y habilita la resistencia pull-up requerida por el protocolo.</p>
+<p>Esta función debe ejecutarse una única vez durante la inicialización del sistema.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pin</td><td>GPIO al que se encuentra conectado el sensor.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Inicialización exitosa.</li>
+<li>ESP_FAIL: Error durante la configuración del dispositivo. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00198">198</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  199</span>{</div>
+<div class="line"><span class="lineno">  200</span>    <a class="code hl_variable" href="#ae8e2126058e269f81fc42f25ab4c7b4e">ds_pin</a> = pin;</div>
+<div class="line"><span class="lineno">  201</span> </div>
+<div class="line"><span class="lineno">  202</span>    gpio_set_pull_mode(<a class="code hl_variable" href="#ae8e2126058e269f81fc42f25ab4c7b4e">ds_pin</a>, GPIO_PULLUP_ONLY);</div>
+<div class="line"><span class="lineno">  203</span> </div>
+<div class="line"><span class="lineno">  204</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;DS18B20 init en GPIO %d&quot;</span>, pin);</div>
+<div class="line"><span class="lineno">  205</span> </div>
+<div class="line"><span class="lineno">  206</span>    <span class="keywordflow">return</span> ESP_OK;</div>
+<div class="line"><span class="lineno">  207</span>}</div>
+<div class="ttc" id="ads18b20_8c_html_ae8e2126058e269f81fc42f25ab4c7b4e"><div class="ttname"><a href="#ae8e2126058e269f81fc42f25ab4c7b4e">ds_pin</a></div><div class="ttdeci">static gpio_num_t ds_pin</div><div class="ttdoc">GPIO utilizado para la comunicación OneWire.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00042">ds18b20.c:42</a></div></div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a5aac389dc38e235043998b969fe9898e" name="a5aac389dc38e235043998b969fe9898e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5aac389dc38e235043998b969fe9898e">&#9670;&#160;</a></span>ds18b20_read_temperature()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ds18b20_read_temperature </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Obtiene la temperatura del sensor DS18B20. </p>
+<p>Obtiene una medición de temperatura desde el DS18B20.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>Temperatura en °C. </dd>
+<dd>
+-127.0 si el sensor no responde.</dd></dl>
+<p>Obtiene la temperatura del sensor DS18B20.</p>
+<p>Ejecuta la secuencia completa de comunicación OneWire:</p><ul>
+<li>Reset del bus.</li>
+<li>Inicio de conversión de temperatura.</li>
+<li>Lectura de memoria Scratchpad.</li>
+<li>Conversión del dato a grados Celsius.</li>
+</ul>
+<dl class="section return"><dt>Devuelve</dt><dd>Temperatura medida en grados Celsius. </dd></dl>
+<dl class="retval"><dt>Valores devueltos</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">-127.0</td><td>Error de comunicación o ausencia del sensor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00219">219</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  220</span>{</div>
+<div class="line"><span class="lineno">  221</span>    <span class="keywordflow">if</span> (!<a class="code hl_function" href="#a5970faf6411a4a88594595f34d515bc5">ow_reset</a>()) {</div>
+<div class="line"><span class="lineno">  222</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Sensor no detectado&quot;</span>);</div>
+<div class="line"><span class="lineno">  223</span>        <span class="keywordflow">return</span> -127.0;</div>
+<div class="line"><span class="lineno">  224</span>    }</div>
+<div class="line"><span class="lineno">  225</span> </div>
+<div class="line"><span class="lineno">  226</span>    <a class="code hl_function" href="#ae142b820973800ab42c9093463abd8e7">ow_write_byte</a>(0xCC);</div>
+<div class="line"><span class="lineno">  227</span>    <a class="code hl_function" href="#ae142b820973800ab42c9093463abd8e7">ow_write_byte</a>(0x44);</div>
+<div class="line"><span class="lineno">  228</span> </div>
+<div class="line"><span class="lineno">  229</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  230</span><span class="comment">    * Tiempo máximo de conversión para resolución de 12 bits</span></div>
+<div class="line"><span class="lineno">  231</span><span class="comment">    * según la hoja de datos del DS18B20.</span></div>
+<div class="line"><span class="lineno">  232</span><span class="comment">    */</span></div>
+<div class="line"><span class="lineno">  233</span>    vTaskDelay(pdMS_TO_TICKS(750));</div>
+<div class="line"><span class="lineno">  234</span> </div>
+<div class="line"><span class="lineno">  235</span>    <span class="keywordflow">if</span> (!<a class="code hl_function" href="#a5970faf6411a4a88594595f34d515bc5">ow_reset</a>()) {</div>
+<div class="line"><span class="lineno">  236</span>        <span class="keywordflow">return</span> -127.0;</div>
+<div class="line"><span class="lineno">  237</span>    }</div>
+<div class="line"><span class="lineno">  238</span> </div>
+<div class="line"><span class="lineno">  239</span>    <a class="code hl_function" href="#ae142b820973800ab42c9093463abd8e7">ow_write_byte</a>(0xCC);</div>
+<div class="line"><span class="lineno">  240</span>    <a class="code hl_function" href="#ae142b820973800ab42c9093463abd8e7">ow_write_byte</a>(0xBE);</div>
+<div class="line"><span class="lineno">  241</span> </div>
+<div class="line"><span class="lineno">  242</span>    uint8_t temp_lsb = <a class="code hl_function" href="#aa24a52307ce366a596c9e292e2b84bda">ow_read_byte</a>();</div>
+<div class="line"><span class="lineno">  243</span>    uint8_t temp_msb = <a class="code hl_function" href="#aa24a52307ce366a596c9e292e2b84bda">ow_read_byte</a>();</div>
+<div class="line"><span class="lineno">  244</span> </div>
+<div class="line"><span class="lineno">  245</span>    int16_t raw = (temp_msb &lt;&lt; 8) | temp_lsb;</div>
+<div class="line"><span class="lineno">  246</span> </div>
+<div class="line"><span class="lineno">  247</span>    <span class="keywordtype">float</span> temp = raw / 16.0;</div>
+<div class="line"><span class="lineno">  248</span> </div>
+<div class="line"><span class="lineno">  249</span>    <span class="keywordflow">return</span> temp;</div>
+<div class="line"><span class="lineno">  250</span>}</div>
+<div class="ttc" id="ads18b20_8c_html_a5970faf6411a4a88594595f34d515bc5"><div class="ttname"><a href="#a5970faf6411a4a88594595f34d515bc5">ow_reset</a></div><div class="ttdeci">static int ow_reset()</div><div class="ttdoc">Realiza el reset del bus OneWire.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00091">ds18b20.c:91</a></div></div>
+<div class="ttc" id="ads18b20_8c_html_aa24a52307ce366a596c9e292e2b84bda"><div class="ttname"><a href="#aa24a52307ce366a596c9e292e2b84bda">ow_read_byte</a></div><div class="ttdeci">static uint8_t ow_read_byte()</div><div class="ttdoc">Lee un byte completo desde el bus OneWire.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00177">ds18b20.c:177</a></div></div>
+<div class="ttc" id="ads18b20_8c_html_ae142b820973800ab42c9093463abd8e7"><div class="ttname"><a href="#ae142b820973800ab42c9093463abd8e7">ow_write_byte</a></div><div class="ttdeci">static void ow_write_byte(uint8_t byte)</div><div class="ttdoc">Escribe un byte completo en el bus OneWire.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00164">ds18b20.c:164</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a220acc6089f507beb8473061aed9e810" name="a220acc6089f507beb8473061aed9e810"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a220acc6089f507beb8473061aed9e810">&#9670;&#160;</a></span>ow_low()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ow_low </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fuerza la línea OneWire a nivel bajo. </p>
+<p>Configura temporalmente el GPIO como salida y escribe un nivel lógico bajo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00053">53</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   54</span>{</div>
+<div class="line"><span class="lineno">   55</span>    gpio_set_direction(<a class="code hl_variable" href="#ae8e2126058e269f81fc42f25ab4c7b4e">ds_pin</a>, GPIO_MODE_OUTPUT);</div>
+<div class="line"><span class="lineno">   56</span>    gpio_set_level(<a class="code hl_variable" href="#ae8e2126058e269f81fc42f25ab4c7b4e">ds_pin</a>, 0);</div>
+<div class="line"><span class="lineno">   57</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a1606dc3f3feb90a3475e1f3e7fb4d1ae" name="a1606dc3f3feb90a3475e1f3e7fb4d1ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1606dc3f3feb90a3475e1f3e7fb4d1ae">&#9670;&#160;</a></span>ow_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ow_read </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lee el estado actual del bus OneWire. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>0 o 1 según el nivel lógico. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00075">75</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   76</span>{</div>
+<div class="line"><span class="lineno">   77</span>    <span class="keywordflow">return</span> gpio_get_level(<a class="code hl_variable" href="#ae8e2126058e269f81fc42f25ab4c7b4e">ds_pin</a>);</div>
+<div class="line"><span class="lineno">   78</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a48ba918873b54e04ddcd4dc4482f333a" name="a48ba918873b54e04ddcd4dc4482f333a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48ba918873b54e04ddcd4dc4482f333a">&#9670;&#160;</a></span>ow_read_bit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ow_read_bit </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lee un bit desde el bus OneWire. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Bit leído (0 o 1). </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00139">139</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  140</span>{</div>
+<div class="line"><span class="lineno">  141</span>    <span class="keywordtype">int</span> bit;</div>
+<div class="line"><span class="lineno">  142</span> </div>
+<div class="line"><span class="lineno">  143</span>    <a class="code hl_function" href="#a220acc6089f507beb8473061aed9e810">ow_low</a>();</div>
+<div class="line"><span class="lineno">  144</span>    esp_rom_delay_us(3);</div>
+<div class="line"><span class="lineno">  145</span>    <a class="code hl_function" href="#a671a28f40d3319fe155661cc86903c78">ow_release</a>();</div>
+<div class="line"><span class="lineno">  146</span>    esp_rom_delay_us(10);</div>
+<div class="line"><span class="lineno">  147</span> </div>
+<div class="line"><span class="lineno">  148</span>    bit = <a class="code hl_function" href="#a1606dc3f3feb90a3475e1f3e7fb4d1ae">ow_read</a>();</div>
+<div class="line"><span class="lineno">  149</span> </div>
+<div class="line"><span class="lineno">  150</span>    esp_rom_delay_us(53);</div>
+<div class="line"><span class="lineno">  151</span> </div>
+<div class="line"><span class="lineno">  152</span>    <span class="keywordflow">return</span> bit;</div>
+<div class="line"><span class="lineno">  153</span>}</div>
+<div class="ttc" id="ads18b20_8c_html_a1606dc3f3feb90a3475e1f3e7fb4d1ae"><div class="ttname"><a href="#a1606dc3f3feb90a3475e1f3e7fb4d1ae">ow_read</a></div><div class="ttdeci">static int ow_read()</div><div class="ttdoc">Lee el estado actual del bus OneWire.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00075">ds18b20.c:75</a></div></div>
+<div class="ttc" id="ads18b20_8c_html_a220acc6089f507beb8473061aed9e810"><div class="ttname"><a href="#a220acc6089f507beb8473061aed9e810">ow_low</a></div><div class="ttdeci">static void ow_low()</div><div class="ttdoc">Fuerza la línea OneWire a nivel bajo.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00053">ds18b20.c:53</a></div></div>
+<div class="ttc" id="ads18b20_8c_html_a671a28f40d3319fe155661cc86903c78"><div class="ttname"><a href="#a671a28f40d3319fe155661cc86903c78">ow_release</a></div><div class="ttdeci">static void ow_release()</div><div class="ttdoc">Libera la línea OneWire.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00065">ds18b20.c:65</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aa24a52307ce366a596c9e292e2b84bda" name="aa24a52307ce366a596c9e292e2b84bda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa24a52307ce366a596c9e292e2b84bda">&#9670;&#160;</a></span>ow_read_byte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t ow_read_byte </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lee un byte completo desde el bus OneWire. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Byte leído. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00177">177</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  178</span>{</div>
+<div class="line"><span class="lineno">  179</span>    uint8_t <span class="keywordtype">byte</span> = 0;</div>
+<div class="line"><span class="lineno">  180</span> </div>
+<div class="line"><span class="lineno">  181</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 8; i++) {</div>
+<div class="line"><span class="lineno">  182</span>        <span class="keywordtype">byte</span> |= (<a class="code hl_function" href="#a48ba918873b54e04ddcd4dc4482f333a">ow_read_bit</a>() &lt;&lt; i);</div>
+<div class="line"><span class="lineno">  183</span>    }</div>
+<div class="line"><span class="lineno">  184</span> </div>
+<div class="line"><span class="lineno">  185</span>    <span class="keywordflow">return</span> byte;</div>
+<div class="line"><span class="lineno">  186</span>}</div>
+<div class="ttc" id="ads18b20_8c_html_a48ba918873b54e04ddcd4dc4482f333a"><div class="ttname"><a href="#a48ba918873b54e04ddcd4dc4482f333a">ow_read_bit</a></div><div class="ttdeci">static int ow_read_bit()</div><div class="ttdoc">Lee un bit desde el bus OneWire.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00139">ds18b20.c:139</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a671a28f40d3319fe155661cc86903c78" name="a671a28f40d3319fe155661cc86903c78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a671a28f40d3319fe155661cc86903c78">&#9670;&#160;</a></span>ow_release()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ow_release </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Libera la línea OneWire. </p>
+<p>Configura el GPIO como entrada permitiendo que la resistencia pull-up mantenga el bus en nivel alto. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00065">65</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   66</span>{</div>
+<div class="line"><span class="lineno">   67</span>    gpio_set_direction(<a class="code hl_variable" href="#ae8e2126058e269f81fc42f25ab4c7b4e">ds_pin</a>, GPIO_MODE_INPUT);</div>
+<div class="line"><span class="lineno">   68</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a5970faf6411a4a88594595f34d515bc5" name="a5970faf6411a4a88594595f34d515bc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5970faf6411a4a88594595f34d515bc5">&#9670;&#160;</a></span>ow_reset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ow_reset </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Realiza el reset del bus OneWire. </p>
+<p>Envía la señal de reset y detecta la presencia del sensor.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>1 si el dispositivo responde, 0 en caso contrario. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00091">91</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   92</span>{</div>
+<div class="line"><span class="lineno">   93</span>    <a class="code hl_function" href="#a220acc6089f507beb8473061aed9e810">ow_low</a>();</div>
+<div class="line"><span class="lineno">   94</span>    esp_rom_delay_us(480);</div>
+<div class="line"><span class="lineno">   95</span> </div>
+<div class="line"><span class="lineno">   96</span>    <a class="code hl_function" href="#a671a28f40d3319fe155661cc86903c78">ow_release</a>();</div>
+<div class="line"><span class="lineno">   97</span>    esp_rom_delay_us(70);</div>
+<div class="line"><span class="lineno">   98</span> </div>
+<div class="line"><span class="lineno">   99</span>    <span class="keywordtype">int</span> presence = !<a class="code hl_function" href="#a1606dc3f3feb90a3475e1f3e7fb4d1ae">ow_read</a>();</div>
+<div class="line"><span class="lineno">  100</span> </div>
+<div class="line"><span class="lineno">  101</span>    esp_rom_delay_us(410);</div>
+<div class="line"><span class="lineno">  102</span> </div>
+<div class="line"><span class="lineno">  103</span>    <span class="keywordflow">return</span> presence;</div>
+<div class="line"><span class="lineno">  104</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a27ea41a1651c0181c573ad118bd9057a" name="a27ea41a1651c0181c573ad118bd9057a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27ea41a1651c0181c573ad118bd9057a">&#9670;&#160;</a></span>ow_write_bit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ow_write_bit </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>bit</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Escribe un bit en el bus OneWire. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bit</td><td>Valor del bit (0 o 1). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00115">115</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  116</span>{</div>
+<div class="line"><span class="lineno">  117</span>    <a class="code hl_function" href="#a220acc6089f507beb8473061aed9e810">ow_low</a>();</div>
+<div class="line"><span class="lineno">  118</span> </div>
+<div class="line"><span class="lineno">  119</span>    <span class="keywordflow">if</span> (bit) {</div>
+<div class="line"><span class="lineno">  120</span>        esp_rom_delay_us(10);</div>
+<div class="line"><span class="lineno">  121</span>        <a class="code hl_function" href="#a671a28f40d3319fe155661cc86903c78">ow_release</a>();</div>
+<div class="line"><span class="lineno">  122</span>        esp_rom_delay_us(55);</div>
+<div class="line"><span class="lineno">  123</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><span class="lineno">  124</span>        esp_rom_delay_us(65);</div>
+<div class="line"><span class="lineno">  125</span>        <a class="code hl_function" href="#a671a28f40d3319fe155661cc86903c78">ow_release</a>();</div>
+<div class="line"><span class="lineno">  126</span>        esp_rom_delay_us(5);</div>
+<div class="line"><span class="lineno">  127</span>    }</div>
+<div class="line"><span class="lineno">  128</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ae142b820973800ab42c9093463abd8e7" name="ae142b820973800ab42c9093463abd8e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae142b820973800ab42c9093463abd8e7">&#9670;&#160;</a></span>ow_write_byte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ow_write_byte </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>byte</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Escribe un byte completo en el bus OneWire. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">byte</td><td>Byte a transmitir. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00164">164</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  165</span>{</div>
+<div class="line"><span class="lineno">  166</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 8; i++) {</div>
+<div class="line"><span class="lineno">  167</span>        <a class="code hl_function" href="#a27ea41a1651c0181c573ad118bd9057a">ow_write_bit</a>(<span class="keywordtype">byte</span> &amp; 0x01);</div>
+<div class="line"><span class="lineno">  168</span>        <span class="keywordtype">byte</span> &gt;&gt;= 1;</div>
+<div class="line"><span class="lineno">  169</span>    }</div>
+<div class="line"><span class="lineno">  170</span>}</div>
+<div class="ttc" id="ads18b20_8c_html_a27ea41a1651c0181c573ad118bd9057a"><div class="ttname"><a href="#a27ea41a1651c0181c573ad118bd9057a">ow_write_bit</a></div><div class="ttdeci">static void ow_write_bit(int bit)</div><div class="ttdoc">Escribe un bit en el bus OneWire.</div><div class="ttdef"><b>Definition</b> <a href="ds18b20_8c_source.html#l00115">ds18b20.c:115</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Documentación de variables</h2>
+<a id="ae8e2126058e269f81fc42f25ab4c7b4e" name="ae8e2126058e269f81fc42f25ab4c7b4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8e2126058e269f81fc42f25ab4c7b4e">&#9670;&#160;</a></span>ds_pin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">gpio_num_t ds_pin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GPIO utilizado para la comunicación OneWire. </p>
+<p>Se configura durante la inicialización del driver y es utilizado por todas las funciones de acceso al sensor. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00042">42</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+
+</div>
+</div>
+<a id="a5a85b9c772bbeb480b209a3e6ea92b4c" name="a5a85b9c772bbeb480b209a3e6ea92b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a85b9c772bbeb480b209a3e6ea92b4c">&#9670;&#160;</a></span>TAG</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* TAG = &quot;DS18B20&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Etiqueta utilizada por el sistema de logging ESP-IDF. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ds18b20_8c_source.html#l00034">34</a> del archivo <a class="el" href="ds18b20_8c_source.html">ds18b20.c</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_ce9acbebd20a964a9fb527ea0a00b86e.html">drivers</a></li><li class="navelem"><a href="ds18b20_8c.html">ds18b20.c</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

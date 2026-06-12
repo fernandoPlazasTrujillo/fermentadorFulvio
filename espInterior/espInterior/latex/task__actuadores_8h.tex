@@ -1,0 +1,145 @@
+\doxysection{Referencia del archivo main/\+tasks/\+task\+\_\+actuadores.h}
+\hypertarget{task__actuadores_8h}{}\label{task__actuadores_8h}\index{main/tasks/task\_actuadores.h@{main/tasks/task\_actuadores.h}}
+
+
+Declaración de la tarea encargada del control de actuadores.  
+
+
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{task__actuadores_8h_a500d896ff89010d54c413e2bec4ee20d}{task\+\_\+actuadores}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\begin{DoxyCompactList}\small\item\em Tarea de ejecución de actuadores. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Declaración de la tarea encargada del control de actuadores. 
+
+Este módulo define la tarea responsable de ejecutar las acciones físicas del sistema a partir de los comandos generados por la lógica de control.
+
+La tarea recibe estructuras \doxylink{structcontrol__cmd__t}{control\+\_\+cmd\+\_\+t} mediante una cola Free\+RTOS y actúa sobre los dispositivos de salida del sistema.
+
+Actuadores gestionados:\+
+\begin{DoxyItemize}
+\item Sistema de enfriamiento.
+\item Bomba de circulación.
+\item Motor de mezcla.
+\item Servomotor.
+\end{DoxyItemize}
+
+Esta arquitectura mantiene desacopladas las decisiones de control del acceso directo al hardware.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{task__actuadores_8h_source}{task\+\_\+actuadores.\+h}}.
+
+
+
+\label{task__actuadores_8h_doc-func-members}
+\Hypertarget{task__actuadores_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{task__actuadores_8h_a500d896ff89010d54c413e2bec4ee20d}\index{task\_actuadores.h@{task\_actuadores.h}!task\_actuadores@{task\_actuadores}}
+\index{task\_actuadores@{task\_actuadores}!task\_actuadores.h@{task\_actuadores.h}}
+\doxysubsubsection{\texorpdfstring{task\_actuadores()}{task\_actuadores()}}
+{\footnotesize\ttfamily \label{task__actuadores_8h_a500d896ff89010d54c413e2bec4ee20d} 
+void task\+\_\+actuadores (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+Tarea de ejecución de actuadores. 
+
+Tarea encargada de ejecutar acciones físicas.
+
+Espera comandos provenientes de la cola de control y ejecuta las acciones correspondientes sobre los actuadores físicos del sistema.
+
+La tarea opera como consumidora de estructuras \doxylink{structcontrol__cmd__t}{control\+\_\+cmd\+\_\+t}, permitiendo separar la lógica de decisión de la manipulación directa del hardware.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados).\\
+\hline
+\end{DoxyParams}
+Tarea de ejecución de actuadores.
+
+Esta tarea permanece bloqueada esperando comandos provenientes de queue\+\_\+control.
+
+Funciones principales:\+
+\begin{DoxyItemize}
+\item Activación y desactivación de la bomba.
+\item Posicionamiento del servomotor.
+\item Gestión del motor de mezcla.
+\item Notificación a task\+\_\+energia al finalizar una mezcla.
+\end{DoxyItemize}
+
+La tarea no implementa lógica de decisión; únicamente ejecuta los comandos generados por task\+\_\+control.
+
+
+\begin{DoxyParams}{Parámetros}
+{\em pv\+Parameters} & Parámetros de la tarea (no utilizados). \\
+\hline
+\end{DoxyParams}
+
+
+Definición en la línea \doxymbox{\hyperlink{task__actuadores_8c_source_l00125}{125}} del archivo \doxymbox{\hyperlink{task__actuadores_8c_source}{task\+\_\+actuadores.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00126\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \doxymbox{\hyperlink{structcontrol__cmd__t}{control\_cmd\_t}}\ cmd;}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \doxymbox{\hyperlink{task__actuadores_8c_a9eb71071f666476ca3b27418af9a7c9d}{actuadores\_init}}();}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{bool}\ motor\_activo\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00132\ \ \ \ \ TickType\_t\ motor\_start\_time\ =\ 0;}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{float}\ last\_servo\_angle\ =\ -\/1;}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Task\ actuadores\ iniciada"{}});}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)\ \{}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xQueueReceive(\doxymbox{\hyperlink{queues_8c_ae944909fe4a2b18292a96cdb6bef3d1c}{queue\_control}},\ \&cmd,\ pdMS\_TO\_TICKS(100)))\ \{}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Ejecutando\ acciones..."{}});}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{task__actuadores_8c_a04c091f47b05cd33db87cbb066492c68}{PIN\_BOMBA}},\ cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a9bb80e4ab633a54fcb7d22d979f08054}{bomba}}\ ?\ 1\ :\ 0);}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a5157b8f70428717e5214f428df519c86}{servo\_angle}}\ !=\ last\_servo\_angle)\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a76f48098c22562b7dd7185f2fc3142f7}{servo\_set\_angle}}(cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a5157b8f70428717e5214f428df519c86}{servo\_angle}});}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ last\_servo\_angle\ =\ cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a5157b8f70428717e5214f428df519c86}{servo\_angle}};}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cmd.\doxymbox{\hyperlink{structcontrol__cmd__t_a29ea2808b8c154a5a5b14c08af80c6ea}{mezclar}}\ \&\&\ !motor\_activo)\ \{}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Iniciando\ mezcla"{}});}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{task__actuadores_8c_ab9c7d85b16a34449359f93d0ef160af8}{PIN\_MOTOR}},\ 1);}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ motor\_activo\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ motor\_start\_time\ =\ xTaskGetTickCount();}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (motor\_activo)\ \{}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ TickType\_t\ now\ =\ xTaskGetTickCount();}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((now\ -\/\ motor\_start\_time)\ >=\ pdMS\_TO\_TICKS(\doxymbox{\hyperlink{task__actuadores_8c_a83618a6cda6ceda41ea6c705c971ca20}{MIX\_DURATION\_MS}}))\ \{}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Deteniendo\ mezcla"{}});}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gpio\_set\_level(\doxymbox{\hyperlink{task__actuadores_8c_ab9c7d85b16a34449359f93d0ef160af8}{PIN\_MOTOR}},\ 0);}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ motor\_activo\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xTaskNotifyGive(\doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\_energia\_handle}});}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ vTaskDelay(pdMS\_TO\_TICKS(50));}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
+\DoxyCodeLine{00179\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,32 @@
+\doxysection{queues.\+c}
+\hypertarget{queues_8c_source}{}\label{queues_8c_source}\index{main/utils/queues.c@{main/utils/queues.c}}
+\doxymbox{\hyperlink{queues_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00035}00035\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{queues_8h}{queues.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00043}\doxymbox{\hyperlink{queues_8c_a9ac1175b5e7231953bed172a42b5161d}{00043}}\ QueueHandle\_t\ \doxymbox{\hyperlink{queues_8c_a9ac1175b5e7231953bed172a42b5161d}{queue\_sensores}};}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00051}\doxymbox{\hyperlink{queues_8c_ae944909fe4a2b18292a96cdb6bef3d1c}{00051}}\ QueueHandle\_t\ \doxymbox{\hyperlink{queues_8c_ae944909fe4a2b18292a96cdb6bef3d1c}{queue\_control}};}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00059}\doxymbox{\hyperlink{queues_8c_a84471e3465c562d8336b3c2366b605cb}{00059}}\ QueueHandle\_t\ \doxymbox{\hyperlink{queues_8c_a84471e3465c562d8336b3c2366b605cb}{queue\_logger}};}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00067}\doxymbox{\hyperlink{queues_8c_a526da114a431a9b62400f5080beb70da}{00067}}\ QueueHandle\_t\ \doxymbox{\hyperlink{queues_8c_a526da114a431a9b62400f5080beb70da}{queue\_mqtt}};}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00075}\doxymbox{\hyperlink{queues_8c_ac32bf9d351fcc767fdcadd39574eb74c}{00075}}\ QueueHandle\_t\ \doxymbox{\hyperlink{queues_8c_ac32bf9d351fcc767fdcadd39574eb74c}{queue\_display}};}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00090}\doxymbox{\hyperlink{queues_8c_a28e124a6b8d5d663be75b1649f51e44a}{00090}}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{queues_8c_a28e124a6b8d5d663be75b1649f51e44a}{queues\_init}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00091}00091\ \{}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00092}00092\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a9ac1175b5e7231953bed172a42b5161d}{queue\_sensores}}\ =\ xQueueCreate(5,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}));}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00094}00094\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_ae944909fe4a2b18292a96cdb6bef3d1c}{queue\_control}}\ \ =\ xQueueCreate(5,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structcontrol__cmd__t}{control\_cmd\_t}}));}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00096}00096\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a84471e3465c562d8336b3c2366b605cb}{queue\_logger}}\ \ \ =\ xQueueCreate(5,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}));}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00098}00098\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a526da114a431a9b62400f5080beb70da}{queue\_mqtt}}\ \ \ \ \ =\ xQueueCreate(10,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}));}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00100}00100\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_ac32bf9d351fcc767fdcadd39574eb74c}{queue\_display}}\ \ =\ xQueueCreate(5,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structdisplay__data__t}{display\_data\_t}}));}
+\DoxyCodeLine{\Hypertarget{queues_8c_source_l00101}00101\ \}}
+
+\end{DoxyCode}

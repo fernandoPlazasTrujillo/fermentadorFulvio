@@ -1,0 +1,69 @@
+\doxysection{voltage\+\_\+sensor.\+c}
+\hypertarget{voltage__sensor_8c_source}{}\label{voltage__sensor_8c_source}\index{main/drivers/voltage\_sensor.c@{main/drivers/voltage\_sensor.c}}
+\doxymbox{\hyperlink{voltage__sensor_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{voltage__sensor_8h}{voltage\_sensor.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00025}00025\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{adc__manager_8h}{hal/adc\_manager.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00026}00026\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00031}\doxymbox{\hyperlink{voltage__sensor_8c_afc3d101f633a076cc1ca84b85b6224b2}{00031}}\ \textcolor{preprocessor}{\#define\ TAG\ "{}VOLTAGE"{}}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00038}\doxymbox{\hyperlink{voltage__sensor_8c_a1aa0734029d3be2499de31ebd0bdf65c}{00038}}\ \textcolor{preprocessor}{\#define\ VOLTAGE\_ADC\_CHANNEL\ ADC\_CHANNEL\_4}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00045}\doxymbox{\hyperlink{voltage__sensor_8c_ada12fcd9aed6fefc5255f46b58e8f42c}{00045}}\ \textcolor{preprocessor}{\#define\ DIVIDER\_RATIO\ 5.0f}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00053}\doxymbox{\hyperlink{voltage__sensor_8c_af0b23eedf2352de4c1eff77e1401730c}{00053}}\ \textcolor{preprocessor}{\#define\ NUM\_SAMPLES\ 10}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00061}\doxymbox{\hyperlink{voltage__sensor_8c_a827907ee6183e98bb8a50727540d4bb1}{00061}}\ \textcolor{preprocessor}{\#define\ ADC\_OFFSET\ 0.48f}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00063}00063\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00064}00064\ \textcolor{comment}{//\ INIT}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00065}00065\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00073}\doxymbox{\hyperlink{voltage__sensor_8c_a13350d9937b7c986d04fe4d4c12ffeec}{00073}}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{voltage__sensor_8c_a13350d9937b7c986d04fe4d4c12ffeec}{voltage\_sensor\_init}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00074}00074\ \{}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00075}00075\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Voltage\ sensor\ inicializado"{}});}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00076}00076\ \}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00078}00078\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00079}00079\ \textcolor{comment}{//\ READ\ VOLTAGE}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00080}00080\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00093}\doxymbox{\hyperlink{voltage__sensor_8c_a15875926fbadec7cb188fe2437f945bc}{00093}}\ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{voltage__sensor_8c_a15875926fbadec7cb188fe2437f945bc}{voltage\_sensor\_read}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00094}00094\ \{}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00095}00095\ \ \ \ \ \textcolor{keywordtype}{float}\ sum\ =\ 0.0f;}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00097}00097\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00098}00098\ \textcolor{comment}{\ \ \ \ \ *\ Promediado\ simple\ para\ reducir\ ruido.}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00099}00099\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00100}00100\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \doxymbox{\hyperlink{mq135_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\_SAMPLES}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00101}00101\ \ \ \ \ \ \ \ \ sum\ +=\ \doxymbox{\hyperlink{adc__manager_8c_a228d08c460b3c57ca3f7efc00c5e3f0c}{adc\_manager\_read\_voltage}}(\doxymbox{\hyperlink{voltage__sensor_8c_a1aa0734029d3be2499de31ebd0bdf65c}{VOLTAGE\_ADC\_CHANNEL}});}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00102}00102\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00104}00104\ \ \ \ \ \textcolor{keywordtype}{float}\ v\_adc\ =\ sum\ /\ \doxymbox{\hyperlink{mq135_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\_SAMPLES}};}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00106}00106\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00107}00107\ \textcolor{comment}{\ \ \ \ \ *\ Corrección\ de\ offset\ obtenida\ durante}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00108}00108\ \textcolor{comment}{\ \ \ \ \ *\ la\ calibración\ experimental.}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00109}00109\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00110}00110\ \ \ \ \ v\_adc\ -\/=\ \doxymbox{\hyperlink{voltage__sensor_8c_a827907ee6183e98bb8a50727540d4bb1}{ADC\_OFFSET}};}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{if}\ (v\_adc\ <\ 0.0f)\ \{}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00113}00113\ \ \ \ \ \ \ \ \ v\_adc\ =\ 0.0f;}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00114}00114\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00116}00116\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00117}00117\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ del\ voltaje\ medido\ en\ el\ ADC}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00118}00118\ \textcolor{comment}{\ \ \ \ \ *\ al\ voltaje\ real\ mediante\ el\ divisor\ resistivo.}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00119}00119\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00120}00120\ \ \ \ \ \textcolor{keywordtype}{float}\ v\_real\ =\ v\_adc\ *\ \doxymbox{\hyperlink{voltage__sensor_8c_ada12fcd9aed6fefc5255f46b58e8f42c}{DIVIDER\_RATIO}};}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00122}00122\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Vadc\ corregido:\ \%.3f\ V"{}},\ v\_adc);}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00123}00123\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Voltaje\ final:\ \%.2f\ V"{}},\ v\_real);}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00125}00125\ \ \ \ \ \textcolor{keywordflow}{return}\ v\_real;}
+\DoxyCodeLine{\Hypertarget{voltage__sensor_8c_source_l00126}00126\ \}}
+
+\end{DoxyCode}

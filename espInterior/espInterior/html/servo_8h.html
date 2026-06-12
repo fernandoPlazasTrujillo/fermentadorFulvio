@@ -1,0 +1,349 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/drivers/servo.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('servo_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo servo.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Driver para control de servomotores mediante PWM usando el periférico LEDC del ESP32.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;esp_err.h&quot;</code><br />
+<code>#include &quot;driver/gpio.h&quot;</code><br />
+</div>
+<p><a href="servo_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a6006789c547dabfec48ef14f0d9a9191" id="r_a6006789c547dabfec48ef14f0d9a9191"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#a6006789c547dabfec48ef14f0d9a9191">servo_init</a> (gpio_num_t pin)</td></tr>
+<tr class="memdesc:a6006789c547dabfec48ef14f0d9a9191"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa el servomotor.  <br /></td></tr>
+<tr class="memitem:a76f48098c22562b7dd7185f2fc3142f7" id="r_a76f48098c22562b7dd7185f2fc3142f7"><td class="memItemLeft">esp_err_t&#160;</td><td class="memItemRight"><a class="el" href="#a76f48098c22562b7dd7185f2fc3142f7">servo_set_angle</a> (float angle)</td></tr>
+<tr class="memdesc:a76f48098c22562b7dd7185f2fc3142f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Posiciona el servomotor en un ángulo específico.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Driver para control de servomotores mediante PWM usando el periférico LEDC del ESP32. </p>
+<p>Este módulo proporciona las funciones necesarias para controlar un servomotor estándar mediante señales PWM generadas por el periférico LEDC del ESP32.</p>
+<p>Funcionalidades:</p><ul>
+<li>Inicialización del canal PWM.</li>
+<li>Configuración del temporizador LEDC.</li>
+<li>Posicionamiento angular del servomotor.</li>
+</ul>
+<p>El módulo es utilizado para accionar mecanismos físicos dentro del sistema de fermentación, como mezcla o posicionamiento de elementos mecánicos.</p>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a6006789c547dabfec48ef14f0d9a9191" name="a6006789c547dabfec48ef14f0d9a9191"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6006789c547dabfec48ef14f0d9a9191">&#9670;&#160;</a></span>servo_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t servo_init </td>
+          <td>(</td>
+          <td class="paramtype">gpio_num_t</td>          <td class="paramname"><span class="paramname"><em>pin</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa el servomotor. </p>
+<p>Configura el temporizador y canal PWM del periférico LEDC necesarios para generar la señal de control del servo.</p>
+<p>Esta función debe ejecutarse una única vez antes de utilizar cualquier otra función del módulo.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pin</td><td>GPIO al que se encuentra conectado el servomotor.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Inicialización exitosa.</li>
+<li>Código de error en caso contrario.</li>
+</ul>
+</dd></dl>
+<p>Configura el temporizador LEDC y el canal PWM asociado al GPIO indicado.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pin</td><td>GPIO conectado al servomotor.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Inicialización exitosa.</li>
+<li>Código de error en caso contrario. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="servo_8c_source.html#l00103">103</a> del archivo <a class="el" href="servo_8c_source.html">servo.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  104</span>{</div>
+<div class="line"><span class="lineno">  105</span>    <a class="code hl_variable" href="servo_8c.html#ae9acca8e58d2713207db3538b31e7afa">servo_pin</a> = pin;</div>
+<div class="line"><span class="lineno">  106</span> </div>
+<div class="line"><span class="lineno">  107</span>    ledc_timer_config_t timer = {</div>
+<div class="line"><span class="lineno">  108</span>        .speed_mode = <a class="code hl_define" href="servo_8c.html#a5d1f820de2e7b5c4922ac2308e484c37">SERVO_MODE</a>,</div>
+<div class="line"><span class="lineno">  109</span>        .timer_num = <a class="code hl_define" href="servo_8c.html#a5ae00189f7e5d8ce80129f55f066e73d">SERVO_TIMER</a>,</div>
+<div class="line"><span class="lineno">  110</span>        .duty_resolution = <a class="code hl_define" href="servo_8c.html#ac10969d83b9cdee051df76a50fe6ab93">SERVO_RESOLUTION</a>,</div>
+<div class="line"><span class="lineno">  111</span>        .freq_hz = <a class="code hl_define" href="servo_8c.html#a7d9c36e285f4f83cc8d30e9ccfe403af">SERVO_FREQ</a>,</div>
+<div class="line"><span class="lineno">  112</span>        .clk_cfg = LEDC_AUTO_CLK</div>
+<div class="line"><span class="lineno">  113</span>    };</div>
+<div class="line"><span class="lineno">  114</span> </div>
+<div class="line"><span class="lineno">  115</span>    ledc_timer_config(&amp;timer);</div>
+<div class="line"><span class="lineno">  116</span> </div>
+<div class="line"><span class="lineno">  117</span>    ledc_channel_config_t channel = {</div>
+<div class="line"><span class="lineno">  118</span>        .gpio_num = <a class="code hl_variable" href="servo_8c.html#ae9acca8e58d2713207db3538b31e7afa">servo_pin</a>,</div>
+<div class="line"><span class="lineno">  119</span>        .speed_mode = <a class="code hl_define" href="servo_8c.html#a5d1f820de2e7b5c4922ac2308e484c37">SERVO_MODE</a>,</div>
+<div class="line"><span class="lineno">  120</span>        .channel = <a class="code hl_define" href="servo_8c.html#af9cd14f35dd24b4fcb9ed8aa627a28a4">SERVO_CHANNEL</a>,</div>
+<div class="line"><span class="lineno">  121</span>        .intr_type = LEDC_INTR_DISABLE,</div>
+<div class="line"><span class="lineno">  122</span>        .timer_sel = <a class="code hl_define" href="servo_8c.html#a5ae00189f7e5d8ce80129f55f066e73d">SERVO_TIMER</a>,</div>
+<div class="line"><span class="lineno">  123</span>        .duty = 0,</div>
+<div class="line"><span class="lineno">  124</span>        .hpoint = 0</div>
+<div class="line"><span class="lineno">  125</span>    };</div>
+<div class="line"><span class="lineno">  126</span> </div>
+<div class="line"><span class="lineno">  127</span>    ledc_channel_config(&amp;channel);</div>
+<div class="line"><span class="lineno">  128</span> </div>
+<div class="line"><span class="lineno">  129</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Servo inicializado en GPIO %d&quot;</span>, pin);</div>
+<div class="line"><span class="lineno">  130</span> </div>
+<div class="line"><span class="lineno">  131</span>    <span class="keywordflow">return</span> ESP_OK;</div>
+<div class="line"><span class="lineno">  132</span>}</div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+<div class="ttc" id="aservo_8c_html_a5ae00189f7e5d8ce80129f55f066e73d"><div class="ttname"><a href="servo_8c.html#a5ae00189f7e5d8ce80129f55f066e73d">SERVO_TIMER</a></div><div class="ttdeci">#define SERVO_TIMER</div><div class="ttdoc">Temporizador LEDC utilizado.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00043">servo.c:43</a></div></div>
+<div class="ttc" id="aservo_8c_html_a5d1f820de2e7b5c4922ac2308e484c37"><div class="ttname"><a href="servo_8c.html#a5d1f820de2e7b5c4922ac2308e484c37">SERVO_MODE</a></div><div class="ttdeci">#define SERVO_MODE</div><div class="ttdoc">Modo de operación LEDC.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00048">servo.c:48</a></div></div>
+<div class="ttc" id="aservo_8c_html_a7d9c36e285f4f83cc8d30e9ccfe403af"><div class="ttname"><a href="servo_8c.html#a7d9c36e285f4f83cc8d30e9ccfe403af">SERVO_FREQ</a></div><div class="ttdeci">#define SERVO_FREQ</div><div class="ttdoc">Frecuencia PWM utilizada por el servomotor.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00038">servo.c:38</a></div></div>
+<div class="ttc" id="aservo_8c_html_ac10969d83b9cdee051df76a50fe6ab93"><div class="ttname"><a href="servo_8c.html#ac10969d83b9cdee051df76a50fe6ab93">SERVO_RESOLUTION</a></div><div class="ttdeci">#define SERVO_RESOLUTION</div><div class="ttdoc">Resolución PWM configurada.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00058">servo.c:58</a></div></div>
+<div class="ttc" id="aservo_8c_html_ae9acca8e58d2713207db3538b31e7afa"><div class="ttname"><a href="servo_8c.html#ae9acca8e58d2713207db3538b31e7afa">servo_pin</a></div><div class="ttdeci">static gpio_num_t servo_pin</div><div class="ttdoc">GPIO utilizado para el servomotor.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00085">servo.c:85</a></div></div>
+<div class="ttc" id="aservo_8c_html_af9cd14f35dd24b4fcb9ed8aa627a28a4"><div class="ttname"><a href="servo_8c.html#af9cd14f35dd24b4fcb9ed8aa627a28a4">SERVO_CHANNEL</a></div><div class="ttdeci">#define SERVO_CHANNEL</div><div class="ttdoc">Canal PWM utilizado.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00053">servo.c:53</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a76f48098c22562b7dd7185f2fc3142f7" name="a76f48098c22562b7dd7185f2fc3142f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76f48098c22562b7dd7185f2fc3142f7">&#9670;&#160;</a></span>servo_set_angle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t servo_set_angle </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>angle</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Posiciona el servomotor en un ángulo específico. </p>
+<p>Posiciona el servomotor en el ángulo especificado.</p>
+<p>Convierte el ángulo solicitado a un ciclo de trabajo PWM compatible con servomotores estándar de 50 Hz.</p>
+<p>El rango válido de operación es de 0° a 180°.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle</td><td>Ángulo deseado en grados.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Operación realizada correctamente.</li>
+<li>ESP_ERR_INVALID_ARG: Ángulo fuera de rango.</li>
+</ul>
+</dd></dl>
+<p>Posiciona el servomotor en un ángulo específico.</p>
+<p>Convierte el ángulo solicitado en un ancho de pulso PWM:</p>
+<ul>
+<li>0° -&gt; 1.0 ms</li>
+<li>90° -&gt; 1.5 ms</li>
+<li>180° -&gt; 2.0 ms</li>
+</ul>
+<p>Posteriormente el ancho de pulso se transforma al valor de duty cycle requerido por el periférico LEDC.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle</td><td>Ángulo deseado en grados.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><ul>
+<li>ESP_OK: Operación realizada correctamente. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="servo_8c_source.html#l00155">155</a> del archivo <a class="el" href="servo_8c_source.html">servo.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  156</span>{</div>
+<div class="line"><span class="lineno">  157</span>    <span class="keywordflow">if</span> (angle &lt; 0.0f) {</div>
+<div class="line"><span class="lineno">  158</span>        angle = 0.0f;</div>
+<div class="line"><span class="lineno">  159</span>    }</div>
+<div class="line"><span class="lineno">  160</span> </div>
+<div class="line"><span class="lineno">  161</span>    <span class="keywordflow">if</span> (angle &gt; 180.0f) {</div>
+<div class="line"><span class="lineno">  162</span>        angle = 180.0f;</div>
+<div class="line"><span class="lineno">  163</span>    }</div>
+<div class="line"><span class="lineno">  164</span> </div>
+<div class="line"><span class="lineno">  165</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  166</span><span class="comment">     * Conversión lineal de ángulo a ancho de pulso.</span></div>
+<div class="line"><span class="lineno">  167</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  168</span>    <span class="keywordtype">float</span> pulse_us =</div>
+<div class="line"><span class="lineno">  169</span>        <a class="code hl_define" href="servo_8c.html#a474f2012d6528c25168fae40ba3c7190">SERVO_MIN_PULSE_US</a> +</div>
+<div class="line"><span class="lineno">  170</span>        ((angle / 180.0f) *</div>
+<div class="line"><span class="lineno">  171</span>        (<a class="code hl_define" href="servo_8c.html#ad1fd3164150a73e22d4a9e870cdb4731">SERVO_MAX_PULSE_US</a> - <a class="code hl_define" href="servo_8c.html#a474f2012d6528c25168fae40ba3c7190">SERVO_MIN_PULSE_US</a>));</div>
+<div class="line"><span class="lineno">  172</span> </div>
+<div class="line"><span class="lineno">  173</span>    <span class="comment">/*</span></div>
+<div class="line"><span class="lineno">  174</span><span class="comment">     * Conversión de ancho de pulso a duty cycle.</span></div>
+<div class="line"><span class="lineno">  175</span><span class="comment">     */</span></div>
+<div class="line"><span class="lineno">  176</span>    uint32_t duty =</div>
+<div class="line"><span class="lineno">  177</span>        (uint32_t)((pulse_us / <a class="code hl_define" href="servo_8c.html#a32d8db9baf0700270731ea14edf1932b">SERVO_PERIOD_US</a>) *</div>
+<div class="line"><span class="lineno">  178</span>        <a class="code hl_define" href="servo_8c.html#a24500855a2a7aab1ec9e7bfeeb00fb7a">SERVO_MAX_DUTY</a>);</div>
+<div class="line"><span class="lineno">  179</span> </div>
+<div class="line"><span class="lineno">  180</span>    ledc_set_duty(</div>
+<div class="line"><span class="lineno">  181</span>        <a class="code hl_define" href="servo_8c.html#a5d1f820de2e7b5c4922ac2308e484c37">SERVO_MODE</a>,</div>
+<div class="line"><span class="lineno">  182</span>        <a class="code hl_define" href="servo_8c.html#af9cd14f35dd24b4fcb9ed8aa627a28a4">SERVO_CHANNEL</a>,</div>
+<div class="line"><span class="lineno">  183</span>        duty);</div>
+<div class="line"><span class="lineno">  184</span> </div>
+<div class="line"><span class="lineno">  185</span>    ledc_update_duty(</div>
+<div class="line"><span class="lineno">  186</span>        <a class="code hl_define" href="servo_8c.html#a5d1f820de2e7b5c4922ac2308e484c37">SERVO_MODE</a>,</div>
+<div class="line"><span class="lineno">  187</span>        <a class="code hl_define" href="servo_8c.html#af9cd14f35dd24b4fcb9ed8aa627a28a4">SERVO_CHANNEL</a>);</div>
+<div class="line"><span class="lineno">  188</span> </div>
+<div class="line"><span class="lineno">  189</span>    ESP_LOGI(</div>
+<div class="line"><span class="lineno">  190</span>        <a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  191</span>        <span class="stringliteral">&quot;Servo angle: %.2f deg | pulse: %.2f us | duty: %lu&quot;</span>,</div>
+<div class="line"><span class="lineno">  192</span>        angle,</div>
+<div class="line"><span class="lineno">  193</span>        pulse_us,</div>
+<div class="line"><span class="lineno">  194</span>        (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)duty);</div>
+<div class="line"><span class="lineno">  195</span> </div>
+<div class="line"><span class="lineno">  196</span>    <span class="keywordflow">return</span> ESP_OK;</div>
+<div class="line"><span class="lineno">  197</span>}</div>
+<div class="ttc" id="aservo_8c_html_a24500855a2a7aab1ec9e7bfeeb00fb7a"><div class="ttname"><a href="servo_8c.html#a24500855a2a7aab1ec9e7bfeeb00fb7a">SERVO_MAX_DUTY</a></div><div class="ttdeci">#define SERVO_MAX_DUTY</div><div class="ttdoc">Ciclo de trabajo máximo para resolución de 16 bits.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00063">servo.c:63</a></div></div>
+<div class="ttc" id="aservo_8c_html_a32d8db9baf0700270731ea14edf1932b"><div class="ttname"><a href="servo_8c.html#a32d8db9baf0700270731ea14edf1932b">SERVO_PERIOD_US</a></div><div class="ttdeci">#define SERVO_PERIOD_US</div><div class="ttdoc">Periodo PWM en microsegundos.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00070">servo.c:70</a></div></div>
+<div class="ttc" id="aservo_8c_html_a474f2012d6528c25168fae40ba3c7190"><div class="ttname"><a href="servo_8c.html#a474f2012d6528c25168fae40ba3c7190">SERVO_MIN_PULSE_US</a></div><div class="ttdeci">#define SERVO_MIN_PULSE_US</div><div class="ttdoc">Ancho de pulso correspondiente a 0°.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00075">servo.c:75</a></div></div>
+<div class="ttc" id="aservo_8c_html_ad1fd3164150a73e22d4a9e870cdb4731"><div class="ttname"><a href="servo_8c.html#ad1fd3164150a73e22d4a9e870cdb4731">SERVO_MAX_PULSE_US</a></div><div class="ttdeci">#define SERVO_MAX_PULSE_US</div><div class="ttdoc">Ancho de pulso correspondiente a 180°.</div><div class="ttdef"><b>Definition</b> <a href="servo_8c_source.html#l00080">servo.c:80</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_ce9acbebd20a964a9fb527ea0a00b86e.html">drivers</a></li><li class="navelem"><a href="servo_8h.html">servo.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

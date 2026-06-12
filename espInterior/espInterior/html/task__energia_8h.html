@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/tasks/task_energia.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('task__energia_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo task_energia.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Declaración de la tarea de gestión energética del sistema.  
+<a href="#details">Más...</a></p>
+
+<p><a href="task__energia_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:ac7b7fee9849a033c0657c650e2dbfc9b" id="r_ac7b7fee9849a033c0657c650e2dbfc9b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac7b7fee9849a033c0657c650e2dbfc9b">task_energia</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:ac7b7fee9849a033c0657c650e2dbfc9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tarea principal de gestión energética.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Declaración de la tarea de gestión energética del sistema. </p>
+<p>Este módulo define la tarea responsable de coordinar el ciclo operativo del sistema y gestionar los modos de bajo consumo.</p>
+<p>La tarea supervisa la finalización de actividades críticas del proceso de fermentación y determina cuándo el sistema puede entrar en estados de ahorro energético.</p>
+<p>Funciones principales:</p><ul>
+<li>Coordinación del ciclo de operación.</li>
+<li>Sincronización con otras tareas.</li>
+<li>Gestión de modos de bajo consumo.</li>
+<li>Preparación para entrada en Deep Sleep.</li>
+<li>Optimización del consumo energético.</li>
+</ul>
+<p>Arquitectura:</p>
+<p>task_actuadores | v Notificación FreeRTOS | v task_energia | v Deep Sleep</p>
+<p>Esta tarea forma parte de la estrategia de eficiencia energética del sistema embebido.</p>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="task__energia_8h_source.html">task_energia.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="ac7b7fee9849a033c0657c650e2dbfc9b" name="ac7b7fee9849a033c0657c650e2dbfc9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7b7fee9849a033c0657c650e2dbfc9b">&#9670;&#160;</a></span>task_energia()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void task_energia </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>pvParameters</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tarea principal de gestión energética. </p>
+<p>Coordina el ciclo de ejecución del sistema y supervisa la finalización de las tareas necesarias antes de activar mecanismos de ahorro energético.</p>
+<p>Dependiendo del estado del sistema, puede preparar la transición hacia modos de bajo consumo como Deep Sleep.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td>Parámetros de la tarea (no utilizados).</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>La tarea permanece bloqueada esperando una notificación que indique el inicio de un nuevo ciclo operativo.</p>
+<p>Flujo de ejecución:</p><ul>
+<li>Esperar activación.</li>
+<li>Iniciar adquisición de sensores.</li>
+<li>Esperar finalización de procesos.</li>
+<li>Entrar en modo Deep Sleep.</li>
+</ul>
+<p>La coordinación se realiza mediante notificaciones directas de FreeRTOS para minimizar el uso de memoria y CPU.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td>Parámetros de la tarea (no utilizados). </td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Esperar inicio de ciclo.</p>
+<p>Activar adquisición de sensores.</p>
+<p>Esperar finalización de procesamiento y actuación.</p>
+<p>Actualmente se utiliza un tiempo máximo de espera como mecanismo de sincronización.</p>
+<p>Esperar finalización de tareas pendientes como almacenamiento o comunicaciones.</p>
+<p>Transición al modo Deep Sleep.</p>
+<p>El sistema permanecerá suspendido hasta que ocurra el evento de despertar configurado.</p>
+
+<p class="definition">Definición en la línea <a class="el" href="task__energia_8c_source.html#l00079">79</a> del archivo <a class="el" href="task__energia_8c_source.html">task_energia.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   80</span>{</div>
+<div class="line"><span class="lineno">   81</span>    <span class="keywordflow">while</span> (1)</div>
+<div class="line"><span class="lineno">   82</span>    {</div>
+<div class="line"><span class="lineno">   86</span>        ulTaskNotifyTake(</div>
+<div class="line"><span class="lineno">   87</span>            pdTRUE,</div>
+<div class="line"><span class="lineno">   88</span>            portMAX_DELAY);</div>
+<div class="line"><span class="lineno">   89</span> </div>
+<div class="line"><span class="lineno">   90</span>        ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Ciclo iniciado&quot;</span>);</div>
+<div class="line"><span class="lineno">   91</span></div>
+<div class="line"><span class="lineno">   95</span>        xTaskNotifyGive(</div>
+<div class="line"><span class="lineno">   96</span>            <a class="code hl_variable" href="main_8c.html#a545de6958783ff726c116adffaebbcfb">task_sensores_handle</a>);</div>
+<div class="line"><span class="lineno">   97</span></div>
+<div class="line"><span class="lineno">  105</span>        ulTaskNotifyTake(</div>
+<div class="line"><span class="lineno">  106</span>            pdTRUE,</div>
+<div class="line"><span class="lineno">  107</span>            pdMS_TO_TICKS(25000));</div>
+<div class="line"><span class="lineno">  108</span></div>
+<div class="line"><span class="lineno">  113</span>        ulTaskNotifyTake(</div>
+<div class="line"><span class="lineno">  114</span>            pdTRUE,</div>
+<div class="line"><span class="lineno">  115</span>            pdMS_TO_TICKS(5000));</div>
+<div class="line"><span class="lineno">  116</span> </div>
+<div class="line"><span class="lineno">  117</span>        ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Entrando en deep sleep&quot;</span>);</div>
+<div class="line"><span class="lineno">  118</span></div>
+<div class="line"><span class="lineno">  125</span>        esp_deep_sleep_start();</div>
+<div class="line"><span class="lineno">  126</span>    }</div>
+<div class="line"><span class="lineno">  127</span>}</div>
+<div class="ttc" id="amain_8c_html_a545de6958783ff726c116adffaebbcfb"><div class="ttname"><a href="main_8c.html#a545de6958783ff726c116adffaebbcfb">task_sensores_handle</a></div><div class="ttdeci">TaskHandle_t task_sensores_handle</div><div class="ttdoc">Handle de la tarea de sensores.</div><div class="ttdef"><b>Definition</b> <a href="main_8c_source.html#l00101">main.c:101</a></div></div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_76dd8867a16d204aa2db31affc56d971.html">tasks</a></li><li class="navelem"><a href="task__energia_8h.html">task_energia.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

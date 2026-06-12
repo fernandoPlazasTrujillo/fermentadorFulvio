@@ -1,0 +1,189 @@
+\doxysection{Referencia del archivo main/\+drivers/\+mq135.h}
+\hypertarget{mq135_8h}{}\label{mq135_8h}\index{main/drivers/mq135.h@{main/drivers/mq135.h}}
+
+
+Driver para adquisición de la señal analógica del sensor MQ135.  
+
+
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{mq135_8h_a6b00c05f51803783dc6cd451ae0f7f0a}{mq135\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa el módulo MQ135. \end{DoxyCompactList}\item 
+int \doxymbox{\hyperlink{mq135_8h_aeaeb8445395bbf8d673b83af30b57997}{mq135\+\_\+read\+\_\+raw}} (void)
+\begin{DoxyCompactList}\small\item\em Obtiene una lectura cruda del sensor. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{mq135_8h_ad6a18fd03c108e7debc52c29a3840e1c}{mq135\+\_\+read\+\_\+voltage}} (void)
+\begin{DoxyCompactList}\small\item\em Obtiene el voltaje promedio de salida del sensor. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{mq135_8h_a62d1f381a988acaa8466fc5d1a609561}{mq135\+\_\+read}} (void)
+\begin{DoxyCompactList}\small\item\em Obtiene una lectura representativa del sensor MQ135. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Driver para adquisición de la señal analógica del sensor MQ135. 
+
+Este módulo permite adquirir la señal de salida del sensor MQ135 mediante el ADC del ESP32, obteniendo lecturas en bruto y valores convertidos a voltaje.
+
+La conversión a concentraciones específicas de gases (ppm) no se encuentra implementada en este módulo.
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{mq135_8h_source}{mq135.\+h}}.
+
+
+
+\label{mq135_8h_doc-func-members}
+\Hypertarget{mq135_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{mq135_8h_a6b00c05f51803783dc6cd451ae0f7f0a}\index{mq135.h@{mq135.h}!mq135\_init@{mq135\_init}}
+\index{mq135\_init@{mq135\_init}!mq135.h@{mq135.h}}
+\doxysubsubsection{\texorpdfstring{mq135\_init()}{mq135\_init()}}
+{\footnotesize\ttfamily \label{mq135_8h_a6b00c05f51803783dc6cd451ae0f7f0a} 
+void mq135\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa el módulo MQ135. 
+
+Inicializa el sensor MQ135.
+
+Realiza la configuración necesaria para la adquisición de datos desde el canal ADC asociado al sensor.
+
+Esta función debe ejecutarse durante la inicialización del sistema antes de realizar lecturas.
+
+Inicializa el módulo MQ135. 
+
+Definición en la línea \doxymbox{\hyperlink{mq135_8c_source_l00052}{52}} del archivo \doxymbox{\hyperlink{mq135_8c_source}{mq135.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00053\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}MQ135\ inicializado"{}});}
+\DoxyCodeLine{00055\ \}}
+
+\end{DoxyCode}
+\Hypertarget{mq135_8h_a62d1f381a988acaa8466fc5d1a609561}\index{mq135.h@{mq135.h}!mq135\_read@{mq135\_read}}
+\index{mq135\_read@{mq135\_read}!mq135.h@{mq135.h}}
+\doxysubsubsection{\texorpdfstring{mq135\_read()}{mq135\_read()}}
+{\footnotesize\ttfamily \label{mq135_8h_a62d1f381a988acaa8466fc5d1a609561} 
+float mq135\+\_\+read (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene una lectura representativa del sensor MQ135. 
+
+Función principal de lectura del sensor MQ135.
+
+Esta función actúa como interfaz principal del módulo y proporciona una medición simplificada para su utilización por parte de las tareas del sistema.
+
+Actualmente retorna el voltaje promedio de salida del sensor.
+
+\begin{DoxyReturn}{Devuelve}
+Valor medido por el sensor.
+\end{DoxyReturn}
+Obtiene una lectura representativa del sensor MQ135.
+
+\begin{DoxyReturn}{Devuelve}
+Voltaje del sensor. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{mq135_8c_source_l00116}{116}} del archivo \doxymbox{\hyperlink{mq135_8c_source}{mq135.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00117\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{mq135_8c_ad6a18fd03c108e7debc52c29a3840e1c}{mq135\_read\_voltage}}();}
+\DoxyCodeLine{00119\ \}}
+
+\end{DoxyCode}
+\Hypertarget{mq135_8h_aeaeb8445395bbf8d673b83af30b57997}\index{mq135.h@{mq135.h}!mq135\_read\_raw@{mq135\_read\_raw}}
+\index{mq135\_read\_raw@{mq135\_read\_raw}!mq135.h@{mq135.h}}
+\doxysubsubsection{\texorpdfstring{mq135\_read\_raw()}{mq135\_read\_raw()}}
+{\footnotesize\ttfamily \label{mq135_8h_aeaeb8445395bbf8d673b83af30b57997} 
+int mq135\+\_\+read\+\_\+raw (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene una lectura cruda del sensor. 
+
+Obtiene un valor crudo estimado del ADC.
+
+Realiza una conversión ADC y devuelve el valor digital correspondiente sin aplicar escalamiento adicional.
+
+\begin{DoxyReturn}{Devuelve}
+Valor digital del ADC.
+\end{DoxyReturn}
+Obtiene una lectura cruda del sensor.
+
+Convierte el voltaje leído a una escala de 12 bits (0–4095).
+
+\begin{DoxyReturn}{Devuelve}
+Valor ADC estimado. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{mq135_8c_source_l00068}{68}} del archivo \doxymbox{\hyperlink{mq135_8c_source}{mq135.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00069\ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{int}\ raw\ =\ 0;}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{float}\ voltage\ =\ \doxymbox{\hyperlink{adc__manager_8c_a228d08c460b3c57ca3f7efc00c5e3f0c}{adc\_manager\_read\_voltage}}(\doxymbox{\hyperlink{mq135_8c_a2c4c61d72f96bbf9291f87e09798ee72}{MQ135\_ADC\_CHANNEL}});}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ raw\ =\ (int)((voltage\ /\ 3.3)\ *\ 4095);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}RAW\ estimado:\ \%d"{}},\ raw);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordflow}{return}\ raw;}
+\DoxyCodeLine{00079\ \}}
+
+\end{DoxyCode}
+\Hypertarget{mq135_8h_ad6a18fd03c108e7debc52c29a3840e1c}\index{mq135.h@{mq135.h}!mq135\_read\_voltage@{mq135\_read\_voltage}}
+\index{mq135\_read\_voltage@{mq135\_read\_voltage}!mq135.h@{mq135.h}}
+\doxysubsubsection{\texorpdfstring{mq135\_read\_voltage()}{mq135\_read\_voltage()}}
+{\footnotesize\ttfamily \label{mq135_8h_ad6a18fd03c108e7debc52c29a3840e1c} 
+float mq135\+\_\+read\+\_\+voltage (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene el voltaje promedio de salida del sensor. 
+
+Lee el voltaje promedio del sensor.
+
+Se realizan múltiples conversiones ADC y posteriormente se calcula un promedio para reducir el efecto del ruido presente en la señal analógica.
+
+\begin{DoxyReturn}{Devuelve}
+Voltaje promedio en voltios.
+\end{DoxyReturn}
+Obtiene el voltaje promedio de salida del sensor.
+
+Realiza múltiples lecturas para reducir ruido.
+
+\begin{DoxyReturn}{Devuelve}
+Voltaje promedio en voltios. 
+\end{DoxyReturn}
+
+
+Definición en la línea \doxymbox{\hyperlink{mq135_8c_source_l00092}{92}} del archivo \doxymbox{\hyperlink{mq135_8c_source}{mq135.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00093\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{float}\ sum\ =\ 0;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \doxymbox{\hyperlink{mq135_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\_SAMPLES}};\ i++)\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ sum\ +=\ \doxymbox{\hyperlink{adc__manager_8c_a228d08c460b3c57ca3f7efc00c5e3f0c}{adc\_manager\_read\_voltage}}(\doxymbox{\hyperlink{mq135_8c_a2c4c61d72f96bbf9291f87e09798ee72}{MQ135\_ADC\_CHANNEL}});}
+\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{float}\ avg\ =\ sum\ /\ \doxymbox{\hyperlink{mq135_8c_af0b23eedf2352de4c1eff77e1401730c}{NUM\_SAMPLES}};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Voltaje:\ \%.4f\ V"{}},\ avg);}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{return}\ avg;}
+\DoxyCodeLine{00105\ \}}
+
+\end{DoxyCode}

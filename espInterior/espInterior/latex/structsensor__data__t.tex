@@ -1,0 +1,125 @@
+\doxysection{Referencia de la estructura sensor\+\_\+data\+\_\+t}
+\hypertarget{structsensor__data__t}{}\label{structsensor__data__t}\index{sensor\_data\_t@{sensor\_data\_t}}
+
+
+Datos adquiridos por los sensores del sistema.  
+
+
+
+
+{\ttfamily \+\#include $<$data\+\_\+types.\+h$>$}
+
+\doxysubsubsection*{Atributos públicos}
+\begin{DoxyCompactItemize}
+\item 
+float \doxymbox{\hyperlink{structsensor__data__t_ae9f44daaf071cadf9887239f0913af12}{temperatura}}
+\item 
+float \doxymbox{\hyperlink{structsensor__data__t_abddfa565d5cd714994d766dc490f1f45}{ph}}
+\item 
+float \doxymbox{\hyperlink{structsensor__data__t_a1ac52f75cb0a613148535e9cbb60dc8f}{co2}}
+\item 
+float \doxymbox{\hyperlink{structsensor__data__t_a826880ddf83c7c8a9ef2d7610659d288}{co2\+\_\+raw}}
+\item 
+float \doxymbox{\hyperlink{structsensor__data__t_a5826cdd684b224914026f072905a43b1}{voltaje}}
+\item 
+float \doxymbox{\hyperlink{structsensor__data__t_acb48cb4500b3a3a5174c92620c5a04f7}{corriente}}
+\item 
+\doxymbox{\hyperlink{structdatetime__t}{datetime\+\_\+t}} \doxymbox{\hyperlink{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}{datetime}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Datos adquiridos por los sensores del sistema. 
+
+Esta estructura agrupa todas las variables medidas durante un ciclo de adquisición.
+
+Es utilizada para:\+
+\begin{DoxyItemize}
+\item Comunicación entre tareas.
+\item Registro en tarjeta SD.
+\item Publicación MQTT.
+\item Visualización en pantalla. 
+\end{DoxyItemize}
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00063}{63}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+
+
+\label{structsensor__data__t_doc-variable-members}
+\Hypertarget{structsensor__data__t_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{structsensor__data__t_a1ac52f75cb0a613148535e9cbb60dc8f}\index{sensor\_data\_t@{sensor\_data\_t}!co2@{co2}}
+\index{co2@{co2}!sensor\_data\_t@{sensor\_data\_t}}
+\doxysubsubsection{\texorpdfstring{co2}{co2}}
+{\footnotesize\ttfamily \label{structsensor__data__t_a1ac52f75cb0a613148535e9cbb60dc8f} 
+float sensor\+\_\+data\+\_\+t::\+co2}
+
+Concentración estimada de CO2. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00067}{67}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structsensor__data__t_a826880ddf83c7c8a9ef2d7610659d288}\index{sensor\_data\_t@{sensor\_data\_t}!co2\_raw@{co2\_raw}}
+\index{co2\_raw@{co2\_raw}!sensor\_data\_t@{sensor\_data\_t}}
+\doxysubsubsection{\texorpdfstring{co2\_raw}{co2\_raw}}
+{\footnotesize\ttfamily \label{structsensor__data__t_a826880ddf83c7c8a9ef2d7610659d288} 
+float sensor\+\_\+data\+\_\+t::\+co2\+\_\+raw}
+
+Lectura ADC sin procesar del MQ-\/135. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00068}{68}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structsensor__data__t_acb48cb4500b3a3a5174c92620c5a04f7}\index{sensor\_data\_t@{sensor\_data\_t}!corriente@{corriente}}
+\index{corriente@{corriente}!sensor\_data\_t@{sensor\_data\_t}}
+\doxysubsubsection{\texorpdfstring{corriente}{corriente}}
+{\footnotesize\ttfamily \label{structsensor__data__t_acb48cb4500b3a3a5174c92620c5a04f7} 
+float sensor\+\_\+data\+\_\+t::\+corriente}
+
+Corriente consumida. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00071}{71}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89}\index{sensor\_data\_t@{sensor\_data\_t}!datetime@{datetime}}
+\index{datetime@{datetime}!sensor\_data\_t@{sensor\_data\_t}}
+\doxysubsubsection{\texorpdfstring{datetime}{datetime}}
+{\footnotesize\ttfamily \label{structsensor__data__t_a7d05b78837724317acaaefe8de6a7a89} 
+\doxymbox{\hyperlink{structdatetime__t}{datetime\+\_\+t}} sensor\+\_\+data\+\_\+t::\+datetime}
+
+Fecha y hora de la medición. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00073}{73}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structsensor__data__t_abddfa565d5cd714994d766dc490f1f45}\index{sensor\_data\_t@{sensor\_data\_t}!ph@{ph}}
+\index{ph@{ph}!sensor\_data\_t@{sensor\_data\_t}}
+\doxysubsubsection{\texorpdfstring{ph}{ph}}
+{\footnotesize\ttfamily \label{structsensor__data__t_abddfa565d5cd714994d766dc490f1f45} 
+float sensor\+\_\+data\+\_\+t::\+ph}
+
+Valor de pH. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00066}{66}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structsensor__data__t_ae9f44daaf071cadf9887239f0913af12}\index{sensor\_data\_t@{sensor\_data\_t}!temperatura@{temperatura}}
+\index{temperatura@{temperatura}!sensor\_data\_t@{sensor\_data\_t}}
+\doxysubsubsection{\texorpdfstring{temperatura}{temperatura}}
+{\footnotesize\ttfamily \label{structsensor__data__t_ae9f44daaf071cadf9887239f0913af12} 
+float sensor\+\_\+data\+\_\+t::\+temperatura}
+
+Temperatura interna (°C). 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00065}{65}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+\Hypertarget{structsensor__data__t_a5826cdd684b224914026f072905a43b1}\index{sensor\_data\_t@{sensor\_data\_t}!voltaje@{voltaje}}
+\index{voltaje@{voltaje}!sensor\_data\_t@{sensor\_data\_t}}
+\doxysubsubsection{\texorpdfstring{voltaje}{voltaje}}
+{\footnotesize\ttfamily \label{structsensor__data__t_a5826cdd684b224914026f072905a43b1} 
+float sensor\+\_\+data\+\_\+t::\+voltaje}
+
+Voltaje del sistema. 
+
+Definición en la línea \doxymbox{\hyperlink{data__types_8h_source_l00070}{70}} del archivo \doxymbox{\hyperlink{data__types_8h_source}{data\+\_\+types.\+h}}.
+
+
+
+La documentación de esta estructura está generada del siguiente archivo:\+\begin{DoxyCompactItemize}
+\item 
+main/\+utils/\+\doxymbox{\hyperlink{data__types_8h}{data\+\_\+types.\+h}}\end{DoxyCompactItemize}

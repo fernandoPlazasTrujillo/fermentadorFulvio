@@ -1,0 +1,116 @@
+\doxysection{servo.\+c}
+\hypertarget{servo_8c_source}{}\label{servo_8c_source}\index{main/drivers/servo.c@{main/drivers/servo.c}}
+\doxymbox{\hyperlink{servo_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00023}00023\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{servo_8h}{drivers/servo.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ "{}driver/ledc.h"{}}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00025}00025\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00030}\doxymbox{\hyperlink{servo_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{00030}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}\ =\ \textcolor{stringliteral}{"{}SERVO"{}};}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00038}\doxymbox{\hyperlink{servo_8c_a7d9c36e285f4f83cc8d30e9ccfe403af}{00038}}\ \textcolor{preprocessor}{\#define\ SERVO\_FREQ\ 50}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00043}\doxymbox{\hyperlink{servo_8c_a5ae00189f7e5d8ce80129f55f066e73d}{00043}}\ \textcolor{preprocessor}{\#define\ SERVO\_TIMER\ LEDC\_TIMER\_0}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00048}\doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{00048}}\ \textcolor{preprocessor}{\#define\ SERVO\_MODE\ LEDC\_HIGH\_SPEED\_MODE}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00053}\doxymbox{\hyperlink{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}{00053}}\ \textcolor{preprocessor}{\#define\ SERVO\_CHANNEL\ LEDC\_CHANNEL\_0}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00058}\doxymbox{\hyperlink{servo_8c_ac10969d83b9cdee051df76a50fe6ab93}{00058}}\ \textcolor{preprocessor}{\#define\ SERVO\_RESOLUTION\ LEDC\_TIMER\_16\_BIT}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00063}\doxymbox{\hyperlink{servo_8c_a24500855a2a7aab1ec9e7bfeeb00fb7a}{00063}}\ \textcolor{preprocessor}{\#define\ SERVO\_MAX\_DUTY\ 65535}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00070}\doxymbox{\hyperlink{servo_8c_a32d8db9baf0700270731ea14edf1932b}{00070}}\ \textcolor{preprocessor}{\#define\ SERVO\_PERIOD\_US\ 20000.0f}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00075}\doxymbox{\hyperlink{servo_8c_a474f2012d6528c25168fae40ba3c7190}{00075}}\ \textcolor{preprocessor}{\#define\ SERVO\_MIN\_PULSE\_US\ 1000.0f}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00080}\doxymbox{\hyperlink{servo_8c_ad1fd3164150a73e22d4a9e870cdb4731}{00080}}\ \textcolor{preprocessor}{\#define\ SERVO\_MAX\_PULSE\_US\ 2000.0f}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00085}\doxymbox{\hyperlink{servo_8c_ae9acca8e58d2713207db3538b31e7afa}{00085}}\ \textcolor{keyword}{static}\ gpio\_num\_t\ \doxymbox{\hyperlink{servo_8c_ae9acca8e58d2713207db3538b31e7afa}{servo\_pin}};}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00087}00087\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00088}00088\ \textcolor{comment}{//\ INIT}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00089}00089\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00103}\doxymbox{\hyperlink{servo_8c_a6006789c547dabfec48ef14f0d9a9191}{00103}}\ esp\_err\_t\ \doxymbox{\hyperlink{servo_8c_a6006789c547dabfec48ef14f0d9a9191}{servo\_init}}(gpio\_num\_t\ pin)}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00104}00104\ \{}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00105}00105\ \ \ \ \ \doxymbox{\hyperlink{servo_8c_ae9acca8e58d2713207db3538b31e7afa}{servo\_pin}}\ =\ pin;}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00107}00107\ \ \ \ \ ledc\_timer\_config\_t\ timer\ =\ \{}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00108}00108\ \ \ \ \ \ \ \ \ .speed\_mode\ =\ \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\_MODE}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00109}00109\ \ \ \ \ \ \ \ \ .timer\_num\ =\ \doxymbox{\hyperlink{servo_8c_a5ae00189f7e5d8ce80129f55f066e73d}{SERVO\_TIMER}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00110}00110\ \ \ \ \ \ \ \ \ .duty\_resolution\ =\ \doxymbox{\hyperlink{servo_8c_ac10969d83b9cdee051df76a50fe6ab93}{SERVO\_RESOLUTION}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00111}00111\ \ \ \ \ \ \ \ \ .freq\_hz\ =\ \doxymbox{\hyperlink{servo_8c_a7d9c36e285f4f83cc8d30e9ccfe403af}{SERVO\_FREQ}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00112}00112\ \ \ \ \ \ \ \ \ .clk\_cfg\ =\ LEDC\_AUTO\_CLK}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00113}00113\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00115}00115\ \ \ \ \ ledc\_timer\_config(\&timer);}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00117}00117\ \ \ \ \ ledc\_channel\_config\_t\ channel\ =\ \{}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00118}00118\ \ \ \ \ \ \ \ \ .gpio\_num\ =\ \doxymbox{\hyperlink{servo_8c_ae9acca8e58d2713207db3538b31e7afa}{servo\_pin}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00119}00119\ \ \ \ \ \ \ \ \ .speed\_mode\ =\ \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\_MODE}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00120}00120\ \ \ \ \ \ \ \ \ .channel\ =\ \doxymbox{\hyperlink{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}{SERVO\_CHANNEL}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00121}00121\ \ \ \ \ \ \ \ \ .intr\_type\ =\ LEDC\_INTR\_DISABLE,}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00122}00122\ \ \ \ \ \ \ \ \ .timer\_sel\ =\ \doxymbox{\hyperlink{servo_8c_a5ae00189f7e5d8ce80129f55f066e73d}{SERVO\_TIMER}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00123}00123\ \ \ \ \ \ \ \ \ .duty\ =\ 0,}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00124}00124\ \ \ \ \ \ \ \ \ .hpoint\ =\ 0}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00125}00125\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00127}00127\ \ \ \ \ ledc\_channel\_config(\&channel);}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00129}00129\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Servo\ inicializado\ en\ GPIO\ \%d"{}},\ pin);}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00131}00131\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00132}00132\ \}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00134}00134\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00135}00135\ \textcolor{comment}{//\ SET\ ANGLE}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00136}00136\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00155}\doxymbox{\hyperlink{servo_8c_a76f48098c22562b7dd7185f2fc3142f7}{00155}}\ esp\_err\_t\ \doxymbox{\hyperlink{servo_8c_a76f48098c22562b7dd7185f2fc3142f7}{servo\_set\_angle}}(\textcolor{keywordtype}{float}\ angle)}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00156}00156\ \{}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00157}00157\ \ \ \ \ \textcolor{keywordflow}{if}\ (angle\ <\ 0.0f)\ \{}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00158}00158\ \ \ \ \ \ \ \ \ angle\ =\ 0.0f;}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00159}00159\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00161}00161\ \ \ \ \ \textcolor{keywordflow}{if}\ (angle\ >\ 180.0f)\ \{}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00162}00162\ \ \ \ \ \ \ \ \ angle\ =\ 180.0f;}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00163}00163\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00165}00165\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00166}00166\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ lineal\ de\ ángulo\ a\ ancho\ de\ pulso.}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00167}00167\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00168}00168\ \ \ \ \ \textcolor{keywordtype}{float}\ pulse\_us\ =}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00169}00169\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a474f2012d6528c25168fae40ba3c7190}{SERVO\_MIN\_PULSE\_US}}\ +}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00170}00170\ \ \ \ \ \ \ \ \ ((angle\ /\ 180.0f)\ *}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00171}00171\ \ \ \ \ \ \ \ \ (\doxymbox{\hyperlink{servo_8c_ad1fd3164150a73e22d4a9e870cdb4731}{SERVO\_MAX\_PULSE\_US}}\ -\/\ \doxymbox{\hyperlink{servo_8c_a474f2012d6528c25168fae40ba3c7190}{SERVO\_MIN\_PULSE\_US}}));}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00173}00173\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00174}00174\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ de\ ancho\ de\ pulso\ a\ duty\ cycle.}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00175}00175\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00176}00176\ \ \ \ \ uint32\_t\ duty\ =}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00177}00177\ \ \ \ \ \ \ \ \ (uint32\_t)((pulse\_us\ /\ \doxymbox{\hyperlink{servo_8c_a32d8db9baf0700270731ea14edf1932b}{SERVO\_PERIOD\_US}})\ *}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00178}00178\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a24500855a2a7aab1ec9e7bfeeb00fb7a}{SERVO\_MAX\_DUTY}});}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00180}00180\ \ \ \ \ ledc\_set\_duty(}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00181}00181\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\_MODE}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00182}00182\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}{SERVO\_CHANNEL}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00183}00183\ \ \ \ \ \ \ \ \ duty);}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00184}00184\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00185}00185\ \ \ \ \ ledc\_update\_duty(}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00186}00186\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_a5d1f820de2e7b5c4922ac2308e484c37}{SERVO\_MODE}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00187}00187\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{servo_8c_af9cd14f35dd24b4fcb9ed8aa627a28a4}{SERVO\_CHANNEL}});}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00188}00188\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00189}00189\ \ \ \ \ ESP\_LOGI(}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00190}00190\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00191}00191\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Servo\ angle:\ \%.2f\ deg\ |\ pulse:\ \%.2f\ us\ |\ duty:\ \%lu"{}},}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00192}00192\ \ \ \ \ \ \ \ \ angle,}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00193}00193\ \ \ \ \ \ \ \ \ pulse\_us,}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00194}00194\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long})duty);}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00196}00196\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{servo_8c_source_l00197}00197\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,191 @@
+\doxysection{Referencia del archivo main/\+utils/\+queues.h}
+\hypertarget{queues_8h}{}\label{queues_8h}\index{main/utils/queues.h@{main/utils/queues.h}}
+
+
+Declaración de las colas de comunicación del sistema.  
+
+
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+queue.\+h"{}}\newline
+{\ttfamily \+\#include "{}utils/\+data\+\_\+types.\+h"{}}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{queues_8h_a28e124a6b8d5d663be75b1649f51e44a}{queues\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializa todas las colas del sistema. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{queues_8h_a9ac1175b5e7231953bed172a42b5161d}{queue\+\_\+sensores}}
+\begin{DoxyCompactList}\small\item\em Cola de datos provenientes de los sensores. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{queues_8h_ae944909fe4a2b18292a96cdb6bef3d1c}{queue\+\_\+control}}
+\begin{DoxyCompactList}\small\item\em Cola de comandos de control. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{queues_8h_a84471e3465c562d8336b3c2366b605cb}{queue\+\_\+logger}}
+\begin{DoxyCompactList}\small\item\em Cola para registro de datos. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{queues_8h_a526da114a431a9b62400f5080beb70da}{queue\+\_\+mqtt}}
+\begin{DoxyCompactList}\small\item\em Cola para publicación MQTT. \end{DoxyCompactList}\item 
+Queue\+Handle\+\_\+t \doxymbox{\hyperlink{queues_8h_ac32bf9d351fcc767fdcadd39574eb74c}{queue\+\_\+display}}
+\begin{DoxyCompactList}\small\item\em Cola de actualización de pantalla. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Declaración de las colas de comunicación del sistema. 
+
+Este módulo define las colas Free\+RTOS utilizadas para el intercambio de información entre las diferentes tareas del sistema embebido.
+
+Las colas permiten una comunicación segura y desacoplada entre productores y consumidores, evitando el uso de variables globales compartidas.
+
+Flujo principal:\+
+
+task\+\_\+sensores \texorpdfstring{$\vert$}{|} v queue\+\_\+sensores \texorpdfstring{$\vert$}{|} v task\+\_\+control \texorpdfstring{$\vert$}{|} v queue\+\_\+control \texorpdfstring{$\vert$}{|} v task\+\_\+actuadores
+
+Además, los datos pueden ser distribuidos hacia:\+
+\begin{DoxyItemize}
+\item queue\+\_\+logger
+\item queue\+\_\+display
+\item queue\+\_\+mqtt
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{queues_8h_source}{queues.\+h}}.
+
+
+
+\label{queues_8h_doc-func-members}
+\Hypertarget{queues_8h_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{queues_8h_a28e124a6b8d5d663be75b1649f51e44a}\index{queues.h@{queues.h}!queues\_init@{queues\_init}}
+\index{queues\_init@{queues\_init}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{queues\_init()}{queues\_init()}}
+{\footnotesize\ttfamily \label{queues_8h_a28e124a6b8d5d663be75b1649f51e44a} 
+void queues\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializa todas las colas del sistema. 
+
+Crea las colas Free\+RTOS necesarias para la comunicación entre tareas y verifica la correcta asignación de memoria.
+
+Crea las colas Free\+RTOS utilizadas para la comunicación entre tareas y reserva la memoria necesaria para cada una.
+
+Tamaños configurados:\+
+\begin{DoxyItemize}
+\item queue\+\_\+sensores :\+ 5 elementos.
+\item queue\+\_\+control :\+ 5 elementos.
+\item queue\+\_\+logger :\+ 5 elementos.
+\item queue\+\_\+mqtt :\+ 10 elementos.
+\item queue\+\_\+display :\+ 5 elementos. 
+\end{DoxyItemize}
+
+Definición en la línea \doxymbox{\hyperlink{queues_8c_source_l00090}{90}} del archivo \doxymbox{\hyperlink{queues_8c_source}{queues.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00091\ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a9ac1175b5e7231953bed172a42b5161d}{queue\_sensores}}\ =\ xQueueCreate(5,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}));}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_ae944909fe4a2b18292a96cdb6bef3d1c}{queue\_control}}\ \ =\ xQueueCreate(5,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structcontrol__cmd__t}{control\_cmd\_t}}));}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a84471e3465c562d8336b3c2366b605cb}{queue\_logger}}\ \ \ =\ xQueueCreate(5,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}));}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a526da114a431a9b62400f5080beb70da}{queue\_mqtt}}\ \ \ \ \ =\ xQueueCreate(10,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structsensor__data__t}{sensor\_data\_t}}));}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_ac32bf9d351fcc767fdcadd39574eb74c}{queue\_display}}\ \ =\ xQueueCreate(5,\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{structdisplay__data__t}{display\_data\_t}}));}
+\DoxyCodeLine{00101\ \}}
+
+\end{DoxyCode}
+
+
+\label{queues_8h_doc-var-members}
+\Hypertarget{queues_8h_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{queues_8h_ae944909fe4a2b18292a96cdb6bef3d1c}\index{queues.h@{queues.h}!queue\_control@{queue\_control}}
+\index{queue\_control@{queue\_control}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{queue\_control}{queue\_control}}
+{\footnotesize\ttfamily \label{queues_8h_ae944909fe4a2b18292a96cdb6bef3d1c} 
+Queue\+Handle\+\_\+t queue\+\_\+control\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Cola de comandos de control. 
+
+Utilizada para enviar estructuras \doxylink{structcontrol__cmd__t}{control\+\_\+cmd\+\_\+t} desde la tarea de control hacia la tarea de actuadores.
+
+Transporta estructuras \doxylink{structcontrol__cmd__t}{control\+\_\+cmd\+\_\+t} desde la tarea de control hacia la tarea de actuadores. 
+
+Definición en la línea \doxymbox{\hyperlink{queues_8c_source_l00051}{51}} del archivo \doxymbox{\hyperlink{queues_8c_source}{queues.\+c}}.
+
+\Hypertarget{queues_8h_ac32bf9d351fcc767fdcadd39574eb74c}\index{queues.h@{queues.h}!queue\_display@{queue\_display}}
+\index{queue\_display@{queue\_display}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{queue\_display}{queue\_display}}
+{\footnotesize\ttfamily \label{queues_8h_ac32bf9d351fcc767fdcadd39574eb74c} 
+Queue\+Handle\+\_\+t queue\+\_\+display\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Cola de actualización de pantalla. 
+
+Transporta estructuras \doxylink{structdisplay__data__t}{display\+\_\+data\+\_\+t} hacia la tarea encargada de la interfaz de usuario. 
+
+Definición en la línea \doxymbox{\hyperlink{queues_8c_source_l00075}{75}} del archivo \doxymbox{\hyperlink{queues_8c_source}{queues.\+c}}.
+
+\Hypertarget{queues_8h_a84471e3465c562d8336b3c2366b605cb}\index{queues.h@{queues.h}!queue\_logger@{queue\_logger}}
+\index{queue\_logger@{queue\_logger}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{queue\_logger}{queue\_logger}}
+{\footnotesize\ttfamily \label{queues_8h_a84471e3465c562d8336b3c2366b605cb} 
+Queue\+Handle\+\_\+t queue\+\_\+logger\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Cola para registro de datos. 
+
+Cola para almacenamiento de datos.
+
+Permite transferir mediciones hacia la tarea encargada del almacenamiento en tarjeta SD.
+
+Cola para registro de datos.
+
+Utilizada para transferir mediciones hacia la tarea encargada del registro en tarjeta SD. 
+
+Definición en la línea \doxymbox{\hyperlink{queues_8c_source_l00059}{59}} del archivo \doxymbox{\hyperlink{queues_8c_source}{queues.\+c}}.
+
+\Hypertarget{queues_8h_a526da114a431a9b62400f5080beb70da}\index{queues.h@{queues.h}!queue\_mqtt@{queue\_mqtt}}
+\index{queue\_mqtt@{queue\_mqtt}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{queue\_mqtt}{queue\_mqtt}}
+{\footnotesize\ttfamily \label{queues_8h_a526da114a431a9b62400f5080beb70da} 
+Queue\+Handle\+\_\+t queue\+\_\+mqtt\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Cola para publicación MQTT. 
+
+Permite enviar información desde las tareas de aplicación hacia la tarea responsable de la comunicación MQTT.
+
+Permite enviar datos hacia la tarea responsable de la comunicación con el broker MQTT. 
+
+Definición en la línea \doxymbox{\hyperlink{queues_8c_source_l00067}{67}} del archivo \doxymbox{\hyperlink{queues_8c_source}{queues.\+c}}.
+
+\Hypertarget{queues_8h_a9ac1175b5e7231953bed172a42b5161d}\index{queues.h@{queues.h}!queue\_sensores@{queue\_sensores}}
+\index{queue\_sensores@{queue\_sensores}!queues.h@{queues.h}}
+\doxysubsubsection{\texorpdfstring{queue\_sensores}{queue\_sensores}}
+{\footnotesize\ttfamily \label{queues_8h_a9ac1175b5e7231953bed172a42b5161d} 
+Queue\+Handle\+\_\+t queue\+\_\+sensores\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Cola de datos provenientes de los sensores. 
+
+Cola de datos provenientes de sensores.
+
+Transporta estructuras \doxylink{structsensor__data__t}{sensor\+\_\+data\+\_\+t} desde la tarea de adquisición hacia las demás tareas consumidoras.
+
+Cola de datos provenientes de los sensores.
+
+Transporta estructuras \doxylink{structsensor__data__t}{sensor\+\_\+data\+\_\+t} entre las tareas de adquisición y procesamiento. 
+
+Definición en la línea \doxymbox{\hyperlink{queues_8c_source_l00043}{43}} del archivo \doxymbox{\hyperlink{queues_8c_source}{queues.\+c}}.
+

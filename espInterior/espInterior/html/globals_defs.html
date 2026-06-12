@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Miembros de los archivos</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('globals_defs.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="contents">
+<div class="textblock">Lista de todas las macros con enlaces a los archivos a los que corresponden:</div><br/>
+<div class="qindex"><a class="qindex" href="#index_a">A</a><div class="alphasepar"></div><a class="qindex" href="#index_c">C</a><div class="alphasepar"></div><a class="qindex" href="#index_d">D</a><div class="alphasepar"></div><a class="qindex" href="#index_i">I</a><div class="alphasepar"></div><a class="qindex" href="#index_m">M</a><div class="alphasepar"></div><a class="qindex" href="#index_n">N</a><div class="alphasepar"></div><a class="qindex" href="#index_o">O</a><div class="alphasepar"></div><a class="qindex" href="#index_p">P</a><div class="alphasepar"></div><a class="qindex" href="#index_s">S</a><div class="alphasepar"></div><a class="qindex" href="#index_t">T</a><div class="alphasepar"></div><a class="qindex" href="#index_v">V</a><div class="alphasepar"></div><a class="qindex" href="#index_w">W</a></div>
+
+
+<h3 class="doxsection"><a id="index_a" name="index_a"></a>- a -</h3><ul>
+<li>ADC_OFFSET&#160;:&#160;<a class="el" href="voltage__sensor_8c.html#a827907ee6183e98bb8a50727540d4bb1">voltage_sensor.c</a></li>
+<li>ALPHA&#160;:&#160;<a class="el" href="task__sensores_8c.html#af5abd28c44c29b7397c84f1fec4b1d84">task_sensores.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_c" name="index_c"></a>- c -</h3><ul>
+<li>CO2_THRESHOLD&#160;:&#160;<a class="el" href="task__control_8c.html#a925ed04c11e64b5611906a5a1643ef4b">task_control.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_d" name="index_d"></a>- d -</h3><ul>
+<li>DIVIDER_RATIO&#160;:&#160;<a class="el" href="voltage__sensor_8c.html#ada12fcd9aed6fefc5255f46b58e8f42c">voltage_sensor.c</a></li>
+<li>DS3231_ADDR&#160;:&#160;<a class="el" href="rtc__ds3231_8c.html#a807ca712a5ee10a56cf420c420c42524">rtc_ds3231.c</a></li>
+<li>DS3231_CONTROL_A1_INTERRUPT&#160;:&#160;<a class="el" href="rtc__ds3231_8c.html#acb8d02ca6db63c50bcb04d6b38803d13">rtc_ds3231.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_i" name="index_i"></a>- i -</h3><ul>
+<li>I2C_MASTER_FREQ_HZ&#160;:&#160;<a class="el" href="i2c__manager_8c.html#a5c22ca4de37a83a59014e48b0a0b043d">i2c_manager.c</a></li>
+<li>I2C_MASTER_NUM&#160;:&#160;<a class="el" href="i2c__manager_8c.html#aab9e642b6200f95fcbd2ad7466aaa2d3">i2c_manager.c</a></li>
+<li>I2C_MASTER_SCL_IO&#160;:&#160;<a class="el" href="i2c__manager_8c.html#a033b5e8a30541fe4ff939a62fdb7a43d">i2c_manager.c</a></li>
+<li>I2C_MASTER_SDA_IO&#160;:&#160;<a class="el" href="i2c__manager_8c.html#af47631d568bba17edf9d1ea042602bb6">i2c_manager.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_m" name="index_m"></a>- m -</h3><ul>
+<li>MIX_DURATION_MS&#160;:&#160;<a class="el" href="task__actuadores_8c.html#a83618a6cda6ceda41ea6c705c971ca20">task_actuadores.c</a></li>
+<li>MIX_INTERVAL_CYCLES&#160;:&#160;<a class="el" href="task__control_8c.html#a35c55da7dae2012fa594416a7f685792">task_control.c</a></li>
+<li>MQ135_ADC_CHANNEL&#160;:&#160;<a class="el" href="mq135_8c.html#a2c4c61d72f96bbf9291f87e09798ee72">mq135.c</a></li>
+<li>MQTT_BROKER_URI&#160;:&#160;<a class="el" href="mqtt__manager_8c.html#a547a77358f516584c3c31c6c69983b4e">mqtt_manager.c</a></li>
+<li>MQTT_CONNECT_TIMEOUT_MS&#160;:&#160;<a class="el" href="task__mqtt_8c.html#a26528eb0ea53fcc2f08b0a31e0d918e5">task_mqtt.c</a></li>
+<li>MQTT_CONNECTED_BIT&#160;:&#160;<a class="el" href="mqtt__manager_8c.html#a1e80d8829bc152cc952c4a118fcde270">mqtt_manager.c</a></li>
+<li>MQTT_ERROR_BIT&#160;:&#160;<a class="el" href="mqtt__manager_8c.html#a78f2cbc86cf701e5327a3d22120f4b7c">mqtt_manager.c</a></li>
+<li>MQTT_PENDING_PAYLOAD_SIZE&#160;:&#160;<a class="el" href="task__mqtt_8c.html#a2fdbe826e17a13bf27012646c9b74635">task_mqtt.c</a></li>
+<li>MQTT_PUBLISH_TIMEOUT_MS&#160;:&#160;<a class="el" href="task__mqtt_8c.html#a171ce00cd4c77b8836211f14d77df95e">task_mqtt.c</a></li>
+<li>MQTT_PUBLISHED_BIT&#160;:&#160;<a class="el" href="mqtt__manager_8c.html#a1af8627745313cfd7ec63711203fd2c1">mqtt_manager.c</a></li>
+<li>MQTT_TOPIC&#160;:&#160;<a class="el" href="task__mqtt_8c.html#a400d28e1af2bcd57bf651dc23290a6d3">task_mqtt.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_n" name="index_n"></a>- n -</h3><ul>
+<li>NUM_SAMPLES&#160;:&#160;<a class="el" href="mq135_8c.html#af0b23eedf2352de4c1eff77e1401730c">mq135.c</a>, <a class="el" href="ph__sensor_8c.html#af0b23eedf2352de4c1eff77e1401730c">ph_sensor.c</a>, <a class="el" href="voltage__sensor_8c.html#af0b23eedf2352de4c1eff77e1401730c">voltage_sensor.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_o" name="index_o"></a>- o -</h3><ul>
+<li>OLED_ADDR&#160;:&#160;<a class="el" href="oled__display_8c.html#a7dfa2c4cfbfcba36416046052e7943e8">oled_display.c</a></li>
+<li>OLED_HEIGHT&#160;:&#160;<a class="el" href="oled__display_8c.html#a149f081665424602c8c0f90a6e935f3b">oled_display.c</a></li>
+<li>OLED_PAGES&#160;:&#160;<a class="el" href="oled__display_8c.html#ade7dfe72f52e8da2aeefe0ff95ff255d">oled_display.c</a></li>
+<li>OLED_WIDTH&#160;:&#160;<a class="el" href="oled__display_8c.html#a9885a007def27c91dd1720fb65d55f87">oled_display.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_p" name="index_p"></a>- p -</h3><ul>
+<li>PH_ADC_CHANNEL&#160;:&#160;<a class="el" href="ph__sensor_8c.html#afe07d63548e90671ed265d67e7f0df8e">ph_sensor.c</a></li>
+<li>PH_MAX_VOLTAGE&#160;:&#160;<a class="el" href="ph__sensor_8c.html#a6bbdd19ffa0606b6ca36388f17b9d435">ph_sensor.c</a></li>
+<li>PH_MIN_VOLTAGE&#160;:&#160;<a class="el" href="ph__sensor_8c.html#a87abd31489e1cf7514ed303a5194c684">ph_sensor.c</a></li>
+<li>PH_OFFSET&#160;:&#160;<a class="el" href="ph__sensor_8c.html#ac1260df376cca2240c3820d7efd45334">ph_sensor.c</a></li>
+<li>PH_SLOPE&#160;:&#160;<a class="el" href="ph__sensor_8c.html#acb6161a3ffb103e0367458060062d929">ph_sensor.c</a></li>
+<li>PIN_BOMBA&#160;:&#160;<a class="el" href="task__actuadores_8c.html#a04c091f47b05cd33db87cbb066492c68">task_actuadores.c</a></li>
+<li>PIN_CLK&#160;:&#160;<a class="el" href="sd__card_8c.html#a29e4cd8304fdcdd2e715189dfaaf31c2">sd_card.c</a></li>
+<li>PIN_CS&#160;:&#160;<a class="el" href="sd__card_8c.html#afa592f8fcb7a301edfe97aa121fd28ce">sd_card.c</a></li>
+<li>PIN_MISO&#160;:&#160;<a class="el" href="sd__card_8c.html#a46bdd417480dec5cb9cf196af3c7489c">sd_card.c</a></li>
+<li>PIN_MOSI&#160;:&#160;<a class="el" href="sd__card_8c.html#abaeddda4b992af7165ed898ab8b2b4ac">sd_card.c</a></li>
+<li>PIN_MOTOR&#160;:&#160;<a class="el" href="task__actuadores_8c.html#ab9c7d85b16a34449359f93d0ef160af8">task_actuadores.c</a></li>
+<li>PIN_SERVO&#160;:&#160;<a class="el" href="task__actuadores_8c.html#a683a2f1ac846d9e7c7f68fd29130ee1a">task_actuadores.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_s" name="index_s"></a>- s -</h3><ul>
+<li>SERVO_CHANNEL&#160;:&#160;<a class="el" href="servo_8c.html#af9cd14f35dd24b4fcb9ed8aa627a28a4">servo.c</a></li>
+<li>SERVO_FREQ&#160;:&#160;<a class="el" href="servo_8c.html#a7d9c36e285f4f83cc8d30e9ccfe403af">servo.c</a></li>
+<li>SERVO_MAX_DUTY&#160;:&#160;<a class="el" href="servo_8c.html#a24500855a2a7aab1ec9e7bfeeb00fb7a">servo.c</a></li>
+<li>SERVO_MAX_PULSE_US&#160;:&#160;<a class="el" href="servo_8c.html#ad1fd3164150a73e22d4a9e870cdb4731">servo.c</a></li>
+<li>SERVO_MIN_PULSE_US&#160;:&#160;<a class="el" href="servo_8c.html#a474f2012d6528c25168fae40ba3c7190">servo.c</a></li>
+<li>SERVO_MODE&#160;:&#160;<a class="el" href="servo_8c.html#a5d1f820de2e7b5c4922ac2308e484c37">servo.c</a></li>
+<li>SERVO_PERIOD_US&#160;:&#160;<a class="el" href="servo_8c.html#a32d8db9baf0700270731ea14edf1932b">servo.c</a></li>
+<li>SERVO_RESOLUTION&#160;:&#160;<a class="el" href="servo_8c.html#ac10969d83b9cdee051df76a50fe6ab93">servo.c</a></li>
+<li>SERVO_TIMER&#160;:&#160;<a class="el" href="servo_8c.html#a5ae00189f7e5d8ce80129f55f066e73d">servo.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_t" name="index_t"></a>- t -</h3><ul>
+<li>TAG&#160;:&#160;<a class="el" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">mq135.c</a>, <a class="el" href="voltage__sensor_8c.html#afc3d101f633a076cc1ca84b85b6224b2">voltage_sensor.c</a>, <a class="el" href="i2c__manager_8c.html#afc3d101f633a076cc1ca84b85b6224b2">i2c_manager.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_v" name="index_v"></a>- v -</h3><ul>
+<li>VOLTAGE_ADC_CHANNEL&#160;:&#160;<a class="el" href="voltage__sensor_8c.html#a1aa0734029d3be2499de31ebd0bdf65c">voltage_sensor.c</a></li>
+</ul>
+
+
+<h3 class="doxsection"><a id="index_w" name="index_w"></a>- w -</h3><ul>
+<li>WIFI_CONNECT_TIMEOUT_MS&#160;:&#160;<a class="el" href="main_8c.html#a269a6cfad0972318bcd4766eb6a1d7f2">main.c</a></li>
+<li>WIFI_CONNECTED_BIT&#160;:&#160;<a class="el" href="wifi__manager_8c.html#ad552e7688532cbbecd3967538ced06ac">wifi_manager.c</a></li>
+<li>WIFI_FAIL_BIT&#160;:&#160;<a class="el" href="wifi__manager_8c.html#a7d013b55e50dfbda0904f5f933b63ec4">wifi_manager.c</a></li>
+<li>WIFI_MAX_RETRIES&#160;:&#160;<a class="el" href="wifi__manager_8c.html#ae89d816659989e5fe1e0bb202d625985">wifi_manager.c</a></li>
+<li>WIFI_PASS&#160;:&#160;<a class="el" href="wifi__manager_8c.html#a3c95561b03d0fcf9048b231ae2ba90fb">wifi_manager.c</a></li>
+<li>WIFI_SCAN_MAX_AP&#160;:&#160;<a class="el" href="wifi__manager_8c.html#a23f56fbbc8b0a0b5ece3529c7bcbb4ba">wifi_manager.c</a></li>
+<li>WIFI_SSID&#160;:&#160;<a class="el" href="wifi__manager_8c.html#a586542b79d00e4db7e1d5a667ae83a2b">wifi_manager.c</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

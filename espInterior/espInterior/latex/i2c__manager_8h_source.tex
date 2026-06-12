@@ -1,0 +1,38 @@
+\doxysection{i2c\+\_\+manager.\+h}
+\hypertarget{i2c__manager_8h_source}{}\label{i2c__manager_8h_source}\index{main/hal/i2c\_manager.h@{main/hal/i2c\_manager.h}}
+\doxymbox{\hyperlink{i2c__manager_8h}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00028}00028\ \textcolor{preprocessor}{\#ifndef\ I2C\_MANAGER\_H}}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00029}00029\ \textcolor{preprocessor}{\#define\ I2C\_MANAGER\_H}}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00031}00031\ \textcolor{preprocessor}{\#include\ "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00032}00032\ \textcolor{preprocessor}{\#include\ "{}freertos/semphr.h"{}}}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00034}00034\ \textcolor{preprocessor}{\#include\ "{}esp\_err.h"{}}}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00043}00043\ \textcolor{keyword}{extern}\ SemaphoreHandle\_t\ \doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}};}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00054}00054\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{i2c__manager_8h_a87d680c63f56a29ae4e40228349c0e9a}{i2c\_manager\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00073}00073\ esp\_err\_t\ \doxymbox{\hyperlink{i2c__manager_8h_ab0f72d2693079f4ba12276a7b2516b0b}{i2c\_manager\_write}}(}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00074}00074\ \ \ \ \ uint8\_t\ addr,}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00075}00075\ \ \ \ \ uint8\_t\ reg,}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00076}00076\ \ \ \ \ uint8\_t\ *data,}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00077}00077\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ len);}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00094}00094\ esp\_err\_t\ \doxymbox{\hyperlink{i2c__manager_8h_a2b26a5dc8d840e8e3ab4c6d07d772f41}{i2c\_manager\_read}}(}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00095}00095\ \ \ \ \ uint8\_t\ addr,}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00096}00096\ \ \ \ \ uint8\_t\ reg,}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00097}00097\ \ \ \ \ uint8\_t\ *data,}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00098}00098\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ len);}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00115}00115\ esp\_err\_t\ \doxymbox{\hyperlink{i2c__manager_8h_a08d3014e9596e0c13d21fb4473754f31}{i2c\_manager\_write\_raw}}(}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00116}00116\ \ \ \ \ uint8\_t\ addr,}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00117}00117\ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *data,}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00118}00118\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ len);}
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{i2c__manager_8h_source_l00120}00120\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

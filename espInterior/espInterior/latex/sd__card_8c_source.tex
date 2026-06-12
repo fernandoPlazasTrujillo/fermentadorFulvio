@@ -1,0 +1,290 @@
+\doxysection{sd\+\_\+card.\+c}
+\hypertarget{sd__card_8c_source}{}\label{sd__card_8c_source}\index{main/drivers/sd\_card.c@{main/drivers/sd\_card.c}}
+\doxymbox{\hyperlink{sd__card_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00025}00025\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00026}00026\ \textcolor{preprocessor}{\#include\ <errno.h>}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00027}00027\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00028}00028\ \textcolor{preprocessor}{\#include\ <sys/stat.h>}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00030}00030\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00031}00031\ \textcolor{preprocessor}{\#include\ "{}esp\_vfs\_fat.h"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00032}00032\ \textcolor{preprocessor}{\#include\ "{}sdmmc\_cmd.h"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00033}00033\ \textcolor{preprocessor}{\#include\ "{}driver/spi\_common.h"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00034}00034\ \textcolor{preprocessor}{\#include\ "{}driver/sdspi\_host.h"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00036}00036\ \textcolor{preprocessor}{\#include\ "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00037}00037\ \textcolor{preprocessor}{\#include\ "{}freertos/semphr.h"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00039}00039\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{sd__card_8h}{sd\_card.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00044}\doxymbox{\hyperlink{sd__card_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{00044}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}\ =\ \textcolor{stringliteral}{"{}SD"{}};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00046}00046\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00047}00047\ \textcolor{comment}{//\ PINES\ SPI}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00048}00048\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00053}\doxymbox{\hyperlink{sd__card_8c_a46bdd417480dec5cb9cf196af3c7489c}{00053}}\ \textcolor{preprocessor}{\#define\ PIN\_MISO\ 19}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00058}\doxymbox{\hyperlink{sd__card_8c_abaeddda4b992af7165ed898ab8b2b4ac}{00058}}\ \textcolor{preprocessor}{\#define\ PIN\_MOSI\ 23}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00063}\doxymbox{\hyperlink{sd__card_8c_a29e4cd8304fdcdd2e715189dfaaf31c2}{00063}}\ \textcolor{preprocessor}{\#define\ PIN\_CLK\ 18}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00068}\doxymbox{\hyperlink{sd__card_8c_afa592f8fcb7a301edfe97aa121fd28ce}{00068}}\ \textcolor{preprocessor}{\#define\ PIN\_CS\ 5}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00070}00070\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00071}00071\ \textcolor{comment}{//\ MONTAJE}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00072}00072\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00077}\doxymbox{\hyperlink{sd__card_8c_a265dbe8dd1c8bf0f771a15e941c13fae}{00077}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{sd__card_8c_a265dbe8dd1c8bf0f771a15e941c13fae}{mount\_point}}[]\ =\ \textcolor{stringliteral}{"{}/sdcard"{}};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00082}\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{00082}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}}[]\ =\ \textcolor{stringliteral}{"{}/sdcard/mqtt\_pending.txt"{}};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00084}00084\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00085}00085\ \textcolor{comment}{//\ MUTEX\ SPI}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00086}00086\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00094}\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{00094}}\ \textcolor{keyword}{static}\ SemaphoreHandle\_t\ \doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00099}\doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{00099}}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{sd\_mounted}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00101}00101\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00102}00102\ \textcolor{comment}{//\ INIT\ SD}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00103}00103\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00112}\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{00112}}\ esp\_err\_t\ \doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00113}00113\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00114}00114\ \ \ \ \ esp\_err\_t\ ret;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00116}00116\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{sd\_mounted}})\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00118}00118\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00120}00120\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00121}00121\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ =\ xSemaphoreCreateMutex();}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00122}00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00123}00123\ \ \ \ \ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ creando\ mutex\ SPI"{}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00124}00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00125}00125\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00126}00126\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00128}00128\ \ \ \ \ sdmmc\_host\_t\ host\ =\ SDSPI\_HOST\_DEFAULT();}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00130}00130\ \ \ \ \ spi\_bus\_config\_t\ bus\_cfg\ =\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00131}00131\ \ \ \ \ \ \ \ \ .mosi\_io\_num\ =\ \doxymbox{\hyperlink{sd__card_8c_abaeddda4b992af7165ed898ab8b2b4ac}{PIN\_MOSI}},}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00132}00132\ \ \ \ \ \ \ \ \ .miso\_io\_num\ =\ \doxymbox{\hyperlink{sd__card_8c_a46bdd417480dec5cb9cf196af3c7489c}{PIN\_MISO}},}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00133}00133\ \ \ \ \ \ \ \ \ .sclk\_io\_num\ =\ \doxymbox{\hyperlink{sd__card_8c_a29e4cd8304fdcdd2e715189dfaaf31c2}{PIN\_CLK}},}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00134}00134\ \ \ \ \ \ \ \ \ .quadwp\_io\_num\ =\ -\/1,}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00135}00135\ \ \ \ \ \ \ \ \ .quadhd\_io\_num\ =\ -\/1,}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00136}00136\ \ \ \ \ \ \ \ \ .max\_transfer\_sz\ =\ 4000,}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00137}00137\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00139}00139\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00140}00140\ \textcolor{comment}{\ \ \ \ *\ Configuración\ del\ bus\ SPI\ utilizado\ para\ la\ comunicación}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00141}00141\ \textcolor{comment}{\ \ \ \ *\ con\ la\ tarjeta\ SD.}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00142}00142\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00143}00143\ \ \ \ \ ret\ =\ spi\_bus\_initialize(host.slot,\ \&bus\_cfg,\ SDSPI\_DEFAULT\_DMA);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00144}00144\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ ESP\_OK\ \&\&\ ret\ !=\ ESP\_ERR\_INVALID\_STATE)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00145}00145\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ inicializando\ SPI"{}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00147}00147\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00148}00148\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00149}00149\ \ \ \ \ sdspi\_device\_config\_t\ slot\_config\ =\ SDSPI\_DEVICE\_CONFIG\_DEFAULT();}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00150}00150\ \ \ \ \ slot\_config.gpio\_cs\ =\ \doxymbox{\hyperlink{sd__card_8c_afa592f8fcb7a301edfe97aa121fd28ce}{PIN\_CS}};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00151}00151\ \ \ \ \ slot\_config.host\_id\ =\ host.slot;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00153}00153\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00154}00154\ \textcolor{comment}{\ \ \ \ *\ Montaje\ del\ sistema\ de\ archivos\ FAT\ sobre\ la\ tarjeta\ SD.}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00155}00155\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00156}00156\ \ \ \ \ esp\_vfs\_fat\_sdmmc\_mount\_config\_t\ mount\_config\ =\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00157}00157\ \ \ \ \ \ \ \ \ .format\_if\_mount\_failed\ =\ \textcolor{keyword}{false},}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00158}00158\ \ \ \ \ \ \ \ \ .max\_files\ =\ 5,}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00159}00159\ \ \ \ \ \ \ \ \ .allocation\_unit\_size\ =\ 16\ *\ 1024}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00160}00160\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00162}00162\ \ \ \ \ sdmmc\_card\_t\ *card;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00164}00164\ \ \ \ \ ret\ =\ esp\_vfs\_fat\_sdspi\_mount(\doxymbox{\hyperlink{sd__card_8c_a265dbe8dd1c8bf0f771a15e941c13fae}{mount\_point}},\ \&host,\ \&slot\_config,\ \&mount\_config,\ \&card);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00166}00166\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00167}00167\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ montando\ SD\ (\%s)"{}},\ esp\_err\_to\_name(ret));}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00168}00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00169}00169\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00171}00171\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}SD\ montada\ correctamente"{}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00173}00173\ \ \ \ \ \doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{sd\_mounted}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00175}00175\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00176}00176\ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00177}00177\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00178}00178\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00179}00179\ \textcolor{comment}{//\ WRITE}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00180}00180\ \textcolor{comment}{//\ ============================}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00181}00181\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00190}\doxymbox{\hyperlink{sd__card_8c_a44ca2b4d5f9ee8fdb3a5cedd19f2b334}{00190}}\ esp\_err\_t\ \doxymbox{\hyperlink{sd__card_8c_a44ca2b4d5f9ee8fdb3a5cedd19f2b334}{sd\_card\_write\_line}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *line)}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00191}00191\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00192}00192\ \ \ \ \ \textcolor{keywordflow}{if}\ (line\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00193}00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00194}00194\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00196}00196\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00197}00197\ \ \ \ \ \ \ \ \ xSemaphoreTake(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}},\ portMAX\_DELAY);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00198}00198\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00200}00200\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00201}00201\ \textcolor{comment}{\ \ \ \ *\ Apertura\ del\ archivo\ en\ modo\ append\ para\ preservar}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00202}00202\ \textcolor{comment}{\ \ \ \ *\ los\ registros\ históricos\ previamente\ almacenados.}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00203}00203\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00204}00204\ \ \ \ \ FILE\ *f\ =\ fopen(\textcolor{stringliteral}{"{}/sdcard/log.csv"{}},\ \textcolor{stringliteral}{"{}a"{}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00206}00206\ \ \ \ \ \textcolor{keywordflow}{if}\ (f\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ abriendo\ archivo"{}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00208}00208\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00209}00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00211}00211\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00213}00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00214}00214\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00215}00215\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00216}00216\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00217}00217\ \textcolor{comment}{\ \ \ \ *\ Cada\ registro\ corresponde\ a\ una\ muestra\ del\ sistema}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00218}00218\ \textcolor{comment}{\ \ \ \ *\ de\ fermentación\ almacenada\ en\ formato\ CSV.}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00219}00219\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00220}00220\ \ \ \ \ fprintf(f,\ \textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}},\ line);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00221}00221\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00222}00222\ \ \ \ \ fflush(f);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00223}00223\ \ \ \ \ fclose(f);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00224}00224\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00225}00225\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00226}00226\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00227}00227\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00229}00229\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00230}00230\ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00231}00231\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00232}\doxymbox{\hyperlink{sd__card_8c_a9709250696c3a23e2e05891c019b8e88}{00232}}\ esp\_err\_t\ \doxymbox{\hyperlink{sd__card_8c_a9709250696c3a23e2e05891c019b8e88}{sd\_card\_append\_pending\_mqtt}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *payload)}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00233}00233\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00234}00234\ \ \ \ \ \textcolor{keywordflow}{if}\ (payload\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00235}00235\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00236}00236\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00238}00238\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00239}00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00240}00240\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00241}00241\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00242}00242\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00243}00243\ \ \ \ \ \ \ \ \ xSemaphoreTake(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}},\ portMAX\_DELAY);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00244}00244\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00245}00245\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00246}00246\ \ \ \ \ FILE\ *f\ =\ fopen(\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ \textcolor{stringliteral}{"{}a"{}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00247}00247\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00248}00248\ \ \ \ \ \textcolor{keywordflow}{if}\ (f\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00249}00249\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ abriendo\ pendientes\ MQTT\ (\%s),\ errno=\%d"{}},\ \doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ errno);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00250}00250\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00251}00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00253}00253\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00255}00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00256}00256\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00257}00257\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00258}00258\ \ \ \ \ fprintf(f,\ \textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}},\ payload);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00259}00259\ \ \ \ \ fflush(f);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00260}00260\ \ \ \ \ fclose(f);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00261}00261\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00262}00262\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00263}00263\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00264}00264\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00266}00266\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00267}00267\ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00268}00268\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00269}\doxymbox{\hyperlink{sd__card_8c_a4b7f64560c914a0223302fbd144c8f26}{00269}}\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{sd__card_8c_a4b7f64560c914a0223302fbd144c8f26}{sd\_card\_pending\_mqtt\_exists}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00270}00270\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00271}00271\ \ \ \ \ \textcolor{keyword}{struct\ }stat\ file\_stat;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00272}00272\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00273}00273\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00274}00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00275}00275\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00276}00276\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00277}00277\ \ \ \ \ \textcolor{keywordflow}{return}\ stat(\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ \&file\_stat)\ ==\ 0;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00278}00278\ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00280}\doxymbox{\hyperlink{sd__card_8c_a07d076d37d4d84bb737fb156fb4e01fd}{00280}}\ FILE\ *\doxymbox{\hyperlink{sd__card_8c_a07d076d37d4d84bb737fb156fb4e01fd}{sd\_card\_open\_pending\_mqtt\_read}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00281}00281\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00282}00282\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00283}00283\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00284}00284\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00286}00286\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00287}00287\ \ \ \ \ \ \ \ \ xSemaphoreTake(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}},\ portMAX\_DELAY);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00288}00288\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00289}00289\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00290}00290\ \ \ \ \ FILE\ *f\ =\ fopen(\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ \textcolor{stringliteral}{"{}r"{}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00291}00291\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00292}00292\ \ \ \ \ \textcolor{keywordflow}{if}\ (f\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00293}00293\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ abriendo\ pendientes\ MQTT\ (\%s),\ errno=\%d"{}},\ \doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ errno);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00294}00294\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00295}00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00297}00297\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00298}00298\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00299}00299\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00300}00300\ \ \ \ \ \textcolor{keywordflow}{return}\ f;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00301}00301\ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00302}00302\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00303}\doxymbox{\hyperlink{sd__card_8c_a35ae42e918762a7bc304f39cec1d330c}{00303}}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{sd__card_8c_a35ae42e918762a7bc304f39cec1d330c}{sd\_card\_read\_pending\_mqtt\_line}}(FILE\ *file,\ \textcolor{keywordtype}{char}\ *buffer,\ \textcolor{keywordtype}{size\_t}\ size)}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00304}00304\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00305}00305\ \ \ \ \ \textcolor{keywordflow}{if}\ (file\ ==\ NULL\ ||\ buffer\ ==\ NULL\ ||\ size\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00306}00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00307}00307\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00308}00308\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00309}00309\ \ \ \ \ \textcolor{keywordflow}{return}\ fgets(buffer,\ size,\ file);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00310}00310\ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00311}00311\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00312}\doxymbox{\hyperlink{sd__card_8c_a07dd8178e8630f2cc8d381af7f6ec9d9}{00312}}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{sd__card_8c_a07dd8178e8630f2cc8d381af7f6ec9d9}{sd\_card\_close\_pending\_mqtt}}(FILE\ *file)}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00313}00313\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00314}00314\ \ \ \ \ \textcolor{keywordflow}{if}\ (file\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00315}00315\ \ \ \ \ \ \ \ \ fclose(file);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00316}00316\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00317}00317\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00318}00318\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00319}00319\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00320}00320\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00321}00321\ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00322}00322\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00323}\doxymbox{\hyperlink{sd__card_8c_a36756946bae9f06f242754f9af59d944}{00323}}\ esp\_err\_t\ \doxymbox{\hyperlink{sd__card_8c_a36756946bae9f06f242754f9af59d944}{sd\_card\_delete\_pending\_mqtt}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00324}00324\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00325}00325\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_ad78a50dfc8be1e28effacc58f9a18aa1}{sd\_card\_init}}()\ !=\ ESP\_OK)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00326}00326\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00327}00327\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00328}00328\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00329}00329\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00330}00330\ \ \ \ \ \ \ \ \ xSemaphoreTake(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}},\ portMAX\_DELAY);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00331}00331\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00332}00332\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00333}00333\ \ \ \ \ \textcolor{keywordtype}{int}\ result\ =\ remove(\doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00334}00334\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00335}00335\ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}}\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00336}00336\ \ \ \ \ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{sd__card_8c_a76c0525d646735793add25b18043e600}{spi\_mutex}});}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00337}00337\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00338}00338\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00339}00339\ \ \ \ \ \textcolor{keywordflow}{if}\ (result\ ==\ 0\ ||\ errno\ ==\ ENOENT)\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00340}00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00341}00341\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00342}00342\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00343}00343\ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Error\ eliminando\ pendientes\ MQTT\ (\%s),\ errno=\%d"{}},\ \doxymbox{\hyperlink{sd__card_8c_a2e30b1b8f3af73b81aceb3e1b63fff2b}{pending\_mqtt\_path}},\ errno);}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00344}00344\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_FAIL;}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00345}00345\ \}}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00346}00346\ }
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00347}\doxymbox{\hyperlink{sd__card_8c_ac9ae86642649b9c94602adb5b313104e}{00347}}\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{sd__card_8c_ac9ae86642649b9c94602adb5b313104e}{sd\_card\_is\_mounted}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00348}00348\ \{}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00349}00349\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{sd__card_8c_a619b844a05cfbbdf6c779af42c0bc335}{sd\_mounted}};}
+\DoxyCodeLine{\Hypertarget{sd__card_8c_source_l00350}00350\ \}}
+
+\end{DoxyCode}

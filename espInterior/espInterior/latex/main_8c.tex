@@ -1,0 +1,399 @@
+\doxysection{Referencia del archivo main/\+main.c}
+\hypertarget{main_8c}{}\label{main_8c}\index{main/main.c@{main/main.c}}
+
+
+Punto de entrada del sistema de fermentación basado en ESP32.  
+
+
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \+\#include "{}freertos/\+\+Free\+RTOS.\+h"{}}\newline
+{\ttfamily \+\#include "{}freertos/\+task.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+sleep.\+h"{}}\newline
+{\ttfamily \+\#include "{}hal/\+i2c\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include "{}hal/\+adc\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include "{}drivers/\+rtc\+\_\+ds3231.\+h"{}}\newline
+{\ttfamily \+\#include "{}tasks/\+task\+\_\+sensores.\+h"{}}\newline
+{\ttfamily \+\#include "{}tasks/\+task\+\_\+control.\+h"{}}\newline
+{\ttfamily \+\#include "{}tasks/\+task\+\_\+actuadores.\+h"{}}\newline
+{\ttfamily \+\#include "{}tasks/\+task\+\_\+logger.\+h"{}}\newline
+{\ttfamily \+\#include "{}tasks/\+task\+\_\+energia.\+h"{}}\newline
+{\ttfamily \+\#include "{}tasks/\+task\+\_\+mqtt.\+h"{}}\newline
+{\ttfamily \+\#include "{}tasks/\+task\+\_\+display.\+h"{}}\newline
+{\ttfamily \+\#include "{}wifi/\+wifi\+\_\+manager.\+h"{}}\newline
+{\ttfamily \+\#include "{}queues.\+h"{}}\newline
+{\ttfamily \+\#include "{}drivers/\+oled\+\_\+display.\+h"{}}\newline
+\doxysubsubsection*{defines}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{main_8c_a269a6cfad0972318bcd4766eb6a1d7f2}{WIFI\+\_\+\+CONNECT\+\_\+\+TIMEOUT\+\_\+\+MS}}~10000
+\begin{DoxyCompactList}\small\item\em Tiempo máximo de espera para conexión Wi\+Fi. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{main_8c_a630544a7f0a2cc40d8a7fefab7e2fe70}{app\+\_\+main}} (void)
+\begin{DoxyCompactList}\small\item\em Función principal del sistema. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8c_a545de6958783ff726c116adffaebbcfb}{task\+\_\+sensores\+\_\+handle}} = NULL
+\begin{DoxyCompactList}\small\item\em Handle de la tarea de sensores. \end{DoxyCompactList}\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\+\_\+energia\+\_\+handle}} = NULL
+\begin{DoxyCompactList}\small\item\em Handle de la tarea de energía. \end{DoxyCompactList}\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{main_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}MAIN"{}
+\begin{DoxyCompactList}\small\item\em Etiqueta utilizada para mensajes de depuración. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Punto de entrada del sistema de fermentación basado en ESP32. 
+
+Este módulo realiza la inicialización completa del sistema, configura los periféricos necesarios, crea las tareas Free\+RTOS y pone en marcha el ciclo operativo de adquisición, control, almacenamiento y comunicación.
+
+Funciones principales:\+
+\begin{DoxyItemize}
+\item Inicialización de hardware.
+\item Inicialización de red Wi\+Fi.
+\item Configuración del RTC DS3231.
+\item Configuración de wakeup para Deep Sleep.
+\item Creación de colas Free\+RTOS.
+\item Creación de tareas del sistema.
+\item Inicio del ciclo operativo.
+\end{DoxyItemize}
+
+Arquitectura general:\+ \begin{DoxyVerb}         task_energia
+               |
+               v
+        task_sensores
+               |
+   +-----------+-----------+
+   |           |           |
+   v           v           v
+\end{DoxyVerb}
+ task\+\_\+control task\+\_\+logger task\+\_\+mqtt \texorpdfstring{$\vert$}{|} \texorpdfstring{$\vert$}{|} v v task\+\_\+actuadores Broker MQTT \texorpdfstring{$\vert$}{|} v Actuadores \begin{DoxyVerb}          |
+          v
+   task_display
+\end{DoxyVerb}
+
+
+Mecanismos Free\+RTOS utilizados:\+
+\begin{DoxyItemize}
+\item Tareas.
+\item Colas.
+\item Notificaciones.
+\end{DoxyItemize}
+
+Gestión energética:\+
+\begin{DoxyItemize}
+\item Deep Sleep.
+\item Wakeup mediante RTC DS3231.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Autor}
+Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain 
+\end{DoxyAuthor}
+
+
+Definición en el archivo \doxymbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+
+
+\label{main_8c_doc-define-members}
+\Hypertarget{main_8c_doc-define-members}
+\doxysubsection{Documentación de «define»}
+\Hypertarget{main_8c_a269a6cfad0972318bcd4766eb6a1d7f2}\index{main.c@{main.c}!WIFI\_CONNECT\_TIMEOUT\_MS@{WIFI\_CONNECT\_TIMEOUT\_MS}}
+\index{WIFI\_CONNECT\_TIMEOUT\_MS@{WIFI\_CONNECT\_TIMEOUT\_MS}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{WIFI\_CONNECT\_TIMEOUT\_MS}{WIFI\_CONNECT\_TIMEOUT\_MS}}
+{\footnotesize\ttfamily \label{main_8c_a269a6cfad0972318bcd4766eb6a1d7f2} 
+\+\#define WIFI\+\_\+\+CONNECT\+\_\+\+TIMEOUT\+\_\+\+MS~10000}
+
+
+
+Tiempo máximo de espera para conexión Wi\+Fi. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{main_8c_source_l00119}{119}} del archivo \doxymbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+
+
+\label{main_8c_doc-func-members}
+\Hypertarget{main_8c_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{main_8c_a630544a7f0a2cc40d8a7fefab7e2fe70}\index{main.c@{main.c}!app\_main@{app\_main}}
+\index{app\_main@{app\_main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{app\_main()}{app\_main()}}
+{\footnotesize\ttfamily \label{main_8c_a630544a7f0a2cc40d8a7fefab7e2fe70} 
+void app\+\_\+main (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Función principal del sistema. 
+
+Realiza toda la secuencia de inicialización:\+
+
+
+\begin{DoxyEnumerate}
+\item Conexión Wi\+Fi.
+\item Inicialización de hardware.
+\item Configuración del RTC.
+\item Configuración de Deep Sleep.
+\item Creación de colas.
+\item Creación de tareas.
+\item Inicio del ciclo operativo. 
+\end{DoxyEnumerate}Variable persistente utilizada para alternar entre los instantes de despertar.
+
+Definición en la línea \doxymbox{\hyperlink{main_8c_source_l00134}{134}} del archivo \doxymbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00135\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Iniciando\ sistema..."{}});}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{//\ INICIALIZACIÓN\ WIFI}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \doxymbox{\hyperlink{wifi__manager_8c_a7267cf9f0ba503d904709977c18a07ea}{wifi\_init}}();}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{bool}\ wifi\_connected\ =}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{wifi__manager_8c_a74ffcbcc6723fdd1f6a44c7dfa813079}{wifi\_wait\_connected}}(}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{main_8c_a269a6cfad0972318bcd4766eb6a1d7f2}{WIFI\_CONNECT\_TIMEOUT\_MS}});}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordflow}{if}\ (wifi\_connected)}
+\DoxyCodeLine{00149\ \ \ \ \ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}WiFi\ listo"{}});}
+\DoxyCodeLine{00151\ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00153\ \ \ \ \ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ ESP\_LOGW(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}WiFi\ no\ conectado,\ se\ continua\ sin\ red"{}});}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{wifi__manager_8c_a5b3e7a6e474fda19d447711c86399104}{wifi\_scan\_print}}();}
+\DoxyCodeLine{00158\ \ \ \ \ \}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{comment}{//\ INICIALIZACIÓN\ DE\ HARDWARE}}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a87d680c63f56a29ae4e40228349c0e9a}{i2c\_manager\_init}}();}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \doxymbox{\hyperlink{adc__manager_8c_a680e6c7fca574971070af6b808ef98d1}{adc\_manager\_init}}();}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{//\ CAUSA\ DE\ DESPERTAR}}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ esp\_sleep\_wakeup\_cause\_t\ cause\ =}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ esp\_sleep\_get\_wakeup\_cause();}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ ESP\_LOGI(}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Wakeup\ cause:\ \%d"{}},}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ cause);}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{comment}{//\ CONFIGURACIÓN\ DE\ WAKEUP}}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ esp\_sleep\_enable\_ext0\_wakeup(}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ GPIO\_NUM\_33,}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ 0);}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{//\ INICIALIZACIÓN\ RTC}}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \doxymbox{\hyperlink{rtc__ds3231_8c_a2a1750bb44d1a047f327cf54a3146ccd}{ds3231\_init}}();}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \doxymbox{\hyperlink{rtc__ds3231_8c_a85015e3ba9b8a4e2e6e8043d78431e50}{ds3231\_clear\_alarm\_flag}}();}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{//\ CONFIGURACIÓN\ DE\ ALARMA\ RTC}}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{static}\ RTC\_DATA\_ATTR\ \textcolor{keywordtype}{int}\ toggle\ =\ 0;}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordflow}{if}\ (toggle\ ==\ 0)}
+\DoxyCodeLine{00207\ \ \ \ \ \{}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{rtc__ds3231_8c_ac86af95cd378d3044d6ebecd116410b1}{ds3231\_set\_alarm\_seconds}}(30);}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ toggle\ =\ 1;}
+\DoxyCodeLine{00210\ \ \ \ \ \}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00212\ \ \ \ \ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{rtc__ds3231_8c_ac86af95cd378d3044d6ebecd116410b1}{ds3231\_set\_alarm\_seconds}}(0);}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ toggle\ =\ 0;}
+\DoxyCodeLine{00215\ \ \ \ \ \}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{comment}{//\ CREACIÓN\ DE\ COLAS}}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \doxymbox{\hyperlink{queues_8c_a28e124a6b8d5d663be75b1649f51e44a}{queues\_init}}();}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{comment}{//\ CREACIÓN\ DE\ TAREAS}}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ BaseType\_t\ res;}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ res\ =\ xTaskCreate(}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__sensores_8c_a5b2930d6b5c8d2540af7d0b8e60ec19c}{task\_sensores}},}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}task\_sensores"{}},}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ 4096,}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ 5,}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \&\doxymbox{\hyperlink{main_8c_a545de6958783ff726c116adffaebbcfb}{task\_sensores\_handle}});}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordflow}{if}\ (res\ !=\ pdPASS)}
+\DoxyCodeLine{00238\ \ \ \ \ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Error\ creando\ task\_sensores"{}});}
+\DoxyCodeLine{00241\ \ \ \ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ res\ =\ xTaskCreate(}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__control_8c_af9e54aa0648e5d424ebc75ad59db14c6}{task\_control}},}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}task\_control"{}},}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ 4096,}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ 5,}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ NULL);}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{keywordflow}{if}\ (res\ !=\ pdPASS)}
+\DoxyCodeLine{00252\ \ \ \ \ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Error\ creando\ task\_control"{}});}
+\DoxyCodeLine{00255\ \ \ \ \ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ res\ =\ xTaskCreate(}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__actuadores_8c_a500d896ff89010d54c413e2bec4ee20d}{task\_actuadores}},}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}task\_actuadores"{}},}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ 4096,}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ 5,}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ NULL);}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordflow}{if}\ (res\ !=\ pdPASS)}
+\DoxyCodeLine{00266\ \ \ \ \ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Error\ creando\ task\_actuadores"{}});}
+\DoxyCodeLine{00269\ \ \ \ \ \}}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ res\ =\ xTaskCreate(}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__logger_8c_af38783d3b22fb6c2783f14a88308c330}{task\_logger}},}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}task\_logger"{}},}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ 4096,}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ 5,}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ NULL);}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordflow}{if}\ (res\ !=\ pdPASS)}
+\DoxyCodeLine{00280\ \ \ \ \ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Error\ creando\ task\_logger"{}});}
+\DoxyCodeLine{00283\ \ \ \ \ \}}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ res\ =\ xTaskCreate(}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__mqtt_8c_a376c1e55c392503ef2bd96eedae58a21}{task\_mqtt}},}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}task\_mqtt"{}},}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ 6144,}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ 5,}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ NULL);}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keywordflow}{if}\ (res\ !=\ pdPASS)}
+\DoxyCodeLine{00294\ \ \ \ \ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Error\ creando\ task\_mqtt"{}});}
+\DoxyCodeLine{00297\ \ \ \ \ \}}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ res\ =\ xTaskCreate(}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__display_8c_a0c23017a47c450de05f8c7af642c7461}{task\_display}},}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}task\_display"{}},}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ 4096,}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ 4,}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ NULL);}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keywordflow}{if}\ (res\ !=\ pdPASS)}
+\DoxyCodeLine{00308\ \ \ \ \ \{}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Error\ creando\ task\_display"{}});}
+\DoxyCodeLine{00311\ \ \ \ \ \}}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \ \ \ \ res\ =\ xTaskCreate(}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{task__energia_8c_ac7b7fee9849a033c0657c650e2dbfc9b}{task\_energia}},}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}task\_energia"{}},}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ 4096,}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ NULL,}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ 5,}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \&\doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\_energia\_handle}});}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{keywordflow}{if}\ (res\ !=\ pdPASS)}
+\DoxyCodeLine{00322\ \ \ \ \ \{}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ ESP\_LOGE(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Error\ creando\ task\_energia"{}});}
+\DoxyCodeLine{00325\ \ \ \ \ \}}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Sistema\ listo"{}});}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{comment}{//\ INICIO\ DEL\ CICLO\ OPERATIVO}}
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{comment}{//\ =====================================================}}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \ \ xTaskNotifyGive(}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}{task\_energia\_handle}});}
+\DoxyCodeLine{00335\ \}}
+
+\end{DoxyCode}
+
+
+\label{main_8c_doc-var-members}
+\Hypertarget{main_8c_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{main_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{main.c@{main.c}!TAG@{TAG}}
+\index{TAG@{TAG}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{main_8c_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}MAIN"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Etiqueta utilizada para mensajes de depuración. 
+
+
+
+Definición en la línea \doxymbox{\hyperlink{main_8c_source_l00114}{114}} del archivo \doxymbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71}\index{main.c@{main.c}!task\_energia\_handle@{task\_energia\_handle}}
+\index{task\_energia\_handle@{task\_energia\_handle}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{task\_energia\_handle}{task\_energia\_handle}}
+{\footnotesize\ttfamily \label{main_8c_ac9bf4127b0b50168ecd12b71b89c2f71} 
+Task\+Handle\+\_\+t task\+\_\+energia\+\_\+handle = NULL}
+
+
+
+Handle de la tarea de energía. 
+
+Utilizado para coordinar el ciclo general del sistema.
+
+Utilizado para enviar notificaciones cuando finaliza un ciclo de mezcla. 
+
+Definición en la línea \doxymbox{\hyperlink{main_8c_source_l00109}{109}} del archivo \doxymbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8c_a545de6958783ff726c116adffaebbcfb}\index{main.c@{main.c}!task\_sensores\_handle@{task\_sensores\_handle}}
+\index{task\_sensores\_handle@{task\_sensores\_handle}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{task\_sensores\_handle}{task\_sensores\_handle}}
+{\footnotesize\ttfamily \label{main_8c_a545de6958783ff726c116adffaebbcfb} 
+Task\+Handle\+\_\+t task\+\_\+sensores\+\_\+handle = NULL}
+
+
+
+Handle de la tarea de sensores. 
+
+Utilizado por task\+\_\+energia para iniciar nuevos ciclos de adquisición.
+
+Utilizado para iniciar un nuevo ciclo de adquisición. 
+
+Definición en la línea \doxymbox{\hyperlink{main_8c_source_l00101}{101}} del archivo \doxymbox{\hyperlink{main_8c_source}{main.\+c}}.
+

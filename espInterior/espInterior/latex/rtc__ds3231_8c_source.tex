@@ -1,0 +1,139 @@
+\doxysection{rtc\+\_\+ds3231.\+c}
+\hypertarget{rtc__ds3231_8c_source}{}\label{rtc__ds3231_8c_source}\index{main/drivers/rtc\_ds3231.c@{main/drivers/rtc\_ds3231.c}}
+\doxymbox{\hyperlink{rtc__ds3231_8c}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{rtc__ds3231_8h}{rtc\_ds3231.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00025}00025\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{i2c__manager_8h}{hal/i2c\_manager.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00027}00027\ \textcolor{preprocessor}{\#include\ "{}freertos/FreeRTOS.h"{}}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00028}00028\ \textcolor{preprocessor}{\#include\ "{}freertos/semphr.h"{}}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00030}00030\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00035}\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{00035}}\ \textcolor{preprocessor}{\#define\ DS3231\_ADDR\ 0x68}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00043}\doxymbox{\hyperlink{rtc__ds3231_8c_acb8d02ca6db63c50bcb04d6b38803d13}{00043}}\ \textcolor{preprocessor}{\#define\ DS3231\_CONTROL\_A1\_INTERRUPT\ 0x05}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00051}00051\ \textcolor{keyword}{extern}\ SemaphoreHandle\_t\ \doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}};}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00056}\doxymbox{\hyperlink{rtc__ds3231_8c_a5a85b9c772bbeb480b209a3e6ea92b4c}{00056}}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}}\ =\ \textcolor{stringliteral}{"{}DS3231"{}};}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00058}00058\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00059}00059\ \textcolor{comment}{//\ INIT}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00060}00060\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00071}\doxymbox{\hyperlink{rtc__ds3231_8c_a2a1750bb44d1a047f327cf54a3146ccd}{00071}}\ esp\_err\_t\ \doxymbox{\hyperlink{rtc__ds3231_8c_a2a1750bb44d1a047f327cf54a3146ccd}{ds3231\_init}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00072}00072\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00073}00073\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}DS3231\ inicializado"{}});}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00074}00074\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00075}00075\ \}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00077}00077\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00078}00078\ \textcolor{comment}{//\ BCD\ <-\/-\/>\ DEC}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00079}00079\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00092}\doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{00092}}\ \textcolor{keyword}{static}\ uint8\_t\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(uint8\_t\ val)}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00093}00093\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00094}00094\ \ \ \ \ \textcolor{keywordflow}{return}\ (val\ >>\ 4)\ *\ 10\ +\ (val\ \&\ 0x0F);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00095}00095\ \}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00107}\doxymbox{\hyperlink{rtc__ds3231_8c_a24b3d8dbee18df34f1133e358b959f74}{00107}}\ \textcolor{keyword}{static}\ uint8\_t\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24b3d8dbee18df34f1133e358b959f74}{dec\_to\_bcd}}(uint8\_t\ val)}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00108}00108\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00109}00109\ \ \ \ \ \textcolor{keywordflow}{return}\ ((val\ /\ 10)\ <<\ 4)\ |\ (val\ \%\ 10);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00110}00110\ \}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00112}00112\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00113}00113\ \textcolor{comment}{//\ GET\ DATETIME}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00114}00114\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00129}\doxymbox{\hyperlink{rtc__ds3231_8c_a7d6b92b6796f068787606003b7653075}{00129}}\ esp\_err\_t\ \doxymbox{\hyperlink{rtc__ds3231_8c_a7d6b92b6796f068787606003b7653075}{ds3231\_get\_datetime}}(\doxymbox{\hyperlink{structdatetime__t}{datetime\_t}}\ *dt)}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00130}00130\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00131}00131\ \ \ \ \ uint8\_t\ data[7];}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00133}00133\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100))\ !=\ pdTRUE)\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_ERR\_TIMEOUT;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00135}00135\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00137}00137\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a2b26a5dc8d840e8e3ab4c6d07d772f41}{i2c\_manager\_read}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x00,\ data,\ 7);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00139}00139\ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00141}00141\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00142}00142\ \textcolor{comment}{\ \ \ \ \ *\ Conversión\ de\ registros\ DS3231\ almacenados}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00143}00143\ \textcolor{comment}{\ \ \ \ \ *\ en\ formato\ BCD\ hacia\ formato\ decimal.}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00144}00144\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00145}00145\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_a059ad89b95fd58b6e782970181f0ac64}{seconds}}\ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[0]);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00146}00146\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_aa0c767273ddef75d440a6650691b7f8e}{minutes}}\ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[1]);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00147}00147\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_aff39f3c2079c7d3c0f465f9eb1e566b8}{hours}}\ \ \ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[2]);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00148}00148\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_afabded25c81cb29402963646e458e652}{day}}\ \ \ \ \ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[4]);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00149}00149\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_a69a3491a78234c70fcd6dbdf7cd4c8c4}{month}}\ \ \ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[5]\ \&\ 0x1F);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00150}00150\ \ \ \ \ dt-\/>\doxymbox{\hyperlink{structdatetime__t_ad8118505f760f56db69081b45943b9d4}{year}}\ \ \ \ =\ 2000\ +\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24f474e744189c94192a1450f4bf6bbd}{bcd\_to\_dec}}(data[6]);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00152}00152\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00153}00153\ \}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00155}00155\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00156}00156\ \textcolor{comment}{//\ CLEAR\ FLAG}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00157}00157\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00169}\doxymbox{\hyperlink{rtc__ds3231_8c_a85015e3ba9b8a4e2e6e8043d78431e50}{00169}}\ esp\_err\_t\ \doxymbox{\hyperlink{rtc__ds3231_8c_a85015e3ba9b8a4e2e6e8043d78431e50}{ds3231\_clear\_alarm\_flag}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00170}00170\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00171}00171\ \ \ \ \ uint8\_t\ status;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00173}00173\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100))\ !=\ pdTRUE)\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00174}00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_ERR\_TIMEOUT;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00175}00175\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00177}00177\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_a2b26a5dc8d840e8e3ab4c6d07d772f41}{i2c\_manager\_read}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x0F,\ \&status,\ 1);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00179}00179\ \ \ \ \ status\ \&=\ \string~0x01;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00181}00181\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b}{i2c\_manager\_write}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x0F,\ \&status,\ 1);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00182}00182\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00183}00183\ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00184}00184\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00185}00185\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00186}00186\ \}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00188}00188\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00189}00189\ \textcolor{comment}{//\ SET\ ALARM}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00190}00190\ \textcolor{comment}{//\ =====================}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00204}\doxymbox{\hyperlink{rtc__ds3231_8c_ac86af95cd378d3044d6ebecd116410b1}{00204}}\ esp\_err\_t\ \doxymbox{\hyperlink{rtc__ds3231_8c_ac86af95cd378d3044d6ebecd116410b1}{ds3231\_set\_alarm\_seconds}}(uint8\_t\ seconds)}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00205}00205\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00206}00206\ \ \ \ \ uint8\_t\ data[4];}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00207}00207\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00208}00208\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00209}00209\ \textcolor{comment}{\ \ \ \ \ *\ Configuración\ de\ Alarm\ 1:}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00210}00210\ \textcolor{comment}{\ \ \ \ \ *\ -\/\ Coincidencia\ únicamente\ sobre\ segundos.}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00211}00211\ \textcolor{comment}{\ \ \ \ \ *\ -\/\ Minutos,\ horas\ y\ día\ ignorados\ mediante\ bits\ A1Mx.}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00212}00212\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00213}00213\ \ \ \ \ data[0]\ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_a24b3d8dbee18df34f1133e358b959f74}{dec\_to\_bcd}}(seconds);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00214}00214\ \ \ \ \ data[1]\ =\ 0x80;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00215}00215\ \ \ \ \ data[2]\ =\ 0x80;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00216}00216\ \ \ \ \ data[3]\ =\ 0x80;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00217}00217\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00218}00218\ \ \ \ \ \textcolor{keywordflow}{if}\ (xSemaphoreTake(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}},\ pdMS\_TO\_TICKS(100))\ !=\ pdTRUE)\ \{}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00219}00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_ERR\_TIMEOUT;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00220}00220\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00221}00221\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00222}00222\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b}{i2c\_manager\_write}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x07,\ data,\ 4);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00223}00223\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00224}00224\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00225}00225\ \textcolor{comment}{\ \ \ \ \ *\ INTCN\ =\ 1\ \ -\/>\ modo\ interrupción}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00226}00226\ \textcolor{comment}{\ \ \ \ \ *\ A1IE\ \ =\ 1\ \ -\/>\ habilita\ Alarm\ 1}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00227}00227\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00228}00228\ \ \ \ \ uint8\_t\ control\ =\ \doxymbox{\hyperlink{rtc__ds3231_8c_acb8d02ca6db63c50bcb04d6b38803d13}{DS3231\_CONTROL\_A1\_INTERRUPT}};}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00229}00229\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00230}00230\ \ \ \ \ \doxymbox{\hyperlink{i2c__manager_8c_ab0f72d2693079f4ba12276a7b2516b0b}{i2c\_manager\_write}}(\doxymbox{\hyperlink{rtc__ds3231_8c_a807ca712a5ee10a56cf420c420c42524}{DS3231\_ADDR}},\ 0x0E,\ \&control,\ 1);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00231}00231\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00232}00232\ \ \ \ \ xSemaphoreGive(\doxymbox{\hyperlink{oled__display_8c_a60bdaef4d905b9f3d244350633a80080}{mutex\_i2c}});}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00234}00234\ \ \ \ \ ESP\_LOGI(\doxymbox{\hyperlink{mq135_8c_afc3d101f633a076cc1ca84b85b6224b2}{TAG}},\ \textcolor{stringliteral}{"{}Alarma\ configurada\ en\ segundo:\ \%d"{}},\ seconds);}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00235}00235\ }
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00236}00236\ \ \ \ \ \textcolor{keywordflow}{return}\ ESP\_OK;}
+\DoxyCodeLine{\Hypertarget{rtc__ds3231_8c_source_l00237}00237\ \}}
+
+\end{DoxyCode}

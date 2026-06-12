@@ -1,0 +1,875 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.17.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ESP32 Interior - Sistema de Fermentacion de Cafe: Referencia del archivo main/wifi/wifi_manager.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+mermaid.initialize({ startOnLoad: true, theme: theme });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">ESP32 Interior - Sistema de Fermentacion de Cafe<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Control de fermentacion con ESP32, FreeRTOS, sensores, actuadores y MQTT</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.17.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+  initMenu('',true);
+  init_search();
+});
+</script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1" style="position:absolute;right:8px;top:8px;height:36px;"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2" style="float:right">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('wifi__manager_8c.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo wifi_manager.c</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Implementación del gestor de conectividad WiFi.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="wifi__manager_8h_source.html">wifi_manager.h</a>&quot;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/event_groups.h&quot;</code><br />
+<code>#include &quot;freertos/task.h&quot;</code><br />
+<code>#include &quot;esp_event.h&quot;</code><br />
+<code>#include &quot;esp_log.h&quot;</code><br />
+<code>#include &quot;esp_netif.h&quot;</code><br />
+<code>#include &quot;esp_wifi.h&quot;</code><br />
+<code>#include &quot;nvs_flash.h&quot;</code><br />
+</div>
+<p><a href="wifi__manager_8c_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+defines</h2></td></tr>
+<tr class="memitem:a586542b79d00e4db7e1d5a667ae83a2b" id="r_a586542b79d00e4db7e1d5a667ae83a2b"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a586542b79d00e4db7e1d5a667ae83a2b">WIFI_SSID</a>&#160;&#160;&#160;&quot;Sala331&quot;</td></tr>
+<tr class="memitem:a3c95561b03d0fcf9048b231ae2ba90fb" id="r_a3c95561b03d0fcf9048b231ae2ba90fb"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a3c95561b03d0fcf9048b231ae2ba90fb">WIFI_PASS</a>&#160;&#160;&#160;&quot;Sala331tm&quot;</td></tr>
+<tr class="memitem:ae89d816659989e5fe1e0bb202d625985" id="r_ae89d816659989e5fe1e0bb202d625985"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#ae89d816659989e5fe1e0bb202d625985">WIFI_MAX_RETRIES</a>&#160;&#160;&#160;4</td></tr>
+<tr class="memdesc:ae89d816659989e5fe1e0bb202d625985"><td class="mdescLeft">&#160;</td><td class="mdescRight">Número máximo de reintentos de conexión WiFi.  <br /></td></tr>
+<tr class="memitem:a23f56fbbc8b0a0b5ece3529c7bcbb4ba" id="r_a23f56fbbc8b0a0b5ece3529c7bcbb4ba"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a23f56fbbc8b0a0b5ece3529c7bcbb4ba">WIFI_SCAN_MAX_AP</a>&#160;&#160;&#160;20</td></tr>
+<tr class="memdesc:a23f56fbbc8b0a0b5ece3529c7bcbb4ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Número máximo de puntos de acceso almacenados durante un escaneo.  <br /></td></tr>
+<tr class="memitem:ad552e7688532cbbecd3967538ced06ac" id="r_ad552e7688532cbbecd3967538ced06ac"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#ad552e7688532cbbecd3967538ced06ac">WIFI_CONNECTED_BIT</a>&#160;&#160;&#160;BIT0</td></tr>
+<tr class="memdesc:ad552e7688532cbbecd3967538ced06ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bit que indica conexión WiFi exitosa.  <br /></td></tr>
+<tr class="memitem:a7d013b55e50dfbda0904f5f933b63ec4" id="r_a7d013b55e50dfbda0904f5f933b63ec4"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a7d013b55e50dfbda0904f5f933b63ec4">WIFI_FAIL_BIT</a>&#160;&#160;&#160;BIT1</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:ac31e38637f7a5e5c8ce4d033b0955fec" id="r_ac31e38637f7a5e5c8ce4d033b0955fec"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#ac31e38637f7a5e5c8ce4d033b0955fec">wifi_event_handler</a> (void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)</td></tr>
+<tr class="memdesc:ac31e38637f7a5e5c8ce4d033b0955fec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manejador de eventos WiFi e IP.  <br /></td></tr>
+<tr class="memitem:a7267cf9f0ba503d904709977c18a07ea" id="r_a7267cf9f0ba503d904709977c18a07ea"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a7267cf9f0ba503d904709977c18a07ea">wifi_init</a> (void)</td></tr>
+<tr class="memdesc:a7267cf9f0ba503d904709977c18a07ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inicializa y conecta el ESP32 a una red WiFi.  <br /></td></tr>
+<tr class="memitem:a74ffcbcc6723fdd1f6a44c7dfa813079" id="r_a74ffcbcc6723fdd1f6a44c7dfa813079"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a74ffcbcc6723fdd1f6a44c7dfa813079">wifi_wait_connected</a> (uint32_t timeout_ms)</td></tr>
+<tr class="memdesc:a74ffcbcc6723fdd1f6a44c7dfa813079"><td class="mdescLeft">&#160;</td><td class="mdescRight">Espera hasta que el ESP32 se conecte a la red WiFi.  <br /></td></tr>
+<tr class="memitem:a9dcf78476c0528f382454066e5af1130" id="r_a9dcf78476c0528f382454066e5af1130"><td class="memItemLeft">static const char *&#160;</td><td class="memItemRight"><a class="el" href="#a9dcf78476c0528f382454066e5af1130">auth_mode_name</a> (wifi_auth_mode_t authmode)</td></tr>
+<tr class="memdesc:a9dcf78476c0528f382454066e5af1130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convierte un modo de autenticación WiFi a texto.  <br /></td></tr>
+<tr class="memitem:a5b3e7a6e474fda19d447711c86399104" id="r_a5b3e7a6e474fda19d447711c86399104"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a5b3e7a6e474fda19d447711c86399104">wifi_scan_print</a> (void)</td></tr>
+<tr class="memdesc:a5b3e7a6e474fda19d447711c86399104"><td class="mdescLeft">&#160;</td><td class="mdescRight">Realiza un escaneo de redes WiFi disponibles.  <br /></td></tr>
+<tr class="memitem:ac2e99f68c3fb924e301871f4388ccc51" id="r_ac2e99f68c3fb924e301871f4388ccc51"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ac2e99f68c3fb924e301871f4388ccc51">wifi_is_connected</a> (void)</td></tr>
+<tr class="memdesc:ac2e99f68c3fb924e301871f4388ccc51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifica si existe una conexión WiFi activa.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a5a85b9c772bbeb480b209a3e6ea92b4c" id="r_a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="memItemLeft">static const char *&#160;</td><td class="memItemRight"><a class="el" href="#a5a85b9c772bbeb480b209a3e6ea92b4c">TAG</a> = &quot;wifi_manager&quot;</td></tr>
+<tr class="memdesc:a5a85b9c772bbeb480b209a3e6ea92b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Etiqueta utilizada para mensajes de depuración.  <br /></td></tr>
+<tr class="memitem:a79d9a1941d35eea97ea57ea98d6ac2ae" id="r_a79d9a1941d35eea97ea57ea98d6ac2ae"><td class="memItemLeft">static int&#160;</td><td class="memItemRight"><a class="el" href="#a79d9a1941d35eea97ea57ea98d6ac2ae">retry_count</a> = 0</td></tr>
+<tr class="memdesc:a79d9a1941d35eea97ea57ea98d6ac2ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contador de reintentos de conexión WiFi.  <br /></td></tr>
+<tr class="memitem:a20c6ba80259caf6916ca631b853d82af" id="r_a20c6ba80259caf6916ca631b853d82af"><td class="memItemLeft">static EventGroupHandle_t&#160;</td><td class="memItemRight"><a class="el" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a></td></tr>
+<tr class="memdesc:a20c6ba80259caf6916ca631b853d82af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Event group para manejar estados del WiFi.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Implementación del gestor de conectividad WiFi. </p>
+<p>Este módulo implementa la inicialización, conexión y monitoreo de la interfaz WiFi del ESP32 utilizando el framework ESP-IDF.</p>
+<p>Funcionalidades principales:</p><ul>
+<li>Inicialización del subsistema WiFi.</li>
+<li>Gestión automática de conexión y reconexión.</li>
+<li>Obtención de dirección IP mediante DHCP.</li>
+<li>Escaneo de redes inalámbricas disponibles.</li>
+<li>Consulta del estado de conexión.</li>
+<li>Sincronización mediante Event Groups de FreeRTOS.</li>
+</ul>
+<p>El módulo abstrae la complejidad de la pila de red y proporciona una interfaz sencilla para las tareas de aplicación.</p>
+<p>Mecanismos FreeRTOS utilizados:</p><ul>
+<li>Event Groups para sincronización de estados de conexión.</li>
+</ul>
+<p>Eventos gestionados:</p><ul>
+<li>Inicio del modo estación.</li>
+<li>Conexión y desconexión WiFi.</li>
+<li>Obtención de dirección IP.</li>
+<li>Reintentos automáticos de conexión.</li>
+</ul>
+<dl class="section author"><dt>Autor</dt><dd>Fernando Plazas Trujillo Isabella Ordoñez Juan Daniel Constain </dd></dl>
+
+<p class="definition">Definición en el archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+</div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Documentación de «define»</h2>
+<a id="ad552e7688532cbbecd3967538ced06ac" name="ad552e7688532cbbecd3967538ced06ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad552e7688532cbbecd3967538ced06ac">&#9670;&#160;</a></span>WIFI_CONNECTED_BIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WIFI_CONNECTED_BIT&#160;&#160;&#160;BIT0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Bit que indica conexión WiFi exitosa. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00083">83</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a7d013b55e50dfbda0904f5f933b63ec4" name="a7d013b55e50dfbda0904f5f933b63ec4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d013b55e50dfbda0904f5f933b63ec4">&#9670;&#160;</a></span>WIFI_FAIL_BIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WIFI_FAIL_BIT&#160;&#160;&#160;BIT1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00084">84</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="ae89d816659989e5fe1e0bb202d625985" name="ae89d816659989e5fe1e0bb202d625985"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae89d816659989e5fe1e0bb202d625985">&#9670;&#160;</a></span>WIFI_MAX_RETRIES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WIFI_MAX_RETRIES&#160;&#160;&#160;4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Número máximo de reintentos de conexión WiFi. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00058">58</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a3c95561b03d0fcf9048b231ae2ba90fb" name="a3c95561b03d0fcf9048b231ae2ba90fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c95561b03d0fcf9048b231ae2ba90fb">&#9670;&#160;</a></span>WIFI_PASS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WIFI_PASS&#160;&#160;&#160;&quot;Sala331tm&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00049">49</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a23f56fbbc8b0a0b5ece3529c7bcbb4ba" name="a23f56fbbc8b0a0b5ece3529c7bcbb4ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23f56fbbc8b0a0b5ece3529c7bcbb4ba">&#9670;&#160;</a></span>WIFI_SCAN_MAX_AP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WIFI_SCAN_MAX_AP&#160;&#160;&#160;20</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Número máximo de puntos de acceso almacenados durante un escaneo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00063">63</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a586542b79d00e4db7e1d5a667ae83a2b" name="a586542b79d00e4db7e1d5a667ae83a2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a586542b79d00e4db7e1d5a667ae83a2b">&#9670;&#160;</a></span>WIFI_SSID</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WIFI_SSID&#160;&#160;&#160;&quot;Sala331&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00048">48</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a9dcf78476c0528f382454066e5af1130" name="a9dcf78476c0528f382454066e5af1130"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dcf78476c0528f382454066e5af1130">&#9670;&#160;</a></span>auth_mode_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * auth_mode_name </td>
+          <td>(</td>
+          <td class="paramtype">wifi_auth_mode_t</td>          <td class="paramname"><span class="paramname"><em>authmode</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convierte un modo de autenticación WiFi a texto. </p>
+<p>Se utiliza para mostrar información legible durante el escaneo de redes disponibles.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">authmode</td><td>Modo de autenticación reportado por ESP-IDF.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Cadena descriptiva del tipo de autenticación. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00334">334</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  335</span>{</div>
+<div class="line"><span class="lineno">  336</span>    <span class="keywordflow">switch</span> (authmode)</div>
+<div class="line"><span class="lineno">  337</span>    {</div>
+<div class="line"><span class="lineno">  338</span>        <span class="keywordflow">case</span> WIFI_AUTH_OPEN:</div>
+<div class="line"><span class="lineno">  339</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;OPEN&quot;</span>;</div>
+<div class="line"><span class="lineno">  340</span>        <span class="keywordflow">case</span> WIFI_AUTH_WEP:</div>
+<div class="line"><span class="lineno">  341</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;WEP&quot;</span>;</div>
+<div class="line"><span class="lineno">  342</span>        <span class="keywordflow">case</span> WIFI_AUTH_WPA_PSK:</div>
+<div class="line"><span class="lineno">  343</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;WPA&quot;</span>;</div>
+<div class="line"><span class="lineno">  344</span>        <span class="keywordflow">case</span> WIFI_AUTH_WPA2_PSK:</div>
+<div class="line"><span class="lineno">  345</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;WPA2&quot;</span>;</div>
+<div class="line"><span class="lineno">  346</span>        <span class="keywordflow">case</span> WIFI_AUTH_WPA_WPA2_PSK:</div>
+<div class="line"><span class="lineno">  347</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;WPA/WPA2&quot;</span>;</div>
+<div class="line"><span class="lineno">  348</span>        <span class="keywordflow">case</span> WIFI_AUTH_WPA2_ENTERPRISE:</div>
+<div class="line"><span class="lineno">  349</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;WPA2_ENT&quot;</span>;</div>
+<div class="line"><span class="lineno">  350</span>        <span class="keywordflow">case</span> WIFI_AUTH_WPA3_PSK:</div>
+<div class="line"><span class="lineno">  351</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;WPA3&quot;</span>;</div>
+<div class="line"><span class="lineno">  352</span>        <span class="keywordflow">case</span> WIFI_AUTH_WPA2_WPA3_PSK:</div>
+<div class="line"><span class="lineno">  353</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;WPA2/WPA3&quot;</span>;</div>
+<div class="line"><span class="lineno">  354</span>        <span class="keywordflow">default</span>:</div>
+<div class="line"><span class="lineno">  355</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;UNKNOWN&quot;</span>;</div>
+<div class="line"><span class="lineno">  356</span>    }</div>
+<div class="line"><span class="lineno">  357</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ac31e38637f7a5e5c8ce4d033b0955fec" name="ac31e38637f7a5e5c8ce4d033b0955fec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac31e38637f7a5e5c8ce4d033b0955fec">&#9670;&#160;</a></span>wifi_event_handler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wifi_event_handler </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>arg</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">esp_event_base_t</td>          <td class="paramname"><span class="paramname"><em>event_base</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t</td>          <td class="paramname"><span class="paramname"><em>event_id</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>event_data</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Manejador de eventos WiFi e IP. </p>
+<p>Esta función es registrada en el sistema de eventos del ESP-IDF y es ejecutada automáticamente cuando ocurre un evento relacionado con la conectividad de red.</p>
+<p>Eventos gestionados:</p><ul>
+<li>Inicio de la interfaz WiFi.</li>
+<li>Desconexión de la red.</li>
+<li>Obtención de dirección IP.</li>
+</ul>
+<p>Además actualiza los Event Groups utilizados por las tareas para sincronizar el estado de conexión.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">arg</td><td>Argumento de usuario. </td></tr>
+    <tr><td class="paramname">event_base</td><td>Base del evento recibido. </td></tr>
+    <tr><td class="paramname">event_id</td><td>Identificador del evento. </td></tr>
+    <tr><td class="paramname">event_data</td><td>Datos asociados al evento. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p>WiFi iniciado.</p>
+<p>WiFi desconectado.</p>
+<p>IP obtenida correctamente.</p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00106">106</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  111</span>{</div>
+<div class="line"><span class="lineno">  115</span>    <span class="keywordflow">if</span> (event_base == WIFI_EVENT &amp;&amp;</div>
+<div class="line"><span class="lineno">  116</span>        event_id == WIFI_EVENT_STA_START)</div>
+<div class="line"><span class="lineno">  117</span>    {</div>
+<div class="line"><span class="lineno">  118</span>        ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Conectando al WiFi...&quot;</span>);</div>
+<div class="line"><span class="lineno">  119</span>        <a class="code hl_variable" href="#a79d9a1941d35eea97ea57ea98d6ac2ae">retry_count</a> = 0;</div>
+<div class="line"><span class="lineno">  120</span>        xEventGroupClearBits(</div>
+<div class="line"><span class="lineno">  121</span>            <a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a>,</div>
+<div class="line"><span class="lineno">  122</span>            <a class="code hl_define" href="#ad552e7688532cbbecd3967538ced06ac">WIFI_CONNECTED_BIT</a> | <a class="code hl_define" href="#a7d013b55e50dfbda0904f5f933b63ec4">WIFI_FAIL_BIT</a>);</div>
+<div class="line"><span class="lineno">  123</span>        esp_wifi_connect();</div>
+<div class="line"><span class="lineno">  124</span>    }</div>
+<div class="line"><span class="lineno">  125</span></div>
+<div class="line"><span class="lineno">  129</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (event_base == WIFI_EVENT &amp;&amp;</div>
+<div class="line"><span class="lineno">  130</span>             event_id == WIFI_EVENT_STA_DISCONNECTED)</div>
+<div class="line"><span class="lineno">  131</span>    {</div>
+<div class="line"><span class="lineno">  132</span>        wifi_event_sta_disconnected_t *<span class="keyword">event</span> =</div>
+<div class="line"><span class="lineno">  133</span>            (wifi_event_sta_disconnected_t *) event_data;</div>
+<div class="line"><span class="lineno">  134</span> </div>
+<div class="line"><span class="lineno">  135</span>        xEventGroupClearBits(</div>
+<div class="line"><span class="lineno">  136</span>            <a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a>,</div>
+<div class="line"><span class="lineno">  137</span>            <a class="code hl_define" href="#ad552e7688532cbbecd3967538ced06ac">WIFI_CONNECTED_BIT</a>);</div>
+<div class="line"><span class="lineno">  138</span> </div>
+<div class="line"><span class="lineno">  139</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a79d9a1941d35eea97ea57ea98d6ac2ae">retry_count</a> &lt; <a class="code hl_define" href="#ae89d816659989e5fe1e0bb202d625985">WIFI_MAX_RETRIES</a>)</div>
+<div class="line"><span class="lineno">  140</span>        {</div>
+<div class="line"><span class="lineno">  141</span>            <a class="code hl_variable" href="#a79d9a1941d35eea97ea57ea98d6ac2ae">retry_count</a>++;</div>
+<div class="line"><span class="lineno">  142</span>            ESP_LOGW(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  143</span>                     <span class="stringliteral">&quot;WiFi desconectado. Razon=%d. Reintento %d/%d...&quot;</span>,</div>
+<div class="line"><span class="lineno">  144</span>                     event-&gt;reason,</div>
+<div class="line"><span class="lineno">  145</span>                     <a class="code hl_variable" href="#a79d9a1941d35eea97ea57ea98d6ac2ae">retry_count</a>,</div>
+<div class="line"><span class="lineno">  146</span>                     <a class="code hl_define" href="#ae89d816659989e5fe1e0bb202d625985">WIFI_MAX_RETRIES</a>);</div>
+<div class="line"><span class="lineno">  147</span>            esp_wifi_connect();</div>
+<div class="line"><span class="lineno">  148</span>        }</div>
+<div class="line"><span class="lineno">  149</span>        <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  150</span>        {</div>
+<div class="line"><span class="lineno">  151</span>            ESP_LOGW(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  152</span>                     <span class="stringliteral">&quot;WiFi desconectado. Razon=%d. Sin mas reintentos.&quot;</span>,</div>
+<div class="line"><span class="lineno">  153</span>                     event-&gt;reason);</div>
+<div class="line"><span class="lineno">  154</span>            xEventGroupSetBits(</div>
+<div class="line"><span class="lineno">  155</span>                <a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a>,</div>
+<div class="line"><span class="lineno">  156</span>                <a class="code hl_define" href="#a7d013b55e50dfbda0904f5f933b63ec4">WIFI_FAIL_BIT</a>);</div>
+<div class="line"><span class="lineno">  157</span>        }</div>
+<div class="line"><span class="lineno">  158</span>    }</div>
+<div class="line"><span class="lineno">  159</span></div>
+<div class="line"><span class="lineno">  163</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (event_base == IP_EVENT &amp;&amp;</div>
+<div class="line"><span class="lineno">  164</span>             event_id == IP_EVENT_STA_GOT_IP)</div>
+<div class="line"><span class="lineno">  165</span>    {</div>
+<div class="line"><span class="lineno">  166</span>        ip_event_got_ip_t *<span class="keyword">event</span> =</div>
+<div class="line"><span class="lineno">  167</span>            (ip_event_got_ip_t *) event_data;</div>
+<div class="line"><span class="lineno">  168</span> </div>
+<div class="line"><span class="lineno">  169</span>        ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  170</span>                 <span class="stringliteral">&quot;WiFi conectado&quot;</span>);</div>
+<div class="line"><span class="lineno">  171</span> </div>
+<div class="line"><span class="lineno">  172</span>        ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  173</span>                 <span class="stringliteral">&quot;IP obtenida: &quot;</span> IPSTR,</div>
+<div class="line"><span class="lineno">  174</span>                 IP2STR(&amp;event-&gt;ip_info.ip));</div>
+<div class="line"><span class="lineno">  175</span> </div>
+<div class="line"><span class="lineno">  176</span>        xEventGroupSetBits(</div>
+<div class="line"><span class="lineno">  177</span>            <a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a>,</div>
+<div class="line"><span class="lineno">  178</span>            <a class="code hl_define" href="#ad552e7688532cbbecd3967538ced06ac">WIFI_CONNECTED_BIT</a>);</div>
+<div class="line"><span class="lineno">  179</span>        xEventGroupClearBits(</div>
+<div class="line"><span class="lineno">  180</span>            <a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a>,</div>
+<div class="line"><span class="lineno">  181</span>            <a class="code hl_define" href="#a7d013b55e50dfbda0904f5f933b63ec4">WIFI_FAIL_BIT</a>);</div>
+<div class="line"><span class="lineno">  182</span>        <a class="code hl_variable" href="#a79d9a1941d35eea97ea57ea98d6ac2ae">retry_count</a> = 0;</div>
+<div class="line"><span class="lineno">  183</span>    }</div>
+<div class="line"><span class="lineno">  184</span>}</div>
+<div class="ttc" id="amq135_8c_html_afc3d101f633a076cc1ca84b85b6224b2"><div class="ttname"><a href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a></div><div class="ttdeci">#define TAG</div><div class="ttdoc">Etiqueta utilizada por el sistema de logging.</div><div class="ttdef"><b>Definition</b> <a href="mq135_8c_source.html#l00029">mq135.c:29</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_a20c6ba80259caf6916ca631b853d82af"><div class="ttname"><a href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a></div><div class="ttdeci">static EventGroupHandle_t wifi_event_group</div><div class="ttdoc">Event group para manejar estados del WiFi.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00078">wifi_manager.c:78</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_a79d9a1941d35eea97ea57ea98d6ac2ae"><div class="ttname"><a href="#a79d9a1941d35eea97ea57ea98d6ac2ae">retry_count</a></div><div class="ttdeci">static int retry_count</div><div class="ttdoc">Contador de reintentos de conexión WiFi.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00073">wifi_manager.c:73</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_a7d013b55e50dfbda0904f5f933b63ec4"><div class="ttname"><a href="#a7d013b55e50dfbda0904f5f933b63ec4">WIFI_FAIL_BIT</a></div><div class="ttdeci">#define WIFI_FAIL_BIT</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00084">wifi_manager.c:84</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_ad552e7688532cbbecd3967538ced06ac"><div class="ttname"><a href="#ad552e7688532cbbecd3967538ced06ac">WIFI_CONNECTED_BIT</a></div><div class="ttdeci">#define WIFI_CONNECTED_BIT</div><div class="ttdoc">Bit que indica conexión WiFi exitosa.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00083">wifi_manager.c:83</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_ae89d816659989e5fe1e0bb202d625985"><div class="ttname"><a href="#ae89d816659989e5fe1e0bb202d625985">WIFI_MAX_RETRIES</a></div><div class="ttdeci">#define WIFI_MAX_RETRIES</div><div class="ttdoc">Número máximo de reintentos de conexión WiFi.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00058">wifi_manager.c:58</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a7267cf9f0ba503d904709977c18a07ea" name="a7267cf9f0ba503d904709977c18a07ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7267cf9f0ba503d904709977c18a07ea">&#9670;&#160;</a></span>wifi_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wifi_init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inicializa y conecta el ESP32 a una red WiFi. </p>
+<p>Inicializa la interfaz WiFi y establece la conexión.</p>
+<p>Realiza la inicialización de:</p><ul>
+<li>NVS Flash.</li>
+<li>Pila TCP/IP.</li>
+<li>Event Loop del sistema.</li>
+<li>Interfaz WiFi en modo estación.</li>
+</ul>
+<p>Posteriormente configura las credenciales de acceso, registra los manejadores de eventos y comienza el proceso de conexión a la red inalámbrica.</p>
+<p>Inicializa y conecta el ESP32 a una red WiFi.</p>
+<p>Configura el subsistema WiFi del ESP32, registra los eventos necesarios y comienza el proceso de conexión a la red previamente configurada. </p>
+<p>Crear event group.</p>
+<p>Inicializar NVS.</p>
+<p>Inicializar TCP/IP stack.</p>
+<p>Crear event loop.</p>
+<p>Crear interfaz WiFi station.</p>
+<p>Configuración WiFi por defecto.</p>
+<p>Registrar handlers de eventos.</p>
+<p>Configuración de credenciales WiFi.</p>
+<p>Configurar modo station.</p>
+<p>Aplicar configuración WiFi.</p>
+<p>Iniciar WiFi.</p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00199">199</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  200</span>{</div>
+<div class="line"><span class="lineno">  204</span>    <a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a> = xEventGroupCreate();</div>
+<div class="line"><span class="lineno">  205</span></div>
+<div class="line"><span class="lineno">  209</span>    esp_err_t ret = nvs_flash_init();</div>
+<div class="line"><span class="lineno">  210</span> </div>
+<div class="line"><span class="lineno">  211</span>    <span class="keywordflow">if</span> (ret == ESP_ERR_NVS_NO_FREE_PAGES ||</div>
+<div class="line"><span class="lineno">  212</span>        ret == ESP_ERR_NVS_NEW_VERSION_FOUND)</div>
+<div class="line"><span class="lineno">  213</span>    {</div>
+<div class="line"><span class="lineno">  214</span>        ESP_ERROR_CHECK(nvs_flash_erase());</div>
+<div class="line"><span class="lineno">  215</span> </div>
+<div class="line"><span class="lineno">  216</span>        ret = nvs_flash_init();</div>
+<div class="line"><span class="lineno">  217</span>    }</div>
+<div class="line"><span class="lineno">  218</span> </div>
+<div class="line"><span class="lineno">  219</span>    ESP_ERROR_CHECK(ret);</div>
+<div class="line"><span class="lineno">  220</span></div>
+<div class="line"><span class="lineno">  224</span>    ESP_ERROR_CHECK(esp_netif_init());</div>
+<div class="line"><span class="lineno">  225</span></div>
+<div class="line"><span class="lineno">  229</span>    ESP_ERROR_CHECK(</div>
+<div class="line"><span class="lineno">  230</span>        esp_event_loop_create_default());</div>
+<div class="line"><span class="lineno">  231</span></div>
+<div class="line"><span class="lineno">  235</span>    esp_netif_create_default_wifi_sta();</div>
+<div class="line"><span class="lineno">  236</span></div>
+<div class="line"><span class="lineno">  240</span>    wifi_init_config_t cfg =</div>
+<div class="line"><span class="lineno">  241</span>        WIFI_INIT_CONFIG_DEFAULT();</div>
+<div class="line"><span class="lineno">  242</span> </div>
+<div class="line"><span class="lineno">  243</span>    ESP_ERROR_CHECK(esp_wifi_init(&amp;cfg));</div>
+<div class="line"><span class="lineno">  244</span></div>
+<div class="line"><span class="lineno">  248</span>    ESP_ERROR_CHECK(</div>
+<div class="line"><span class="lineno">  249</span>        esp_event_handler_instance_register(</div>
+<div class="line"><span class="lineno">  250</span>            WIFI_EVENT,</div>
+<div class="line"><span class="lineno">  251</span>            ESP_EVENT_ANY_ID,</div>
+<div class="line"><span class="lineno">  252</span>            &amp;<a class="code hl_function" href="#ac31e38637f7a5e5c8ce4d033b0955fec">wifi_event_handler</a>,</div>
+<div class="line"><span class="lineno">  253</span>            NULL,</div>
+<div class="line"><span class="lineno">  254</span>            NULL));</div>
+<div class="line"><span class="lineno">  255</span> </div>
+<div class="line"><span class="lineno">  256</span>    ESP_ERROR_CHECK(</div>
+<div class="line"><span class="lineno">  257</span>        esp_event_handler_instance_register(</div>
+<div class="line"><span class="lineno">  258</span>            IP_EVENT,</div>
+<div class="line"><span class="lineno">  259</span>            IP_EVENT_STA_GOT_IP,</div>
+<div class="line"><span class="lineno">  260</span>            &amp;<a class="code hl_function" href="#ac31e38637f7a5e5c8ce4d033b0955fec">wifi_event_handler</a>,</div>
+<div class="line"><span class="lineno">  261</span>            NULL,</div>
+<div class="line"><span class="lineno">  262</span>            NULL));</div>
+<div class="line"><span class="lineno">  263</span></div>
+<div class="line"><span class="lineno">  267</span>    wifi_config_t wifi_config = {</div>
+<div class="line"><span class="lineno">  268</span>        .sta = {</div>
+<div class="line"><span class="lineno">  269</span>            .ssid = <a class="code hl_define" href="#a586542b79d00e4db7e1d5a667ae83a2b">WIFI_SSID</a>,</div>
+<div class="line"><span class="lineno">  270</span>            .password = <a class="code hl_define" href="#a3c95561b03d0fcf9048b231ae2ba90fb">WIFI_PASS</a>,</div>
+<div class="line"><span class="lineno">  271</span>        },</div>
+<div class="line"><span class="lineno">  272</span>    };</div>
+<div class="line"><span class="lineno">  273</span></div>
+<div class="line"><span class="lineno">  277</span>    ESP_ERROR_CHECK(</div>
+<div class="line"><span class="lineno">  278</span>        esp_wifi_set_mode(WIFI_MODE_STA));</div>
+<div class="line"><span class="lineno">  279</span></div>
+<div class="line"><span class="lineno">  283</span>    ESP_ERROR_CHECK(</div>
+<div class="line"><span class="lineno">  284</span>        esp_wifi_set_config(</div>
+<div class="line"><span class="lineno">  285</span>            WIFI_IF_STA,</div>
+<div class="line"><span class="lineno">  286</span>            &amp;wifi_config));</div>
+<div class="line"><span class="lineno">  287</span></div>
+<div class="line"><span class="lineno">  291</span>    ESP_ERROR_CHECK(esp_wifi_start());</div>
+<div class="line"><span class="lineno">  292</span> </div>
+<div class="line"><span class="lineno">  293</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  294</span>             <span class="stringliteral">&quot;Inicialización WiFi completada&quot;</span>);</div>
+<div class="line"><span class="lineno">  295</span>}</div>
+<div class="ttc" id="awifi__manager_8c_html_a3c95561b03d0fcf9048b231ae2ba90fb"><div class="ttname"><a href="#a3c95561b03d0fcf9048b231ae2ba90fb">WIFI_PASS</a></div><div class="ttdeci">#define WIFI_PASS</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00049">wifi_manager.c:49</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_a586542b79d00e4db7e1d5a667ae83a2b"><div class="ttname"><a href="#a586542b79d00e4db7e1d5a667ae83a2b">WIFI_SSID</a></div><div class="ttdeci">#define WIFI_SSID</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00048">wifi_manager.c:48</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_ac31e38637f7a5e5c8ce4d033b0955fec"><div class="ttname"><a href="#ac31e38637f7a5e5c8ce4d033b0955fec">wifi_event_handler</a></div><div class="ttdeci">static void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)</div><div class="ttdoc">Manejador de eventos WiFi e IP.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00106">wifi_manager.c:106</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ac2e99f68c3fb924e301871f4388ccc51" name="ac2e99f68c3fb924e301871f4388ccc51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2e99f68c3fb924e301871f4388ccc51">&#9670;&#160;</a></span>wifi_is_connected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool wifi_is_connected </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Verifica si existe una conexión WiFi activa. </p>
+<p>Consulta el estado actual de la conexión WiFi.</p>
+<p>Consulta el estado actual almacenado en el Event Group del módulo WiFi.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>true si el ESP32 está conectado a una red. </dd>
+<dd>
+false si no existe conexión activa.</dd></dl>
+<p>Verifica si existe una conexión WiFi activa.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>true si el ESP32 está conectado a una red WiFi. </dd>
+<dd>
+false si no existe conexión activa. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00428">428</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  429</span>{</div>
+<div class="line"><span class="lineno">  430</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a> == NULL)</div>
+<div class="line"><span class="lineno">  431</span>    {</div>
+<div class="line"><span class="lineno">  432</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">  433</span>    }</div>
+<div class="line"><span class="lineno">  434</span> </div>
+<div class="line"><span class="lineno">  435</span>    EventBits_t bits = xEventGroupGetBits(<a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a>);</div>
+<div class="line"><span class="lineno">  436</span> </div>
+<div class="line"><span class="lineno">  437</span>    <span class="keywordflow">return</span> (bits &amp; <a class="code hl_define" href="#ad552e7688532cbbecd3967538ced06ac">WIFI_CONNECTED_BIT</a>) != 0;</div>
+<div class="line"><span class="lineno">  438</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a5b3e7a6e474fda19d447711c86399104" name="a5b3e7a6e474fda19d447711c86399104"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b3e7a6e474fda19d447711c86399104">&#9670;&#160;</a></span>wifi_scan_print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wifi_scan_print </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Realiza un escaneo de redes WiFi disponibles. </p>
+<p>Escanea las redes WiFi disponibles.</p>
+<p>Ejecuta un escaneo activo del entorno inalámbrico, obtiene la lista de puntos de acceso detectados y muestra por consola información relevante:</p>
+<ul>
+<li>SSID</li>
+<li>Intensidad de señal (RSSI)</li>
+<li>Canal</li>
+<li>Tipo de autenticación</li>
+</ul>
+<p>Los resultados son utilizados principalmente para diagnóstico y configuración del sistema.</p>
+<p>Realiza un escaneo de redes WiFi disponibles.</p>
+<p>Realiza un escaneo activo del entorno inalámbrico e imprime los resultados mediante la consola de depuración. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00374">374</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  375</span>{</div>
+<div class="line"><span class="lineno">  376</span>    wifi_ap_record_t ap_records[<a class="code hl_define" href="#a23f56fbbc8b0a0b5ece3529c7bcbb4ba">WIFI_SCAN_MAX_AP</a>];</div>
+<div class="line"><span class="lineno">  377</span>    uint16_t ap_count = <a class="code hl_define" href="#a23f56fbbc8b0a0b5ece3529c7bcbb4ba">WIFI_SCAN_MAX_AP</a>;</div>
+<div class="line"><span class="lineno">  378</span> </div>
+<div class="line"><span class="lineno">  379</span>    wifi_scan_config_t scan_config = {</div>
+<div class="line"><span class="lineno">  380</span>        .ssid = NULL,</div>
+<div class="line"><span class="lineno">  381</span>        .bssid = NULL,</div>
+<div class="line"><span class="lineno">  382</span>        .channel = 0,</div>
+<div class="line"><span class="lineno">  383</span>        .show_hidden = <span class="keyword">true</span></div>
+<div class="line"><span class="lineno">  384</span>    };</div>
+<div class="line"><span class="lineno">  385</span> </div>
+<div class="line"><span class="lineno">  386</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Escaneando redes WiFi visibles...&quot;</span>);</div>
+<div class="line"><span class="lineno">  387</span> </div>
+<div class="line"><span class="lineno">  388</span>    esp_wifi_disconnect();</div>
+<div class="line"><span class="lineno">  389</span>    vTaskDelay(pdMS_TO_TICKS(500));</div>
+<div class="line"><span class="lineno">  390</span> </div>
+<div class="line"><span class="lineno">  391</span>    esp_err_t ret = esp_wifi_scan_start(&amp;scan_config, <span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">  392</span>    <span class="keywordflow">if</span> (ret != ESP_OK)</div>
+<div class="line"><span class="lineno">  393</span>    {</div>
+<div class="line"><span class="lineno">  394</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error iniciando escaneo WiFi: %s&quot;</span>, esp_err_to_name(ret));</div>
+<div class="line"><span class="lineno">  395</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><span class="lineno">  396</span>    }</div>
+<div class="line"><span class="lineno">  397</span> </div>
+<div class="line"><span class="lineno">  398</span>    ret = esp_wifi_scan_get_ap_records(&amp;ap_count, ap_records);</div>
+<div class="line"><span class="lineno">  399</span>    <span class="keywordflow">if</span> (ret != ESP_OK)</div>
+<div class="line"><span class="lineno">  400</span>    {</div>
+<div class="line"><span class="lineno">  401</span>        ESP_LOGE(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Error leyendo escaneo WiFi: %s&quot;</span>, esp_err_to_name(ret));</div>
+<div class="line"><span class="lineno">  402</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><span class="lineno">  403</span>    }</div>
+<div class="line"><span class="lineno">  404</span> </div>
+<div class="line"><span class="lineno">  405</span>    ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>, <span class="stringliteral">&quot;Redes encontradas: %d&quot;</span>, ap_count);</div>
+<div class="line"><span class="lineno">  406</span> </div>
+<div class="line"><span class="lineno">  407</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; ap_count; i++)</div>
+<div class="line"><span class="lineno">  408</span>    {</div>
+<div class="line"><span class="lineno">  409</span>        ESP_LOGI(<a class="code hl_define" href="mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2">TAG</a>,</div>
+<div class="line"><span class="lineno">  410</span>                 <span class="stringliteral">&quot;%02d SSID=&#39;%s&#39; RSSI=%d canal=%d auth=%s&quot;</span>,</div>
+<div class="line"><span class="lineno">  411</span>                 i + 1,</div>
+<div class="line"><span class="lineno">  412</span>                 (<span class="keywordtype">char</span> *) ap_records[i].ssid,</div>
+<div class="line"><span class="lineno">  413</span>                 ap_records[i].rssi,</div>
+<div class="line"><span class="lineno">  414</span>                 ap_records[i].primary,</div>
+<div class="line"><span class="lineno">  415</span>                 <a class="code hl_function" href="#a9dcf78476c0528f382454066e5af1130">auth_mode_name</a>(ap_records[i].authmode));</div>
+<div class="line"><span class="lineno">  416</span>    }</div>
+<div class="line"><span class="lineno">  417</span>}</div>
+<div class="ttc" id="awifi__manager_8c_html_a23f56fbbc8b0a0b5ece3529c7bcbb4ba"><div class="ttname"><a href="#a23f56fbbc8b0a0b5ece3529c7bcbb4ba">WIFI_SCAN_MAX_AP</a></div><div class="ttdeci">#define WIFI_SCAN_MAX_AP</div><div class="ttdoc">Número máximo de puntos de acceso almacenados durante un escaneo.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00063">wifi_manager.c:63</a></div></div>
+<div class="ttc" id="awifi__manager_8c_html_a9dcf78476c0528f382454066e5af1130"><div class="ttname"><a href="#a9dcf78476c0528f382454066e5af1130">auth_mode_name</a></div><div class="ttdeci">static const char * auth_mode_name(wifi_auth_mode_t authmode)</div><div class="ttdoc">Convierte un modo de autenticación WiFi a texto.</div><div class="ttdef"><b>Definition</b> <a href="wifi__manager_8c_source.html#l00334">wifi_manager.c:334</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a74ffcbcc6723fdd1f6a44c7dfa813079" name="a74ffcbcc6723fdd1f6a44c7dfa813079"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74ffcbcc6723fdd1f6a44c7dfa813079">&#9670;&#160;</a></span>wifi_wait_connected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool wifi_wait_connected </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>timeout_ms</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Espera hasta que el ESP32 se conecte a la red WiFi. </p>
+<p>Espera hasta que se establezca una conexión WiFi.</p>
+<p>La función bloquea la ejecución hasta recibir un evento de conexión exitosa o hasta que se detecte un fallo de conexión.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeout_ms</td><td>Tiempo máximo de espera en milisegundos.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>true si la conexión fue exitosa. </dd>
+<dd>
+false si ocurrió timeout o fallo de conexión.</dd></dl>
+<p>Espera hasta que el ESP32 se conecte a la red WiFi.</p>
+<p>La función bloquea la ejecución hasta que el dispositivo obtenga una dirección IP válida o hasta que expire el tiempo máximo de espera especificado.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeout_ms</td><td>Tiempo máximo de espera en milisegundos.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>true si la conexión fue exitosa. </dd>
+<dd>
+false si ocurrió timeout o error. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00307">307</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  308</span>{</div>
+<div class="line"><span class="lineno">  309</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a> == NULL)</div>
+<div class="line"><span class="lineno">  310</span>    {</div>
+<div class="line"><span class="lineno">  311</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">  312</span>    }</div>
+<div class="line"><span class="lineno">  313</span> </div>
+<div class="line"><span class="lineno">  314</span>    EventBits_t bits = xEventGroupWaitBits(</div>
+<div class="line"><span class="lineno">  315</span>        <a class="code hl_variable" href="#a20c6ba80259caf6916ca631b853d82af">wifi_event_group</a>,</div>
+<div class="line"><span class="lineno">  316</span>        <a class="code hl_define" href="#ad552e7688532cbbecd3967538ced06ac">WIFI_CONNECTED_BIT</a> | <a class="code hl_define" href="#a7d013b55e50dfbda0904f5f933b63ec4">WIFI_FAIL_BIT</a>,</div>
+<div class="line"><span class="lineno">  317</span>        pdFALSE,</div>
+<div class="line"><span class="lineno">  318</span>        pdFALSE,</div>
+<div class="line"><span class="lineno">  319</span>        pdMS_TO_TICKS(timeout_ms));</div>
+<div class="line"><span class="lineno">  320</span> </div>
+<div class="line"><span class="lineno">  321</span>    <span class="keywordflow">return</span> (bits &amp; <a class="code hl_define" href="#ad552e7688532cbbecd3967538ced06ac">WIFI_CONNECTED_BIT</a>) != 0;</div>
+<div class="line"><span class="lineno">  322</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Documentación de variables</h2>
+<a id="a79d9a1941d35eea97ea57ea98d6ac2ae" name="a79d9a1941d35eea97ea57ea98d6ac2ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79d9a1941d35eea97ea57ea98d6ac2ae">&#9670;&#160;</a></span>retry_count</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int retry_count = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Contador de reintentos de conexión WiFi. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00073">73</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a5a85b9c772bbeb480b209a3e6ea92b4c" name="a5a85b9c772bbeb480b209a3e6ea92b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a85b9c772bbeb480b209a3e6ea92b4c">&#9670;&#160;</a></span>TAG</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* TAG = &quot;wifi_manager&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Etiqueta utilizada para mensajes de depuración. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00068">68</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+<a id="a20c6ba80259caf6916ca631b853d82af" name="a20c6ba80259caf6916ca631b853d82af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20c6ba80259caf6916ca631b853d82af">&#9670;&#160;</a></span>wifi_event_group</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">EventGroupHandle_t wifi_event_group</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Event group para manejar estados del WiFi. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="wifi__manager_8c_source.html#l00078">78</a> del archivo <a class="el" href="wifi__manager_8c_source.html">wifi_manager.c</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_5c982d53a68cdbcd421152b4020263a9.html">main</a></li><li class="navelem"><a href="dir_eefee35c6ab380d7209ec05948f73f5c.html">wifi</a></li><li class="navelem"><a href="wifi__manager_8c.html">wifi_manager.c</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
+  </ul>
+</div>
+</body>
+</html>

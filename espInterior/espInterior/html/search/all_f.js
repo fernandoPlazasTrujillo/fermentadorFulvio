@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['tag_0',['TAG',['../mq135_8c.html#afc3d101f633a076cc1ca84b85b6224b2',1,'TAG:&#160;mq135.c'],['../voltage__sensor_8c.html#afc3d101f633a076cc1ca84b85b6224b2',1,'TAG:&#160;voltage_sensor.c'],['../i2c__manager_8c.html#afc3d101f633a076cc1ca84b85b6224b2',1,'TAG:&#160;i2c_manager.c'],['../ds18b20_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;ds18b20.c'],['../ph__sensor_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;ph_sensor.c'],['../rtc__ds3231_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;rtc_ds3231.c'],['../sd__card_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;sd_card.c'],['../servo_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;servo.c'],['../adc__manager_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;adc_manager.c'],['../main_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;main.c'],['../mqtt__manager_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;mqtt_manager.c'],['../task__actuadores_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;task_actuadores.c'],['../task__control_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;task_control.c'],['../task__energia_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;task_energia.c'],['../task__logger_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;task_logger.c'],['../task__sensores_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;task_sensores.c'],['../wifi__manager_8c.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;wifi_manager.c']]],
+  ['task_5factuadores_1',['task_actuadores',['../task__actuadores_8c.html#a500d896ff89010d54c413e2bec4ee20d',1,'task_actuadores(void *pvParameters):&#160;task_actuadores.c'],['../task__actuadores_8h.html#a500d896ff89010d54c413e2bec4ee20d',1,'task_actuadores(void *pvParameters):&#160;task_actuadores.c']]],
+  ['task_5factuadores_2ec_2',['task_actuadores.c',['../task__actuadores_8c.html',1,'']]],
+  ['task_5factuadores_2eh_3',['task_actuadores.h',['../task__actuadores_8h.html',1,'']]],
+  ['task_5fcontrol_4',['task_control',['../task__control_8c.html#af9e54aa0648e5d424ebc75ad59db14c6',1,'task_control(void *pvParameters):&#160;task_control.c'],['../task__control_8h.html#af9e54aa0648e5d424ebc75ad59db14c6',1,'task_control(void *pvParameters):&#160;task_control.c']]],
+  ['task_5fcontrol_2ec_5',['task_control.c',['../task__control_8c.html',1,'']]],
+  ['task_5fcontrol_2eh_6',['task_control.h',['../task__control_8h.html',1,'']]],
+  ['task_5fdisplay_7',['task_display',['../task__display_8c.html#a0c23017a47c450de05f8c7af642c7461',1,'task_display(void *pvParameters):&#160;task_display.c'],['../task__display_8h.html#a0c23017a47c450de05f8c7af642c7461',1,'task_display(void *pvParameters):&#160;task_display.c']]],
+  ['task_5fdisplay_2ec_8',['task_display.c',['../task__display_8c.html',1,'']]],
+  ['task_5fdisplay_2eh_9',['task_display.h',['../task__display_8h.html',1,'']]],
+  ['task_5fenergia_10',['task_energia',['../task__energia_8c.html#ac7b7fee9849a033c0657c650e2dbfc9b',1,'task_energia(void *pvParameters):&#160;task_energia.c'],['../task__energia_8h.html#ac7b7fee9849a033c0657c650e2dbfc9b',1,'task_energia(void *pvParameters):&#160;task_energia.c']]],
+  ['task_5fenergia_2ec_11',['task_energia.c',['../task__energia_8c.html',1,'']]],
+  ['task_5fenergia_2eh_12',['task_energia.h',['../task__energia_8h.html',1,'']]],
+  ['task_5fenergia_5fhandle_13',['task_energia_handle',['../main_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71',1,'task_energia_handle:&#160;main.c'],['../task__actuadores_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71',1,'task_energia_handle:&#160;main.c'],['../task__mqtt_8c.html#ac9bf4127b0b50168ecd12b71b89c2f71',1,'task_energia_handle:&#160;main.c']]],
+  ['task_5flogger_14',['task_logger',['../task__logger_8c.html#af38783d3b22fb6c2783f14a88308c330',1,'task_logger(void *pvParameters):&#160;task_logger.c'],['../task__logger_8h.html#af38783d3b22fb6c2783f14a88308c330',1,'task_logger(void *pvParameters):&#160;task_logger.c']]],
+  ['task_5flogger_2ec_15',['task_logger.c',['../task__logger_8c.html',1,'']]],
+  ['task_5flogger_2eh_16',['task_logger.h',['../task__logger_8h.html',1,'']]],
+  ['task_5fmqtt_17',['task_mqtt',['../task__mqtt_8c.html#a376c1e55c392503ef2bd96eedae58a21',1,'task_mqtt(void *pvParameters):&#160;task_mqtt.c'],['../task__mqtt_8h.html#a376c1e55c392503ef2bd96eedae58a21',1,'task_mqtt(void *pvParameters):&#160;task_mqtt.c']]],
+  ['task_5fmqtt_2ec_18',['task_mqtt.c',['../task__mqtt_8c.html',1,'']]],
+  ['task_5fmqtt_2eh_19',['task_mqtt.h',['../task__mqtt_8h.html',1,'']]],
+  ['task_5fsensores_20',['task_sensores',['../task__sensores_8c.html#a5b2930d6b5c8d2540af7d0b8e60ec19c',1,'task_sensores(void *pvParameters):&#160;task_sensores.c'],['../task__sensores_8h.html#a5b2930d6b5c8d2540af7d0b8e60ec19c',1,'task_sensores(void *pvParameters):&#160;task_sensores.c']]],
+  ['task_5fsensores_2ec_21',['task_sensores.c',['../task__sensores_8c.html',1,'']]],
+  ['task_5fsensores_2eh_22',['task_sensores.h',['../task__sensores_8h.html',1,'']]],
+  ['task_5fsensores_5fhandle_23',['task_sensores_handle',['../main_8c.html#a545de6958783ff726c116adffaebbcfb',1,'task_sensores_handle:&#160;main.c'],['../task__energia_8c.html#a545de6958783ff726c116adffaebbcfb',1,'task_sensores_handle:&#160;main.c']]],
+  ['temperatura_24',['temperatura',['../structsensor__data__t.html#ae9f44daaf071cadf9887239f0913af12',1,'sensor_data_t::temperatura'],['../structdisplay__data__t.html#ab1900e3dd4593f30a237cfeee005b094',1,'display_data_t::temperatura']]]
+];
